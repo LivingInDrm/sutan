@@ -1,0 +1,104 @@
+[
+  {
+    "card_id": "card_protagonist",
+    "name": "阿尔图",
+    "type": "character",
+    "rarity": "silver",
+    "description": "你自己，一个卷入苏丹游戏的可悲之人。",
+    "image": "card01.png",
+    "attributes": {
+      "physique": 9, "charm": 5, "wisdom": 3, "combat": 8,
+      "social": 4, "survival": 3, "stealth": 2, "magic": 2
+    },
+    "special_attributes": { "support": 2, "reroll": 1 },
+    "tags": ["male", "clan", "protagonist"],
+    "equipment_slots": 3
+  },
+  {
+    "card_id": "card_002",
+    "name": "山狮",
+    "type": "character",
+    "rarity": "copper",
+    "description": "一个强壮的部落战士，善于近身搏斗。",
+    "image": "card02.png",
+    "attributes": {
+      "physique": 7, "charm": 2, "wisdom": 2, "combat": 9,
+      "social": 1, "survival": 5, "stealth": 3, "magic": 1
+    },
+    "special_attributes": { "support": -1, "reroll": 0 },
+    "tags": ["male", "warrior", "tribal"],
+    "equipment_slots": 2
+  },
+  {
+    "card_id": "card_003",
+    "name": "丝路商人",
+    "type": "character",
+    "rarity": "copper",
+    "description": "一个精明的商人，擅长交涉和谈判。",
+    "image": "card03.png",
+    "attributes": {
+      "physique": 3, "charm": 7, "wisdom": 5, "combat": 2,
+      "social": 8, "survival": 2, "stealth": 4, "magic": 1
+    },
+    "special_attributes": { "support": 3, "reroll": 0 },
+    "tags": ["male", "merchant"],
+    "equipment_slots": 1
+  },
+  {
+    "card_id": "card_sultan_01",
+    "name": "苏丹之印",
+    "type": "sultan",
+    "rarity": "gold",
+    "description": "苏丹的权力象征。在处刑日来临时持有此卡将被处决。",
+    "image": "sultan.png",
+    "tags": ["sultan", "dangerous"]
+  },
+  {
+    "card_id": "equip_001",
+    "name": "弯刀",
+    "type": "equipment",
+    "rarity": "copper",
+    "description": "锋利的阿拉伯弯刀，增强战斗力。",
+    "image": "equip01.png",
+    "equipment_type": "weapon",
+    "attribute_bonus": { "combat": 4 },
+    "special_bonus": { "reroll": 1 },
+    "gem_slots": 1,
+    "tags": ["weapon"]
+  },
+  {
+    "card_id": "equip_002",
+    "name": "皮甲",
+    "type": "equipment",
+    "rarity": "stone",
+    "description": "基础防护装备。",
+    "image": "equip02.png",
+    "equipment_type": "armor",
+    "attribute_bonus": { "physique": 3 },
+    "gem_slots": 0,
+    "tags": ["armor"]
+  },
+  {
+    "card_id": "intel_001",
+    "name": "宫廷流言",
+    "type": "intel",
+    "rarity": "stone",
+    "description": "关于宫廷的流言蜚语，有助于社交场合。",
+    "image": "intel01.png",
+    "attribute_bonus": { "social": 3, "charm": 2 },
+    "tags": ["intel", "consumable"]
+  },
+  {
+    "card_id": "gem_001",
+    "name": "红宝石",
+    "type": "gem",
+    "rarity": "silver",
+    "description": "火红的宝石，蕴含强大能量。",
+    "image": "gem01.png",
+    "attribute_bonus": {
+      "physique": 2, "charm": 2, "wisdom": 2, "combat": 2,
+      "social": 2, "survival": 2, "stealth": 2, "magic": 2
+    },
+    "tags": ["gem", "valuable"]
+  }
+]

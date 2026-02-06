@@ -1,0 +1,42 @@
+[
+  {
+    "achievement_id": "ach_001",
+    "name": "初入宫廷",
+    "description": "完成第一个宫廷事件",
+    "category": "story",
+    "condition": { "type": "scene_complete", "scene_id": "scene_001" },
+    "reward": { "type": "golden_dice", "amount": 1 }
+  },
+  {
+    "achievement_id": "ach_002",
+    "name": "沙漠行者",
+    "description": "成功穿越沙漠",
+    "category": "story",
+    "condition": { "type": "scene_complete", "scene_id": "scene_002", "result": "success" },
+    "reward": { "type": "golden_dice", "amount": 1 }
+  },
+  {
+    "achievement_id": "ach_003",
+    "name": "决斗冠军",
+    "description": "在决斗中获胜",
+    "category": "combat",
+    "condition": { "type": "scene_complete", "scene_id": "scene_003", "result": "success" },
+    "reward": { "type": "rewind_charge", "amount": 1 }
+  },
+  {
+    "achievement_id": "ach_004",
+    "name": "活过第一天",
+    "description": "完成游戏的第一天",
+    "category": "survival",
+    "condition": { "type": "day_reached", "day": 2 },
+    "reward": { "type": "gold", "amount": 10 }
+  },
+  {
+    "achievement_id": "ach_005",
+    "name": "苏丹的阴影",
+    "description": "首次获得苏丹卡",
+    "category": "story",
+    "condition": { "type": "card_obtained", "card_type": "sultan" },
+    "reward": { "type": "rewind_charge", "amount": 1 }
+  }
+]
