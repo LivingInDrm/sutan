@@ -3,7 +3,23 @@ import { useGameStore } from '../../stores/gameStore';
 import { useUIStore } from '../../stores/uiStore';
 import { CardComponent } from '../components/card/CardComponent';
 import { SlotComponent } from '../components/card/SlotComponent';
-import type { Card } from '../../core/types';
+import type { Card, Slot } from '../../core/types';
+import { SlotType, CardType } from '../../core/types/enums';
+
+function isCardValidForSlot(card: Card, slot: Slot): boolean {
+  switch (slot.type) {
+    case SlotType.Character:
+      return card.type === CardType.Character;
+    case SlotType.Item:
+      return card.type === CardType.Equipment || card.type === CardType.Intel ||
+             card.type === CardType.Consumable || card.type === CardType.Book ||
+             card.type === CardType.Gem;
+    case SlotType.Sultan:
+      return card.type === CardType.Sultan;
+    default:
+      return false;
+  }
+}
 
 export function SceneScreen() {
   const game = useGameStore(s => s.game);
@@ -27,12 +43,20 @@ export function SceneScreen() {
 
   const handleConfirm = () => {
     if (!game || !selectedSceneId || !scene) return;
+    const requiredFilled = scene.slots.every(
+      (slot, idx) => !slot.required || selectedCards[idx]
+    );
+    if (!requiredFilled) return;
     const investedIds = Object.values(selectedCards);
     if (investedIds.length === 0) return;
     game.sceneManager.participateScene(selectedSceneId, investedIds);
     syncState();
     setScreen('map');
   };
+
+  const requiredSlotsFilled = scene
+    ? scene.slots.every((slot, idx) => !slot.required || selectedCards[idx])
+    : false;
 
   if (!scene) {
     return (
@@ -73,7 +97,7 @@ export function SceneScreen() {
 
         <button
           onClick={handleConfirm}
-          disabled={Object.keys(selectedCards).length === 0}
+          disabled={!requiredSlotsFilled}
           className="px-6 py-2 bg-amber-700/60 border border-amber-500/40 rounded-lg
                      text-amber-100 hover:bg-amber-600/60 transition-all font-bold
                      disabled:opacity-40 disabled:cursor-not-allowed"
@@ -93,7 +117,9 @@ export function SceneScreen() {
                 key={card.card_id}
                 onClick={() => {
                   if (!isUsed) {
-                    const emptySlot = scene.slots.findIndex((_, i) => !selectedCards[i]);
+                    const emptySlot = scene.slots.findIndex(
+                      (slot, i) => !selectedCards[i] && !slot.locked && isCardValidForSlot(card, slot)
+                    );
                     if (emptySlot >= 0) {
                       handleCardSelect(emptySlot, card.card_id);
                     }

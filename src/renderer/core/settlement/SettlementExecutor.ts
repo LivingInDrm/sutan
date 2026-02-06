@@ -1,10 +1,10 @@
 import type {
-  Scene, SettlementResult, Effects,
+  Scene, SettlementResult,
   DiceCheckSettlement, TradeSettlement, ChoiceSettlement,
 } from '../types';
-import { CheckResult, SceneStatus } from '../types/enums';
+import { CheckResult, SpecialAttribute } from '../types/enums';
 import { DiceChecker } from './DiceChecker';
-import { EffectApplier } from './EffectApplier';
+import { EffectApplier, type CardDataResolver } from './EffectApplier';
 import { calcCheckPool } from './calcCheckPool';
 import { CardManager } from '../card/CardManager';
 import { PlayerState } from '../player/PlayerState';
@@ -35,6 +35,10 @@ export class SettlementExecutor {
     this.playerState = playerState;
     this.sceneManager = sceneManager;
     this.equipmentSystem = equipmentSystem;
+  }
+
+  setCardDataResolver(resolver: CardDataResolver): void {
+    this.effectApplier.setCardDataResolver(resolver);
   }
 
   settleScene(sceneId: string, options?: {
@@ -102,9 +106,27 @@ export class SettlementExecutor {
 
     poolSize = Math.min(poolSize, 20);
 
+    let totalReroll = 0;
+    for (const card of cards) {
+      totalReroll += card.getSpecialAttributeValue(SpecialAttribute.Reroll);
+      totalReroll += this.equipmentSystem.getSpecialBonus(card.id, SpecialAttribute.Reroll);
+    }
+
+    const itemCards = investedCardIds
+      .map(id => this.cardManager.getCard(id))
+      .filter((c): c is CardInstance => c !== undefined && !c.isCharacter);
+    for (const item of itemCards) {
+      const bonus = item.data.attribute_bonus;
+      if (bonus) {
+        poolSize += bonus[settlement.check.attribute as keyof typeof bonus] || 0;
+      }
+    }
+    poolSize = Math.min(poolSize, 20);
+
     const diceState = this.diceChecker.performFullCheck(
       poolSize,
       settlement.check,
+      totalReroll,
       options?.rerollIndices,
       options?.goldenDiceUsed ?? 0
     );

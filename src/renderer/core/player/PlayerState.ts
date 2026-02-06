@@ -38,7 +38,7 @@ export class PlayerState {
   }
 
   changeGold(amount: number): void {
-    this._gold += amount;
+    this._gold = Math.max(0, this._gold + amount);
     eventBus.emit('player:gold_change', { amount, newTotal: this._gold });
   }
 
@@ -112,5 +112,19 @@ export class PlayerState {
       data.rewind_charges,
       data.think_charges
     );
+  }
+
+  restore(data: {
+    gold: number;
+    reputation: number;
+    golden_dice: number;
+    rewind_charges: number;
+    think_charges: number;
+  }): void {
+    this._gold = data.gold;
+    this._reputation = data.reputation;
+    this._goldenDice = data.golden_dice;
+    this._rewindCharges = data.rewind_charges;
+    this._thinkCharges = data.think_charges;
   }
 }

@@ -1,4 +1,4 @@
-import { GamePhase } from '../types/enums';
+import { GamePhase, GAME_CONSTANTS } from '../types/enums';
 import { TimeManager } from './TimeManager';
 import { SceneManager } from '../scene/SceneManager';
 import { SettlementExecutor } from '../settlement/SettlementExecutor';
@@ -39,8 +39,19 @@ export class DayManager {
   executeDawn(): void {
     this._phase = GamePhase.Dawn;
     this.thinkSystem.resetDaily();
+    this.refreshScenes();
     eventBus.emit('day:dawn', { day: this.timeManager.currentDay });
     eventBus.emit('phase:change', { phase: GamePhase.Dawn });
+  }
+
+  private refreshScenes(): void {
+    const allRegistered = this.sceneManager.getAllRegisteredSceneIds();
+    for (const sceneId of allRegistered) {
+      const state = this.sceneManager.getSceneState(sceneId);
+      if (!state) {
+        this.sceneManager.activateScene(sceneId);
+      }
+    }
   }
 
   startAction(): void {
@@ -54,7 +65,12 @@ export class DayManager {
     eventBus.emit('day:settlement', { day: this.timeManager.currentDay });
     eventBus.emit('phase:change', { phase: GamePhase.Settlement });
 
-    this.timeManager.advanceDay();
+    const preSettlementSnapshot = {
+      sceneStatesSnapshot: this.sceneManager.getSceneStatesMap() as unknown as Record<string, unknown>,
+      handCardIds: this.cardManager.getCardIds(),
+      thinkUsedToday: this.thinkSystem.usedToday,
+    };
+
     const settledSceneIds = this.sceneManager.decrementRemainingTurns();
     const results: SettlementResult[] = [];
 
@@ -73,7 +89,8 @@ export class DayManager {
 
     this.sceneManager.removeCompletedScenes();
 
-    eventBus.emit('day:end', { day: this.timeManager.currentDay - 1 });
+    eventBus.emit('day:end', { day: this.timeManager.currentDay });
+    this.timeManager.advanceDay(preSettlementSnapshot);
     return results;
   }
 

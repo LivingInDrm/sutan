@@ -1,14 +1,21 @@
-import type { Effects } from '../types';
+import type { Effects, Card } from '../types';
 import { PlayerState } from '../player/PlayerState';
 import { CardManager } from '../card/CardManager';
+
+export type CardDataResolver = (cardId: string) => Card | undefined;
 
 export class EffectApplier {
   private playerState: PlayerState;
   private cardManager: CardManager;
+  private cardDataResolver?: CardDataResolver;
 
   constructor(playerState: PlayerState, cardManager: CardManager) {
     this.playerState = playerState;
     this.cardManager = cardManager;
+  }
+
+  setCardDataResolver(resolver: CardDataResolver): void {
+    this.cardDataResolver = resolver;
   }
 
   apply(effects: Effects, investedCardIds: string[] = []): void {
@@ -22,8 +29,11 @@ export class EffectApplier {
 
     if (effects.cards_add) {
       for (const cardId of effects.cards_add) {
-        // cards_add 引用的是配置中的卡牌ID，此处仅做添加标记
-        // 实际卡牌数据由外部传入或从配置加载
+        if (this.cardManager.hasCard(cardId)) continue;
+        const cardData = this.cardDataResolver?.(cardId);
+        if (cardData) {
+          this.cardManager.addCard(cardData);
+        }
       }
     }
 

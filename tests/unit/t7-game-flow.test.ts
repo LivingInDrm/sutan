@@ -64,7 +64,7 @@ describe('T7.1: TimeManager', () => {
     const tm = new TimeManager(player, 14);
     tm.advanceDay();
     expect(tm.currentDay).toBe(2);
-    expect(tm.rewind()).toBe(true);
+    expect(tm.rewind()).toBeTruthy();
     expect(tm.currentDay).toBe(1);
     expect(tm.executionCountdown).toBe(14);
     expect(player.rewindCharges).toBe(2);
@@ -74,7 +74,7 @@ describe('T7.1: TimeManager', () => {
     const player = new PlayerState(30, 50, 0, 0);
     const tm = new TimeManager(player, 14);
     tm.advanceDay();
-    expect(tm.rewind()).toBe(false);
+    expect(tm.rewind()).toBeNull();
   });
 });
 

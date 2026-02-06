@@ -161,4 +161,8 @@ export class SceneManager {
       this.sceneStates.set(id, { ...state });
     }
   }
+
+  getAllRegisteredSceneIds(): string[] {
+    return Array.from(this.scenes.keys());
+  }
 }

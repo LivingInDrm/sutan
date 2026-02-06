@@ -9,7 +9,7 @@ export class DiceChecker {
     this.rng = rng;
   }
 
-  rollDice(poolSize: number): DiceRollResult {
+  rollDice(poolSize: number, rerollAvailable: number = 0): DiceRollResult {
     const diceCount = Math.min(poolSize, DICE_CONFIG.MAX_POOL);
     const dice: number[] = [];
 
@@ -43,14 +43,16 @@ export class DiceChecker {
       exploded_dice: explodedDice,
       all_dice: allDice,
       successes,
-      reroll_available: 0,
+      reroll_available: rerollAvailable,
     };
   }
 
   reroll(rollResult: DiceRollResult, indicesToReroll: number[]): DiceRollResult {
+    const maxRerolls = rollResult.reroll_available;
+    const validIndices = indicesToReroll.slice(0, maxRerolls);
     const newAllDice = [...rollResult.all_dice];
 
-    for (const idx of indicesToReroll) {
+    for (const idx of validIndices) {
       if (idx >= 0 && idx < newAllDice.length) {
         if (newAllDice[idx] < DICE_CONFIG.SUCCESS_THRESHOLD) {
           newAllDice[idx] = this.rng.rollD10();
@@ -89,10 +91,11 @@ export class DiceChecker {
   performFullCheck(
     poolSize: number,
     config: DiceCheckConfig,
+    rerollAvailable: number = 0,
     rerollIndices?: number[],
     goldenDiceUsed: number = 0
   ): DiceCheckState {
-    const initialRoll = this.rollDice(poolSize);
+    const initialRoll = this.rollDice(poolSize, rerollAvailable);
 
     let afterReroll: DiceRollResult | undefined;
     if (rerollIndices && rerollIndices.length > 0) {

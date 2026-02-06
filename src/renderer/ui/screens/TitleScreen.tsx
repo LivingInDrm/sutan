@@ -1,39 +1,16 @@
 import React from 'react';
 import { useUIStore } from '../../stores/uiStore';
 import { useGameStore } from '../../stores/gameStore';
-import { CardType } from '../../core/types/enums';
-import type { Card } from '../../core/types';
-
-const INITIAL_CARDS: Card[] = [
-  {
-    card_id: 'card_protagonist',
-    name: '阿尔图',
-    type: CardType.Character,
-    rarity: 'silver' as any,
-    description: '你自己，一个卷入苏丹游戏的可悲之人。',
-    image: 'card01.png',
-    attributes: { physique: 9, charm: 5, wisdom: 3, combat: 8, social: 4, survival: 3, stealth: 2, magic: 2 },
-    special_attributes: { support: 2, reroll: 1 },
-    tags: ['male', 'clan', 'protagonist'],
-    equipment_slots: 3,
-  },
-  {
-    card_id: 'card_sultan_01',
-    name: '苏丹之印',
-    type: CardType.Sultan,
-    rarity: 'gold' as any,
-    description: '苏丹的权力象征。在处刑日来临时持有此卡将被处决。',
-    image: 'sultan.png',
-    tags: ['sultan', 'dangerous'],
-  },
-];
+import type { Card, Scene } from '../../core/types';
+import baseCards from '../../data/configs/cards/base_cards.json';
+import baseScenes from '../../data/configs/scenes/base_scenes.json';
 
 export function TitleScreen() {
   const setScreen = useUIStore(s => s.setScreen);
   const startNewGame = useGameStore(s => s.startNewGame);
 
   const handleStart = (difficulty: string) => {
-    startNewGame(difficulty, INITIAL_CARDS, []);
+    startNewGame(difficulty, baseCards as Card[], baseScenes as Scene[]);
     setScreen('map');
   };
 

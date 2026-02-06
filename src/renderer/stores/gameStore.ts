@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { GameManager } from '../core/game/GameManager';
 import type { Card, Scene, SaveData, SettlementResult } from '../core/types';
 import { GamePhase, GameEndReason } from '../core/types/enums';

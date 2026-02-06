@@ -7,8 +7,8 @@ import { TimeManager } from './TimeManager';
 import { DayManager } from './DayManager';
 import { ThinkSystem } from '../player/ThinkSystem';
 import { RandomManager } from '../../lib/random';
-import { GameEndReason, CardType } from '../types/enums';
-import type { Card, Scene, SaveData, SettlementResult, Difficulty } from '../types';
+import { GameEndReason } from '../types/enums';
+import type { Card, Scene, SaveData, SettlementResult } from '../types';
 import { DIFFICULTIES } from '../types';
 import { eventBus } from '../../lib/events';
 
@@ -26,6 +26,7 @@ export class GameManager {
   private _isGameOver: boolean = false;
   private _endReason: GameEndReason | null = null;
   private _difficulty: string;
+  private _allCardsMap: Map<string, Card> = new Map();
 
   constructor(difficulty: string = 'normal', seed?: string) {
     this._difficulty = difficulty;
@@ -53,8 +54,12 @@ export class GameManager {
 
   startNewGame(initialCards: Card[] = [], initialScenes: Scene[] = []): void {
     for (const card of initialCards) {
+      this._allCardsMap.set(card.card_id, card);
       this.cardManager.addCard(card);
     }
+    this.settlementExecutor.setCardDataResolver(
+      (cardId: string) => this._allCardsMap.get(cardId)
+    );
     this.sceneManager.registerScenes(initialScenes);
     for (const scene of initialScenes) {
       this.sceneManager.activateScene(scene.scene_id);
@@ -71,6 +76,35 @@ export class GameManager {
     return results;
   }
 
+  rewindDay(): boolean {
+    const snapshot = this.timeManager.rewind();
+    if (!snapshot) return false;
+
+    this.playerState.restore(snapshot.playerData);
+
+    if (snapshot.handCardIds) {
+      this.cardManager.clear();
+      for (const cardId of snapshot.handCardIds) {
+        const cardData = this._allCardsMap.get(cardId);
+        if (cardData) this.cardManager.addCard(cardData);
+      }
+    }
+
+    if (snapshot.sceneStatesSnapshot) {
+      this.sceneManager.loadSceneStates(
+        snapshot.sceneStatesSnapshot as Record<string, import('../types').SceneState>
+      );
+    }
+
+    if (snapshot.thinkUsedToday) {
+      this.thinkSystem.loadUsedToday(snapshot.thinkUsedToday);
+    }
+
+    this.dayManager.executeDawn();
+    this.dayManager.startAction();
+    return true;
+  }
+
   checkGameEnd(): GameEndReason | null {
     if (this.timeManager.isExecutionDay) {
       const sultanCards = this.cardManager.getSultanCards();
@@ -79,6 +113,11 @@ export class GameManager {
         this._endReason = GameEndReason.ExecutionFailure;
         eventBus.emit('game:end', { reason: GameEndReason.ExecutionFailure });
         return GameEndReason.ExecutionFailure;
+      } else {
+        this._isGameOver = true;
+        this._endReason = GameEndReason.SurvivalVictory;
+        eventBus.emit('game:end', { reason: GameEndReason.SurvivalVictory });
+        return GameEndReason.SurvivalVictory;
       }
     }
     return null;
@@ -101,7 +140,7 @@ export class GameManager {
       cards: {
         hand: this.cardManager.getCardIds(),
         equipped: this.equipmentSystem.getEquipmentMap(),
-        locked_in_scenes: {},
+        locked_in_scenes: this.buildLockedInScenes(),
         think_used_today: this.thinkSystem.usedToday,
       },
       scenes: {
@@ -115,6 +154,14 @@ export class GameManager {
   }
 
   loadSave(save: SaveData, allCards: Card[], allScenes: Scene[]): void {
+    this._allCardsMap.clear();
+    for (const card of allCards) {
+      this._allCardsMap.set(card.card_id, card);
+    }
+    this.settlementExecutor.setCardDataResolver(
+      (cardId: string) => this._allCardsMap.get(cardId)
+    );
+
     this.cardManager.clear();
     for (const cardId of save.cards.hand) {
       const cardData = allCards.find(c => c.card_id === cardId);
@@ -132,5 +179,16 @@ export class GameManager {
 
     this._isGameOver = false;
     this._endReason = null;
+  }
+
+  private buildLockedInScenes(): Record<string, string[]> {
+    const result: Record<string, string[]> = {};
+    const sceneStates = this.sceneManager.getSceneStatesMap();
+    for (const [sceneId, state] of Object.entries(sceneStates)) {
+      if (state.invested_cards.length > 0) {
+        result[sceneId] = [...state.invested_cards];
+      }
+    }
+    return result;
   }
 }
