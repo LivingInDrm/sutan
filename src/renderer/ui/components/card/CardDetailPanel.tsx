@@ -147,37 +147,32 @@ function renderCharacterLayout(
 
       <div className="w-px bg-gold-dim/30 self-stretch my-4" />
 
-      <div className="flex-[3] p-5 pl-4 flex flex-col items-center">
-        <h2 className="text-lg font-bold text-leather font-[family-name:var(--font-display)] text-center">
-          {card.name}
-        </h2>
-        <span className="text-[11px] text-leather/50 mt-0.5">
-          {CARD_TYPE_LABELS[card.type]}
-        </span>
-
-        <div className="flex-1 flex items-center justify-center my-3">
-          <div className="w-32 h-44 rounded border border-gold-dim/30 bg-leather/5 flex items-center justify-center overflow-hidden">
-            {card.image ? (
-              <img src={card.image} alt={card.name} className="w-full h-full object-cover" />
-            ) : (
-              <span className="text-4xl opacity-30">🃏</span>
-            )}
+      <div className="flex-[3] relative flex items-stretch overflow-hidden">
+        {card.image ? (
+          <img src={card.image} alt={card.name} className="w-full h-full object-cover object-top" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="text-4xl opacity-30">🃏</span>
           </div>
+        )}
+
+        <div className="absolute bottom-0 right-0 flex items-end gap-1 p-3">
+          <span className="text-[11px] text-leather/50">{CARD_TYPE_LABELS[card.type]}</span>
+          <h2 className="text-lg font-bold text-leather font-[family-name:var(--font-display)] writing-mode-vertical">
+            {card.name}
+          </h2>
         </div>
 
         {card.equipment_slots !== undefined && card.equipment_slots > 0 && (
-          <div className="flex items-center gap-1.5 text-xs mt-auto">
-            <span className="text-leather/50">装备栏</span>
-            <div className="flex gap-1">
-              {Array.from({ length: card.equipment_slots }).map((_, i) => (
-                <div
-                  key={i}
-                  className="w-5 h-5 rounded border border-gold-dim/40 bg-leather/10 flex items-center justify-center"
-                >
-                  <span className="text-gold-dim text-[8px]">+</span>
-                </div>
-              ))}
-            </div>
+          <div className="absolute bottom-3 left-3 flex gap-1">
+            {Array.from({ length: card.equipment_slots }).map((_, i) => (
+              <div
+                key={i}
+                className="w-5 h-5 rounded border border-gold-dim/40 bg-parchment/60 flex items-center justify-center"
+              >
+                <span className="text-gold-dim text-[8px]">+</span>
+              </div>
+            ))}
           </div>
         )}
       </div>
