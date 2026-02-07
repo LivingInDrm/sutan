@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import type { Card } from '../../../core/types';
 import { CardType } from '../../../core/types/enums';
-import { FrameOrnate, DividerLine, DecorDiamond } from '../common/svg';
+import { CARD_TYPE_LABELS, EQUIPMENT_TYPE_LABELS } from '../../constants/labels';
+import { FrameOrnate } from '../common/svg';
+import { AttrBadge } from '../common/AttrBadge';
+import { SectionTitle } from '../common/SectionTitle';
 
 const RARITY_COLORS: Record<string, { border: string; glow: string; badge: string; badgeText: string }> = {
   gold: { border: 'text-yellow-400', glow: 'drop-shadow-[0_0_12px_rgba(234,179,8,0.4)]', badge: 'bg-yellow-500/90', badgeText: 'text-yellow-950' },
@@ -9,86 +12,6 @@ const RARITY_COLORS: Record<string, { border: string; glow: string; badge: strin
   copper: { border: 'text-amber-600', glow: 'drop-shadow-[0_0_12px_rgba(217,119,6,0.3)]', badge: 'bg-amber-600/90', badgeText: 'text-amber-950' },
   stone: { border: 'text-stone-500', glow: 'drop-shadow-[0_0_8px_rgba(120,113,108,0.2)]', badge: 'bg-stone-500/90', badgeText: 'text-stone-900' },
 };
-
-const ATTR_LABELS: Record<string, string> = {
-  physique: '体魄',
-  charm: '魅力',
-  wisdom: '智慧',
-  combat: '战斗',
-  social: '社交',
-  survival: '生存',
-  stealth: '隐匿',
-  magic: '魔力',
-};
-
-const ATTR_ICONS: Record<string, string> = {
-  physique: '💪',
-  charm: '✨',
-  wisdom: '🧠',
-  combat: '⚔️',
-  social: '🗣️',
-  survival: '🛡️',
-  stealth: '👁️',
-  magic: '🔮',
-};
-
-const SPECIAL_ATTR_LABELS: Record<string, string> = {
-  support: '支持',
-  reroll: '重投',
-};
-
-const SPECIAL_ATTR_ICONS: Record<string, string> = {
-  support: '🤝',
-  reroll: '🎲',
-};
-
-const EQUIPMENT_TYPE_LABELS: Record<string, string> = {
-  weapon: '武器',
-  armor: '护甲',
-  accessory: '饰品',
-  mount: '坐骑',
-};
-
-const CARD_TYPE_LABELS: Record<string, string> = {
-  character: '角色',
-  equipment: '装备',
-  sultan: '苏丹',
-  intel: '情报',
-  consumable: '消耗品',
-  book: '典籍',
-  gem: '宝石',
-  thought: '思绪',
-};
-
-function SectionTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex items-center gap-2 mt-1">
-      <span className="text-sm font-bold text-gold font-[family-name:var(--font-display)] text-glow-gold whitespace-nowrap">
-        {children}
-      </span>
-      <DividerLine
-        className="flex-1 h-[3px] text-gold-dim/50 pointer-events-none"
-        preserveAspectRatio="none"
-      />
-    </div>
-  );
-}
-
-function AttrBadge({ icon, label, value }: { icon: string; label: string; value: number }) {
-  return (
-    <div className="flex items-center gap-1.5 py-0.5">
-      <div className="relative w-7 h-7 flex items-center justify-center shrink-0">
-        <DecorDiamond
-          className="absolute inset-0 w-full h-full text-gold-dim/60 pointer-events-none"
-          preserveAspectRatio="none"
-        />
-        <span className="relative text-[10px] z-10">{icon}</span>
-      </div>
-      <span className="text-xs text-parchment/70 whitespace-nowrap">{label}</span>
-      <span className="text-sm text-gold-bright font-bold ml-auto tabular-nums">{value}</span>
-    </div>
-  );
-}
 
 interface CardDetailPanelProps {
   card: Card;
@@ -187,12 +110,7 @@ function renderCharacterLayout(
             <SectionTitle>属性</SectionTitle>
             <div className="grid grid-cols-4 gap-x-3 gap-y-0.5 mt-1.5">
               {Object.entries(card.attributes).map(([attr, val]) => (
-                <AttrBadge
-                  key={attr}
-                  icon={ATTR_ICONS[attr] || '?'}
-                  label={ATTR_LABELS[attr] || attr}
-                  value={val}
-                />
+                <AttrBadge key={attr} attr={attr} value={val} />
               ))}
             </div>
           </>
@@ -201,12 +119,7 @@ function renderCharacterLayout(
         {card.special_attributes && Object.keys(card.special_attributes).length > 0 && (
           <div className="grid grid-cols-4 gap-x-3 gap-y-0.5 mt-0.5">
             {Object.entries(card.special_attributes).map(([attr, val]) => (
-              <AttrBadge
-                key={attr}
-                icon={SPECIAL_ATTR_ICONS[attr] || '?'}
-                label={SPECIAL_ATTR_LABELS[attr] || attr}
-                value={val as number}
-              />
+              <AttrBadge key={attr} attr={attr} value={val as number} />
             ))}
           </div>
         )}
@@ -304,17 +217,7 @@ function renderGenericLayout(
           <SectionTitle>属性加成</SectionTitle>
           <div className="grid grid-cols-4 gap-x-3 gap-y-0.5 mt-1">
             {Object.entries(card.attribute_bonus).map(([attr, val]) => (
-              <div key={attr} className="flex items-center gap-1.5 py-0.5">
-                <div className="relative w-7 h-7 flex items-center justify-center shrink-0">
-                  <DecorDiamond
-                    className="absolute inset-0 w-full h-full text-gold-dim/60 pointer-events-none"
-                    preserveAspectRatio="none"
-                  />
-                  <span className="relative text-[10px] z-10">{ATTR_ICONS[attr] || '?'}</span>
-                </div>
-                <span className="text-xs text-parchment/70 whitespace-nowrap">{ATTR_LABELS[attr] || attr}</span>
-                <span className="text-sm text-green-400 font-bold ml-auto tabular-nums">+{val}</span>
-              </div>
+              <AttrBadge key={attr} attr={attr} value={val as number} variant="bonus" />
             ))}
           </div>
         </>
@@ -325,17 +228,7 @@ function renderGenericLayout(
           <SectionTitle>特殊加成</SectionTitle>
           <div className="grid grid-cols-4 gap-x-3 gap-y-0.5 mt-1">
             {Object.entries(card.special_bonus).map(([attr, val]) => (
-              <div key={attr} className="flex items-center gap-1.5 py-0.5">
-                <div className="relative w-7 h-7 flex items-center justify-center shrink-0">
-                  <DecorDiamond
-                    className="absolute inset-0 w-full h-full text-gold-dim/60 pointer-events-none"
-                    preserveAspectRatio="none"
-                  />
-                  <span className="relative text-[10px] z-10">{SPECIAL_ATTR_ICONS[attr] || '?'}</span>
-                </div>
-                <span className="text-xs text-parchment/70 whitespace-nowrap">{SPECIAL_ATTR_LABELS[attr] || attr}</span>
-                <span className="text-sm text-green-400 font-bold ml-auto tabular-nums">+{val}</span>
-              </div>
+              <AttrBadge key={attr} attr={attr} value={val as number} variant="bonus" />
             ))}
           </div>
         </>
@@ -362,17 +255,7 @@ function renderGenericLayout(
           <SectionTitle>属性加成</SectionTitle>
           <div className="grid grid-cols-4 gap-x-3 gap-y-0.5 mt-1">
             {Object.entries(card.attribute_bonus).map(([attr, val]) => (
-              <div key={attr} className="flex items-center gap-1.5 py-0.5">
-                <div className="relative w-7 h-7 flex items-center justify-center shrink-0">
-                  <DecorDiamond
-                    className="absolute inset-0 w-full h-full text-gold-dim/60 pointer-events-none"
-                    preserveAspectRatio="none"
-                  />
-                  <span className="relative text-[10px] z-10">{ATTR_ICONS[attr] || '?'}</span>
-                </div>
-                <span className="text-xs text-parchment/70 whitespace-nowrap">{ATTR_LABELS[attr] || attr}</span>
-                <span className="text-sm text-green-400 font-bold ml-auto tabular-nums">+{val}</span>
-              </div>
+              <AttrBadge key={attr} attr={attr} value={val as number} variant="bonus" />
             ))}
           </div>
         </>

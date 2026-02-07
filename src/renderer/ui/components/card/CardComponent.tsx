@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import type { Card } from '../../../core/types';
 import { Rarity } from '../../../core/types/enums';
+import { ATTR_LABELS, CARD_TYPE_LABELS } from '../../constants/labels';
 
 const RARITY_STYLES: Record<string, string> = {
   gold: 'border-yellow-400 bg-yellow-950/30 shadow-yellow-500/20',
@@ -83,7 +84,7 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
           <span className={`text-xs px-2 py-0.5 rounded ${badgeStyle} font-bold`}>
             {card.rarity.toUpperCase()}
           </span>
-          <span className="text-xs text-gray-400">{card.type}</span>
+          <span className="text-xs text-gray-400">{CARD_TYPE_LABELS[card.type] || card.type}</span>
         </div>
         <h3 className="text-sm font-bold text-amber-100 mb-1">{card.name}</h3>
         <p className="text-xs text-gray-400 line-clamp-2 mb-2">{card.description}</p>
@@ -92,7 +93,7 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
           <div className="grid grid-cols-4 gap-1 text-[10px]">
             {Object.entries(card.attributes).map(([attr, val]) => (
               <div key={attr} className="text-center">
-                <div className="text-gray-500">{attr.slice(0, 3).toUpperCase()}</div>
+                <div className="text-gray-500">{ATTR_LABELS[attr] || attr.slice(0, 3).toUpperCase()}</div>
                 <div className="text-amber-300 font-bold">{val}</div>
               </div>
             ))}
