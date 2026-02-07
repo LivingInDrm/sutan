@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Ma Shan Zheng';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/MaShanZheng-Regular.woff2') format('woff2');
+}
+
 @theme {
   --color-leather: #1a0f0a;
   --color-leather-light: #2a1810;
@@ -18,7 +26,7 @@
   --shadow-gold: 0 0 20px rgba(201, 168, 76, 0.3);
   --shadow-gold-lg: 0 0 40px rgba(201, 168, 76, 0.4);
 
-  --font-display: serif;
+  --font-display: 'Ma Shan Zheng', serif;
 }
 
 .bg-parchment-texture {
