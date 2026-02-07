@@ -56,7 +56,7 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
       <div
         onClick={handleClick}
         className={`
-          w-28 h-36 rounded-lg overflow-hidden cursor-pointer transition-all duration-200
+          w-28 h-48 rounded-lg overflow-hidden cursor-pointer transition-all duration-200
           border border-leather/30 shadow-lg
           ${selected ? 'ring-2 ring-amber-400 scale-105' : ''}
           ${locked ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
