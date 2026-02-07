@@ -4,8 +4,8 @@
     "name": "阿尔图",
     "type": "character",
     "rarity": "silver",
-    "description": "你自己，一个卷入苏丹游戏的可悲之人。",
-    "image": "card01.png",
+    "description": "你自己，一个卷入苏丹游戏的可悲之人。虽然年纪尚轻，却已经历过刀光剑影的洗礼。",
+    "image": "/src/renderer/assets/portraits/figure01.png",
     "attributes": {
       "physique": 9, "charm": 5, "wisdom": 3, "combat": 8,
       "social": 4, "survival": 3, "stealth": 2, "magic": 2
@@ -16,32 +16,77 @@
   },
   {
     "card_id": "card_002",
-    "name": "山狮",
+    "name": "红缨",
     "type": "character",
-    "rarity": "copper",
-    "description": "一个强壮的部落战士，善于近身搏斗。",
-    "image": "card02.png",
+    "rarity": "gold",
+    "description": "江湖上赫赫有名的女剑客，以一柄薄刃和腰间红绸行走四方。性情刚烈，嫉恶如仇，据说曾单枪匹马闯过苏丹的禁卫营。",
+    "image": "/src/renderer/assets/portraits/figure02.png",
     "attributes": {
-      "physique": 7, "charm": 2, "wisdom": 2, "combat": 9,
-      "social": 1, "survival": 5, "stealth": 3, "magic": 1
+      "physique": 7, "charm": 8, "wisdom": 4, "combat": 10,
+      "social": 3, "survival": 6, "stealth": 7, "magic": 2
     },
-    "special_attributes": { "support": -1, "reroll": 0 },
-    "tags": ["male", "warrior", "tribal"],
+    "special_attributes": { "support": 1, "reroll": 2 },
+    "tags": ["female", "swordsman", "wanderer"],
     "equipment_slots": 2
   },
   {
     "card_id": "card_003",
-    "name": "丝路商人",
+    "name": "长风",
+    "type": "character",
+    "rarity": "silver",
+    "description": "来历不明的白衣剑客，挥刀时周身缠绕灼热气焰。沉默寡言，但一旦拔刀便势不可挡。有人说他是被放逐的皇室后裔。",
+    "image": "/src/renderer/assets/portraits/figure03.png",
+    "attributes": {
+      "physique": 8, "charm": 3, "wisdom": 5, "combat": 9,
+      "social": 2, "survival": 6, "stealth": 4, "magic": 5
+    },
+    "special_attributes": { "support": -1, "reroll": 1 },
+    "tags": ["male", "warrior", "exile"],
+    "equipment_slots": 2
+  },
+  {
+    "card_id": "card_004",
+    "name": "明溪",
     "type": "character",
     "rarity": "copper",
-    "description": "一个精明的商人，擅长交涉和谈判。",
-    "image": "card03.png",
+    "description": "一个乐天的少年旅人，靠着灵活的身手和圆滑的口才在丝路上讨生活。虽然看起来不太可靠，关键时刻却总能派上用场。",
+    "image": "/src/renderer/assets/portraits/figure04.png",
     "attributes": {
-      "physique": 3, "charm": 7, "wisdom": 5, "combat": 2,
-      "social": 8, "survival": 2, "stealth": 4, "magic": 1
+      "physique": 4, "charm": 7, "wisdom": 4, "combat": 5,
+      "social": 8, "survival": 3, "stealth": 6, "magic": 1
     },
     "special_attributes": { "support": 3, "reroll": 0 },
-    "tags": ["male", "merchant"],
+    "tags": ["male", "merchant", "traveler"],
+    "equipment_slots": 1
+  },
+  {
+    "card_id": "card_005",
+    "name": "霜月",
+    "type": "character",
+    "rarity": "gold",
+    "description": "身着橙衣的神秘女子，擅长以舞蹈施展秘术。据传她能预见三日之内的未来，却从不为自己占卜。飘逸的长发中似乎藏着不为人知的秘密。",
+    "image": "/src/renderer/assets/portraits/figure05.png",
+    "attributes": {
+      "physique": 3, "charm": 9, "wisdom": 7, "combat": 2,
+      "social": 6, "survival": 2, "stealth": 4, "magic": 10
+    },
+    "special_attributes": { "support": 2, "reroll": 3 },
+    "tags": ["female", "mystic", "dancer"],
+    "equipment_slots": 1
+  },
+  {
+    "card_id": "card_006",
+    "name": "云觉",
+    "type": "character",
+    "rarity": "silver",
+    "description": "总是仰望天空的青衣谋士，看似散漫实则算无遗策。在苏丹的棋盘上，他从不亲自执棋，却能操控整盘局势的走向。",
+    "image": "/src/renderer/assets/portraits/figure06.png",
+    "attributes": {
+      "physique": 2, "charm": 6, "wisdom": 10, "combat": 1,
+      "social": 7, "survival": 3, "stealth": 5, "magic": 6
+    },
+    "special_attributes": { "support": 4, "reroll": 2 },
+    "tags": ["male", "strategist", "scholar"],
     "equipment_slots": 1
   },
   {

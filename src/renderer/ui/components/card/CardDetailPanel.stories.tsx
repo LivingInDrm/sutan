@@ -9,6 +9,13 @@ import {
   EquipmentType,
 } from "../../../core/types/enums";
 
+import portraitAertu from "../../../assets/portraits/figure01.png";
+import portraitHongying from "../../../assets/portraits/figure02.png";
+import portraitChangfeng from "../../../assets/portraits/figure03.png";
+import portraitMingxi from "../../../assets/portraits/figure04.png";
+import portraitShuangyue from "../../../assets/portraits/figure05.png";
+import portraitYunjue from "../../../assets/portraits/figure06.png";
+
 const CHAR_ATTRS: Attributes = {
   [Attribute.Physique]: 31,
   [Attribute.Charm]: 18,
@@ -21,43 +28,53 @@ const CHAR_ATTRS: Attributes = {
 };
 
 const MOCK_CHARACTER_GOLD: Card = {
-  card_id: "char_gold_01",
-  name: "阿尔图",
+  card_id: "card_005",
+  name: "霜月",
   type: CardType.Character,
   rarity: Rarity.Gold,
-  description: "你自己，一个卷入苏丹游戏的可悲之人。",
-  image: "",
-  attributes: CHAR_ATTRS,
+  description: "身着橙衣的神秘女子，擅长以舞蹈施展秘术。据传她能预见三日之内的未来，却从不为自己占卜。",
+  image: portraitShuangyue,
+  attributes: {
+    [Attribute.Physique]: 3,
+    [Attribute.Charm]: 9,
+    [Attribute.Wisdom]: 7,
+    [Attribute.Combat]: 2,
+    [Attribute.Social]: 6,
+    [Attribute.Survival]: 2,
+    [Attribute.Stealth]: 4,
+    [Attribute.Magic]: 10,
+  },
+  special_attributes: {
+    [SpecialAttribute.Support]: 2,
+    [SpecialAttribute.Reroll]: 3,
+  },
+  tags: ["female", "mystic", "dancer"],
+  equipment_slots: 1,
+};
+
+const MOCK_CHARACTER_SILVER: Card = {
+  card_id: "card_protagonist",
+  name: "阿尔图",
+  type: CardType.Character,
+  rarity: Rarity.Silver,
+  description: "你自己，一个卷入苏丹游戏的可悲之人。虽然年纪尚轻，却已经历过刀光剑影的洗礼。",
+  image: portraitAertu,
+  attributes: {
+    [Attribute.Physique]: 9,
+    [Attribute.Charm]: 5,
+    [Attribute.Wisdom]: 3,
+    [Attribute.Combat]: 8,
+    [Attribute.Social]: 4,
+    [Attribute.Survival]: 3,
+    [Attribute.Stealth]: 2,
+    [Attribute.Magic]: 2,
+  },
   special_attributes: {
     [SpecialAttribute.Support]: 2,
     [SpecialAttribute.Reroll]: 1,
   },
-  tags: ["男性", "贵族", "主角", "已拥有", "妆扮", "黑暗知识"],
+  tags: ["male", "clan", "protagonist"],
   equipment_slots: 3,
-};
-
-const MOCK_CHARACTER_SILVER: Card = {
-  card_id: "char_silver_01",
-  name: "贝姬芙",
-  type: CardType.Character,
-  rarity: Rarity.Silver,
-  description: "山狮部落的女战士，擅长近身格斗与荒野求生。",
-  image: "",
-  attributes: {
-    [Attribute.Physique]: 22,
-    [Attribute.Charm]: 12,
-    [Attribute.Wisdom]: 10,
-    [Attribute.Combat]: 28,
-    [Attribute.Social]: 8,
-    [Attribute.Survival]: 25,
-    [Attribute.Stealth]: 15,
-    [Attribute.Magic]: 5,
-  },
-  special_attributes: {
-    [SpecialAttribute.Support]: 3,
-  },
-  tags: ["女性", "战士", "山狮部落"],
-  equipment_slots: 2,
 };
 
 const MOCK_EQUIPMENT: Card = {
