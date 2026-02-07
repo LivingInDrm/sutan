@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { useUIStore } from '../../stores/uiStore';
 import { CardComponent } from '../components/card/CardComponent';
+import { CardDetailPanel } from '../components/card/CardDetailPanel';
 import { SlotComponent } from '../components/card/SlotComponent';
 import type { Card, Slot } from '../../core/types';
 import { SlotType, CardType } from '../../core/types/enums';
@@ -29,9 +30,13 @@ export function SceneScreen() {
   const setScreen = useUIStore(s => s.setScreen);
 
   const [selectedCards, setSelectedCards] = useState<Record<number, string>>({});
+  const [detailCard, setDetailCard] = useState<Card | null>(null);
+  const [detailPos, setDetailPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const scene = selectedSceneId ? game?.sceneManager.getScene(selectedSceneId) : null;
   const sceneState = selectedSceneId ? game?.sceneManager.getSceneState(selectedSceneId) : null;
+
+  const lockedCardIds = game ? game.sceneManager.getLockedCardIds() : new Set<string>();
 
   const allCards: Card[] = game
     ? handCardIds.map(id => game.cardManager.getCard(id)?.data).filter(Boolean) as Card[]
@@ -40,6 +45,10 @@ export function SceneScreen() {
   const handleCardSelect = (slotIndex: number, cardId: string) => {
     setSelectedCards(prev => ({ ...prev, [slotIndex]: cardId }));
   };
+
+  const handleCloseDetail = useCallback(() => {
+    setDetailCard(null);
+  }, []);
 
   const handleConfirm = () => {
     if (!game || !selectedSceneId || !scene) return;
@@ -112,11 +121,20 @@ export function SceneScreen() {
         <div className="flex flex-wrap gap-2">
           {allCards.map(card => {
             const isUsed = Object.values(selectedCards).includes(card.card_id);
+            const isLocked = lockedCardIds.has(card.card_id);
             return (
-              <div
+              <CardComponent
                 key={card.card_id}
-                onClick={() => {
-                  if (!isUsed) {
+                card={card}
+                compact
+                selected={isUsed}
+                locked={isUsed || isLocked}
+                onClick={(e) => {
+                  setDetailCard(card);
+                  setDetailPos({ x: e.clientX, y: e.clientY });
+                }}
+                onDoubleClick={() => {
+                  if (!isUsed && !isLocked) {
                     const emptySlot = scene.slots.findIndex(
                       (slot, i) => !selectedCards[i] && !slot.locked && isCardValidForSlot(card, slot)
                     );
@@ -125,13 +143,15 @@ export function SceneScreen() {
                     }
                   }
                 }}
-              >
-                <CardComponent card={card} compact selected={isUsed} locked={isUsed} />
-              </div>
+              />
             );
           })}
         </div>
       </div>
+
+      {detailCard && (
+        <CardDetailPanel card={detailCard} position={detailPos} onClose={handleCloseDetail} />
+      )}
     </div>
   );
 }

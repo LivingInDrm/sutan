@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import type { Card } from '../../../core/types';
 import { Rarity } from '../../../core/types/enums';
 
@@ -18,20 +18,41 @@ const RARITY_BADGE: Record<string, string> = {
 
 interface CardComponentProps {
   card: Card;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
+  onDoubleClick?: (e: React.MouseEvent) => void;
   selected?: boolean;
   locked?: boolean;
   compact?: boolean;
 }
 
-export function CardComponent({ card, onClick, selected, locked, compact }: CardComponentProps) {
+const DOUBLE_CLICK_DELAY = 250;
+
+export function CardComponent({ card, onClick, onDoubleClick, selected, locked, compact }: CardComponentProps) {
   const rarityStyle = RARITY_STYLES[card.rarity] || RARITY_STYLES.stone;
   const badgeStyle = RARITY_BADGE[card.rarity] || RARITY_BADGE.stone;
+  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clickCount = useRef(0);
+
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    clickCount.current += 1;
+    if (clickCount.current === 1) {
+      clickTimer.current = setTimeout(() => {
+        if (clickCount.current === 1) {
+          onClick?.(e);
+        }
+        clickCount.current = 0;
+      }, DOUBLE_CLICK_DELAY);
+    } else if (clickCount.current === 2) {
+      if (clickTimer.current) clearTimeout(clickTimer.current);
+      clickCount.current = 0;
+      onDoubleClick?.(e);
+    }
+  }, [onClick, onDoubleClick]);
 
   if (compact) {
     return (
       <div
-        onClick={onClick}
+        onClick={handleClick}
         className={`
           w-20 h-28 rounded border-2 cursor-pointer transition-all duration-200
           ${rarityStyle} ${selected ? 'ring-2 ring-amber-400 scale-105' : ''}
@@ -49,7 +70,7 @@ export function CardComponent({ card, onClick, selected, locked, compact }: Card
 
   return (
     <div
-      onClick={onClick}
+      onClick={handleClick}
       className={`
         w-48 rounded-lg border-2 cursor-pointer transition-all duration-200
         ${rarityStyle} ${selected ? 'ring-2 ring-amber-400 scale-105' : ''}

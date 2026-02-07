@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { useUIStore } from '../../stores/uiStore';
 import { CardComponent } from '../components/card/CardComponent';
+import { CardDetailPanel } from '../components/card/CardDetailPanel';
 import type { Card } from '../../core/types';
 
 export function MapScreen() {
@@ -13,6 +14,10 @@ export function MapScreen() {
   const handCardIds = useGameStore(s => s.handCardIds);
   const setScreen = useUIStore(s => s.setScreen);
   const selectScene = useUIStore(s => s.selectScene);
+
+  const [detailCard, setDetailCard] = useState<Card | null>(null);
+  const [detailPos, setDetailPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const handleCloseDetail = useCallback(() => setDetailCard(null), []);
 
   const allCards: Card[] = game
     ? handCardIds.map(id => game.cardManager.getCard(id)?.data).filter(Boolean) as Card[]
@@ -113,10 +118,22 @@ export function MapScreen() {
         <h3 className="text-sm font-bold text-amber-400 mb-3">Hand ({allCards.length})</h3>
         <div className="flex flex-col gap-2">
           {allCards.map(card => (
-            <CardComponent key={card.card_id} card={card} compact />
+            <CardComponent
+              key={card.card_id}
+              card={card}
+              compact
+              onClick={(e) => {
+                setDetailCard(card);
+                setDetailPos({ x: e.clientX, y: e.clientY });
+              }}
+            />
           ))}
         </div>
       </div>
+
+      {detailCard && (
+        <CardDetailPanel card={detailCard} position={detailPos} onClose={handleCloseDetail} />
+      )}
     </div>
   );
 }
