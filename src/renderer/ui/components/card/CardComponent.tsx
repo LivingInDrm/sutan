@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from 'react';
 import type { Card } from '../../../core/types';
 import { Rarity } from '../../../core/types/enums';
 import { ATTR_LABELS, CARD_TYPE_LABELS } from '../../constants/labels';
+import ricePaperTexture from '../../../assets/textures/rice-paper-256.webp';
 
 const RARITY_STYLES: Record<string, string> = {
   gold: 'border-yellow-400 bg-yellow-950/30 shadow-yellow-500/20',
@@ -55,16 +56,33 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
       <div
         onClick={handleClick}
         className={`
-          w-20 h-28 rounded border-2 cursor-pointer transition-all duration-200
-          ${rarityStyle} ${selected ? 'ring-2 ring-amber-400 scale-105' : ''}
+          w-28 h-36 rounded-lg overflow-hidden cursor-pointer transition-all duration-200
+          border border-leather/30 shadow-lg
+          ${selected ? 'ring-2 ring-amber-400 scale-105' : ''}
           ${locked ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
-          shadow-lg flex flex-col items-center justify-center p-1
         `}
       >
-        <span className={`text-[10px] px-1 rounded ${badgeStyle} font-bold`}>
-          {card.rarity.charAt(0).toUpperCase()}
-        </span>
-        <span className="text-[10px] text-center mt-1 line-clamp-2">{card.name}</span>
+        <div
+          className="flex w-full h-full"
+          style={{ backgroundImage: `url(${ricePaperTexture})`, backgroundSize: 'cover' }}
+        >
+          <div className="flex-1 flex items-end p-1.5">
+            <span className="text-[11px] font-bold text-leather font-[family-name:var(--font-display)] leading-tight line-clamp-2">
+              {card.name}
+            </span>
+          </div>
+          <div className="w-[45%] relative overflow-hidden">
+            {card.image ? (
+              <img src={card.image} alt={card.name} className="w-full h-full object-cover object-top" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-leather/5">
+                <span className={`text-xs px-1.5 py-0.5 rounded ${badgeStyle} font-bold`}>
+                  {card.rarity.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     );
   }
