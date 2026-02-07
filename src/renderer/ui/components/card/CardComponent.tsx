@@ -63,15 +63,15 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
         `}
       >
         <div
-          className="flex w-full h-full"
+          className="flex flex-col w-full h-full"
           style={{ backgroundImage: `url(${ricePaperTexture})`, backgroundSize: 'cover' }}
         >
-          <div className="flex-1 flex items-end p-1.5">
-            <span className="text-[11px] font-bold text-leather font-[family-name:var(--font-display)] leading-tight line-clamp-2">
+          <div className="px-2 pt-1.5 pb-1">
+            <span className="text-[11px] font-bold text-leather font-[family-name:var(--font-display)] leading-tight line-clamp-1">
               {card.name}
             </span>
           </div>
-          <div className="w-[45%] relative overflow-hidden">
+          <div className="flex-1 relative overflow-hidden">
             {card.image ? (
               <img src={card.image} alt={card.name} className="w-full h-full object-cover object-top" />
             ) : (
