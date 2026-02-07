@@ -61,7 +61,7 @@ export function CardDetailPanel({ card, position, onClose }: CardDetailPanelProp
     <div
       ref={panelRef}
       style={{ left: position.x + 8, top: position.y }}
-      className={`fixed z-50 ${isWide ? 'w-[600px]' : 'w-[380px]'}`}
+      className={`fixed z-50 ${isWide ? 'w-[720px]' : 'w-[380px]'}`}
     >
       <div className="relative">
         <FrameOrnate
@@ -94,7 +94,7 @@ function renderCharacterLayout(
 ) {
   return (
     <div className="flex min-h-[280px]">
-      <div className="flex-[3] p-5 pr-4 flex flex-col">
+      <div className="flex-[7] p-5 pr-4 flex flex-col">
         <div className="flex items-center gap-2 mb-2">
           <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${rarity.badge} ${rarity.badgeText}`}>
             {card.rarity.toUpperCase()}
@@ -108,7 +108,7 @@ function renderCharacterLayout(
         {card.attributes && (
           <>
             <SectionTitle>属性</SectionTitle>
-            <div className="grid grid-cols-4 gap-x-3 gap-y-0.5 mt-1.5">
+            <div className="grid grid-cols-4 gap-x-8 gap-y-0.5 mt-1.5">
               {Object.entries(card.attributes).map(([attr, val]) => (
                 <AttrBadge key={attr} attr={attr} value={val} />
               ))}
@@ -117,7 +117,7 @@ function renderCharacterLayout(
         )}
 
         {card.special_attributes && Object.keys(card.special_attributes).length > 0 && (
-          <div className="grid grid-cols-4 gap-x-3 gap-y-0.5 mt-0.5">
+          <div className="grid grid-cols-4 gap-x-8 gap-y-0.5 mt-0.5">
             {Object.entries(card.special_attributes).map(([attr, val]) => (
               <AttrBadge key={attr} attr={attr} value={val as number} />
             ))}
@@ -143,7 +143,7 @@ function renderCharacterLayout(
 
       <div className="w-px bg-gold-dim/20 self-stretch my-4" />
 
-      <div className="flex-[2] p-5 pl-4 flex flex-col items-center">
+      <div className="flex-[3] p-5 pl-4 flex flex-col items-center">
         <h2 className="text-lg font-bold text-gold font-[family-name:var(--font-display)] text-glow-gold text-center">
           {card.name}
         </h2>
