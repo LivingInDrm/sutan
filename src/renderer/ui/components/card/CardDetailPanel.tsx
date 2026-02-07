@@ -56,13 +56,12 @@ export function CardDetailPanel({ card, position, onClose }: CardDetailPanelProp
   const rarity = RARITY_COLORS[card.rarity] || RARITY_COLORS.stone;
   const isCharacter = card.type === CardType.Character;
   const isEquipment = card.type === CardType.Equipment;
-  const isWide = isCharacter;
 
   return (
     <div
       ref={panelRef}
       style={{ left: position.x + 8, top: position.y }}
-      className={`fixed z-50 ${isWide ? 'w-[720px]' : 'w-[380px]'}`}
+      className="fixed z-50 w-[720px]"
     >
       <div className="relative">
         <FrameOrnate
@@ -84,197 +83,127 @@ export function CardDetailPanel({ card, position, onClose }: CardDetailPanelProp
               </svg>
             </button>
 
-            {isCharacter ? renderCharacterLayout(card, rarity) : renderGenericLayout(card, rarity, isEquipment)}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+            <div className="flex min-h-[280px]">
+              <div className="flex-[7] p-5 pr-4 flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${rarity.badge} ${rarity.badgeText}`}>
+                    {card.rarity.toUpperCase()}
+                  </span>
+                  <h2 className="text-base font-bold text-leather font-[family-name:var(--font-display)]">
+                    {card.name}
+                  </h2>
+                  <span className="text-[11px] text-leather/40">{CARD_TYPE_LABELS[card.type]}</span>
+                  {isEquipment && card.equipment_type && (
+                    <span className="text-[11px] px-2 py-0.5 rounded bg-leather/10 border border-leather/20 text-leather/60">
+                      {EQUIPMENT_TYPE_LABELS[card.equipment_type] || card.equipment_type}
+                    </span>
+                  )}
+                </div>
 
-function renderCharacterLayout(
-  card: Card,
-  rarity: { badge: string; badgeText: string },
-) {
-  return (
-    <div className="flex min-h-[280px]">
-      <div className="flex-[7] p-5 pr-4 flex flex-col">
-        <div className="flex items-center gap-2 mb-2">
-          <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${rarity.badge} ${rarity.badgeText}`}>
-            {card.rarity.toUpperCase()}
-          </span>
-        </div>
+                <p className="text-xs text-leather/70 leading-relaxed mb-3">
+                  {card.description}
+                </p>
 
-        <p className="text-xs text-leather/70 leading-relaxed mb-3">
-          {card.description}
-        </p>
+                {isCharacter && card.attributes && (
+                  <>
+                    <SectionTitle theme="light">属性</SectionTitle>
+                    <div className="grid grid-cols-4 gap-x-8 gap-y-0.5 mt-1.5">
+                      {Object.entries(card.attributes).map(([attr, val]) => (
+                        <AttrBadge key={attr} attr={attr} value={val} theme="light" />
+                      ))}
+                    </div>
+                  </>
+                )}
 
-        {card.attributes && (
-          <>
-            <SectionTitle theme="light">属性</SectionTitle>
-            <div className="grid grid-cols-4 gap-x-8 gap-y-0.5 mt-1.5">
-              {Object.entries(card.attributes).map(([attr, val]) => (
-                <AttrBadge key={attr} attr={attr} value={val} theme="light" />
-              ))}
-            </div>
-          </>
-        )}
+                {isCharacter && card.special_attributes && Object.keys(card.special_attributes).length > 0 && (
+                  <div className="grid grid-cols-4 gap-x-8 gap-y-0.5 mt-0.5">
+                    {Object.entries(card.special_attributes).map(([attr, val]) => (
+                      <AttrBadge key={attr} attr={attr} value={val as number} theme="light" />
+                    ))}
+                  </div>
+                )}
 
-        {card.special_attributes && Object.keys(card.special_attributes).length > 0 && (
-          <div className="grid grid-cols-4 gap-x-8 gap-y-0.5 mt-0.5">
-            {Object.entries(card.special_attributes).map(([attr, val]) => (
-              <AttrBadge key={attr} attr={attr} value={val as number} theme="light" />
-            ))}
-          </div>
-        )}
+                {!isCharacter && card.attribute_bonus && Object.keys(card.attribute_bonus).length > 0 && (
+                  <>
+                    <SectionTitle theme="light">属性加成</SectionTitle>
+                    <div className="grid grid-cols-4 gap-x-8 gap-y-0.5 mt-1.5">
+                      {Object.entries(card.attribute_bonus).map(([attr, val]) => (
+                        <AttrBadge key={attr} attr={attr} value={val as number} variant="bonus" theme="light" />
+                      ))}
+                    </div>
+                  </>
+                )}
 
-        {card.tags && card.tags.length > 0 && (
-          <div className="mt-auto pt-3">
-            <SectionTitle theme="light">标签</SectionTitle>
-            <div className="flex flex-wrap gap-1.5 mt-1.5">
-              {card.tags.map(tag => (
-                <span
-                  key={tag}
-                  className="text-[11px] px-2 py-0.5 bg-leather/10 rounded text-leather/70 border border-leather/20"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+                {!isCharacter && card.special_bonus && Object.keys(card.special_bonus).length > 0 && (
+                  <>
+                    <SectionTitle theme="light">特殊加成</SectionTitle>
+                    <div className="grid grid-cols-4 gap-x-8 gap-y-0.5 mt-0.5">
+                      {Object.entries(card.special_bonus).map(([attr, val]) => (
+                        <AttrBadge key={attr} attr={attr} value={val as number} variant="bonus" theme="light" />
+                      ))}
+                    </div>
+                  </>
+                )}
 
-      <div className="w-px bg-gold-dim/30 self-stretch my-4" />
+                {isEquipment && card.gem_slots !== undefined && card.gem_slots > 0 && (
+                  <div className="flex items-center gap-2 text-xs mt-2">
+                    <span className="text-leather/50">宝石槽</span>
+                    <div className="flex gap-1">
+                      {Array.from({ length: card.gem_slots }).map((_, i) => (
+                        <div
+                          key={i}
+                          className="w-5 h-5 rounded-full border border-gold-dim/40 bg-leather/10 flex items-center justify-center"
+                        >
+                          <span className="text-gold-dim text-[8px]">◇</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-      <div className="flex-[3] relative flex items-stretch overflow-hidden">
-        {card.image ? (
-          <img src={card.image} alt={card.name} className="w-full h-full object-cover object-top" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="text-4xl opacity-30">🃏</span>
-          </div>
-        )}
-
-        <div className="absolute bottom-0 right-0 flex items-end gap-1 p-3">
-          <span className="text-[11px] text-leather/50">{CARD_TYPE_LABELS[card.type]}</span>
-          <h2 className="text-lg font-bold text-leather font-[family-name:var(--font-display)] writing-mode-vertical">
-            {card.name}
-          </h2>
-        </div>
-
-        {card.equipment_slots !== undefined && card.equipment_slots > 0 && (
-          <div className="absolute bottom-3 left-3 flex gap-1">
-            {Array.from({ length: card.equipment_slots }).map((_, i) => (
-              <div
-                key={i}
-                className="w-5 h-5 rounded border border-gold-dim/40 bg-parchment/60 flex items-center justify-center"
-              >
-                <span className="text-gold-dim text-[8px]">+</span>
+                {card.tags && card.tags.length > 0 && (
+                  <div className="mt-auto pt-3">
+                    <SectionTitle theme="light">标签</SectionTitle>
+                    <div className="flex flex-wrap gap-1.5 mt-1.5">
+                      {card.tags.map(tag => (
+                        <span
+                          key={tag}
+                          className="text-[11px] px-2 py-0.5 bg-leather/10 rounded text-leather/70 border border-leather/20"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
 
-function renderGenericLayout(
-  card: Card,
-  rarity: { badge: string; badgeText: string },
-  isEquipment: boolean,
-) {
-  return (
-    <div className="p-5 space-y-3">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${rarity.badge} ${rarity.badgeText}`}>
-              {card.rarity.toUpperCase()}
-            </span>
-            <span className="text-[11px] text-leather/40">
-              {CARD_TYPE_LABELS[card.type] || card.type}
-            </span>
-          </div>
-          <h2 className="text-base font-bold text-leather font-[family-name:var(--font-display)]">
-            {card.name}
-          </h2>
-        </div>
+              <div className="flex-[3] relative flex items-stretch overflow-hidden">
+                {card.image ? (
+                  <img src={card.image} alt={card.name} className="w-full h-full object-cover object-top" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-4xl opacity-30">🃏</span>
+                  </div>
+                )}
 
-        {isEquipment && card.equipment_type && (
-          <span className="text-[11px] px-2 py-1 rounded bg-leather/10 border border-leather/20 text-leather/60">
-            {EQUIPMENT_TYPE_LABELS[card.equipment_type] || card.equipment_type}
-          </span>
-        )}
-      </div>
-
-      <p className="text-xs text-leather/70 leading-relaxed">{card.description}</p>
-
-      {isEquipment && card.attribute_bonus && Object.keys(card.attribute_bonus).length > 0 && (
-        <>
-          <SectionTitle theme="light">属性加成</SectionTitle>
-          <div className="grid grid-cols-4 gap-x-3 gap-y-0.5 mt-1">
-            {Object.entries(card.attribute_bonus).map(([attr, val]) => (
-              <AttrBadge key={attr} attr={attr} value={val as number} variant="bonus" theme="light" />
-            ))}
-          </div>
-        </>
-      )}
-
-      {isEquipment && card.special_bonus && Object.keys(card.special_bonus).length > 0 && (
-        <>
-          <SectionTitle theme="light">特殊加成</SectionTitle>
-          <div className="grid grid-cols-4 gap-x-3 gap-y-0.5 mt-1">
-            {Object.entries(card.special_bonus).map(([attr, val]) => (
-              <AttrBadge key={attr} attr={attr} value={val as number} variant="bonus" theme="light" />
-            ))}
-          </div>
-        </>
-      )}
-
-      {isEquipment && card.gem_slots !== undefined && (
-        <div className="flex items-center gap-2 text-xs">
-          <span className="text-leather/50">宝石槽</span>
-          <div className="flex gap-1">
-            {Array.from({ length: card.gem_slots }).map((_, i) => (
-              <div
-                key={i}
-                className="w-5 h-5 rounded-full border border-gold-dim/40 bg-leather/10 flex items-center justify-center"
-              >
-                <span className="text-gold-dim text-[8px]">◇</span>
+                {isCharacter && card.equipment_slots !== undefined && card.equipment_slots > 0 && (
+                  <div className="absolute bottom-3 left-3 flex gap-1">
+                    {Array.from({ length: card.equipment_slots }).map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-5 h-5 rounded border border-gold-dim/40 bg-parchment/60 flex items-center justify-center"
+                      >
+                        <span className="text-gold-dim text-[8px]">+</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            ))}
+            </div>
           </div>
         </div>
-      )}
-
-      {!isEquipment && card.attribute_bonus && Object.keys(card.attribute_bonus).length > 0 && (
-        <>
-          <SectionTitle theme="light">属性加成</SectionTitle>
-          <div className="grid grid-cols-4 gap-x-3 gap-y-0.5 mt-1">
-            {Object.entries(card.attribute_bonus).map(([attr, val]) => (
-              <AttrBadge key={attr} attr={attr} value={val as number} variant="bonus" theme="light" />
-            ))}
-          </div>
-        </>
-      )}
-
-      {card.tags && card.tags.length > 0 && (
-        <>
-          <SectionTitle theme="light">标签</SectionTitle>
-          <div className="flex flex-wrap gap-1.5 mt-1">
-            {card.tags.map(tag => (
-              <span
-                key={tag}
-                className="text-[11px] px-2 py-0.5 bg-leather/10 rounded text-leather/70 border border-leather/20"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </>
-      )}
+      </div>
     </div>
   );
 }
