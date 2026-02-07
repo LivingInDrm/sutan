@@ -2,17 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import type { Card } from '../../../core/types';
 import { CardType } from '../../../core/types/enums';
 import { CARD_TYPE_LABELS, EQUIPMENT_TYPE_LABELS } from '../../constants/labels';
-import { FrameOrnate } from '../common/svg';
 import { AttrBadge } from '../common/AttrBadge';
 import { SectionTitle } from '../common/SectionTitle';
 import ricePaperTexture from '../../../assets/textures/rice-paper-1024.webp';
-
-const RARITY_COLORS: Record<string, { border: string; glow: string; badge: string; badgeText: string }> = {
-  gold: { border: 'text-yellow-400', glow: 'drop-shadow-[0_0_12px_rgba(234,179,8,0.4)]', badge: 'bg-yellow-500/90', badgeText: 'text-yellow-950' },
-  silver: { border: 'text-gray-300', glow: 'drop-shadow-[0_0_12px_rgba(209,213,219,0.3)]', badge: 'bg-gray-300/90', badgeText: 'text-gray-900' },
-  copper: { border: 'text-amber-600', glow: 'drop-shadow-[0_0_12px_rgba(217,119,6,0.3)]', badge: 'bg-amber-600/90', badgeText: 'text-amber-950' },
-  stone: { border: 'text-stone-500', glow: 'drop-shadow-[0_0_8px_rgba(120,113,108,0.2)]', badge: 'bg-stone-500/90', badgeText: 'text-stone-900' },
-};
 
 interface CardDetailPanelProps {
   card: Card;
@@ -53,7 +45,6 @@ export function CardDetailPanel({ card, position, onClose }: CardDetailPanelProp
     }
   }, [position]);
 
-  const rarity = RARITY_COLORS[card.rarity] || RARITY_COLORS.stone;
   const isCharacter = card.type === CardType.Character;
   const isEquipment = card.type === CardType.Equipment;
 
@@ -64,13 +55,8 @@ export function CardDetailPanel({ card, position, onClose }: CardDetailPanelProp
       className="fixed z-50 w-[720px]"
     >
       <div className="relative">
-        <FrameOrnate
-          className={`absolute inset-0 w-full h-full ${rarity.border} ${rarity.glow} pointer-events-none`}
-          preserveAspectRatio="none"
-        />
-
         <div
-          className="relative z-10 rounded-lg overflow-hidden shadow-2xl"
+          className="relative rounded-lg overflow-hidden shadow-2xl"
           style={{ backgroundImage: `url(${ricePaperTexture})`, backgroundSize: 'cover' }}
         >
           <div>
@@ -86,9 +72,6 @@ export function CardDetailPanel({ card, position, onClose }: CardDetailPanelProp
             <div className="flex min-h-[280px]">
               <div className="flex-[7] p-5 pr-4 flex flex-col">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className={`text-[10px] px-2 py-0.5 rounded font-bold ${rarity.badge} ${rarity.badgeText}`}>
-                    {card.rarity.toUpperCase()}
-                  </span>
                   <h2 className="text-base font-bold text-leather font-[family-name:var(--font-display)]">
                     {card.name}
                   </h2>
