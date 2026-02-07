@@ -5,7 +5,7 @@
     "type": "character",
     "rarity": "silver",
     "description": "北凉二公子，徐凤年亲弟，绰号黄蛮儿。生而金刚境，天生神力、铜筋铁骨，心智纯粹，唯兄命是从。师承龙虎山赵希抟，驭黑虎、掌龙象军，战场肉身横绝，为北凉最锐之矛。",
-    "image": "/src/renderer/assets/portraits/figure01.png",
+    "image": "/assets/portraits/figure01.png",
     "attributes": {
       "physique": 9, "charm": 5, "wisdom": 3, "combat": 8,
       "social": 4, "survival": 3, "stealth": 2, "magic": 2
@@ -20,7 +20,7 @@
     "type": "character",
     "rarity": "gold",
     "description": "北凉二郡主，徐凤年二姐，实为春秋兵圣叶白夔之女、死士甲。胭脂副榜之首，上阴学宫学霸，棋剑双绝，掌赤螭符剑。铁门关一战后轮椅度日，坐镇梧桐院，以智谋为北凉定鼎中枢。",
-    "image": "/src/renderer/assets/portraits/figure02.png",
+    "image": "/assets/portraits/figure02.png",
     "attributes": {
       "physique": 7, "charm": 8, "wisdom": 4, "combat": 10,
       "social": 3, "survival": 6, "stealth": 7, "magic": 2
@@ -35,7 +35,7 @@
     "type": "character",
     "rarity": "silver",
     "description": "北凉世子，真武转世，纨绔为表、智武双绝。三千里历练成天人境，掌双刀、通百家武学，临阵守北凉、镇天下。",
-    "image": "/src/renderer/assets/portraits/figure03.png",
+    "image": "/assets/portraits/figure03.png",
     "attributes": {
       "physique": 8, "charm": 3, "wisdom": 5, "combat": 9,
       "social": 2, "survival": 6, "stealth": 4, "magic": 5
@@ -50,7 +50,7 @@
     "type": "character",
     "rarity": "copper",
     "description": "徐凤年兄弟，人称温不胜。出身寒微，一柄木剑闯江湖，得黄三甲传剑、名动京华。为不背叛兄弟，自断一臂、废去武功，折剑退出江湖。",
-    "image": "/src/renderer/assets/portraits/figure04.png",
+    "image": "/assets/portraits/figure04.png",
     "attributes": {
       "physique": 4, "charm": 7, "wisdom": 4, "combat": 5,
       "social": 8, "survival": 3, "stealth": 6, "magic": 1
@@ -65,7 +65,7 @@
     "type": "character",
     "rarity": "gold",
     "description": "北凉王府梧桐苑的大丫鬟，眉眼温软、心思极深。看似只是侍女，实则是徐凤年身边最可靠的影子与退路。",
-    "image": "/src/renderer/assets/portraits/figure05.png",
+    "image": "/assets/portraits/figure05.png",
     "attributes": {
       "physique": 3, "charm": 9, "wisdom": 7, "combat": 2,
       "social": 6, "survival": 2, "stealth": 4, "magic": 10
@@ -80,7 +80,7 @@
     "type": "character",
     "rarity": "silver",
     "description": "武当山掌教，吕祖转世，天道千年一遇的修行奇才。自幼骑牛悟道，不登武当绝顶，只为等待红衣。一朝悟道直入天人境，一剑破万法，愿为徐脂虎飞升，自行兵解，再修三百年换人间太平。",
-    "image": "/src/renderer/assets/portraits/figure06.png",
+    "image": "/assets/portraits/figure06.png",
     "attributes": {
       "physique": 2, "charm": 6, "wisdom": 10, "combat": 1,
       "social": 7, "survival": 3, "stealth": 5, "magic": 6
@@ -117,7 +117,7 @@
     "type": "equipment",
     "rarity": "silver",
     "description": "南宫仆射佩刀，与春雷成对，三尺二寸，十斤九两，钝锋重刀，十九停之根基，力沉势稳可镇千军，江湖双刀传奇之首。",
-    "image": "/src/renderer/assets/items/item_scimitar_01.png",
+    "image": "/assets/items/item_scimitar_01.png",
     "equipment_type": "weapon",
     "attribute_bonus": { "combat": 7, "physique": 5 },
     "special_bonus": { "support": 2 },
@@ -130,7 +130,7 @@
     "type": "equipment",
     "rarity": "gold",
     "description": "北凉王妃吴素佩剑，吴家剑冢四大神兵之一，剑匣刻\"此剑抚平天下不平事，此剑无愧世间有愧人\"；吴素死后由徐凤年转赠姜泥，是两代北凉王妃的象征，一剑可破百甲。",
-    "image": "/src/renderer/assets/items/item_sword_01.png",
+    "image": "/assets/items/item_sword_01.png",
     "equipment_type": "weapon",
     "attribute_bonus": { "combat": 10, "charm": 3, "wisdom": 2 },
     "special_bonus": { "reroll": 2 },
@@ -143,7 +143,7 @@
     "type": "equipment",
     "rarity": "gold",
     "description": "桃花剑神邓太阿的信物，后赠予徐凤年；分别为玄甲、青梅、竹马、朝露、春水、桃花、峨眉、朱雀、黄桐、蚍蜉、金缕、太阿，可御使群攻，灵动无双。",
-    "image": "/src/renderer/assets/items/item_daggers_01.png",
+    "image": "/assets/items/item_daggers_01.png",
     "equipment_type": "weapon",
     "attribute_bonus": { "combat": 6, "magic": 8, "stealth": 4 },
     "special_bonus": { "reroll": 3 },
@@ -156,7 +156,7 @@
     "type": "equipment",
     "rarity": "gold",
     "description": "剑神李淳罡的佩剑，天外陨石所铸，与符将红甲同源；\"三尺木马牛，可折天下兵\"，可惜在与王仙芝一战中被折断。",
-    "image": "/src/renderer/assets/items/item_sword_02.png",
+    "image": "/assets/items/item_sword_02.png",
     "equipment_type": "weapon",
     "attribute_bonus": { "combat": 12 },
     "special_bonus": { "support": -1, "reroll": 1 },
