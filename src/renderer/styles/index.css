@@ -1,1 +1,34 @@
 @import "tailwindcss";
+
+@theme {
+  --color-leather: #1a0f0a;
+  --color-leather-light: #2a1810;
+  --color-parchment: #d4c5a9;
+  --color-parchment-light: #e8dcc8;
+  --color-gold: #c9a84c;
+  --color-gold-bright: #f0d060;
+  --color-gold-dim: #8a6d2b;
+  --color-crimson: #8b1a1a;
+  --color-crimson-dark: #6b0f0f;
+  --color-brass: #b8860b;
+  --color-ink: #1a1a2e;
+  --color-ink-light: #252540;
+
+  --shadow-gold-sm: 0 0 8px rgba(201, 168, 76, 0.2);
+  --shadow-gold: 0 0 20px rgba(201, 168, 76, 0.3);
+  --shadow-gold-lg: 0 0 40px rgba(201, 168, 76, 0.4);
+
+  --font-display: serif;
+}
+
+.bg-parchment-texture {
+  background: linear-gradient(135deg, #d4c5a9 0%, #c4b594 50%, #d4c5a9 100%);
+}
+
+.bg-leather-texture {
+  background: radial-gradient(ellipse at 20% 50%, #2a1810 0%, #1a0f0a 100%);
+}
+
+.text-glow-gold {
+  text-shadow: 0 0 12px rgba(201, 168, 76, 0.5);
+}
