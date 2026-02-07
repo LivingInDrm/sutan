@@ -1,0 +1,150 @@
+import type { Story } from "@ladle/react";
+import { CardDetailPanel } from "./CardDetailPanel";
+import type { Card, Attributes } from "../../../core/types";
+import {
+  CardType,
+  Rarity,
+  Attribute,
+  SpecialAttribute,
+  EquipmentType,
+} from "../../../core/types/enums";
+
+const CHAR_ATTRS: Attributes = {
+  [Attribute.Physique]: 31,
+  [Attribute.Charm]: 18,
+  [Attribute.Wisdom]: 21,
+  [Attribute.Combat]: 31,
+  [Attribute.Social]: 17,
+  [Attribute.Survival]: 16,
+  [Attribute.Stealth]: 10,
+  [Attribute.Magic]: 23,
+};
+
+const MOCK_CHARACTER_GOLD: Card = {
+  card_id: "char_gold_01",
+  name: "阿尔图",
+  type: CardType.Character,
+  rarity: Rarity.Gold,
+  description: "你自己，一个卷入苏丹游戏的可悲之人。",
+  image: "",
+  attributes: CHAR_ATTRS,
+  special_attributes: {
+    [SpecialAttribute.Support]: 2,
+    [SpecialAttribute.Reroll]: 1,
+  },
+  tags: ["男性", "贵族", "主角", "已拥有", "妆扮", "黑暗知识"],
+  equipment_slots: 3,
+};
+
+const MOCK_CHARACTER_SILVER: Card = {
+  card_id: "char_silver_01",
+  name: "贝姬芙",
+  type: CardType.Character,
+  rarity: Rarity.Silver,
+  description: "山狮部落的女战士，擅长近身格斗与荒野求生。",
+  image: "",
+  attributes: {
+    [Attribute.Physique]: 22,
+    [Attribute.Charm]: 12,
+    [Attribute.Wisdom]: 10,
+    [Attribute.Combat]: 28,
+    [Attribute.Social]: 8,
+    [Attribute.Survival]: 25,
+    [Attribute.Stealth]: 15,
+    [Attribute.Magic]: 5,
+  },
+  special_attributes: {
+    [SpecialAttribute.Support]: 3,
+  },
+  tags: ["女性", "战士", "山狮部落"],
+  equipment_slots: 2,
+};
+
+const MOCK_EQUIPMENT: Card = {
+  card_id: "equip_01",
+  name: "实传铠",
+  type: CardType.Equipment,
+  rarity: Rarity.Gold,
+  description: "传承自古代苏丹的珍贵铠甲，蕴含着不可思议的防护之力。",
+  image: "",
+  equipment_type: EquipmentType.Armor,
+  attribute_bonus: {
+    [Attribute.Physique]: 5,
+    [Attribute.Combat]: 3,
+    [Attribute.Survival]: 2,
+  },
+  special_bonus: {
+    [SpecialAttribute.Support]: 1,
+  },
+  gem_slots: 2,
+  tags: ["护甲", "传说"],
+};
+
+const MOCK_INTEL: Card = {
+  card_id: "intel_01",
+  name: "密道地图",
+  type: CardType.Intel,
+  rarity: Rarity.Copper,
+  description: "一张标注了宫殿密道的古老地图，也许能在关键时刻派上用场。",
+  image: "",
+  attribute_bonus: {
+    [Attribute.Stealth]: 4,
+    [Attribute.Wisdom]: 2,
+  },
+  tags: ["情报", "宫殿"],
+};
+
+const MOCK_CONSUMABLE: Card = {
+  card_id: "consumable_01",
+  name: "治愈药水",
+  type: CardType.Consumable,
+  rarity: Rarity.Stone,
+  description: "普通的治愈药水，能恢复少量体力。",
+  image: "",
+  attribute_bonus: {
+    [Attribute.Physique]: 3,
+  },
+  tags: ["消耗品"],
+};
+
+const noop = () => {};
+const center = { x: 40, y: 40 };
+
+const Wrap = ({ children }: { children: React.ReactNode }) => (
+  <div className="bg-leather min-h-screen p-10 relative">{children}</div>
+);
+
+export const CharacterGold: Story = () => (
+  <Wrap>
+    <CardDetailPanel card={MOCK_CHARACTER_GOLD} position={center} onClose={noop} />
+  </Wrap>
+);
+CharacterGold.meta = { title: "CardDetailPanel / Character Gold" };
+
+export const CharacterSilver: Story = () => (
+  <Wrap>
+    <CardDetailPanel card={MOCK_CHARACTER_SILVER} position={center} onClose={noop} />
+  </Wrap>
+);
+CharacterSilver.meta = { title: "CardDetailPanel / Character Silver" };
+
+export const Equipment: Story = () => (
+  <Wrap>
+    <CardDetailPanel card={MOCK_EQUIPMENT} position={center} onClose={noop} />
+  </Wrap>
+);
+Equipment.meta = { title: "CardDetailPanel / Equipment" };
+
+export const Intel: Story = () => (
+  <Wrap>
+    <CardDetailPanel card={MOCK_INTEL} position={center} onClose={noop} />
+  </Wrap>
+);
+Intel.meta = { title: "CardDetailPanel / Intel" };
+
+export const Consumable: Story = () => (
+  <Wrap>
+    <CardDetailPanel card={MOCK_CONSUMABLE} position={center} onClose={noop} />
+  </Wrap>
+);
+Consumable.meta = { title: "CardDetailPanel / Consumable" };
