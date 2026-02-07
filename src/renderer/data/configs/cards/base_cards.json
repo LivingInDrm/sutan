@@ -112,6 +112,58 @@
     "tags": ["weapon"]
   },
   {
+    "card_id": "equip_003",
+    "name": "绣冬",
+    "type": "equipment",
+    "rarity": "silver",
+    "description": "南宫仆射佩刀，与春雷成对，三尺二寸，十斤九两，钝锋重刀，十九停之根基，力沉势稳可镇千军，江湖双刀传奇之首。",
+    "image": "/src/renderer/assets/items/item_scimitar_01.png",
+    "equipment_type": "weapon",
+    "attribute_bonus": { "combat": 7, "physique": 5 },
+    "special_bonus": { "support": 2 },
+    "gem_slots": 1,
+    "tags": ["weapon", "legendary", "paired"]
+  },
+  {
+    "card_id": "equip_004",
+    "name": "大凉龙雀",
+    "type": "equipment",
+    "rarity": "gold",
+    "description": "北凉王妃吴素佩剑，吴家剑冢四大神兵之一，剑匣刻\"此剑抚平天下不平事，此剑无愧世间有愧人\"；吴素死后由徐凤年转赠姜泥，是两代北凉王妃的象征，一剑可破百甲。",
+    "image": "/src/renderer/assets/items/item_sword_01.png",
+    "equipment_type": "weapon",
+    "attribute_bonus": { "combat": 10, "charm": 3, "wisdom": 2 },
+    "special_bonus": { "reroll": 2 },
+    "gem_slots": 2,
+    "tags": ["weapon", "divine", "heirloom"]
+  },
+  {
+    "card_id": "equip_005",
+    "name": "十二飞剑",
+    "type": "equipment",
+    "rarity": "gold",
+    "description": "桃花剑神邓太阿的信物，后赠予徐凤年；分别为玄甲、青梅、竹马、朝露、春水、桃花、峨眉、朱雀、黄桐、蚍蜉、金缕、太阿，可御使群攻，灵动无双。",
+    "image": "/src/renderer/assets/items/item_daggers_01.png",
+    "equipment_type": "weapon",
+    "attribute_bonus": { "combat": 6, "magic": 8, "stealth": 4 },
+    "special_bonus": { "reroll": 3 },
+    "gem_slots": 3,
+    "tags": ["weapon", "divine", "flying-sword"]
+  },
+  {
+    "card_id": "equip_006",
+    "name": "木马牛",
+    "type": "equipment",
+    "rarity": "gold",
+    "description": "剑神李淳罡的佩剑，天外陨石所铸，与符将红甲同源；\"三尺木马牛，可折天下兵\"，可惜在与王仙芝一战中被折断。",
+    "image": "/src/renderer/assets/items/item_sword_02.png",
+    "equipment_type": "weapon",
+    "attribute_bonus": { "combat": 12 },
+    "special_bonus": { "support": -1, "reroll": 1 },
+    "gem_slots": 0,
+    "tags": ["weapon", "divine", "broken"]
+  },
+  {
     "card_id": "equip_002",
     "name": "皮甲",
     "type": "equipment",

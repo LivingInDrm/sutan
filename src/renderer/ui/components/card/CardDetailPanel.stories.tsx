@@ -16,6 +16,11 @@ import portraitWenhua from "../../../assets/portraits/figure04.png";
 import portraitHongshu from "../../../assets/portraits/figure05.png";
 import portraitHongXixiang from "../../../assets/portraits/figure06.png";
 
+import itemScimitar from "../../../assets/items/item_scimitar_01.png";
+import itemSword01 from "../../../assets/items/item_sword_01.png";
+import itemDaggers from "../../../assets/items/item_daggers_01.png";
+import itemSword02 from "../../../assets/items/item_sword_02.png";
+
 const MOCK_XU_LONGXIANG: Card = {
   card_id: "card_protagonist",
   name: "徐龙象",
@@ -126,6 +131,62 @@ const MOCK_EQUIPMENT: Card = {
   tags: ["weapon"],
 };
 
+const MOCK_XIUDONG: Card = {
+  card_id: "equip_003",
+  name: "绣冬",
+  type: CardType.Equipment,
+  rarity: Rarity.Silver,
+  description: "南宫仆射佩刀，与春雷成对，三尺二寸，十斤九两，钝锋重刀，十九停之根基，力沉势稳可镇千军，江湖双刀传奇之首。",
+  image: itemScimitar,
+  equipment_type: EquipmentType.Weapon,
+  attribute_bonus: { [Attribute.Combat]: 7, [Attribute.Physique]: 5 },
+  special_bonus: { [SpecialAttribute.Support]: 2 },
+  gem_slots: 1,
+  tags: ["weapon", "legendary", "paired"],
+};
+
+const MOCK_LONGQUE: Card = {
+  card_id: "equip_004",
+  name: "大凉龙雀",
+  type: CardType.Equipment,
+  rarity: Rarity.Gold,
+  description: "北凉王妃吴素佩剑，吴家剑冢四大神兵之一，剑匣刻\"此剑抚平天下不平事，此剑无愧世间有愧人\"；吴素死后由徐凤年转赠姜泥，是两代北凉王妃的象征，一剑可破百甲。",
+  image: itemSword01,
+  equipment_type: EquipmentType.Weapon,
+  attribute_bonus: { [Attribute.Combat]: 10, [Attribute.Charm]: 3, [Attribute.Wisdom]: 2 },
+  special_bonus: { [SpecialAttribute.Reroll]: 2 },
+  gem_slots: 2,
+  tags: ["weapon", "divine", "heirloom"],
+};
+
+const MOCK_FEIJIAN: Card = {
+  card_id: "equip_005",
+  name: "十二飞剑",
+  type: CardType.Equipment,
+  rarity: Rarity.Gold,
+  description: "桃花剑神邓太阿的信物，后赠予徐凤年；分别为玄甲、青梅、竹马、朝露、春水、桃花、峨眉、朱雀、黄桐、蚍蜉、金缕、太阿，可御使群攻，灵动无双。",
+  image: itemDaggers,
+  equipment_type: EquipmentType.Weapon,
+  attribute_bonus: { [Attribute.Combat]: 6, [Attribute.Magic]: 8, [Attribute.Stealth]: 4 },
+  special_bonus: { [SpecialAttribute.Reroll]: 3 },
+  gem_slots: 3,
+  tags: ["weapon", "divine", "flying-sword"],
+};
+
+const MOCK_MUMANIU: Card = {
+  card_id: "equip_006",
+  name: "木马牛",
+  type: CardType.Equipment,
+  rarity: Rarity.Gold,
+  description: "剑神李淳罡的佩剑，天外陨石所铸，与符将红甲同源；\"三尺木马牛，可折天下兵\"，可惜在与王仙芝一战中被折断。",
+  image: itemSword02,
+  equipment_type: EquipmentType.Weapon,
+  attribute_bonus: { [Attribute.Combat]: 12 },
+  special_bonus: { [SpecialAttribute.Support]: -1, [SpecialAttribute.Reroll]: 1 },
+  gem_slots: 0,
+  tags: ["weapon", "divine", "broken"],
+};
+
 const MOCK_INTEL: Card = {
   card_id: "intel_01",
   name: "宫廷流言",
@@ -178,6 +239,26 @@ export const Equipment: Story = () => (
   <Wrap><CardDetailPanel card={MOCK_EQUIPMENT} position={center} onClose={noop} /></Wrap>
 );
 Equipment.meta = { title: "CardDetailPanel / 装备-弯刀" };
+
+export const Xiudong: Story = () => (
+  <Wrap><CardDetailPanel card={MOCK_XIUDONG} position={center} onClose={noop} /></Wrap>
+);
+Xiudong.meta = { title: "CardDetailPanel / 装备-绣冬 (Silver)" };
+
+export const Longque: Story = () => (
+  <Wrap><CardDetailPanel card={MOCK_LONGQUE} position={center} onClose={noop} /></Wrap>
+);
+Longque.meta = { title: "CardDetailPanel / 装备-大凉龙雀 (Gold)" };
+
+export const Feijian: Story = () => (
+  <Wrap><CardDetailPanel card={MOCK_FEIJIAN} position={center} onClose={noop} /></Wrap>
+);
+Feijian.meta = { title: "CardDetailPanel / 装备-十二飞剑 (Gold)" };
+
+export const Mumaniu: Story = () => (
+  <Wrap><CardDetailPanel card={MOCK_MUMANIU} position={center} onClose={noop} /></Wrap>
+);
+Mumaniu.meta = { title: "CardDetailPanel / 装备-木马牛 (Gold)" };
 
 export const Intel: Story = () => (
   <Wrap><CardDetailPanel card={MOCK_INTEL} position={center} onClose={noop} /></Wrap>
