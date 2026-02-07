@@ -32,7 +32,7 @@ export function AttrBadge({ attr, value, variant = 'default', compact = false }:
           className="absolute inset-0 w-full h-full text-gold-dim/60 pointer-events-none"
           preserveAspectRatio="none"
         />
-        <span className="relative text-[10px] z-10">{icon}</span>
+        <span className="relative text-[18px] z-10 leading-none">{icon}</span>
       </div>
       <span className="text-xs text-parchment/70 whitespace-nowrap">{label}</span>
       <span className={`text-sm font-bold ml-auto tabular-nums ${isBonus ? 'text-green-400' : 'text-gold-bright'}`}>
