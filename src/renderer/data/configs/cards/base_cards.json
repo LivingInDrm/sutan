@@ -1,10 +1,10 @@
 [
   {
     "card_id": "card_protagonist",
-    "name": "阿尔图",
+    "name": "徐龙象",
     "type": "character",
     "rarity": "silver",
-    "description": "你自己，一个卷入苏丹游戏的可悲之人。虽然年纪尚轻，却已经历过刀光剑影的洗礼。",
+    "description": "北凉二公子，徐凤年亲弟，绰号黄蛮儿。生而金刚境，天生神力、铜筋铁骨，心智纯粹，唯兄命是从。师承龙虎山赵希抟，驭黑虎、掌龙象军，战场肉身横绝，为北凉最锐之矛。",
     "image": "/src/renderer/assets/portraits/figure01.png",
     "attributes": {
       "physique": 9, "charm": 5, "wisdom": 3, "combat": 8,
@@ -16,10 +16,10 @@
   },
   {
     "card_id": "card_002",
-    "name": "红缨",
+    "name": "徐渭熊",
     "type": "character",
     "rarity": "gold",
-    "description": "江湖上赫赫有名的女剑客，以一柄薄刃和腰间红绸行走四方。性情刚烈，嫉恶如仇，据说曾单枪匹马闯过苏丹的禁卫营。",
+    "description": "北凉二郡主，徐凤年二姐，实为春秋兵圣叶白夔之女、死士甲。胭脂副榜之首，上阴学宫学霸，棋剑双绝，掌赤螭符剑。铁门关一战后轮椅度日，坐镇梧桐院，以智谋为北凉定鼎中枢。",
     "image": "/src/renderer/assets/portraits/figure02.png",
     "attributes": {
       "physique": 7, "charm": 8, "wisdom": 4, "combat": 10,
@@ -31,10 +31,10 @@
   },
   {
     "card_id": "card_003",
-    "name": "长风",
+    "name": "徐凤年",
     "type": "character",
     "rarity": "silver",
-    "description": "来历不明的白衣剑客，挥刀时周身缠绕灼热气焰。沉默寡言，但一旦拔刀便势不可挡。有人说他是被放逐的皇室后裔。",
+    "description": "北凉世子，真武转世，纨绔为表、智武双绝。三千里历练成天人境，掌双刀、通百家武学，临阵守北凉、镇天下。",
     "image": "/src/renderer/assets/portraits/figure03.png",
     "attributes": {
       "physique": 8, "charm": 3, "wisdom": 5, "combat": 9,
@@ -46,10 +46,10 @@
   },
   {
     "card_id": "card_004",
-    "name": "明溪",
+    "name": "温华",
     "type": "character",
     "rarity": "copper",
-    "description": "一个乐天的少年旅人，靠着灵活的身手和圆滑的口才在丝路上讨生活。虽然看起来不太可靠，关键时刻却总能派上用场。",
+    "description": "徐凤年兄弟，人称温不胜。出身寒微，一柄木剑闯江湖，得黄三甲传剑、名动京华。为不背叛兄弟，自断一臂、废去武功，折剑退出江湖。",
     "image": "/src/renderer/assets/portraits/figure04.png",
     "attributes": {
       "physique": 4, "charm": 7, "wisdom": 4, "combat": 5,
@@ -61,10 +61,10 @@
   },
   {
     "card_id": "card_005",
-    "name": "霜月",
+    "name": "红薯",
     "type": "character",
     "rarity": "gold",
-    "description": "身着橙衣的神秘女子，擅长以舞蹈施展秘术。据传她能预见三日之内的未来，却从不为自己占卜。飘逸的长发中似乎藏着不为人知的秘密。",
+    "description": "北凉王府梧桐苑的大丫鬟，眉眼温软、心思极深。看似只是侍女，实则是徐凤年身边最可靠的影子与退路。",
     "image": "/src/renderer/assets/portraits/figure05.png",
     "attributes": {
       "physique": 3, "charm": 9, "wisdom": 7, "combat": 2,
@@ -76,10 +76,10 @@
   },
   {
     "card_id": "card_006",
-    "name": "云觉",
+    "name": "洪洗象",
     "type": "character",
     "rarity": "silver",
-    "description": "总是仰望天空的青衣谋士，看似散漫实则算无遗策。在苏丹的棋盘上，他从不亲自执棋，却能操控整盘局势的走向。",
+    "description": "武当山掌教，吕祖转世，天道千年一遇的修行奇才。自幼骑牛悟道，不登武当绝顶，只为等待红衣。一朝悟道直入天人境，一剑破万法，愿为徐脂虎飞升，自行兵解，再修三百年换人间太平。",
     "image": "/src/renderer/assets/portraits/figure06.png",
     "attributes": {
       "physique": 2, "charm": 6, "wisdom": 10, "combat": 1,
