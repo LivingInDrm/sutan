@@ -99,14 +99,43 @@ export function getD20FaceOrientations(): { faceIndex: number; number: number; n
   });
 }
 
-export function getRotationForFace(targetNumber: number): THREE.Euler {
+export function getRotationForFace(targetNumber: number, cameraPosition?: [number, number, number]): THREE.Euler {
   const orientations = getD20FaceOrientations();
   const face = orientations.find(f => f.number === targetNumber);
   if (!face) return new THREE.Euler(0, 0, 0);
 
-  const up = new THREE.Vector3(0, 1, 0);
-  const quat = new THREE.Quaternion().setFromUnitVectors(face.normal, up);
-  return new THREE.Euler().setFromQuaternion(quat);
+  const camPos = cameraPosition ?? [0, 2, 4];
+  const toCamera = new THREE.Vector3(camPos[0], camPos[1], camPos[2]).normalize();
+
+  const alignQuat = new THREE.Quaternion().setFromUnitVectors(face.normal, toCamera);
+
+  const vertices = RAW_VERTS.map(v => new THREE.Vector3(...v).normalize());
+  const faceData = FACES[face.faceIndex];
+  const v0 = vertices[faceData[0]].clone();
+  const v1 = vertices[faceData[1]].clone();
+  const v2 = vertices[faceData[2]].clone();
+
+  const bottomMid = v1.clone().add(v2).multiplyScalar(0.5);
+  const textUp = new THREE.Vector3().subVectors(v0, bottomMid).normalize();
+  const rotatedTextUp = textUp.clone().applyQuaternion(alignQuat);
+
+  const worldUp = new THREE.Vector3(0, 1, 0);
+  const screenUp = worldUp.clone()
+    .sub(toCamera.clone().multiplyScalar(worldUp.dot(toCamera)))
+    .normalize();
+
+  const projectedTextUp = rotatedTextUp.clone()
+    .sub(toCamera.clone().multiplyScalar(rotatedTextUp.dot(toCamera)))
+    .normalize();
+
+  const cos = projectedTextUp.dot(screenUp);
+  const cross = new THREE.Vector3().crossVectors(projectedTextUp, screenUp);
+  const sin = cross.dot(toCamera);
+  const angle = Math.atan2(sin, cos);
+
+  const correction = new THREE.Quaternion().setFromAxisAngle(toCamera, angle);
+  const finalQuat = correction.multiply(alignQuat);
+  return new THREE.Euler().setFromQuaternion(finalQuat);
 }
 
 export { FACE_NUMBERS };
