@@ -231,34 +231,18 @@ export const ClickToRoll: Story = () => {
         <p className="text-parchment/50 text-xs mt-1">点击骰子或按钮投掷</p>
       </div>
       <SceneWrap height="650px">
-        <Canvas camera={{ position: [0, 2, 4], fov: 45 }}>
-          <ambientLight intensity={0.25} />
-          <directionalLight position={[5, 5, 5]} intensity={1.2} color="#fff5e0" />
-          <directionalLight position={[-3, 2, -3]} intensity={0.5} color="#6a6aff" />
-          <pointLight position={[0, 3, 0]} intensity={1} color="#c9a84c" />
-          <spotLight
-            position={[0, 5, 2]}
-            angle={0.3}
-            penumbra={0.5}
-            intensity={1.5}
-            color="#fff5e0"
-            castShadow
-          />
+        <Canvas camera={{ position: [0, 2, 3.5], fov: 45 }}>
+          <ambientLight intensity={0.3} />
+          <directionalLight position={[5, 5, 5]} intensity={1} color="#fff5e0" />
+          <pointLight position={[0, 3, 0]} intensity={0.6} color="#4ade80" />
           <D20Mesh
             rolling={rolling}
             targetNumber={targetNum}
             scale={1.5}
             onClick={handleClick}
             onRollComplete={handleRollComplete}
-            crystalColor="#5a5a7a"
-          />
-          <ContactShadows
-            position={[0, -1.5, 0]}
-            opacity={0.5}
-            scale={8}
-            blur={2.5}
-            far={4}
-            color="#0a0510"
+            crystalColor="#2a5a3a"
+            edgeColor="#4ade80"
           />
           <Environment preset="night" />
         </Canvas>
