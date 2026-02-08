@@ -90,6 +90,21 @@
     "equipment_slots": 1
   },
   {
+    "card_id": "card_007",
+    "name": "老黄",
+    "type": "character",
+    "rarity": "copper",
+    "description": "北凉王府的马夫，原来是西蜀铁匠，据说是高手，但看他邋邋遢遢，哪有半点高手风范。",
+    "image": "/assets/portraits/figure07.png",
+    "attributes": {
+      "physique": 7, "charm": 2, "wisdom": 4, "combat": 7,
+      "social": 3, "survival": 6, "stealth": 5, "magic": 1
+    },
+    "special_attributes": { "support": 1, "reroll": 1 },
+    "tags": ["male", "clan", "hidden-master"],
+    "equipment_slots": 2
+  },
+  {
     "card_id": "card_sultan_01",
     "name": "苏丹之印",
     "type": "sultan",
