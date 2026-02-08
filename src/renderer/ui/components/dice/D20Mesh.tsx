@@ -33,11 +33,14 @@ export function D20Mesh({
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const edgeRef = useRef<THREE.LineSegments>(null);
+  const spotRef = useRef<THREE.SpotLight>(null);
   const rollStartRef = useRef(0);
   const rollPhaseRef = useRef<'idle' | 'spinning' | 'settling'>('idle');
   const settleStartRef = useRef(new THREE.Euler(0, 0, 0));
   const settleTargetRef = useRef(new THREE.Euler(0, 0, 0));
   const [hovered, setHovered] = useState(false);
+  const [settled, setSettled] = useState(false);
+  const spotIntensityRef = useRef(0);
 
   const geometry = useMemo(() => createD20Geometry(), []);
   const edgeGeometry = useMemo(() => new THREE.EdgesGeometry(geometry, 1), [geometry]);
@@ -117,6 +120,8 @@ export function D20Mesh({
     if (rolling) {
       rollPhaseRef.current = 'spinning';
       rollStartRef.current = 0;
+      setSettled(false);
+      spotIntensityRef.current = 0;
     }
   }, [rolling]);
 
@@ -166,10 +171,18 @@ export function D20Mesh({
 
       if (t >= 1) {
         rollPhaseRef.current = 'idle';
+        setSettled(true);
       }
     } else if (spinning) {
       groupRef.current.rotation.y += delta * spinSpeed;
       groupRef.current.rotation.x += delta * spinSpeed * 0.3;
+    }
+
+    if (settled && spotRef.current) {
+      spotIntensityRef.current = Math.min(spotIntensityRef.current + delta * 2.5, 3);
+      spotRef.current.intensity = spotIntensityRef.current;
+    } else if (!settled && spotRef.current) {
+      spotRef.current.intensity = 0;
     }
 
     if (hovered && rollPhaseRef.current === 'idle') {
@@ -215,32 +228,51 @@ export function D20Mesh({
     return meshes;
   }, [geometry, faceMaterials]);
 
+  useEffect(() => {
+    if (spotRef.current) {
+      spotRef.current.target.position.set(0, 0, 0);
+      spotRef.current.target.updateMatrixWorld();
+    }
+  }, []);
+
   return (
-    <group
-      ref={groupRef}
-      position={position}
-      onClick={onClick}
-      onPointerOver={() => { setHovered(true); document.body.style.cursor = onClick ? 'pointer' : 'default'; }}
-      onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default'; }}
-    >
-      {handleMeshes}
-      <lineSegments ref={edgeRef} geometry={edgeGeometry}>
-        <lineBasicMaterial
-          color={edgeColor}
-          transparent
-          opacity={0.7}
-          linewidth={2}
-        />
-      </lineSegments>
-      <mesh geometry={geometry}>
-        <meshBasicMaterial
-          color="#1a1028"
-          transparent
-          opacity={0.4}
-          side={THREE.BackSide}
-          depthWrite={false}
-        />
-      </mesh>
-    </group>
+    <>
+      <spotLight
+        ref={spotRef}
+        position={[0, 1.5, 3]}
+        angle={0.35}
+        penumbra={0.7}
+        intensity={0}
+        color={edgeColor}
+        distance={8}
+        decay={2}
+      />
+      <group
+        ref={groupRef}
+        position={position}
+        onClick={onClick}
+        onPointerOver={() => { setHovered(true); document.body.style.cursor = onClick ? 'pointer' : 'default'; }}
+        onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default'; }}
+      >
+        {handleMeshes}
+        <lineSegments ref={edgeRef} geometry={edgeGeometry}>
+          <lineBasicMaterial
+            color={edgeColor}
+            transparent
+            opacity={0.7}
+            linewidth={2}
+          />
+        </lineSegments>
+        <mesh geometry={geometry}>
+          <meshBasicMaterial
+            color="#1a1028"
+            transparent
+            opacity={0.8}
+            side={THREE.BackSide}
+            depthWrite={false}
+          />
+        </mesh>
+      </group>
+    </>
   );
 }
