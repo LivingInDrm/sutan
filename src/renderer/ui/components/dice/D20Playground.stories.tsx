@@ -235,15 +235,17 @@ export const ClickToRoll: Story = () => {
           <ambientLight intensity={0.3} />
           <directionalLight position={[5, 5, 5]} intensity={1} color="#fff5e0" />
           <pointLight position={[0, 3, 0]} intensity={0.6} color="#4ade80" />
-          <D20Mesh
-            rolling={rolling}
-            targetNumber={targetNum}
-            scale={1.5}
-            onClick={handleClick}
-            onRollComplete={handleRollComplete}
-            crystalColor="#2a5a3a"
-            edgeColor="#4ade80"
-          />
+          <Float speed={2} rotationIntensity={0.4} floatIntensity={0.3}>
+            <D20Mesh
+              rolling={rolling}
+              targetNumber={targetNum}
+              scale={1.1}
+              onClick={handleClick}
+              onRollComplete={handleRollComplete}
+              crystalColor="#2a5a3a"
+              edgeColor="#4ade80"
+            />
+          </Float>
           <Environment preset="night" />
         </Canvas>
 
