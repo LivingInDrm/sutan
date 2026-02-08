@@ -1,4 +1,4 @@
-import "../src/renderer/styles/index.css";
+import "./theme.css";
 
 import type { GlobalProvider } from "@ladle/react";
 
