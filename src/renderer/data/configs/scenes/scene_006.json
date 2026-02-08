@@ -1,0 +1,284 @@
+{
+  "scene_id": "scene_006",
+  "name": "边境破茶摊・剑影初逢",
+  "description": "朔风卷着沙砾掠过边境小镇外的破茶摊，一个嚣张少年正在为茶钱争执。",
+  "background_image": "/assets/scenes/scene06.png",
+  "type": "event",
+  "duration": 3,
+  "slots": [
+    { "type": "character", "required": true, "locked": false },
+    { "type": "item", "required": false, "locked": false }
+  ],
+  "entry_stage": "opening",
+  "stages": [
+    {
+      "stage_id": "opening",
+      "narrative": [
+        { "type": "narration", "text": "朔风卷着沙砾掠过边境小镇外的破茶摊，油布棚下的木桌积着薄尘。" },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "（斜倚长凳，指尖敲了敲桌面，眼底泛起笑意）",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "温华",
+          "text": "老子温华，迟早是名动天下的剑客！这几文茶钱算什么？等我成名，赏你十两黄金！",
+          "portrait": "/assets/portraits/figure04.png"
+        },
+        { "type": "narration", "text": "少年拍着胸脯，语气嚣张却难掩窘迫。老黄抱着剑匣缩在一旁嗑瓜子，目光瞟向摊位中央。" }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "徐凤年打量着这个少年，心中盘算该如何回应……进行「魅力」鉴定。",
+        "check": { "attribute": "charm", "calc_mode": "max", "target": 5 },
+        "results": {
+          "success": {
+            "narrative": "徐凤年自带世家气度，温华虽嚣张却也隐约感受到了不凡。",
+            "effects": { "cards_add": ["temp_generosity"] }
+          },
+          "partial_success": {
+            "narrative": "徐凤年自带世家气度，温华虽嚣张却也隐约感受到了不凡。",
+            "effects": { "cards_add": ["temp_generosity"] }
+          },
+          "failure": {
+            "narrative": "徐凤年随性不羁，比起正经解围更想调侃几句。",
+            "effects": { "cards_add": ["temp_mockery"] }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年随性不羁，比起正经解围更想调侃几句。",
+            "effects": { "cards_add": ["temp_mockery"] }
+          }
+        }
+      },
+      "branches": [
+        { "condition": "success", "next_stage": "path_b_rescue" },
+        { "condition": "partial_success", "next_stage": "path_b_rescue" },
+        { "condition": "failure", "next_stage": "path_a_mockery" },
+        { "condition": "critical_failure", "next_stage": "path_a_mockery" }
+      ]
+    },
+
+    {
+      "stage_id": "path_a_mockery",
+      "narrative": [
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "吹牛皮不打草稿，就你这木剑配剑穗的模样，怕是连茶摊的板凳都劈不开。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "温华",
+          "text": "你个落魄小子也配笑话我？有种比划比划！输了的人替我付茶钱，还得给我赔罪！",
+          "portrait": "/assets/portraits/figure04.png"
+        },
+        { "type": "narration", "text": "摊主见状连忙拦在中间，却被温华一把推开，少年抄起桌上的空茶碗就朝徐凤年扔去！" }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "温华扔来茶碗！进行「体魄」鉴定。",
+        "check": { "attribute": "physique", "calc_mode": "max", "target": 4 },
+        "results": {
+          "success": {
+            "narrative": "徐凤年灵巧侧身避开茶碗，反手抓起桌上瓜子壳扔向温华。温华被瓜子壳迷了眼，踉跄着撞在桌腿上，却仰头大笑：「有点意思！你这身手配当我对手！」",
+            "effects": { "cards_add": ["temp_friendly_rivalry"] }
+          },
+          "partial_success": {
+            "narrative": "徐凤年被茶碗擦过衣袖，顺手扯起老黄的剑匣挡了一下。老黄急得跳脚，一边抢回剑匣一边劝架。温华盯着剑匣眼睛发亮：「你这同伴还带剑匣？看来你也不是普通人！」",
+            "effects": { "cards_add": ["temp_swordcase_mystery"] }
+          },
+          "failure": {
+            "narrative": "徐凤年没躲开，被空茶碗砸中肩膀，佯装吃痛咧嘴。温华叉腰得意：「怎么样？服了吧！快替我付茶钱！」 徐凤年笑着掏钱，温华愣了愣，脸上闪过一丝不好意思。",
+            "effects": {
+              "gold": -5,
+              "tags_add": { "card_004": ["嘴硬心软"] }
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年完全没躲开，被空茶碗砸了个正着。温华叉腰得意：「怎么样？服了吧！快替我付茶钱！」 徐凤年笑着掏钱，温华愣了愣，脸上闪过一丝不好意思。",
+            "effects": {
+              "gold": -5,
+              "tags_add": { "card_004": ["嘴硬心软"] }
+            }
+          }
+        }
+      },
+      "branches": [
+        { "condition": "success", "next_stage": "path_a_drink" },
+        { "condition": "partial_success", "next_stage": "path_a_drink" },
+        { "condition": "failure", "next_stage": "path_a_drink" },
+        { "condition": "critical_failure", "next_stage": "path_a_drink" }
+      ]
+    },
+
+    {
+      "stage_id": "path_a_drink",
+      "narrative": [
+        { "type": "narration", "text": "温华喘着气坐在徐凤年对面，摊主已经重新端上一碗热茶。他打量着徐凤年腰间的旧酒葫芦，伸手想去摸，被徐凤年抬手挡住。" },
+        {
+          "type": "dialogue",
+          "speaker": "温华",
+          "text": "你这葫芦比我碗还破，里面有酒没？分我一口，我教你两招'绝世剑法'，保准你能打遍小镇无敌手！",
+          "portrait": "/assets/portraits/figure04.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "就你那木剑，劈柴都费劲，还绝世剑法？",
+          "portrait": "/assets/portraits/figure03.png"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "酒葫芦引出了新话题。进行「社交」鉴定。",
+        "check": { "attribute": "social", "calc_mode": "max", "target": 4 },
+        "results": {
+          "success": {
+            "narrative": "徐凤年顺着话头说：「要喝酒可以，先把你的'绝世剑法'练给我看看。」 温华眼睛一亮，抓起木剑在茶摊外比划起来，招式笨拙却透着韧劲。练完后，徐凤年点头：「还行，跟我走，以后有你练剑的地方，酒管够。」",
+            "effects": {
+              "cards_add": ["card_wenhua_sword"],
+              "cards_remove": ["temp_mockery", "temp_friendly_rivalry", "temp_swordcase_mystery"],
+              "tags_add": { "card_004": ["知己"] }
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年顺着话头说：「要喝酒可以，先把你的'绝世剑法'练给我看看。」 温华眼睛一亮，抓起木剑在茶摊外比划起来。徐凤年点头：「还行，跟我走吧。」",
+            "effects": {
+              "cards_add": ["card_wenhua_sword"],
+              "cards_remove": ["temp_mockery", "temp_friendly_rivalry", "temp_swordcase_mystery"],
+              "tags_add": { "card_004": ["损友"] }
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年直接把葫芦扔给温华：「少废话，喝两口就走。」 温华猛灌两口，咂咂嘴：「好酒！算你够意思！以后你就是我温华的兄弟！」",
+            "effects": {
+              "cards_add": ["card_wenhua_sword"],
+              "cards_remove": ["temp_mockery", "temp_friendly_rivalry", "temp_swordcase_mystery"],
+              "tags_add": { "card_wenhua_sword": ["嗜酒"], "card_004": ["损友"] }
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年直接把葫芦扔给温华：「少废话，喝两口就走。」 温华猛灌两口，拍了拍徐凤年的肩膀：「以后你就是我温华的兄弟！」",
+            "effects": {
+              "cards_add": ["card_wenhua_sword"],
+              "cards_remove": ["temp_mockery", "temp_friendly_rivalry", "temp_swordcase_mystery"],
+              "tags_add": { "card_wenhua_sword": ["嗜酒"], "card_004": ["损友"] }
+            }
+          }
+        }
+      },
+      "is_final": true
+    },
+
+    {
+      "stage_id": "path_b_rescue",
+      "narrative": [
+        { "type": "narration", "text": "徐凤年没接温华的话，直接从袖中摸出一串铜钱放在桌上。" },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "老板，他的茶钱我替他付了，再给我来两碗热茶。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        { "type": "narration", "text": "铜钱碰撞的脆响让争执瞬间停止，温华愣在原地，脸上的嚣张褪去，取而代之的是一脸错愕。" },
+        {
+          "type": "dialogue",
+          "speaker": "温华",
+          "text": "够意思！你这朋友我温华交定了！以后我罩你，江湖上没人敢欺负咱兄弟！",
+          "portrait": "/assets/portraits/figure04.png"
+        },
+        { "type": "narration", "text": "摊主收了钱，笑着端上热茶，温华自来熟地坐在徐凤年对面，目光落在他腰间的旧酒葫芦上。" }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "温华坐下后，气氛逐渐缓和。进行「社交」鉴定。",
+        "check": { "attribute": "social", "calc_mode": "max", "target": 5 },
+        "results": {
+          "success": {
+            "narrative": "温华完全放下戒备，凑近说：「兄弟，我看你气度不凡，肯定不是普通人。我最近悟了一套绝世剑法，就是缺个能喝酒的伴儿。」",
+            "effects": { "gold": -10 }
+          },
+          "partial_success": {
+            "narrative": "温华端起热茶喝了一口：「以后有什么事你尽管开口，我温华别的不行，打架绝对不含糊。」",
+            "effects": { "gold": -10 }
+          },
+          "failure": {
+            "narrative": "温华犹豫了一下，还是说：「谢谢你替我付茶钱，以后我会还你的。」",
+            "effects": { "gold": -10 }
+          },
+          "critical_failure": {
+            "narrative": "温华有些警惕，但还是小声说了句：「……谢了。」",
+            "effects": { "gold": -10 }
+          }
+        }
+      },
+      "branches": [
+        { "condition": "success", "next_stage": "path_b_wine" },
+        { "condition": "partial_success", "next_stage": "path_b_wine" },
+        { "condition": "failure", "next_stage": "path_b_wine" },
+        { "condition": "critical_failure", "next_stage": "path_b_wine" }
+      ]
+    },
+
+    {
+      "stage_id": "path_b_wine",
+      "narrative": [
+        {
+          "type": "dialogue",
+          "speaker": "温华",
+          "text": "兄弟，你这葫芦看着破破烂烂的，里面该不会有好酒吧？分我一口尝尝，我教你两招'绝世剑法'，保管实用！",
+          "portrait": "/assets/portraits/figure04.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "就你那木剑，劈柴都费劲，还想教我剑法？",
+          "portrait": "/assets/portraits/figure03.png"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "温华对酒葫芦虎视眈眈。进行「魅力」鉴定。",
+        "check": { "attribute": "charm", "calc_mode": "max", "target": 5 },
+        "results": {
+          "success": {
+            "narrative": "徐凤年拔开葫芦塞递了过去。温华仰头灌了一大口，眯着眼露出满足笑容：「好酒！够劲！」 他猛地一拍桌子：「兄弟，以后你去哪我去哪！你的事就是我的事！」",
+            "effects": {
+              "cards_add": ["card_wenhua_sword"],
+              "cards_remove": ["temp_generosity"],
+              "tags_add": { "card_wenhua_sword": ["仗义"], "card_004": ["知己"] }
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年倒出半盏酒放在温华面前。温华小口抿着，眼神发亮：「这酒比我喝过的所有酒都好！兄弟，我温华欠你个人情，以后一定还！」",
+            "effects": {
+              "cards_add": ["card_wenhua_sword", "temp_owe_favor"],
+              "cards_remove": ["temp_generosity"],
+              "tags_add": { "card_004": ["债主"] }
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年把葫芦往怀里一揣：「想喝酒？先跟我走，到了前面城镇，我请你喝个够。」 温华搓了搓手，毫不犹豫地跟上：「走就走！只要有酒喝，跟你闯天涯都行！」",
+            "effects": {
+              "cards_add": ["card_wenhua_sword"],
+              "cards_remove": ["temp_generosity"],
+              "tags_add": { "card_wenhua_sword": ["嗜酒如命"], "card_004": ["债主"] }
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年把葫芦往怀里一揣：「想喝酒？先跟我走。」 温华搓了搓手跟上：「走就走！只要有酒喝，跟你闯天涯都行！」",
+            "effects": {
+              "cards_add": ["card_wenhua_sword"],
+              "cards_remove": ["temp_generosity"],
+              "tags_add": { "card_wenhua_sword": ["嗜酒如命"], "card_004": ["债主"] }
+            }
+          }
+        }
+      },
+      "is_final": true
+    }
+  ]
+}

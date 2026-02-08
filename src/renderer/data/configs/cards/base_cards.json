@@ -212,5 +212,94 @@
       "social": 2, "survival": 2, "stealth": 2, "magic": 2
     },
     "tags": ["gem", "valuable"]
+  },
+  {
+    "card_id": "equip_gourd_01",
+    "name": "旧酒葫芦",
+    "type": "equipment",
+    "rarity": "copper",
+    "description": "徐凤年随身携带的旧酒葫芦，破破烂烂却从不离身。里面的酒比外表好得多。",
+    "image": "/assets/items/item_gourd_01.png",
+    "equipment_type": "accessory",
+    "attribute_bonus": { "charm": 2, "social": 1 },
+    "gem_slots": 0,
+    "tags": ["accessory", "wine"]
+  },
+  {
+    "card_id": "equip_swordcase_01",
+    "name": "剑匣",
+    "type": "equipment",
+    "rarity": "copper",
+    "description": "老黄随身携带的剑匣，看似普通，内藏玄机。",
+    "image": "/assets/items/item_swordcase_01.png",
+    "equipment_type": "accessory",
+    "attribute_bonus": { "combat": 2, "stealth": 1 },
+    "gem_slots": 0,
+    "tags": ["accessory", "mystery"]
+  },
+  {
+    "card_id": "temp_mockery",
+    "name": "调侃",
+    "type": "thought",
+    "rarity": "stone",
+    "description": "随性不羁的调侃，激起了少年的斗志。临时提升体魄鉴定修正。",
+    "image": "/assets/items/item_gourd_01.png",
+    "attribute_bonus": { "physique": 1 },
+    "tags": ["temporary", "scene_006"]
+  },
+  {
+    "card_id": "temp_generosity",
+    "name": "仗义疏财",
+    "type": "thought",
+    "rarity": "stone",
+    "description": "世家气度，出手解围。临时提升社交鉴定修正。",
+    "image": "/assets/items/item_gourd_01.png",
+    "attribute_bonus": { "social": 2 },
+    "tags": ["temporary", "scene_006"]
+  },
+  {
+    "card_id": "temp_friendly_rivalry",
+    "name": "不打不相识",
+    "type": "thought",
+    "rarity": "stone",
+    "description": "一场趣味切磋，反而拉近了彼此距离。可触发结伴剧情。",
+    "image": "/assets/items/item_swordcase_01.png",
+    "attribute_bonus": { "social": 2 },
+    "tags": ["temporary", "scene_006", "bond"]
+  },
+  {
+    "card_id": "temp_swordcase_mystery",
+    "name": "剑匣疑云",
+    "type": "thought",
+    "rarity": "stone",
+    "description": "温华对老黄的剑匣产生了好奇，好感度提升。",
+    "image": "/assets/items/item_swordcase_01.png",
+    "attribute_bonus": { "charm": 1 },
+    "tags": ["temporary", "scene_006"]
+  },
+  {
+    "card_id": "temp_owe_favor",
+    "name": "欠人情",
+    "type": "thought",
+    "rarity": "stone",
+    "description": "温华欠下的人情，关键时刻可抵挡一次伤害。",
+    "image": "/assets/items/item_gourd_01.png",
+    "attribute_bonus": { "survival": 2 },
+    "tags": ["temporary", "scene_006", "favor"]
+  },
+  {
+    "card_id": "card_wenhua_sword",
+    "name": "木剑温华",
+    "type": "character",
+    "rarity": "copper",
+    "description": "温华正式加入队伍后的战斗形态。一柄木剑闯江湖，招式笨拙却透着韧劲，嘴上不饶人心里却重情义。",
+    "image": "/assets/portraits/figure04.png",
+    "attributes": {
+      "physique": 5, "charm": 6, "wisdom": 3, "combat": 6,
+      "social": 7, "survival": 4, "stealth": 5, "magic": 1
+    },
+    "special_attributes": { "support": 3, "reroll": 1 },
+    "tags": ["male", "swordsman", "companion"],
+    "equipment_slots": 2
   }
 ]
