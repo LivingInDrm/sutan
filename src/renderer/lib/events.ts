@@ -1,5 +1,5 @@
 import mitt from 'mitt';
-import type { SettlementResult, GameState } from '@core/types';
+import type { SettlementResult, GameState, StageResult } from '@core/types';
 import type { CheckResult, GameEndReason, GamePhase } from '@core/types/enums';
 
 export type GameEvents = {
@@ -10,6 +10,11 @@ export type GameEvents = {
   'scene:unlock': { sceneId: string };
   'scene:participate': { sceneId: string; cardIds: string[] };
   'scene:settle': { sceneId: string; result: SettlementResult };
+  'stage:start': { sceneId: string; stageId: string };
+  'stage:settle': { sceneId: string; stageId: string; result: CheckResult };
+  'stage:complete': { sceneId: string; stageId: string };
+  'narrative:advance': { sceneId: string; stageId: string; nodeIndex: number };
+  'narrative:choice': { sceneId: string; stageId: string; choiceLabel: string };
   'card:add': { cardId: string };
   'card:remove': { cardId: string };
   'card:equip': { characterId: string; equipmentId: string };

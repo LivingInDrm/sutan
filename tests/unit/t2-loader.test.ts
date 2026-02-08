@@ -54,16 +54,22 @@ describe('T2.1: DataLoader', () => {
         scene_id: 'scene_001', name: 'Test', description: 'desc',
         background_image: 'bg.png', type: 'event', duration: 3,
         slots: [{ type: 'character', required: true, locked: false }],
-        settlement: {
-          type: 'dice_check',
-          check: { attribute: 'social', calc_mode: 'max', target: 5 },
-          results: {
-            success: { narrative: 'ok', effects: { gold: 10 } },
-            partial_success: { narrative: 'ok', effects: {} },
-            failure: { narrative: 'fail', effects: {} },
-            critical_failure: { narrative: 'bad', effects: {} },
+        entry_stage: 'main',
+        stages: [{
+          stage_id: 'main',
+          narrative: [],
+          settlement: {
+            type: 'dice_check',
+            check: { attribute: 'social', calc_mode: 'max', target: 5 },
+            results: {
+              success: { narrative: 'ok', effects: { gold: 10 } },
+              partial_success: { narrative: 'ok', effects: {} },
+              failure: { narrative: 'fail', effects: {} },
+              critical_failure: { narrative: 'bad', effects: {} },
+            },
           },
-        },
+          is_final: true,
+        }],
       },
     ]);
     expect(scenes).toHaveLength(1);

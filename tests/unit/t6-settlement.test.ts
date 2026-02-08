@@ -20,16 +20,22 @@ const makeDiceScene = (id: string, target = 3): Scene => ({
   scene_id: id, name: `Scene ${id}`, description: 'test',
   background_image: 'bg.png', type: SceneType.Event, duration: 1,
   slots: [{ type: SlotType.Character, required: true, locked: false }],
-  settlement: {
-    type: 'dice_check',
-    check: { attribute: 'combat' as any, calc_mode: 'max' as any, target },
-    results: {
-      success: { narrative: 'Win!', effects: { gold: 20, reputation: 5 } },
-      partial_success: { narrative: 'Partial', effects: { gold: 10 } },
-      failure: { narrative: 'Fail', effects: { gold: -10, reputation: -3 } },
-      critical_failure: { narrative: 'Crit fail', effects: { reputation: -8 } },
+  entry_stage: 'main',
+  stages: [{
+    stage_id: 'main',
+    narrative: [],
+    settlement: {
+      type: 'dice_check',
+      check: { attribute: 'combat' as any, calc_mode: 'max' as any, target },
+      results: {
+        success: { narrative: 'Win!', effects: { gold: 20, reputation: 5 } },
+        partial_success: { narrative: 'Partial', effects: { gold: 10 } },
+        failure: { narrative: 'Fail', effects: { gold: -10, reputation: -3 } },
+        critical_failure: { narrative: 'Crit fail', effects: { reputation: -8 } },
+      },
     },
-  },
+    is_final: true,
+  }],
   absence_penalty: { effects: { reputation: -5 }, narrative: '缺席' },
 } as Scene);
 
@@ -37,24 +43,36 @@ const makeChoiceScene = (id: string): Scene => ({
   scene_id: id, name: `Choice ${id}`, description: 'test',
   background_image: 'bg.png', type: SceneType.Event, duration: 1,
   slots: [{ type: SlotType.Character, required: true, locked: false }],
-  settlement: {
-    type: 'choice',
-    options: [
-      { label: '战斗', effects: { reputation: 5, gold: -10 } },
-      { label: '和平', effects: { reputation: -5, gold: 20 } },
-    ],
-  },
+  entry_stage: 'main',
+  stages: [{
+    stage_id: 'main',
+    narrative: [],
+    settlement: {
+      type: 'choice',
+      options: [
+        { label: '战斗', effects: { reputation: 5, gold: -10 } },
+        { label: '和平', effects: { reputation: -5, gold: 20 } },
+      ],
+    },
+    is_final: true,
+  }],
 } as Scene);
 
 const makeTradeScene = (id: string): Scene => ({
   scene_id: id, name: `Shop ${id}`, description: 'test',
   background_image: 'bg.png', type: SceneType.Shop, duration: 1,
   slots: [],
-  settlement: {
-    type: 'trade',
-    shop_inventory: ['card_101'],
-    allow_sell: true,
-  },
+  entry_stage: 'main',
+  stages: [{
+    stage_id: 'main',
+    narrative: [],
+    settlement: {
+      type: 'trade',
+      shop_inventory: ['card_101'],
+      allow_sell: true,
+    },
+    is_final: true,
+  }],
 } as Scene);
 
 describe('T6.1: EffectApplier', () => {

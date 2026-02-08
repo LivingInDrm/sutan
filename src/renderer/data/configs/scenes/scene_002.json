@@ -1,0 +1,44 @@
+{
+  "scene_id": "scene_002",
+  "name": "沙漠穿越",
+  "description": "一支商队需要穿越危险的沙漠地带。生存技能是关键。",
+  "background_image": "scene02.png",
+  "type": "challenge",
+  "duration": 2,
+  "slots": [
+    { "type": "character", "required": true, "locked": false },
+    { "type": "character", "required": false, "locked": false }
+  ],
+  "entry_stage": "main",
+  "stages": [
+    {
+      "stage_id": "main",
+      "narrative": [
+        { "type": "narration", "text": "沙暴来袭，你的队伍能否安全穿越？" }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "check": { "attribute": "survival", "calc_mode": "min", "target": 4 },
+        "results": {
+          "success": {
+            "narrative": "你们安全穿越了沙漠，找到了珍贵的商路。",
+            "effects": { "gold": 30, "reputation": 3 }
+          },
+          "partial_success": {
+            "narrative": "虽然有人受了伤，但总算到达了目的地。",
+            "effects": { "gold": 15 }
+          },
+          "failure": {
+            "narrative": "沙暴让你们迷失了方向，损失了不少补给。",
+            "effects": { "gold": -15, "reputation": -2 }
+          },
+          "critical_failure": {
+            "narrative": "这次穿越是一场噩梦，你们几乎丧命。",
+            "effects": { "reputation": -10 }
+          }
+        }
+      },
+      "is_final": true
+    }
+  ]
+}

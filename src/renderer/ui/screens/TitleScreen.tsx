@@ -3,14 +3,16 @@ import { useUIStore } from '../../stores/uiStore';
 import { useGameStore } from '../../stores/gameStore';
 import type { Card, Scene } from '../../core/types';
 import baseCards from '../../data/configs/cards/base_cards.json';
-import baseScenes from '../../data/configs/scenes/base_scenes.json';
+import { dataLoader } from '../../data/loader';
+
+const baseScenes = dataLoader.loadScenesFromDirectory();
 
 export function TitleScreen() {
   const setScreen = useUIStore(s => s.setScreen);
   const startNewGame = useGameStore(s => s.startNewGame);
 
   const handleStart = (difficulty: string) => {
-    startNewGame(difficulty, baseCards as Card[], baseScenes as Scene[]);
+    startNewGame(difficulty, baseCards as Card[], baseScenes);
     setScreen('map');
   };
 

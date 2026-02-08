@@ -90,6 +90,13 @@ export enum GamePhase {
   Settlement = 'settlement',
 }
 
+export enum NarrativeNodeType {
+  Dialogue = 'dialogue',
+  Narration = 'narration',
+  Effect = 'effect',
+  Choice = 'choice',
+}
+
 export enum GameEndReason {
   MainlineVictory = 'mainline_victory',
   SurvivalVictory = 'survival_victory',

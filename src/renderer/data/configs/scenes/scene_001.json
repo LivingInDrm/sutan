@@ -1,0 +1,49 @@
+{
+  "scene_id": "scene_001",
+  "name": "权力的游戏",
+  "description": "宫廷中的政治博弈，各方势力角逐权力。你需要派遣你最善于交际的人前去。",
+  "background_image": "scene01.png",
+  "type": "event",
+  "duration": 3,
+  "slots": [
+    { "type": "character", "required": true, "locked": false },
+    { "type": "item", "required": false, "locked": false }
+  ],
+  "entry_stage": "main",
+  "stages": [
+    {
+      "stage_id": "main",
+      "narrative": [
+        { "type": "narration", "text": "宫廷的暗流涌动，你的代理人能否在这场博弈中存活？" }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "check": { "attribute": "social", "calc_mode": "max", "target": 5 },
+        "results": {
+          "success": {
+            "narrative": "你的代理人在宫廷中游刃有余，赢得了众人的尊敬。",
+            "effects": { "gold": 20, "reputation": 5 }
+          },
+          "partial_success": {
+            "narrative": "虽然没有大获全胜，但至少没有丢脸。",
+            "effects": { "gold": 10, "reputation": 2 }
+          },
+          "failure": {
+            "narrative": "你的代理人在宫廷中出了丑，损失了一些金币。",
+            "effects": { "gold": -10, "reputation": -3 }
+          },
+          "critical_failure": {
+            "narrative": "一场灾难！你的代理人被当众羞辱。",
+            "effects": { "reputation": -8 }
+          }
+        }
+      },
+      "is_final": true
+    }
+  ],
+  "unlock_conditions": { "reputation_min": 20 },
+  "absence_penalty": {
+    "effects": { "reputation": -5 },
+    "narrative": "你缺席了重要的宫廷会议，众人议论纷纷。"
+  }
+}

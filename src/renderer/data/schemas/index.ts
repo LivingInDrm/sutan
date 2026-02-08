@@ -1,7 +1,7 @@
 import { z } from 'zod/v4';
 import {
   Rarity, Attribute, CardType, EquipmentType, SceneType,
-  SceneStatus, CheckResult, CalcMode, SlotType,
+  SceneStatus, CheckResult, CalcMode, SlotType, NarrativeNodeType,
 } from '../../core/types/enums';
 
 const RarityEnum = z.enum([Rarity.Gold, Rarity.Silver, Rarity.Copper, Rarity.Stone]);
@@ -147,6 +147,59 @@ const SettlementSchema = z.discriminatedUnion('type', [
   ChoiceSettlementSchema,
 ]);
 
+const DialogueNodeSchema = z.object({
+  type: z.literal('dialogue'),
+  speaker: z.string().optional(),
+  text: z.string().min(1),
+  portrait: z.string().optional(),
+});
+
+const NarrationNodeSchema = z.object({
+  type: z.literal('narration'),
+  text: z.string().min(1),
+});
+
+const EffectNodeSchema = z.object({
+  type: z.literal('effect'),
+  effects: EffectsSchema,
+  text: z.string().optional(),
+});
+
+const NarrativeChoiceOptionSchema = z.object({
+  label: z.string().min(1),
+  next_stage: z.string().optional(),
+  effects: EffectsSchema.optional(),
+});
+
+const ChoiceNodeSchema = z.object({
+  type: z.literal('choice'),
+  text: z.string().min(1),
+  options: z.array(NarrativeChoiceOptionSchema).min(1),
+});
+
+const NarrativeNodeSchema = z.discriminatedUnion('type', [
+  DialogueNodeSchema,
+  NarrationNodeSchema,
+  EffectNodeSchema,
+  ChoiceNodeSchema,
+]);
+
+const StageBranchSchema = z.object({
+  condition: z.union([
+    z.enum([CheckResult.Success, CheckResult.PartialSuccess, CheckResult.Failure, CheckResult.CriticalFailure]),
+    z.literal('default'),
+  ]),
+  next_stage: z.string().min(1),
+});
+
+const StageSchema = z.object({
+  stage_id: z.string().min(1),
+  narrative: z.array(NarrativeNodeSchema),
+  settlement: SettlementSchema.optional(),
+  branches: z.array(StageBranchSchema).optional(),
+  is_final: z.boolean().optional(),
+});
+
 const UnlockConditionsSchema = z.object({
   reputation_min: z.number().int().optional(),
   required_tags: z.array(z.string()).optional(),
@@ -165,7 +218,8 @@ export const SceneSchema = z.object({
   type: SceneTypeEnum,
   duration: z.number().int().min(1),
   slots: z.array(SlotSchema),
-  settlement: SettlementSchema,
+  stages: z.array(StageSchema).min(1),
+  entry_stage: z.string().min(1),
   unlock_conditions: UnlockConditionsSchema.optional(),
   absence_penalty: AbsencePenaltySchema.nullable().optional(),
 });
@@ -191,6 +245,8 @@ const SceneStateSchema = z.object({
   remaining_turns: z.number().int().min(0),
   invested_cards: z.array(z.string()),
   status: SceneStatusEnum,
+  current_stage: z.string().optional(),
+  stage_results: z.record(z.string(), CheckResultEnum).optional(),
 });
 
 const ScenesStateSchema = z.object({
@@ -215,4 +271,8 @@ export {
   DiceCheckConfigSchema,
   AttributesSchema,
   SpecialAttributesSchema,
+  StageSchema,
+  NarrativeNodeSchema,
+  SettlementSchema,
+  StageBranchSchema,
 };

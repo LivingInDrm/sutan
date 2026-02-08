@@ -1,0 +1,47 @@
+{
+  "scene_id": "scene_003",
+  "name": "决斗场",
+  "description": "有人向你发起了决斗挑战。只能派一人应战。",
+  "background_image": "scene03.png",
+  "type": "challenge",
+  "duration": 1,
+  "slots": [
+    { "type": "character", "required": true, "locked": false }
+  ],
+  "entry_stage": "main",
+  "stages": [
+    {
+      "stage_id": "main",
+      "narrative": [
+        { "type": "narration", "text": "决斗的号角吹响，你的战士走上擂台。" }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "check": { "attribute": "combat", "calc_mode": "first", "target": 6 },
+        "results": {
+          "success": {
+            "narrative": "精彩的胜利！你的战士赢得了决斗。",
+            "effects": { "gold": 25, "reputation": 8 }
+          },
+          "partial_success": {
+            "narrative": "虽然受了伤，但勉强赢得了决斗。",
+            "effects": { "gold": 10, "reputation": 3 }
+          },
+          "failure": {
+            "narrative": "你的战士落败了，被对手嘲笑。",
+            "effects": { "gold": -5, "reputation": -5 }
+          },
+          "critical_failure": {
+            "narrative": "惨败！你的战士身受重伤。",
+            "effects": { "reputation": -12 }
+          }
+        }
+      },
+      "is_final": true
+    }
+  ],
+  "absence_penalty": {
+    "effects": { "reputation": -10 },
+    "narrative": "你怯懦地逃避了决斗，名誉扫地。"
+  }
+}

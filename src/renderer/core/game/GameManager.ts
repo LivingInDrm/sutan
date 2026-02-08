@@ -2,6 +2,7 @@ import { PlayerState } from '../player/PlayerState';
 import { CardManager } from '../card/CardManager';
 import { EquipmentSystem } from '../card/EquipmentSystem';
 import { SceneManager } from '../scene/SceneManager';
+import { SceneRunner } from '../scene/SceneRunner';
 import { SettlementExecutor } from '../settlement/SettlementExecutor';
 import { TimeManager } from './TimeManager';
 import { DayManager } from './DayManager';
@@ -74,6 +75,13 @@ export class GameManager {
     const results = this.dayManager.nextDay();
     this.checkGameEnd();
     return results;
+  }
+
+  createSceneRunner(sceneId: string): SceneRunner | null {
+    const scene = this.sceneManager.getScene(sceneId);
+    const sceneState = this.sceneManager.getSceneState(sceneId);
+    if (!scene || !sceneState) return null;
+    return new SceneRunner(scene, sceneState);
   }
 
   rewindDay(): boolean {

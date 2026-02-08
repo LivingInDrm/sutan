@@ -85,16 +85,24 @@ describe('T1.3: Zod Schema Validation', () => {
           { type: 'character', required: true, locked: false },
           { type: 'item', required: false, locked: false },
         ],
-        settlement: {
-          type: 'dice_check',
-          check: { attribute: 'social', calc_mode: 'max', target: 8 },
-          results: {
-            success: { narrative: '成功', effects: { gold: 20, reputation: 5 } },
-            partial_success: { narrative: '险胜', effects: { gold: 10 } },
-            failure: { narrative: '失败', effects: { gold: -10 } },
-            critical_failure: { narrative: '大失败', effects: { reputation: -8 } },
+        stages: [
+          {
+            stage_id: 'main',
+            narrative: [],
+            settlement: {
+              type: 'dice_check',
+              check: { attribute: 'social', calc_mode: 'max', target: 8 },
+              results: {
+                success: { narrative: '成功', effects: { gold: 20, reputation: 5 } },
+                partial_success: { narrative: '险胜', effects: { gold: 10 } },
+                failure: { narrative: '失败', effects: { gold: -10 } },
+                critical_failure: { narrative: '大失败', effects: { reputation: -8 } },
+              },
+            },
+            is_final: true,
           },
-        },
+        ],
+        entry_stage: 'main',
         unlock_conditions: { reputation_min: 40 },
       };
       expect(() => SceneSchema.parse(scene)).not.toThrow();
@@ -109,11 +117,19 @@ describe('T1.3: Zod Schema Validation', () => {
         type: 'shop',
         duration: 1,
         slots: [],
-        settlement: {
-          type: 'trade',
-          shop_inventory: ['card_101', 'card_102'],
-          allow_sell: true,
-        },
+        stages: [
+          {
+            stage_id: 'main',
+            narrative: [],
+            settlement: {
+              type: 'trade',
+              shop_inventory: ['card_101', 'card_102'],
+              allow_sell: true,
+            },
+            is_final: true,
+          },
+        ],
+        entry_stage: 'main',
         absence_penalty: null,
       };
       expect(() => SceneSchema.parse(scene)).not.toThrow();
@@ -128,13 +144,21 @@ describe('T1.3: Zod Schema Validation', () => {
         type: 'event',
         duration: 2,
         slots: [{ type: 'character', required: true, locked: false }],
-        settlement: {
-          type: 'choice',
-          options: [
-            { label: '战斗', effects: { reputation: 5, gold: -10 } },
-            { label: '和平', effects: { reputation: -5, gold: 20 } },
-          ],
-        },
+        stages: [
+          {
+            stage_id: 'main',
+            narrative: [],
+            settlement: {
+              type: 'choice',
+              options: [
+                { label: '战斗', effects: { reputation: 5, gold: -10 } },
+                { label: '和平', effects: { reputation: -5, gold: 20 } },
+              ],
+            },
+            is_final: true,
+          },
+        ],
+        entry_stage: 'main',
       };
       expect(() => SceneSchema.parse(scene)).not.toThrow();
     });
@@ -148,7 +172,15 @@ describe('T1.3: Zod Schema Validation', () => {
         type: 'invalid',
         duration: 1,
         slots: [],
-        settlement: { type: 'trade', shop_inventory: [], allow_sell: false },
+        stages: [
+          {
+            stage_id: 'main',
+            narrative: [],
+            settlement: { type: 'trade', shop_inventory: [], allow_sell: false },
+            is_final: true,
+          },
+        ],
+        entry_stage: 'main',
       };
       expect(() => SceneSchema.parse(scene)).toThrow();
     });

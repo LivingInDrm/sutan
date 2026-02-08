@@ -22,16 +22,22 @@ const makeDiceScene = (id: string, duration = 2): Scene => ({
   scene_id: id, name: `Scene ${id}`, description: 'test',
   background_image: 'bg.png', type: SceneType.Event, duration,
   slots: [{ type: SlotType.Character, required: true, locked: false }],
-  settlement: {
-    type: 'dice_check',
-    check: { attribute: 'combat' as any, calc_mode: 'max' as any, target: 3 },
-    results: {
-      success: { narrative: 'Win', effects: { gold: 20 } },
-      partial_success: { narrative: 'Partial', effects: { gold: 5 } },
-      failure: { narrative: 'Fail', effects: { gold: -5 } },
-      critical_failure: { narrative: 'Crit Fail', effects: { gold: -10 } },
+  entry_stage: 'main',
+  stages: [{
+    stage_id: 'main',
+    narrative: [],
+    settlement: {
+      type: 'dice_check',
+      check: { attribute: 'combat' as any, calc_mode: 'max' as any, target: 3 },
+      results: {
+        success: { narrative: 'Win', effects: { gold: 20 } },
+        partial_success: { narrative: 'Partial', effects: { gold: 5 } },
+        failure: { narrative: 'Fail', effects: { gold: -5 } },
+        critical_failure: { narrative: 'Crit Fail', effects: { gold: -10 } },
+      },
     },
-  },
+    is_final: true,
+  }],
   absence_penalty: { effects: { reputation: -5 }, narrative: '缺席' },
 } as Scene);
 

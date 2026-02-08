@@ -9,7 +9,7 @@ export function MapScreen() {
   const game = useGameStore(s => s.game);
   const currentDay = useGameStore(s => s.currentDay);
   const executionCountdown = useGameStore(s => s.executionCountdown);
-  const nextDay = useGameStore(s => s.nextDay);
+  const beginSettlement = useGameStore(s => s.beginSettlement);
   const syncState = useGameStore(s => s.syncState);
   const handCardIds = useGameStore(s => s.handCardIds);
   const setScreen = useUIStore(s => s.setScreen);
@@ -27,10 +27,8 @@ export function MapScreen() {
   const participatedScenes = game ? game.sceneManager.getParticipatedScenes() : [];
 
   const handleNextDay = () => {
-    const results = nextDay();
-    if (results.length > 0) {
-      setScreen('settlement');
-    }
+    beginSettlement();
+    setScreen('settlement');
   };
 
   const handleSceneClick = (sceneId: string) => {

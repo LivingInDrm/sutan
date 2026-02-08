@@ -1,7 +1,7 @@
 import {
   Rarity, Attribute, SpecialAttribute, CardType, EquipmentType,
   SceneType, SceneStatus, CheckResult, CalcMode, SlotType,
-  ReputationLevel, GamePhase, GameEndReason,
+  ReputationLevel, GamePhase, GameEndReason, NarrativeNodeType,
 } from './enums';
 
 export type Attributes = Record<Attribute, number>;
@@ -82,6 +82,58 @@ export interface ChoiceSettlement {
 
 export type Settlement = DiceCheckSettlement | TradeSettlement | ChoiceSettlement;
 
+export interface DialogueNode {
+  type: 'dialogue';
+  speaker?: string;
+  text: string;
+  portrait?: string;
+}
+
+export interface NarrationNode {
+  type: 'narration';
+  text: string;
+}
+
+export interface EffectNode {
+  type: 'effect';
+  effects: Effects;
+  text?: string;
+}
+
+export interface NarrativeChoiceOption {
+  label: string;
+  next_stage?: string;
+  effects?: Effects;
+}
+
+export interface ChoiceNode {
+  type: 'choice';
+  text: string;
+  options: NarrativeChoiceOption[];
+}
+
+export type NarrativeNode = DialogueNode | NarrationNode | EffectNode | ChoiceNode;
+
+export interface StageBranch {
+  condition: CheckResult | 'default';
+  next_stage: string;
+}
+
+export interface Stage {
+  stage_id: string;
+  narrative: NarrativeNode[];
+  settlement?: Settlement;
+  branches?: StageBranch[];
+  is_final?: boolean;
+}
+
+export interface StagePlayback {
+  stageId: string;
+  narrative: NarrativeNode[];
+  hasSettlement: boolean;
+  settlementConfig?: Settlement;
+}
+
 export interface UnlockConditions {
   reputation_min?: number;
   required_tags?: string[];
@@ -100,7 +152,8 @@ export interface Scene {
   type: SceneType;
   duration: number;
   slots: Slot[];
-  settlement: Settlement;
+  stages: Stage[];
+  entry_stage: string;
   unlock_conditions?: UnlockConditions;
   absence_penalty?: AbsencePenalty | null;
 }
@@ -109,6 +162,8 @@ export interface SceneState {
   remaining_turns: number;
   invested_cards: string[];
   status: SceneStatus;
+  current_stage?: string;
+  stage_results?: Record<string, CheckResult>;
 }
 
 export interface GameState {
@@ -171,6 +226,19 @@ export interface SettlementResult {
   effects_applied: Effects;
   narrative: string;
   dice_check_state?: DiceCheckState;
+  stage_id?: string;
+  all_stage_results?: StageResult[];
+}
+
+export interface StageResult {
+  stage_id: string;
+  narrative_played: NarrativeNode[];
+  settlement_result?: {
+    type: Settlement['type'];
+    result_key?: CheckResult;
+    effects_applied: Effects;
+    dice_check_state?: DiceCheckState;
+  };
 }
 
 export interface Difficulty {
@@ -189,4 +257,4 @@ export const DIFFICULTIES: Record<string, Difficulty> = {
 
 export type { Rarity, Attribute, SpecialAttribute, CardType, EquipmentType,
   SceneType, SceneStatus, CheckResult, CalcMode, SlotType,
-  ReputationLevel, GamePhase, GameEndReason } from './enums';
+  ReputationLevel, GamePhase, GameEndReason, NarrativeNodeType } from './enums';

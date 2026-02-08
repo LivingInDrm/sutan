@@ -4,6 +4,11 @@ import type { Card, Scene } from '../core/types';
 
 type SchemaType = typeof CardSchema | typeof SceneSchema;
 
+const sceneModules = import.meta.glob<{ default: unknown }>(
+  './configs/scenes/*.json',
+  { eager: true }
+);
+
 class DataLoader {
   private cache: Map<string, unknown[]> = new Map();
 
@@ -13,6 +18,31 @@ class DataLoader {
 
   async loadScenes(data: unknown[]): Promise<Scene[]> {
     return this.loadAndValidate('scenes', data, SceneSchema) as Promise<Scene[]>;
+  }
+
+  loadScenesFromDirectory(): Scene[] {
+    if (this.cache.has('scenes_dir')) {
+      return this.cache.get('scenes_dir') as Scene[];
+    }
+
+    const scenes: Scene[] = [];
+    for (const [path, mod] of Object.entries(sceneModules)) {
+      try {
+        const data = (mod as { default: unknown }).default ?? mod;
+        const validated = SceneSchema.parse(data);
+        scenes.push(validated as Scene);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          throw new Error(
+            `Scene validation error in ${path}: ${error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')}`
+          );
+        }
+        throw error;
+      }
+    }
+
+    this.cache.set('scenes_dir', scenes);
+    return scenes;
   }
 
   private async loadAndValidate(

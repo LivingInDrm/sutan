@@ -8,6 +8,11 @@ import { CardManager } from '../card/CardManager';
 import type { SettlementResult } from '../types';
 import { eventBus } from '../../lib/events';
 
+export interface SettlementPhaseResult {
+  absencePenaltyResults: SettlementResult[];
+  pendingSceneIds: string[];
+}
+
 export class DayManager {
   private _phase: GamePhase = GamePhase.Dawn;
   private timeManager: TimeManager;
@@ -16,6 +21,7 @@ export class DayManager {
   private thinkSystem: ThinkSystem;
   private playerState: PlayerState;
   private cardManager: CardManager;
+  private _preSettlementSnapshot: Record<string, unknown> | null = null;
 
   constructor(
     timeManager: TimeManager,
@@ -60,37 +66,57 @@ export class DayManager {
     eventBus.emit('phase:change', { phase: GamePhase.Action });
   }
 
-  executeSettlement(): SettlementResult[] {
+  beginSettlement(): SettlementPhaseResult {
     this._phase = GamePhase.Settlement;
     eventBus.emit('day:settlement', { day: this.timeManager.currentDay });
     eventBus.emit('phase:change', { phase: GamePhase.Settlement });
 
-    const preSettlementSnapshot = {
+    this._preSettlementSnapshot = {
       sceneStatesSnapshot: this.sceneManager.getSceneStatesMap() as unknown as Record<string, unknown>,
       handCardIds: this.cardManager.getCardIds(),
       thinkUsedToday: this.thinkSystem.usedToday,
     };
 
     const settledSceneIds = this.sceneManager.decrementRemainingTurns();
-    const results: SettlementResult[] = [];
+    const absencePenaltyResults: SettlementResult[] = [];
 
     const unparticipated = this.sceneManager.getExpiredUnparticipatedScenes();
     for (const sceneId of unparticipated) {
       const result = this.settlementExecutor.applyAbsencePenalty(sceneId);
-      if (result) results.push(result);
+      if (result) absencePenaltyResults.push(result);
       else this.sceneManager.completeScene(sceneId);
     }
 
-    const participated = settledSceneIds.filter(id => !unparticipated.includes(id));
-    for (const sceneId of participated) {
+    const pendingSceneIds = settledSceneIds.filter(id => !unparticipated.includes(id));
+
+    return { absencePenaltyResults, pendingSceneIds };
+  }
+
+  finishSettlement(): void {
+    this.sceneManager.removeCompletedScenes();
+    eventBus.emit('day:end', { day: this.timeManager.currentDay });
+    if (this._preSettlementSnapshot) {
+      this.timeManager.advanceDay(this._preSettlementSnapshot);
+      this._preSettlementSnapshot = null;
+    }
+  }
+
+  endDay(): void {
+    this.finishSettlement();
+    this.executeDawn();
+    this.startAction();
+  }
+
+  executeSettlement(): SettlementResult[] {
+    const { absencePenaltyResults, pendingSceneIds } = this.beginSettlement();
+    const results: SettlementResult[] = [...absencePenaltyResults];
+
+    for (const sceneId of pendingSceneIds) {
       const result = this.settlementExecutor.settleScene(sceneId);
       if (result) results.push(result);
     }
 
-    this.sceneManager.removeCompletedScenes();
-
-    eventBus.emit('day:end', { day: this.timeManager.currentDay });
-    this.timeManager.advanceDay(preSettlementSnapshot);
+    this.finishSettlement();
     return results;
   }
 

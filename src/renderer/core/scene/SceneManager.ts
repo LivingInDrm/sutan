@@ -1,5 +1,5 @@
 import type { Scene, SceneState, UnlockConditions } from '../types';
-import { SceneStatus } from '../types/enums';
+import { SceneStatus, CheckResult } from '../types/enums';
 import { PlayerState } from '../player/PlayerState';
 import { CardManager } from '../card/CardManager';
 import { eventBus } from '../../lib/events';
@@ -46,13 +46,43 @@ export class SceneManager {
   }
 
   participateScene(sceneId: string, cardIds: string[]): boolean {
+    const scene = this.scenes.get(sceneId);
     const state = this.sceneStates.get(sceneId);
-    if (!state || state.status !== SceneStatus.Available) return false;
+    if (!scene || !state || state.status !== SceneStatus.Available) return false;
+
+    for (const cardId of cardIds) {
+      if (this.isCardLocked(cardId)) return false;
+    }
 
     state.invested_cards = [...cardIds];
     state.status = SceneStatus.Participated;
+    state.current_stage = scene.entry_stage;
     eventBus.emit('scene:participate', { sceneId, cardIds });
     return true;
+  }
+
+  isCardLocked(cardId: string): boolean {
+    for (const [, state] of this.sceneStates) {
+      if (
+        (state.status === SceneStatus.Participated || state.status === SceneStatus.Settling) &&
+        state.invested_cards.includes(cardId)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getLockedCardIds(): Set<string> {
+    const locked = new Set<string>();
+    for (const [, state] of this.sceneStates) {
+      if (state.status === SceneStatus.Participated || state.status === SceneStatus.Settling) {
+        for (const cardId of state.invested_cards) {
+          locked.add(cardId);
+        }
+      }
+    }
+    return locked;
   }
 
   getScene(sceneId: string): Scene | undefined {
@@ -135,6 +165,23 @@ export class SceneManager {
       }
     }
     return true;
+  }
+
+  updateCurrentStage(sceneId: string, stageId: string): void {
+    const state = this.sceneStates.get(sceneId);
+    if (state) {
+      state.current_stage = stageId;
+    }
+  }
+
+  recordStageResult(sceneId: string, stageId: string, result: CheckResult): void {
+    const state = this.sceneStates.get(sceneId);
+    if (state) {
+      if (!state.stage_results) {
+        state.stage_results = {};
+      }
+      state.stage_results[stageId] = result;
+    }
   }
 
   getActiveSceneIds(): string[] {

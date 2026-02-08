@@ -1,0 +1,26 @@
+{
+  "scene_id": "scene_shop_001",
+  "name": "装备商人",
+  "description": "一个来自远方的商人，出售各种装备和物资。",
+  "background_image": "shop01.png",
+  "type": "shop",
+  "duration": 1,
+  "slots": [],
+  "entry_stage": "main",
+  "stages": [
+    {
+      "stage_id": "main",
+      "narrative": [
+        { "type": "narration", "text": "一个来自远方的商人向你展示了他的货物。" }
+      ],
+      "settlement": {
+        "type": "trade",
+        "shop_inventory": ["equip_001", "equip_002", "intel_001"],
+        "allow_sell": true,
+        "refresh_cycle": 7
+      },
+      "is_final": true
+    }
+  ],
+  "absence_penalty": null
+}
