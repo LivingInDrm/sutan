@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { useUIStore } from '../../stores/uiStore';
-import { NarrativePlayer } from '../components/narrative/NarrativePlayer';
+import { NarrativePlayer, NarrativeNodeView } from '../components/narrative/NarrativePlayer';
 import { DiceResult } from '../components/dice/DiceComponent';
 import { CardComponent } from '../components/card/CardComponent';
 import { Panel } from '../components/common/Panel';
@@ -9,7 +9,7 @@ import { Button } from '../components/common/Button';
 import { BookLayout } from '../layouts/BookLayout';
 import { DividerLine } from '../components/common/svg';
 import { ATTR_LABELS } from '../constants/labels';
-import type { Card, SettlementResult } from '../../core/types';
+import type { Card, NarrativeNode, SettlementResult } from '../../core/types';
 import type { StageSettlementResult } from '../../core/settlement/SettlementExecutor';
 
 const RESULT_COLORS: Record<string, string> = {
@@ -137,8 +137,9 @@ function SettlementRightPanel({
   onContinue,
   isNarrativeComplete,
   hasSettlement,
+  historyNodes,
 }: {
-  narrative: import('../../core/types').NarrativeNode[];
+  narrative: NarrativeNode[];
   narrativeIndex: number;
   onAdvance: () => void;
   onChoice: (nextStageId: string, effects?: import('../../core/types').Effects) => void;
@@ -146,6 +147,7 @@ function SettlementRightPanel({
   onContinue: () => void;
   isNarrativeComplete: boolean;
   hasSettlement: boolean;
+  historyNodes: NarrativeNode[];
 }) {
   if (!isNarrativeComplete) {
     return (
@@ -154,19 +156,28 @@ function SettlementRightPanel({
         currentIndex={narrativeIndex}
         onAdvance={onAdvance}
         onChoice={onChoice}
+        historyNodes={historyNodes}
       />
     );
   }
 
   if (settlementResult) {
+    const allPastNodes = [...historyNodes, ...narrative];
     return (
-      <div className="flex flex-col h-full px-8 py-6">
-        <div className="flex-1">
+      <div className="flex flex-col h-full">
+        <div className="flex-1 overflow-auto px-8 py-6">
+          {allPastNodes.length > 0 && (
+            <div className="flex flex-col gap-4 mb-4">
+              {allPastNodes.map((node, idx) => (
+                <NarrativeNodeView key={`p-${idx}`} node={node} isCurrent={false} />
+              ))}
+            </div>
+          )}
           <p className="text-leather leading-relaxed text-[15px] italic">
             {settlementResult.narrative}
           </p>
         </div>
-        <div className="shrink-0 pt-4">
+        <div className="shrink-0 px-8 pb-4 pt-2">
           <DividerLine className="w-full h-1 text-gold-dim/20 pointer-events-none mb-3" preserveAspectRatio="none" />
           <button
             onClick={onContinue}
@@ -184,16 +195,35 @@ function SettlementRightPanel({
   }
 
   if (isNarrativeComplete && hasSettlement) {
+    const allPastNodes = [...historyNodes, ...narrative];
     return (
-      <div className="flex items-center justify-center h-full px-8">
-        <p className="text-leather/50 text-sm italic">等待鉴定……</p>
+      <div className="flex flex-col h-full">
+        <div className="flex-1 overflow-auto px-8 py-6">
+          {allPastNodes.length > 0 && (
+            <div className="flex flex-col gap-4 mb-4">
+              {allPastNodes.map((node, idx) => (
+                <NarrativeNodeView key={`w-${idx}`} node={node} isCurrent={false} />
+              ))}
+            </div>
+          )}
+          <p className="text-leather/50 text-sm italic">等待鉴定……</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-center h-full px-8">
-      <p className="text-leather/50 text-sm italic">阶段完成</p>
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-auto px-8 py-6">
+        {historyNodes.length > 0 && (
+          <div className="flex flex-col gap-4 mb-4">
+            {historyNodes.map((node, idx) => (
+              <NarrativeNodeView key={`d-${idx}`} node={node} isCurrent={false} />
+            ))}
+          </div>
+        )}
+        <p className="text-leather/50 text-sm italic">阶段完成</p>
+      </div>
     </div>
   );
 }
@@ -279,6 +309,47 @@ export function SettlementScreen() {
 
   const { isPlaying, currentStagePlayback, narrativeIndex, currentStageSettlementResult } = settlement;
 
+  const [historyNodes, setHistoryNodes] = useState<NarrativeNode[]>([]);
+  const prevStageIdRef = useRef<string | null>(null);
+  const prevSettlementNarrativeRef = useRef<string | null>(null);
+
+  const currentStageId = currentStagePlayback?.stageId ?? null;
+
+  useEffect(() => {
+    if (currentStageId && currentStageId !== prevStageIdRef.current) {
+      if (prevStageIdRef.current !== null) {
+        const prevNarrative = prevStageIdRef.current;
+        setHistoryNodes(prev => {
+          const newHistory = [...prev];
+          const prevPlayback = settlement.currentRunner?.allStageResults.find(
+            r => r.stage_id === prevNarrative
+          );
+          if (prevPlayback) {
+            for (const node of prevPlayback.narrative_played) {
+              newHistory.push(node);
+            }
+          }
+          return newHistory;
+        });
+      }
+      prevStageIdRef.current = currentStageId;
+    }
+  }, [currentStageId]);
+
+  useEffect(() => {
+    if (currentStageSettlementResult?.narrative && currentStageSettlementResult.narrative !== prevSettlementNarrativeRef.current) {
+      prevSettlementNarrativeRef.current = currentStageSettlementResult.narrative;
+    }
+  }, [currentStageSettlementResult]);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      setHistoryNodes([]);
+      prevStageIdRef.current = null;
+      prevSettlementNarrativeRef.current = null;
+    }
+  }, [isPlaying]);
+
   if (!isPlaying) {
     return <SummaryView results={lastResults} />;
   }
@@ -301,6 +372,11 @@ export function SettlementScreen() {
         .filter(Boolean) as Card[]
     : [];
 
+  const fullHistory = [...historyNodes];
+  if (prevSettlementNarrativeRef.current && currentStageSettlementResult === null) {
+    fullHistory.push({ type: 'narration', text: prevSettlementNarrativeRef.current } as NarrativeNode);
+  }
+
   const leftContent = (
     <SettlementLeftPanel
       sceneName={sceneName}
@@ -322,6 +398,7 @@ export function SettlementScreen() {
       onContinue={advanceAfterSettlement}
       isNarrativeComplete={isNarrativeComplete}
       hasSettlement={hasSettlement}
+      historyNodes={fullHistory}
     />
   );
 

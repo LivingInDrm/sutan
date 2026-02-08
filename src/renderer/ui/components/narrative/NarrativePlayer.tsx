@@ -7,6 +7,7 @@ interface NarrativePlayerProps {
   currentIndex: number;
   onAdvance: () => void;
   onChoice: (nextStageId: string, effects?: Effects) => void;
+  historyNodes?: NarrativeNode[];
 }
 
 function EffectDisplay({ effects }: { effects: Effects }) {
@@ -29,7 +30,7 @@ function EffectDisplay({ effects }: { effects: Effects }) {
   return <div className="flex gap-2 mt-1">{items}</div>;
 }
 
-function NarrativeNodeView({ node, isCurrent }: { node: NarrativeNode; isCurrent: boolean }) {
+export function NarrativeNodeView({ node, isCurrent }: { node: NarrativeNode; isCurrent: boolean }) {
   const opacity = isCurrent ? '' : 'opacity-60';
 
   if (node.type === 'dialogue') {
@@ -74,7 +75,7 @@ function NarrativeNodeView({ node, isCurrent }: { node: NarrativeNode; isCurrent
   return null;
 }
 
-export function NarrativePlayer({ nodes, currentIndex, onAdvance, onChoice }: NarrativePlayerProps) {
+export function NarrativePlayer({ nodes, currentIndex, onAdvance, onChoice, historyNodes = [] }: NarrativePlayerProps) {
   const currentNode = currentIndex < nodes.length ? nodes[currentIndex] : null;
   const isNarrativeComplete = currentIndex >= nodes.length;
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -95,7 +96,7 @@ export function NarrativePlayer({ nodes, currentIndex, onAdvance, onChoice }: Na
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [currentIndex]);
+  }, [currentIndex, historyNodes.length]);
 
   if (isNarrativeComplete || !currentNode) {
     return null;
@@ -108,11 +109,19 @@ export function NarrativePlayer({ nodes, currentIndex, onAdvance, onChoice }: Na
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-auto px-8 py-6">
+        {historyNodes.length > 0 && (
+          <div className="flex flex-col gap-4 mb-4">
+            {historyNodes.map((node, idx) => (
+              <NarrativeNodeView key={`h-${idx}`} node={node} isCurrent={false} />
+            ))}
+          </div>
+        )}
+
         <div className="flex flex-col gap-4">
           {visibleNodes.map((node, idx) => {
             const isCurrent = idx === currentIndex;
             if (node.type === 'choice' && isCurrent) return null;
-            return <NarrativeNodeView key={idx} node={node} isCurrent={isCurrent} />;
+            return <NarrativeNodeView key={`c-${idx}`} node={node} isCurrent={isCurrent} />;
           })}
         </div>
 
