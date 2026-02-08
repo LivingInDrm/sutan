@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import type { NarrativeNode, Effects } from '../../../core/types';
 import { DividerLine } from '../common/svg';
 
@@ -26,12 +26,58 @@ function EffectDisplay({ effects }: { effects: Effects }) {
     );
   }
   if (items.length === 0) return null;
-  return <div className="flex gap-2 mt-3">{items}</div>;
+  return <div className="flex gap-2 mt-1">{items}</div>;
+}
+
+function NarrativeNodeView({ node, isCurrent }: { node: NarrativeNode; isCurrent: boolean }) {
+  const opacity = isCurrent ? '' : 'opacity-60';
+
+  if (node.type === 'dialogue') {
+    return (
+      <div className={opacity}>
+        <div className="flex items-start gap-3 mb-1">
+          {node.portrait && (
+            <div className="w-10 h-10 shrink-0 rounded overflow-hidden border border-gold-dim/30 shadow-sm">
+              <img src={node.portrait} alt={node.speaker || ''} className="w-full h-full object-cover object-top" />
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            {node.speaker && (
+              <div className="text-xs font-bold text-crimson-dark mb-0.5 font-[family-name:var(--font-display)]">
+                {node.speaker}
+              </div>
+            )}
+            <p className="text-leather leading-relaxed text-[15px]">{node.text}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (node.type === 'narration') {
+    return (
+      <div className={opacity}>
+        <p className="text-leather/80 leading-loose text-[15px] italic">{node.text}</p>
+      </div>
+    );
+  }
+
+  if (node.type === 'effect') {
+    return (
+      <div className={opacity}>
+        {node.text && <p className="text-leather/80 leading-relaxed text-[15px] mb-1">{node.text}</p>}
+        <EffectDisplay effects={node.effects} />
+      </div>
+    );
+  }
+
+  return null;
 }
 
 export function NarrativePlayer({ nodes, currentIndex, onAdvance, onChoice }: NarrativePlayerProps) {
   const currentNode = currentIndex < nodes.length ? nodes[currentIndex] : null;
   const isNarrativeComplete = currentIndex >= nodes.length;
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === ' ' || e.key === 'Enter') {
@@ -47,65 +93,32 @@ export function NarrativePlayer({ nodes, currentIndex, onAdvance, onChoice }: Na
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [currentIndex]);
+
   if (isNarrativeComplete || !currentNode) {
     return null;
   }
 
+  const visibleNodes = nodes.slice(0, currentIndex + 1);
   const showContinue = currentNode.type !== 'choice';
+  const isChoice = currentNode.type === 'choice';
 
   return (
-    <div className="flex flex-col h-full px-8 py-6">
-      <div className="flex-1">
-        {currentNode.type === 'dialogue' && (
-          <div>
-            <div className="flex items-start gap-4 mb-4">
-              {currentNode.portrait && (
-                <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden border-2 border-gold-dim/30 shadow-md">
-                  <img
-                    src={currentNode.portrait}
-                    alt={currentNode.speaker || ''}
-                    className="w-full h-full object-cover object-top"
-                  />
-                </div>
-              )}
-              <div className="flex-1 pt-1">
-                {currentNode.speaker && (
-                  <div className="text-sm font-bold text-crimson-dark mb-2 font-[family-name:var(--font-display)]">
-                    {currentNode.speaker}
-                  </div>
-                )}
-              </div>
-            </div>
-            <p className="text-leather leading-relaxed text-[15px]">
-              {currentNode.text}
-            </p>
-          </div>
-        )}
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-auto px-8 py-6">
+        <div className="flex flex-col gap-4">
+          {visibleNodes.map((node, idx) => {
+            const isCurrent = idx === currentIndex;
+            if (node.type === 'choice' && isCurrent) return null;
+            return <NarrativeNodeView key={idx} node={node} isCurrent={isCurrent} />;
+          })}
+        </div>
 
-        {currentNode.type === 'narration' && (
-          <div>
-            <p className="text-leather/80 leading-loose text-[15px] italic">
-              {currentNode.text}
-            </p>
-          </div>
-        )}
-
-        {currentNode.type === 'effect' && (
-          <div>
-            {currentNode.text && (
-              <p className="text-leather/80 leading-relaxed text-[15px] mb-2">
-                {currentNode.text}
-              </p>
-            )}
-            <EffectDisplay effects={currentNode.effects} />
-          </div>
-        )}
-
-        {currentNode.type === 'choice' && (
-          <div>
-            <p className="text-leather leading-relaxed text-[15px] mb-6">
-              {currentNode.text}
-            </p>
+        {isChoice && (
+          <div className="mt-6">
+            <p className="text-leather leading-relaxed text-[15px] mb-4">{currentNode.text}</p>
             <div className="flex flex-col gap-2">
               {currentNode.options.map((option, idx) => (
                 <button
@@ -131,10 +144,12 @@ export function NarrativePlayer({ nodes, currentIndex, onAdvance, onChoice }: Na
             </div>
           </div>
         )}
+
+        <div ref={bottomRef} />
       </div>
 
       {showContinue && (
-        <div className="shrink-0 pt-4">
+        <div className="shrink-0 px-8 pb-4 pt-2">
           <DividerLine
             className="w-full h-1 text-gold-dim/20 pointer-events-none mb-3"
             preserveAspectRatio="none"
