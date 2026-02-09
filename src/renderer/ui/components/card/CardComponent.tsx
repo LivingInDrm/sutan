@@ -128,18 +128,9 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
 
           <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${r.accent}`} />
 
-          <div className="absolute top-0 inset-x-0 p-1.5 flex items-start justify-between gap-1">
+          <div className="absolute top-0 inset-x-0 p-1.5">
             <span className="text-[12px] font-bold text-white font-[family-name:var(--font-display)] leading-tight line-clamp-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
               {card.name}
-            </span>
-            <span className={`shrink-0 text-[8px] font-bold w-3.5 h-3.5 rounded-sm flex items-center justify-center leading-none ${r.badge}`}>
-              {r.label}
-            </span>
-          </div>
-
-          <div className="absolute bottom-1 left-1.5">
-            <span className="text-[9px] text-white/50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.6)]">
-              {CARD_TYPE_LABELS[card.type]}
             </span>
           </div>
         </div>
