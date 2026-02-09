@@ -18,6 +18,43 @@ const RARITY_BADGE: Record<string, string> = {
   stone: 'bg-stone-500 text-stone-900',
 };
 
+const COMPACT_RARITY: Record<string, {
+  border: string;
+  glow: string;
+  accent: string;
+  badge: string;
+  label: string;
+}> = {
+  gold: {
+    border: 'border-yellow-500/50',
+    glow: '0 0 12px rgba(234,179,8,0.20), 0 2px 8px rgba(0,0,0,0.3)',
+    accent: 'from-yellow-600 to-amber-500',
+    badge: 'bg-gradient-to-b from-yellow-500 to-amber-600 text-yellow-950',
+    label: '金',
+  },
+  silver: {
+    border: 'border-gray-300/40',
+    glow: '0 0 10px rgba(156,163,175,0.15), 0 2px 8px rgba(0,0,0,0.3)',
+    accent: 'from-gray-300 to-slate-400',
+    badge: 'bg-gradient-to-b from-gray-300 to-slate-400 text-gray-800',
+    label: '银',
+  },
+  copper: {
+    border: 'border-amber-600/40',
+    glow: '0 0 10px rgba(180,83,9,0.15), 0 2px 8px rgba(0,0,0,0.3)',
+    accent: 'from-amber-600 to-orange-700',
+    badge: 'bg-gradient-to-b from-amber-600 to-orange-700 text-amber-50',
+    label: '铜',
+  },
+  stone: {
+    border: 'border-stone-400/30',
+    glow: '0 2px 8px rgba(0,0,0,0.3)',
+    accent: 'from-stone-400 to-stone-500',
+    badge: 'bg-gradient-to-b from-stone-400 to-stone-500 text-stone-800',
+    label: '石',
+  },
+};
+
 interface CardComponentProps {
   card: Card;
   onClick?: (e: React.MouseEvent) => void;
@@ -52,35 +89,58 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
   }, [onClick, onDoubleClick]);
 
   if (compact) {
+    const r = COMPACT_RARITY[card.rarity] || COMPACT_RARITY.stone;
     return (
       <div
         onClick={handleClick}
         className={`
-          w-28 h-48 shrink-0 rounded-lg overflow-hidden cursor-pointer transition-all duration-200
-          border border-leather/30 shadow-lg
-          ${selected ? 'ring-2 ring-amber-400 scale-105' : ''}
-          ${locked ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
+          group w-28 h-48 shrink-0 rounded overflow-hidden cursor-pointer
+          transition-all duration-200 ease-out border ${r.border}
+          ${selected ? 'ring-2 ring-amber-400/80 scale-105' : ''}
+          ${locked ? 'opacity-50 grayscale cursor-not-allowed' : 'hover:scale-[1.06] hover:-translate-y-0.5'}
         `}
+        style={{ boxShadow: r.glow }}
       >
-        <div
-          className="flex flex-col w-full h-full"
-          style={{ backgroundImage: `url(${ricePaperTexture})`, backgroundSize: 'cover' }}
-        >
-          <div className="px-2 pt-1.5 pb-1">
-            <span className="text-[11px] font-bold text-leather font-[family-name:var(--font-display)] leading-tight line-clamp-1">
-              {card.name}
-            </span>
-          </div>
-          <div className="flex-1 relative overflow-hidden">
+        <div className="relative w-full h-full">
+          <div
+            className="absolute inset-0"
+            style={{ backgroundImage: `url(${ricePaperTexture})`, backgroundSize: 'cover' }}
+          />
+
+          <div className="absolute inset-0">
             {card.image ? (
-              <img src={card.image} alt={card.name} className="w-full h-full object-cover object-top" />
+              <img
+                src={card.image}
+                alt={card.name}
+                className="w-full h-full object-cover object-top"
+              />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-leather/5">
-                <span className={`text-xs px-1.5 py-0.5 rounded ${badgeStyle} font-bold`}>
-                  {card.rarity.charAt(0).toUpperCase()}
+              <div className="w-full h-full flex items-center justify-center">
+                <span className="text-3xl opacity-20 font-[family-name:var(--font-display)] text-leather">
+                  {CARD_TYPE_LABELS[card.type]?.charAt(0) || '?'}
                 </span>
               </div>
             )}
+          </div>
+
+          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/50 via-black/25 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+
+          <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${r.accent}`} />
+
+          <div className="absolute top-0 inset-x-0 p-1.5 flex items-start justify-between gap-1">
+            <span className="text-[12px] font-bold text-white font-[family-name:var(--font-display)] leading-tight line-clamp-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+              {card.name}
+            </span>
+            <span className={`shrink-0 text-[8px] font-bold w-3.5 h-3.5 rounded-sm flex items-center justify-center leading-none ${r.badge}`}>
+              {r.label}
+            </span>
+          </div>
+
+          <div className="absolute bottom-1 left-1.5">
+            <span className="text-[9px] text-white/50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.6)]">
+              {CARD_TYPE_LABELS[card.type]}
+            </span>
           </div>
         </div>
       </div>

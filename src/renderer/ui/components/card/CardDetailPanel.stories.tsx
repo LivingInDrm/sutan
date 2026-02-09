@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import type { Story } from "@ladle/react";
 import { CardDetailPanel } from "./CardDetailPanel";
 import type { Card } from "../../../core/types";
@@ -198,12 +199,67 @@ const MOCK_INTEL: Card = {
   tags: ["intel", "consumable"],
 };
 
+const ALL_CARDS: Card[] = [
+  MOCK_XU_WEIXIONG, MOCK_HONGSHU, MOCK_LONGQUE, MOCK_FEIJIAN, MOCK_MUMANIU,
+  MOCK_XU_LONGXIANG, MOCK_XU_FENGNIAN, MOCK_HONG_XIXIANG, MOCK_XIUDONG,
+  MOCK_WENHUA, MOCK_EQUIPMENT,
+  MOCK_INTEL,
+];
+
 const noop = () => {};
-const center = { x: 40, y: 40 };
+const center = { x: 40, y: 60 };
 
 const Wrap = ({ children }: { children: React.ReactNode }) => (
   <div className="bg-leather min-h-screen p-10 relative">{children}</div>
 );
+
+const RARITY_COLOR: Record<string, string> = {
+  gold: 'text-yellow-400',
+  silver: 'text-gray-300',
+  copper: 'text-amber-500',
+  stone: 'text-stone-400',
+};
+
+const RARITY_BG: Record<string, string> = {
+  gold: 'bg-yellow-500/15 border-yellow-500/30',
+  silver: 'bg-gray-400/15 border-gray-400/30',
+  copper: 'bg-amber-600/15 border-amber-600/30',
+  stone: 'bg-stone-500/15 border-stone-500/30',
+};
+
+export const Playground: Story = () => {
+  const [selected, setSelected] = useState<Card>(MOCK_XU_WEIXIONG);
+  const [key, setKey] = useState(0);
+
+  const handleSelect = (card: Card) => {
+    setSelected(card);
+    setKey(k => k + 1);
+  };
+
+  return (
+    <div className="bg-leather min-h-screen">
+      <div className="sticky top-0 z-[60] flex gap-3 p-4 flex-wrap border-b border-parchment/10 bg-leather">
+        {ALL_CARDS.map(card => (
+          <button
+            key={card.card_id}
+            onClick={() => handleSelect(card)}
+            className={`px-3 py-1.5 rounded text-xs border transition-all ${
+              selected.card_id === card.card_id
+                ? `${RARITY_BG[card.rarity]} font-bold`
+                : 'bg-parchment/5 border-parchment/15 hover:bg-parchment/10'
+            } ${RARITY_COLOR[card.rarity]}`}
+          >
+            {card.name}
+          </button>
+        ))}
+      </div>
+      <div className="p-10 relative">
+        <CardDetailPanel key={key} card={selected} position={center} onClose={noop} />
+      </div>
+    </div>
+  );
+};
+Playground.meta = { title: "CardDetailPanel / Playground" };
 
 export const XuLongxiang: Story = () => (
   <Wrap><CardDetailPanel card={MOCK_XU_LONGXIANG} position={center} onClose={noop} /></Wrap>
