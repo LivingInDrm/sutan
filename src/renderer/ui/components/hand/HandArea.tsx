@@ -194,18 +194,18 @@ function CardStrip({ cards, onCardClick, onCardDoubleClick, selectedCardId }: Ca
         <>
           <div
             className="absolute left-0 top-0 bottom-0 w-10 z-20 pointer-events-none"
-            style={{ background: 'linear-gradient(to right, rgba(26,15,10,1) 0%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to right, var(--color-leather) 0%, transparent 100%)' }}
           />
           <div
             className="absolute right-0 top-0 bottom-0 w-10 z-20 pointer-events-none"
-            style={{ background: 'linear-gradient(to left, rgba(26,15,10,1) 0%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to left, var(--color-leather) 0%, transparent 100%)' }}
           />
         </>
       )}
 
       <div
         className="absolute inset-0 flex items-center"
-        style={{ paddingTop: `${Math.max(0, (CARD_HEIGHT - containerRef.current?.clientHeight! + 16) * 0.5)}px` }}
+        style={{ paddingTop: `${Math.max(0, (CARD_HEIGHT - (containerRef.current?.clientHeight ?? CARD_HEIGHT) + 16) * 0.5)}px` }}
       >
         <AnimatePresence mode="popLayout">
           {cards.map((card, i) => {
