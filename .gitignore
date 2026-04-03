@@ -1,7 +1,9 @@
 node_modules/
 dist/
+build/
 .vite/
 *.tsbuildinfo
 .DS_Store
 tmp/
 FantasyAsiaUI/
+scripts/samples/

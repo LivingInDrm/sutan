@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 Sutan Game Asset Generator
-Generates Chinese ink wash style game assets using DALL-E 3 API.
-White backgrounds are converted to transparent via post-processing.
+Generates Chinese ink wash style game assets using gpt-image-1.5 API.
+Native transparent backgrounds are supported — no post-processing needed.
 
 Usage:
   python scripts/generate_assets.py portrait --name "老将军" --description "年迈将军，银白长须，身披黑色铠甲" --output figure08.png
@@ -16,25 +16,28 @@ import base64
 import json
 import os
 import sys
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from io import BytesIO
 from pathlib import Path
 from typing import Optional
 
-import numpy as np
-
 from openai import OpenAI
 from PIL import Image
+
+# Thread-local storage for log prefix
+_thread_local = threading.local()
 
 # ─────────────────────────────────────────────
 # Config
 # ─────────────────────────────────────────────
 API_KEY = os.environ.get("OPENAI_API_KEY", "")
 
-# DALL-E 3 supported sizes
-DALLE3_PORTRAIT_SIZE = "1024x1792"   # vertical
-DALLE3_SQUARE_SIZE   = "1024x1024"
-DALLE3_LANDSCAPE_SIZE = "1792x1024"  # horizontal
+# gpt-image-1 supported sizes
+GPT_IMAGE_PORTRAIT_SIZE  = "1024x1536"   # vertical (portrait/item)
+GPT_IMAGE_SQUARE_SIZE    = "1024x1024"
+GPT_IMAGE_LANDSCAPE_SIZE = "1536x1024"   # horizontal (scene)
 
 # Target output sizes
 TARGET_PORTRAIT_SIZE = (512, 910)    # final portrait output
@@ -43,6 +46,20 @@ TARGET_SCENE_SIZE    = (2560, 1440)  # scene
 
 DEFAULT_OUTPUT_DIR = Path(__file__).parent / "samples"
 MAX_RETRIES = 3
+DEFAULT_WORKERS = 5
+
+# Thread-safe print lock
+_print_lock = threading.Lock()
+
+
+def tprint(*args, **kwargs):
+    """Thread-safe print with optional task prefix."""
+    prefix = getattr(_thread_local, "prefix", "")
+    with _print_lock:
+        if prefix:
+            print(f"{prefix}", *args, **kwargs)
+        else:
+            print(*args, **kwargs)
 
 # ─────────────────────────────────────────────
 # Prompt Templates
@@ -52,7 +69,7 @@ STYLE_BASE = (
     "simple bold black brush strokes, light watercolor wash with soft ink bleeding, "
     "cartoon proportions: large round head, small body, big expressive eyes, "
     "minimal composition with a few wisps of ink mist around the figure, "
-    "plain white background, no background scenery, "
+    "transparent background, no background scenery, "
     "clean and simple, not dense or complex, "
     "absolutely no text anywhere, no writing, no stamps, no seals, no red marks"
 )
@@ -82,7 +99,7 @@ The character stands upright in a simple dynamic pose, full body from head to fe
 Traditional East Asian costume — flowing robes or simple warrior outfit.
 A few wisps of ink mist trail lightly from clothing edges.
 Accent colors: one or two simple highlights (cyan, vermillion, or gold) on clothing or weapon.
-Plain white background, nothing else behind the character.
+Transparent background, nothing else behind the character.
 Vertical composition, character centered.
 The image must contain absolutely zero text, zero stamps, zero seals, zero red marks.
 
@@ -92,10 +109,10 @@ DO NOT include: {negative}
 ITEM_TEMPLATE = """\
 East Asian ink wash painting style, simple bold brush strokes, light watercolor wash.
 {no_text}
-Single item centered on a plain white background: {name} — {description}.
+Single item centered on a transparent background: {name} — {description}.
 Slightly angled for depth. A few wisps of light ink smoke curl around the item.
 Simple minimal style — a few strokes define the shape, not dense detail.
-Pure white background, no other objects, no decorative elements around the item.
+Transparent background, no other objects, no decorative elements around the item.
 The image must contain absolutely zero text, zero stamps, zero seals, zero red marks.
 Vertical composition, item fills most of the frame.
 
@@ -135,90 +152,42 @@ def build_prompt(asset_type: str, name: str, description: str) -> str:
 
 
 # ─────────────────────────────────────────────
-# Image Generation (DALL-E 3)
+# Image Generation (gpt-image-1.5)
 # ─────────────────────────────────────────────
 def generate_image(client: OpenAI, prompt: str, asset_type: str) -> Image.Image:
-    """Call DALL-E 3 and return a PIL Image."""
-    size = DALLE3_PORTRAIT_SIZE if asset_type in ("portrait", "item") else DALLE3_LANDSCAPE_SIZE
+    """Call gpt-image-1.5 and return a PIL Image with native transparent background."""
+    size = GPT_IMAGE_PORTRAIT_SIZE if asset_type in ("portrait", "item") else GPT_IMAGE_LANDSCAPE_SIZE
 
-    print(f"  [DALL-E 3] Requesting {size} image...")
+    tprint(f"  [gpt-image-1.5] Requesting {size} image...")
     response = client.images.generate(
-        model="dall-e-3",
+        model="gpt-image-1",
         prompt=prompt,
         size=size,
-        quality="hd",
-        response_format="b64_json",
+        quality="high",
+        background="transparent",
+        output_format="png",
         n=1,
     )
 
     image_data = base64.b64decode(response.data[0].b64_json)
     img = Image.open(BytesIO(image_data))
-    print(f"  [DALL-E 3] Received {img.size[0]}x{img.size[1]} {img.mode} image")
+    tprint(f"  [gpt-image-1.5] Received {img.size[0]}x{img.size[1]} {img.mode} image")
     return img
 
 
 # ─────────────────────────────────────────────
 # Post-processing
 # ─────────────────────────────────────────────
-def _remove_red_stamps(arr: np.ndarray) -> np.ndarray:
-    """Remove red seal/stamp marks by making red-dominant pixels transparent."""
-    r, g, b = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2]
-    # Red stamp pixels: R is high, and R is significantly greater than G and B
-    red_mask = (r > 150) & (g < 120) & (b < 120) & (r.astype(int) - g.astype(int) > 60)
-    if np.sum(red_mask) > 0:
-        # Only remove if red cluster is small (< 3% of image = likely a stamp, not main content)
-        red_ratio = np.sum(red_mask) / (arr.shape[0] * arr.shape[1])
-        if red_ratio < 0.03:
-            arr[red_mask, 3] = 0
-            print(f"  [Post-process] Removed red stamps ({np.sum(red_mask)} pixels, {red_ratio:.4%} of image)")
-    return arr
-
-
-def _remove_color_palette(arr: np.ndarray) -> np.ndarray:
-    """Remove color palette dots that DALL-E 3 sometimes adds at edges."""
-    h, w = arr.shape[:2]
-    # Check left edge strip (first 15% width) and right edge strip
-    edge_width = int(w * 0.15)
-    for region_name, region in [("left", arr[:, :edge_width]),
-                                 ("right", arr[:, w - edge_width:])]:
-        # Look for saturated colored circles (non-grey, non-white, non-black)
-        r, g, b, a = region[:, :, 0], region[:, :, 1], region[:, :, 2], region[:, :, 3]
-        # Saturated color: at least one channel > 150 AND channels differ significantly
-        max_ch = np.maximum(np.maximum(r.astype(int), g.astype(int)), b.astype(int))
-        min_ch = np.minimum(np.minimum(r.astype(int), g.astype(int)), b.astype(int))
-        saturation_mask = (max_ch > 150) & ((max_ch - min_ch) > 80) & (a > 0)
-        sat_ratio = np.sum(saturation_mask) / (region.shape[0] * region.shape[1])
-        if 0.001 < sat_ratio < 0.05:
-            # Make these pixels transparent
-            if region_name == "left":
-                arr[:, :edge_width][saturation_mask, 3] = 0
-            else:
-                arr[:, w - edge_width:][saturation_mask, 3] = 0
-            print(f"  [Post-process] Removed color palette from {region_name} edge ({np.sum(saturation_mask)} pixels)")
-    return arr
-
-
 def post_process(img: Image.Image, asset_type: str) -> Image.Image:
-    """Resize to target dimensions and convert white background to transparent for portraits/items."""
+    """Resize to target dimensions. Transparency is native from gpt-image-1.5."""
     if asset_type == "scene":
         target_size = TARGET_SCENE_SIZE
         img = img.convert("RGB")
     else:
         target_size = TARGET_PORTRAIT_SIZE if asset_type == "portrait" else TARGET_ITEM_SIZE
-        # Convert white/near-white background to transparent
         img = img.convert("RGBA")
-        arr = np.array(img)
-        # Pixels where R, G, B are all > 240 are considered white background
-        white_mask = (arr[:, :, 0] > 240) & (arr[:, :, 1] > 240) & (arr[:, :, 2] > 240)
-        arr[white_mask, 3] = 0  # set alpha to 0
-        print("  [Post-process] White background removed (converted to transparent)")
-        # Remove red stamps/seals
-        arr = _remove_red_stamps(arr)
-        # Remove DALL-E 3 color palette artifacts
-        arr = _remove_color_palette(arr)
-        img = Image.fromarray(arr)
 
-    print(f"  [Post-process] Resizing to {target_size[0]}x{target_size[1]}...")
+    tprint(f"  [Post-process] Resizing to {target_size[0]}x{target_size[1]}...")
     img = img.resize(target_size, Image.LANCZOS)
     return img
 
@@ -236,7 +205,7 @@ EVAL_CRITERIA = [
 
 def evaluate_image(client: OpenAI, img: Image.Image, asset_type: str, name: str) -> tuple[float, str]:
     """Use GPT-4o vision to score style consistency (0-1)."""
-    print("  [Eval] Running style consistency check with GPT-4o vision...")
+    tprint("  [Eval] Running style consistency check with GPT-4o vision...")
 
     buf = BytesIO()
     img.save(buf, format="PNG")
@@ -282,16 +251,16 @@ Be strict. Score 1.0 only if ALL criteria are perfectly met.
         suggestions = result.get("suggestions", "")
         passed = result.get("passed", score >= 0.7)
 
-        print(f"  [Eval] Score: {score:.2f} | Passed: {passed}")
+        tprint(f"  [Eval] Score: {score:.2f} | Passed: {passed}")
         if issues:
-            print(f"  [Eval] Issues: {', '.join(issues)}")
+            tprint(f"  [Eval] Issues: {', '.join(issues)}")
         if suggestions:
-            print(f"  [Eval] Suggestions: {suggestions}")
+            tprint(f"  [Eval] Suggestions: {suggestions}")
 
         return score, suggestions
 
     except Exception as e:
-        print(f"  [Eval] Evaluation failed: {e}. Skipping, assuming pass.")
+        tprint(f"  [Eval] Evaluation failed: {e}. Skipping, assuming pass.")
         return 0.8, ""
 
 
@@ -327,14 +296,14 @@ def generate_asset(
     best_score = -1.0
 
     for attempt in range(1, max_retries + 1):
-        print(f"\n[Attempt {attempt}/{max_retries}] Generating {asset_type}: {name}")
+        tprint(f"\n[Attempt {attempt}/{max_retries}] Generating {asset_type}: {name}")
 
         current_prompt = refine_prompt(prompt, suggestions) if attempt > 1 else prompt
 
         try:
             raw_img = generate_image(client, current_prompt, asset_type)
         except Exception as e:
-            print(f"  [Error] Generation failed: {e}")
+            tprint(f"  [Error] Generation failed: {e}")
             if attempt == max_retries:
                 return False
             time.sleep(3)
@@ -351,30 +320,56 @@ def generate_asset(
             best_img = processed
 
         if score >= 0.7:
-            print(f"  [OK] Style check passed (score={score:.2f}).")
+            tprint(f"  [OK] Style check passed (score={score:.2f}).")
             break
         else:
-            print(f"  [Retry] Score {score:.2f} < 0.70, retrying with refined prompt...")
+            tprint(f"  [Retry] Score {score:.2f} < 0.70, retrying with refined prompt...")
             if attempt < max_retries:
                 time.sleep(2)
 
     if best_img is None:
-        print("[Error] All attempts failed to generate an image.")
+        tprint("[Error] All attempts failed to generate an image.")
         return False
 
     # Save
     best_img.save(output_path, format="PNG")
     size_str = f"{best_img.width}x{best_img.height}"
-    print(f"\n[Saved] {output_path} ({size_str}, mode={best_img.mode}, score={best_score:.2f})")
+    tprint(f"\n[Saved] {output_path} ({size_str}, mode={best_img.mode}, score={best_score:.2f})")
     return True
 
 
 # ─────────────────────────────────────────────
 # Batch Generation
 # ─────────────────────────────────────────────
-def run_batch(client: OpenAI, config_path: str, output_dir: Path):
+def _batch_worker(client: OpenAI, idx: int, total: int, item: dict, output_dir: Path) -> dict:
+    """Worker function for parallel batch generation."""
+    asset_type = item["type"]
+    name = item["name"]
+    description = item["description"]
+    output_name = item.get("output", f"{asset_type}_{idx:02d}.png")
+    output_path = output_dir / output_name
+
+    # Set thread-local prefix for log output
+    _thread_local.prefix = f"[{idx}/{total} {name}]"
+
+    tprint(f"\n{'='*60}")
+    tprint(f"{asset_type.upper()}: {name}")
+    tprint(f"{'='*60}")
+
+    if output_path.exists():
+        tprint(f"  [Skip] {output_path} already exists, skipping.")
+        return {"name": name, "output": str(output_path), "success": True, "skipped": True}
+
+    ok = generate_asset(
+        client, asset_type, name, description,
+        output_path
+    )
+    return {"name": name, "output": str(output_path), "success": ok, "skipped": False}
+
+
+def run_batch(client: OpenAI, config_path: str, output_dir: Path, max_workers: int = DEFAULT_WORKERS):
     """
-    Generate multiple assets from a JSON config file.
+    Generate multiple assets from a JSON config file in parallel.
 
     Config format:
     [
@@ -390,29 +385,42 @@ def run_batch(client: OpenAI, config_path: str, output_dir: Path):
     with open(config_path, "r", encoding="utf-8") as f:
         items = json.load(f)
 
-    results = []
-    for idx, item in enumerate(items, 1):
-        asset_type = item["type"]
-        name = item["name"]
-        description = item["description"]
-        output_name = item.get("output", f"{asset_type}_{idx:02d}.png")
-        output_path = output_dir / output_name
+    total = len(items)
+    print(f"[Batch] {total} items, {max_workers} parallel workers")
 
-        print(f"\n{'='*60}")
-        print(f"[{idx}/{len(items)}] {asset_type.upper()}: {name}")
-        print(f"{'='*60}")
+    results = [None] * total
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_idx = {}
+        for idx, item in enumerate(items):
+            future = executor.submit(_batch_worker, client, idx + 1, total, item, output_dir)
+            future_to_idx[future] = idx
 
-        ok = generate_asset(
-            client, asset_type, name, description,
-            output_path
-        )
-        results.append({"name": name, "output": str(output_path), "success": ok})
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            try:
+                results[idx] = future.result()
+            except Exception as e:
+                results[idx] = {"name": items[idx]["name"], "output": "N/A", "success": False, "skipped": False}
+                with _print_lock:
+                    print(f"[Error] Task {idx + 1} ({items[idx]['name']}) crashed: {e}")
 
     print(f"\n{'='*60}")
     print("Batch complete:")
+    success_count = 0
+    fail_count = 0
+    skip_count = 0
     for r in results:
-        status = "OK" if r["success"] else "FAIL"
+        if r.get("skipped"):
+            status = "SKIP"
+            skip_count += 1
+        elif r["success"]:
+            status = "OK  "
+            success_count += 1
+        else:
+            status = "FAIL"
+            fail_count += 1
         print(f"  [{status}] {r['name']} -> {r['output']}")
+    print(f"\nTotal: {success_count} succeeded, {skip_count} skipped, {fail_count} failed out of {total}")
 
 
 # ─────────────────────────────────────────────
@@ -433,6 +441,12 @@ def parse_args():
         "--output-dir",
         default=str(DEFAULT_OUTPUT_DIR),
         help=f"Default output directory (default: {DEFAULT_OUTPUT_DIR})"
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=DEFAULT_WORKERS,
+        help=f"Number of parallel workers for batch mode (default: {DEFAULT_WORKERS})"
     )
 
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -474,7 +488,7 @@ def main():
     output_dir = Path(args.output_dir)
 
     if args.command == "batch":
-        run_batch(client, args.config, output_dir)
+        run_batch(client, args.config, output_dir, max_workers=args.workers)
     else:
         output_path = output_dir / args.output
         ok = generate_asset(

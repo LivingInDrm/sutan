@@ -1,26 +1,176 @@
 [
   {
     "type": "portrait",
-    "name": "年轻女剑客",
-    "description": "年轻女剑客，黑发，白色长裙，腰间佩剑，英姿飒爽",
-    "output": "portrait_swordswoman.png"
+    "name": "徐龙象",
+    "description": "壮硕少年武者，天蓝色厚重战袍，手持铁枪，豪迈站姿，身旁趴着一只黑虎，天生神力的憨厚少年，北凉二公子绰号黄蛮儿",
+    "output": "figure01_xulong/xulong_01.png"
   },
   {
     "type": "portrait",
-    "name": "老和尚",
-    "description": "老和尚，光头，灰色袈裟，慈眉善目，手持禅杖",
-    "output": "portrait_monk.png"
+    "name": "徐龙象",
+    "description": "壮硕少年武者，跳跃冲锋攻击姿势，铁拳轰出爆发气劲，战袍飞扬，脸上带着天真憨厚的笑容，铜筋铁骨的少年战神",
+    "output": "figure01_xulong/xulong_02.png"
   },
   {
-    "type": "item",
-    "name": "弯刀",
-    "description": "阿拉伯风格弯月形弯刀，金色护手，刀刃泛寒光",
-    "output": "item_scimitar.png"
+    "type": "portrait",
+    "name": "徐龙象",
+    "description": "壮硕少年，灰色简朴武服，正襟危立，目光纯真憨厚，双臂交叉胸前，温顺听话等待兄长命令的少年",
+    "output": "figure01_xulong/xulong_03.png"
   },
   {
-    "type": "item",
-    "name": "酒葫芦",
-    "description": "传统葫芦形酒壶，外用麻绳缠绕，深棕色木塞",
-    "output": "item_gourd.png"
+    "type": "portrait",
+    "name": "徐龙象",
+    "description": "壮硕少年骑着黑虎冲锋，手持巨大铁锤，战场豪雄气势，黑虎虎威赫赫，少年憨笑驭虎如马",
+    "output": "figure01_xulong/xulong_04.png"
+  },
+
+  {
+    "type": "portrait",
+    "name": "徐渭熊",
+    "description": "气质凌厉的年轻女子，端坐竹制轮椅，右手轻握赤螭符剑，白色宽袖长裙，目光如剑，胭脂副榜第一的北凉郡主",
+    "output": "figure02_xuweixiong/xuweixiong_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "徐渭熊",
+    "description": "英气女子，白衣飘逸，对着棋盘凝思，手持黑色棋子，眼神沉静如水，棋剑双绝的上阴学宫学霸",
+    "output": "figure02_xuweixiong/xuweixiong_02.png"
+  },
+  {
+    "type": "portrait",
+    "name": "徐渭熊",
+    "description": "威严年轻女子，轮椅上俯视，赤色飞剑出鞘环绕，月光映衬，眼神凌厉，坐镇梧桐院的北凉智谋中枢",
+    "output": "figure02_xuweixiong/xuweixiong_03.png"
+  },
+  {
+    "type": "portrait",
+    "name": "徐渭熊",
+    "description": "白衣年轻女剑客，仗剑站立，赤螭符剑蜿蜒如龙，剑气凌云，飒爽英姿，北凉最强女剑士",
+    "output": "figure02_xuweixiong/xuweixiong_04.png"
+  },
+
+  {
+    "type": "portrait",
+    "name": "徐凤年",
+    "description": "青衫男子，腰间双刀，故作纨绔懒散姿态，拄着酒葫芦，却眼神深邃锋利，北凉世子真武转世",
+    "output": "figure03_xufengnian/xufengnian_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "徐凤年",
+    "description": "青衫男子战斗状态，双刀出鞘，天人境气场爆发，气旋环绕全身，眼神决绝，守北凉之刃",
+    "output": "figure03_xufengnian/xufengnian_02.png"
+  },
+  {
+    "type": "portrait",
+    "name": "徐凤年",
+    "description": "青衫游侠，旧酒葫芦挂腰间，倚树而立，仰头饮酒，笑看风云，纨绔外表下的绝世高手",
+    "output": "figure03_xufengnian/xufengnian_03.png"
+  },
+  {
+    "type": "portrait",
+    "name": "徐凤年",
+    "description": "青衫男子端庄站立，双刀交叉收于背后，眼神坚毅，北凉世子临战前的凝重神态，守护一方",
+    "output": "figure03_xufengnian/xufengnian_04.png"
+  },
+
+  {
+    "type": "portrait",
+    "name": "温华",
+    "description": "清秀温和少年，手持一柄朴素木剑，粗布简朴衣衫，阳光灿烂笑容，出身寒微闯荡江湖的少年侠客",
+    "output": "figure04_wenhua/wenhua_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "温华",
+    "description": "少年坚定前行，木剑负于背后，左袖空荡断臂，风雨中面带微笑，为兄弟义气自断一臂的温不胜",
+    "output": "figure04_wenhua/wenhua_02.png"
+  },
+  {
+    "type": "portrait",
+    "name": "温华",
+    "description": "少年蹲坐石头上，木剑横放膝上，托腮若有所思，眼神中带着执着与善良，重情重义的江湖少年",
+    "output": "figure04_wenhua/wenhua_03.png"
+  },
+  {
+    "type": "portrait",
+    "name": "温华",
+    "description": "断臂少年，右手握木剑指天，左袖随风空荡，含泪微笑，豁达洒脱折剑退出江湖的暖心少年",
+    "output": "figure04_wenhua/wenhua_04.png"
+  },
+
+  {
+    "type": "portrait",
+    "name": "红薯",
+    "description": "温柔侍女，红色宫装，眉眼温软如春水，提着茶壶，莞尔一笑，北凉王府梧桐苑的大丫鬟",
+    "output": "figure05_hongshu/hongshu_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "红薯",
+    "description": "侍女眼神深邃神秘，红色宫装，双手藏于袖中，表情温柔却暗藏心机，徐凤年身边最可靠的影子",
+    "output": "figure05_hongshu/hongshu_02.png"
+  },
+  {
+    "type": "portrait",
+    "name": "红薯",
+    "description": "温柔少女倚着梧桐树，梧桐叶飘落，红色发饰，若有所思的神情，心思极深却外表温顺的神秘侍女",
+    "output": "figure05_hongshu/hongshu_03.png"
+  },
+  {
+    "type": "portrait",
+    "name": "红薯",
+    "description": "灵动少女轻盈舞步，红色彩带飞扬，长裙飘逸，神秘优美的舞姿中隐藏深不可测的智慧",
+    "output": "figure05_hongshu/hongshu_04.png"
+  },
+
+  {
+    "type": "portrait",
+    "name": "洪洗象",
+    "description": "清秀道童，骑黄牛悠然而坐，白色宽袖道袍，手持拂尘，仙气飘飘，悟道中的武当掌教吕祖转世",
+    "output": "figure06_hongxixiang/hongxixiang_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "洪洗象",
+    "description": "年轻道士，白色宽袖道袍飘逸，手执长剑，面带温柔微笑，道骨仙风，一剑可破万法的修行奇才",
+    "output": "figure06_hongxixiang/hongxixiang_02.png"
+  },
+  {
+    "type": "portrait",
+    "name": "洪洗象",
+    "description": "道士少年盘腿坐于牛背，闭目冥想，白色道袍随风舞动，长剑横膝，超然物外悟道千年的仙人",
+    "output": "figure06_hongxixiang/hongxixiang_03.png"
+  },
+  {
+    "type": "portrait",
+    "name": "洪洗象",
+    "description": "年轻道士长剑出鞘，剑光万丈剑气冲天，白袍飞舞，眼中有悲悯有决绝，飞升前的最后一剑破万法",
+    "output": "figure06_hongxixiang/hongxixiang_04.png"
+  },
+
+  {
+    "type": "portrait",
+    "name": "老黄",
+    "description": "邋遢中年汉子，破旧麻衣草帽，背着陈旧剑匣，站在马厩旁，憨厚笑容，北凉王府看似普通的老马夫",
+    "output": "figure07_laohuang/laohuang_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "老黄",
+    "description": "老马夫弯腰喂马，破旧斗笠遮面，举手投足间不经意露出武者气势，邋遢外表下隐藏的绝世高手",
+    "output": "figure07_laohuang/laohuang_02.png"
+  },
+  {
+    "type": "portrait",
+    "name": "老黄",
+    "description": "邋遢中年汉子将剑匣微微打开，隐隐露出神兵寒光，眼神瞬间变得锐利无比，西蜀铁匠的真实面目",
+    "output": "figure07_laohuang/laohuang_03.png"
+  },
+  {
+    "type": "portrait",
+    "name": "老黄",
+    "description": "破衣汉子单手握长剑，铁匠般的魁梧身形，霸气外露，西蜀剑术宗师的真实实力，隐藏高手瞬间显形",
+    "output": "figure07_laohuang/laohuang_04.png"
   }
 ]
