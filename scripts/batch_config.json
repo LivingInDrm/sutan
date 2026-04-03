@@ -1,0 +1,26 @@
+[
+  {
+    "type": "portrait",
+    "name": "年轻女剑客",
+    "description": "年轻女剑客，黑发，白色长裙，腰间佩剑，英姿飒爽",
+    "output": "portrait_swordswoman.png"
+  },
+  {
+    "type": "portrait",
+    "name": "老和尚",
+    "description": "老和尚，光头，灰色袈裟，慈眉善目，手持禅杖",
+    "output": "portrait_monk.png"
+  },
+  {
+    "type": "item",
+    "name": "弯刀",
+    "description": "阿拉伯风格弯月形弯刀，金色护手，刀刃泛寒光",
+    "output": "item_scimitar.png"
+  },
+  {
+    "type": "item",
+    "name": "酒葫芦",
+    "description": "传统葫芦形酒壶，外用麻绳缠绕，深棕色木塞",
+    "output": "item_gourd.png"
+  }
+]

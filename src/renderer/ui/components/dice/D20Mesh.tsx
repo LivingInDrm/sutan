@@ -267,7 +267,7 @@ export function D20Mesh({
           <meshBasicMaterial
             color="#1a1028"
             transparent
-            opacity={0.8}
+            opacity={0.4}
             side={THREE.BackSide}
             depthWrite={false}
           />
