@@ -7,3 +7,5 @@ build/
 tmp/
 FantasyAsiaUI/
 scripts/samples/
+__pycache__/
+*.pyc

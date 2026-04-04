@@ -1,0 +1,280 @@
+{
+  "徐龙象": {
+    "description": "徐骁幼子，天生金刚体魄，心性质朴如赤子，对兄长徐凤年极为依恋。虽不善机变言辞，却有近乎妖孽的蛮横战力，一旦出手便势若山崩，是北凉最令人安心的少年猛将。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 10,
+      "charm": 6,
+      "wisdom": 2,
+      "combat": 10,
+      "social": 3,
+      "survival": 7,
+      "stealth": 1,
+      "magic": 2
+    },
+    "special_attributes": {
+      "support": 4,
+      "reroll": 1
+    },
+    "tags": [
+      "male",
+      "warrior",
+      "clan",
+      "ally"
+    ],
+    "equipment_slots": 4
+  },
+  "徐渭熊": {
+    "description": "北凉王府二郡主，性情清冷刚烈，心思缜密，兼具将门胆魄与谋断。徐渭熊剑术凌厉，行事果决，不喜虚饰，常以冷面示人，却对亲近之人极重情义。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 7,
+      "charm": 7,
+      "wisdom": 8,
+      "combat": 9,
+      "social": 4,
+      "survival": 5,
+      "stealth": 6,
+      "magic": 1
+    },
+    "special_attributes": {
+      "support": 2,
+      "reroll": 3
+    },
+    "tags": [
+      "female",
+      "swordsman",
+      "clan",
+      "ally"
+    ],
+    "equipment_slots": 4
+  },
+  "徐凤年": {
+    "description": "北凉世子徐凤年，外示纨绔，实则心机深沉，历经三年游历磨砺心性。重情重义，善布局权谋，刀剑并修，后承大势而起，于江湖庙堂之间周旋，终成可担天下之人。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 8,
+      "charm": 8,
+      "wisdom": 9,
+      "combat": 8,
+      "social": 7,
+      "survival": 7,
+      "stealth": 4,
+      "magic": 3
+    },
+    "special_attributes": {
+      "support": 4,
+      "reroll": 4
+    },
+    "tags": [
+      "male",
+      "warrior",
+      "wanderer",
+      "protagonist",
+      "ally"
+    ],
+    "equipment_slots": 4
+  },
+  "温华": {
+    "description": "温华出身寒微，嬉笑怒骂间自有赤子真心，行走江湖多年，嘴贫却重义气。剑术天赋不俗，却更动人于那份不肯折腰的风骨，与徐凤年相交莫逆，是市井侠气极浓的江湖游侠。",
+    "rarity": "silver",
+    "attributes": {
+      "physique": 5,
+      "charm": 8,
+      "wisdom": 5,
+      "combat": 6,
+      "social": 7,
+      "survival": 4,
+      "stealth": 3,
+      "magic": 1
+    },
+    "special_attributes": {
+      "support": 3,
+      "reroll": 2
+    },
+    "tags": [
+      "male",
+      "swordsman",
+      "wanderer",
+      "ally"
+    ],
+    "equipment_slots": 2
+  },
+  "红薯": {
+    "description": "红薯为北凉王府侍女，姿容绝艳，心思玲珑，表面温婉柔顺，实则极善察言观色，深得徐凤年信重。她不以正面搏杀见长，却在侍奉、应变与隐忍周旋上颇有过人之处。",
+    "rarity": "silver",
+    "attributes": {
+      "physique": 4,
+      "charm": 9,
+      "wisdom": 7,
+      "combat": 2,
+      "social": 6,
+      "survival": 3,
+      "stealth": 2,
+      "magic": 1
+    },
+    "special_attributes": {
+      "support": 4,
+      "reroll": 1
+    },
+    "tags": [
+      "female",
+      "ally",
+      "clan"
+    ],
+    "equipment_slots": 2
+  },
+  "洪洗象": {
+    "description": "武当掌教洪洗象，生性慵懒温和，常骑青牛云游，看似散淡，实则道心通明。与徐脂虎情深义重，修为高绝，尤擅天道感悟与玄门术法，是超然世外的仙风人物。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 5,
+      "charm": 8,
+      "wisdom": 10,
+      "combat": 7,
+      "social": 5,
+      "survival": 6,
+      "stealth": 4,
+      "magic": 10
+    },
+    "special_attributes": {
+      "support": 4,
+      "reroll": 3
+    },
+    "tags": [
+      "male",
+      "mage",
+      "wanderer",
+      "mentor",
+      "ally"
+    ],
+    "equipment_slots": 4
+  },
+  "老黄": {
+    "description": "老黄本名剑九黄，表面是缺门牙、爱唠叨的马夫老仆，实则藏锋多年的绝顶剑客。一路陪徐凤年游历江湖，忠厚市井中见深情，最终重返武帝城，只为替少爷再探江湖高低。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 7,
+      "charm": 5,
+      "wisdom": 8,
+      "combat": 10,
+      "social": 6,
+      "survival": 7,
+      "stealth": 4,
+      "magic": 1
+    },
+    "special_attributes": {
+      "support": 5,
+      "reroll": 3
+    },
+    "tags": [
+      "male",
+      "swordsman",
+      "mentor",
+      "ally",
+      "wanderer"
+    ],
+    "equipment_slots": 4
+  },
+  "李淳罡": {
+    "description": "李淳罡，春秋剑甲，曾一剑开天门，剑道登峰造极。性情狂傲不羁，却也重情重义，历经跌宕后锋芒内敛。虽断臂落魄，仍是江湖与武道之上的绝代宗师。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 7,
+      "charm": 7,
+      "wisdom": 8,
+      "combat": 10,
+      "social": 4,
+      "survival": 6,
+      "stealth": 2,
+      "magic": 9
+    },
+    "special_attributes": {
+      "support": 3,
+      "reroll": 4
+    },
+    "tags": [
+      "male",
+      "swordsman",
+      "mentor",
+      "wanderer"
+    ],
+    "equipment_slots": 4
+  },
+  "徐脂虎": {
+    "description": "徐家长女徐脂虎，姿容绝艳，性情温婉坚韧，背负红颜薄命之名。虽不以武力见长，却有大家闺秀的气度与处世分寸，能安人心、善维系情义，在徐家诸人中自有柔中带刚的一面。",
+    "rarity": "silver",
+    "attributes": {
+      "physique": 4,
+      "charm": 9,
+      "wisdom": 7,
+      "combat": 1,
+      "social": 7,
+      "survival": 3,
+      "stealth": 1,
+      "magic": 1
+    },
+    "special_attributes": {
+      "support": 4,
+      "reroll": 1
+    },
+    "tags": [
+      "female",
+      "clan",
+      "ally"
+    ],
+    "equipment_slots": 2
+  },
+  "徐骁": {
+    "description": "北凉王徐骁，春秋乱世中以铁血手腕崛起，人称人屠。善用兵、深藏机锋，既能镇压群雄，也能为子女铺路。外粗内深，威望极重，是北凉真正的定海神针。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 7,
+      "charm": 7,
+      "wisdom": 10,
+      "combat": 8,
+      "social": 9,
+      "survival": 7,
+      "stealth": 3,
+      "magic": 1
+    },
+    "special_attributes": {
+      "support": 5,
+      "reroll": 4
+    },
+    "tags": [
+      "male",
+      "warrior",
+      "clan",
+      "mentor",
+      "ally"
+    ],
+    "equipment_slots": 4
+  },
+  "陈芝豹": {
+    "description": "陈芝豹，北凉六义子之首，白衣兵仙，统军与武道皆臻上乘。性情冷峻孤傲，城府极深，既有万人敌之勇，亦有运筹帷幄之智，在北凉与离阳风云中始终是极具压迫感的人物。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 8,
+      "charm": 7,
+      "wisdom": 9,
+      "combat": 10,
+      "social": 5,
+      "survival": 6,
+      "stealth": 4,
+      "magic": 1
+    },
+    "special_attributes": {
+      "support": 4,
+      "reroll": 3
+    },
+    "tags": [
+      "male",
+      "warrior",
+      "swordsman",
+      "clan",
+      "antagonist"
+    ],
+    "equipment_slots": 4
+  }
+}

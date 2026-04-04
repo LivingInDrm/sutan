@@ -1,0 +1,69 @@
+[
+  {
+    "timestamp": "2026-04-04T07:04:11.076999Z",
+    "name": "徐骁",
+    "asset_type": "portrait",
+    "images": [
+      {
+        "path": "portrait_徐骁/徐骁_1775286122_1.png",
+        "url": "/images/portrait_徐骁/徐骁_1775286122_1.png"
+      },
+      {
+        "path": "portrait_徐骁/徐骁_1775286122_2.png",
+        "url": "/images/portrait_徐骁/徐骁_1775286122_2.png"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-04-04T06:55:09.037835Z",
+    "name": "陈芝豹",
+    "asset_type": "portrait",
+    "images": [
+      {
+        "path": "portrait_陈芝豹/陈芝豹_1775285594_1.png",
+        "url": "/images/portrait_陈芝豹/陈芝豹_1775285594_1.png"
+      },
+      {
+        "path": "portrait_陈芝豹/陈芝豹_1775285594_2.png",
+        "url": "/images/portrait_陈芝豹/陈芝豹_1775285594_2.png"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-04-04T06:52:09.642995Z",
+    "name": "徐骁",
+    "asset_type": "portrait",
+    "images": [
+      {
+        "path": "portrait_徐骁/徐骁_1775285409_1.png",
+        "url": "/images/portrait_徐骁/徐骁_1775285409_1.png"
+      },
+      {
+        "path": "portrait_徐骁/徐骁_1775285409_2.png",
+        "url": "/images/portrait_徐骁/徐骁_1775285409_2.png"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-04-04T04:20:51.875814Z",
+    "name": "徐脂虎",
+    "asset_type": "portrait",
+    "images": [
+      {
+        "path": "portrait_徐脂虎/徐脂虎_1775276395_1.png",
+        "url": "/images/portrait_徐脂虎/徐脂虎_1775276395_1.png"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-04-04T03:19:35.122728Z",
+    "name": "李淳罡",
+    "asset_type": "portrait",
+    "images": [
+      {
+        "path": "portrait_李淳罡/李淳罡_1775272714_1.png",
+        "url": "/images/portrait_李淳罡/李淳罡_1775272714_1.png"
+      }
+    ]
+  }
+]

@@ -66,8 +66,8 @@ def tprint(*args, **kwargs):
 # ─────────────────────────────────────────────
 STYLE_BASE = (
     "cute chibi Q-version character, East Asian ink wash painting style, "
-    "simple bold black brush strokes, light watercolor wash with soft ink bleeding, "
-    "cartoon proportions: large round head, small body, big expressive eyes, "
+    "simple bold black brush strokes, vibrant watercolor wash with rich saturated colors and soft ink bleeding, "
+    "chibi proportions: large head, small body, "
     "minimal composition with a few wisps of ink mist around the figure, "
     "transparent background, no background scenery, "
     "clean and simple, not dense or complex, "
@@ -94,11 +94,11 @@ PORTRAIT_TEMPLATE = """\
 
 {no_text}
 
-Subject: Full-body chibi character — {name}: {description}.
+Subject: Full-body chibi character — {description}.
 The character stands upright in a simple dynamic pose, full body from head to feet visible.
 Traditional East Asian costume — flowing robes or simple warrior outfit.
 A few wisps of ink mist trail lightly from clothing edges.
-Accent colors: one or two simple highlights (cyan, vermillion, or gold) on clothing or weapon.
+Rich and vibrant costume colors — each character has their own distinct color palette.
 Transparent background, nothing else behind the character.
 Vertical composition, character centered.
 The image must contain absolutely zero text, zero stamps, zero seals, zero red marks.
@@ -109,7 +109,7 @@ DO NOT include: {negative}
 ITEM_TEMPLATE = """\
 East Asian ink wash painting style, simple bold brush strokes, light watercolor wash.
 {no_text}
-Single item centered on a transparent background: {name} — {description}.
+Single item centered on a transparent background: {description}.
 Slightly angled for depth. A few wisps of light ink smoke curl around the item.
 Simple minimal style — a few strokes define the shape, not dense detail.
 Transparent background, no other objects, no decorative elements around the item.
@@ -124,7 +124,7 @@ SCENE_TEMPLATE = """\
 
 {no_text}
 
-Scene: {name} — {description}.
+Scene: {description}.
 Wide panoramic landscape in East Asian ink wash style.
 Dramatic mountains, mist-filled valleys, or architectural elements rendered in bold brushstrokes.
 Atmospheric depth with ink wash gradients. Limited color palette with ink washes.
