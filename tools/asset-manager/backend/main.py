@@ -276,6 +276,10 @@ class SelectPortraitRequest(BaseModel):
     portrait_path: str  # absolute path to the sample image
 
 
+class RegenerateVariantsRequest(BaseModel):
+    bio: str = ""
+
+
 # ─────────────────────────────────────────────
 # 1. GET /api/characters
 # ─────────────────────────────────────────────
@@ -405,7 +409,7 @@ async def generate_images(body: GenerateRequest):
         from openai import OpenAI
 
         client = OpenAI(api_key=api_key)
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         count = max(1, body.count)
         timestamp = int(time.time())
         folder = _character_folder(body.name)
@@ -696,7 +700,7 @@ async def generate_description(body: GenerateDescriptionRequest) -> Dict[str, An
     Model defaults to gpt-4.1; override via DESCRIPTION_MODEL env var.
     """
     client = _get_openai_client()
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     try:
         descriptions = await loop.run_in_executor(
             None, _generate_descriptions_blocking, client, body.name, body.bio
@@ -735,7 +739,7 @@ async def create_character(body: CreateCharacterRequest) -> Dict[str, Any]:
 
     # Generate descriptions via AI
     client = _get_openai_client()
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     try:
         descriptions = await loop.run_in_executor(
             None, _generate_descriptions_blocking, client, body.name, body.bio
@@ -917,7 +921,7 @@ async def generate_character_profile(character_name: str) -> Dict[str, Any]:
     """AI-generate a default profile for a character and save to character_profiles.json."""
     client = _get_openai_client()
     reference_cards = _read_base_cards()
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     try:
         profile = await loop.run_in_executor(
             None, _generate_profile_blocking, client, character_name, reference_cards
@@ -1082,6 +1086,39 @@ def deploy_preview(character_name: str) -> Dict[str, Any]:
         "preview_card": preview_card,
         "portrait_change": portrait_change,
     }
+
+
+# ─────────────────────────────────────────────
+# 16. POST /api/characters/{character_name}/regenerate-variants
+# ─────────────────────────────────────────────
+@app.post("/api/characters/{character_name}/regenerate-variants")
+async def regenerate_variants(character_name: str, body: RegenerateVariantsRequest) -> Dict[str, Any]:
+    """
+    Regenerate all 4 variant descriptions for an existing character using AI.
+    Accepts an optional bio as input, then overwrites all 4 variants in batch_config.json.
+    """
+    items = _read_batch_config()
+    existing_names = {item.get("name") for item in items}
+    if character_name not in existing_names:
+        raise HTTPException(status_code=404, detail=f"Unknown character: {character_name}")
+
+    client = _get_openai_client()
+    loop = asyncio.get_running_loop()
+    try:
+        descriptions = await loop.run_in_executor(
+            None, _generate_descriptions_blocking, client, character_name, body.bio
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"AI generation failed: {exc}")
+
+    # Update all variants in batch_config.json
+    char_entries_indices = [i for i, item in enumerate(items) if item.get("name") == character_name]
+    for variant_idx, global_idx in enumerate(char_entries_indices[:4]):
+        if variant_idx < len(descriptions):
+            items[global_idx]["description"] = descriptions[variant_idx]
+    _write_batch_config(items)
+
+    return {"success": True, "descriptions": descriptions}
 
 
 # ─────────────────────────────────────────────

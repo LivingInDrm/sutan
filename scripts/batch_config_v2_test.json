@@ -1,0 +1,44 @@
+[
+  {
+    "type": "portrait",
+    "name": "徐龙象",
+    "description": "方圆脸，浓眉小眼，憨厚表情。壮硕少年武者，天蓝色厚重战袍，手持铁枪，豪迈站姿，身旁趴着一只黑虎，天生神力的憨厚少年，北凉二公子绰号黄蛮儿",
+    "output": "xulong_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "徐渭熊",
+    "description": "鹅蛋脸，丹凤眼，凌厉眉峰，冷峻表情。气质凌厉的年轻女子，端坐竹制轮椅，右手轻握赤螭符剑，白色宽袖长裙，目光如剑，胭脂副榜第一的北凉郡主",
+    "output": "xuweixiong_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "徐凤年",
+    "description": "瘦长脸，剑眉星目，似笑非笑的表情。青衫男子，腰间双刀，故作纨绔懒散姿态，拄着酒葫芦，却眼神深邃锋利，北凉世子真武转世",
+    "output": "xufengnian_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "温华",
+    "description": "清秀圆脸，温柔杏眼，忧郁而温暖。清秀温和少年，手持一柄朴素木剑，粗布简朴衣衫，阳光灿烂笑容，出身寒微闯荡江湖的少年侠客",
+    "output": "wenhua_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "红薯",
+    "description": "小巧瓜子脸，弯弯杏眼，灵动俏皮。温柔侍女，红色宫装，眉眼温软如春水，提着茶壶，莞尔一笑，北凉王府梧桐苑的大丫鬟",
+    "output": "hongshu_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "洪洗象",
+    "description": "圆润胖脸，半闭细眼，慈眉善目。清秀道童，骑黄牛悠然而坐，白色宽袖道袍，手持拂尘，仙气飘飘，悟道中的武当掌教吕祖转世",
+    "output": "hongxixiang_01.png"
+  },
+  {
+    "type": "portrait",
+    "name": "老黄",
+    "description": "粗犷方脸，细长眼睛，皱纹深刻，沧桑老者。邋遢中年汉子，破旧麻衣草帽，背着陈旧剑匣，站在马厩旁，憨厚笑容，北凉王府看似普通的老马夫",
+    "output": "laohuang_01.png"
+  }
+]

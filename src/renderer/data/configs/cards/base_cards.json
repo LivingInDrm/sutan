@@ -608,5 +608,34 @@
       "ally"
     ],
     "equipment_slots": 4
+  },
+  {
+    "card_id": "card_褚禄山",
+    "name": "褚禄山",
+    "type": "character",
+    "rarity": "gold",
+    "description": "北凉悍将，外表肥硕憨态可掬，实则心机深沉，最擅统兵与审势。对徐家忠心耿耿，是徐骁麾下心腹重将之一，沙场杀伐果断，亦能以粗中有细稳住局面。",
+    "image": "/assets/portraits/figure12.png",
+    "attributes": {
+      "physique": 8,
+      "charm": 4,
+      "wisdom": 8,
+      "combat": 8,
+      "social": 6,
+      "survival": 6,
+      "stealth": 2,
+      "magic": 1
+    },
+    "special_attributes": {
+      "support": 4,
+      "reroll": 2
+    },
+    "tags": [
+      "male",
+      "warrior",
+      "clan",
+      "ally"
+    ],
+    "equipment_slots": 4
   }
 ]

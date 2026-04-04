@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import type { Character, Templates, SampleImage, GenerationProgress, CharacterProfile, DeployPreview } from '../types';
 import { api } from '../api';
 import Gallery from './Gallery';
@@ -6,10 +6,10 @@ import Gallery from './Gallery';
 interface CharacterDetailProps {
   character: Character;
   templates: Templates | null;
-  onUpdate: () => void;
+  onUpdate: () => void | Promise<void>;
 }
 
-type DetailTab = 'variants' | 'samples' | 'profile' | 'deploy';
+type DetailTab = 'workshop' | 'profile' | 'deploy';
 
 const ATTR_LABELS: Record<string, string> = {
   physique: '体魄',
@@ -53,22 +53,26 @@ export default function CharacterDetail({
   templates,
   onUpdate,
 }: CharacterDetailProps) {
-  const [activeTab, setActiveTab] = useState<DetailTab>('variants');
+  const [activeTab, setActiveTab] = useState<DetailTab>('workshop');
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [editedDescription, setEditedDescription] = useState('');
   const [samples, setSamples] = useState<SampleImage[]>([]);
   const [generateCount, setGenerateCount] = useState(1);
+  const [selectedVariantIndices, setSelectedVariantIndices] = useState<Set<number>>(new Set([0]));
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationProgress, setGenerationProgress] = useState<GenerationProgress | null>(null);
-  const [saving, setSaving] = useState(false);
+  const [multiVariantProgress, setMultiVariantProgress] = useState<{ current: number; total: number } | null>(null);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [loadingSamples, setLoadingSamples] = useState(false);
 
-  // AI description generation state
-  const [showAiPanel, setShowAiPanel] = useState(false);
-  const [aiBio, setAiBio] = useState('');
-  const [isAiGenerating, setIsAiGenerating] = useState(false);
-  const [aiDescriptions, setAiDescriptions] = useState<string[]>([]);
-  const [aiError, setAiError] = useState<string | null>(null);
+  // Assembled prompt collapsed state
+  const [promptExpanded, setPromptExpanded] = useState(false);
+
+  // Regenerate variants panel state
+  const [showRegeneratePanel, setShowRegeneratePanel] = useState(false);
+  const [regenerateBio, setRegenerateBio] = useState('');
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [regenerateError, setRegenerateError] = useState<string | null>(null);
 
   // Profile tab state
   const [profile, setProfile] = useState<CharacterProfile>(DEFAULT_PROFILE);
@@ -85,28 +89,44 @@ export default function CharacterDetail({
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployResult, setDeployResult] = useState<{ success: boolean; message: string } | null>(null);
 
+  // Autosave timer ref
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSavedDescription = useRef<string>('');
+  const saveIdleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Track whether user is currently editing the description textarea
+  const isEditingDescriptionRef = useRef(false);
+
   const selectedVariant = character.variants[selectedVariantIndex];
 
   useEffect(() => {
+    // Don't reset textarea content while user is actively typing —
+    // this prevents focus loss caused by parent re-renders updating the character prop.
+    if (isEditingDescriptionRef.current) return;
     if (selectedVariant) {
       setEditedDescription(selectedVariant.description);
+      lastSavedDescription.current = selectedVariant.description;
     }
-  }, [selectedVariant]);
+  }, [selectedVariant?.index, character.name]);
 
   useEffect(() => {
     // Reset state when switching character
-    setShowAiPanel(false);
-    setAiDescriptions([]);
-    setAiError(null);
-    setAiBio('');
+    isEditingDescriptionRef.current = false; // clear editing guard on character switch
+    setShowRegeneratePanel(false);
+    setRegenerateError(null);
+    setRegenerateBio('');
     setProfileSaved(false);
     setProfileError(null);
     setDeployResult(null);
     setDeployPreview(null);
+    setSaveStatus('idle');
+    setPromptExpanded(false);
+    setSelectedVariantIndices(new Set([0]));
+    setMultiVariantProgress(null);
+    setSelectedVariantIndex(0);
   }, [character.name]);
 
   useEffect(() => {
-    if (activeTab === 'samples') {
+    if (activeTab === 'workshop') {
       loadSamples();
     } else if (activeTab === 'profile') {
       loadProfile();
@@ -114,6 +134,47 @@ export default function CharacterDetail({
       loadDeployPreview();
     }
   }, [activeTab, character.name]);
+
+  // Autosave: debounce 500ms
+  // NOTE: intentionally does NOT call onUpdate() after save — calling onUpdate()
+  // triggers a parent re-render that passes a new `character` prop, which can
+  // reset the textarea and lose focus while the user is still typing.
+  const handleAutoSave = useCallback(async (description: string, variantIndex: number) => {
+    if (description === lastSavedDescription.current) return;
+    try {
+      setSaveStatus('saving');
+      await api.updateCharacter(character.figure_id, {
+        variant_index: variantIndex,
+        description,
+      });
+      lastSavedDescription.current = description;
+      setSaveStatus('saved');
+      if (saveIdleTimerRef.current) clearTimeout(saveIdleTimerRef.current);
+      saveIdleTimerRef.current = setTimeout(() => setSaveStatus('idle'), 2000);
+    } catch (err) {
+      console.error('Autosave failed:', err);
+      setSaveStatus('idle');
+    }
+  }, [character.figure_id]); // onUpdate removed — see note above
+
+  useEffect(() => {
+    if (editedDescription === lastSavedDescription.current) return;
+    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setTimeout(() => {
+      handleAutoSave(editedDescription, selectedVariantIndex);
+    }, 500);
+    return () => {
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    };
+  }, [editedDescription, selectedVariantIndex, handleAutoSave]);
+
+  // Cleanup all pending timers on unmount
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+      if (saveIdleTimerRef.current) clearTimeout(saveIdleTimerRef.current);
+    };
+  }, []);
 
   const loadSamples = async () => {
     try {
@@ -152,41 +213,62 @@ export default function CharacterDetail({
     }
   };
 
-  const handleSave = async () => {
+  const handleRegenerateVariants = async () => {
     try {
-      setSaving(true);
-      await api.updateCharacter(character.figure_id, {
-        variant_index: selectedVariantIndex,
-        description: editedDescription,
-      });
-      onUpdate();
+      setIsRegenerating(true);
+      setRegenerateError(null);
+      const descriptions = await api.regenerateVariants(character.name, regenerateBio);
+      // Refresh character data to get updated variants
+      await onUpdate();
+      setShowRegeneratePanel(false);
+      setRegenerateBio('');
+      // Update currently viewed description if it changed
+      if (descriptions[selectedVariantIndex]) {
+        setEditedDescription(descriptions[selectedVariantIndex]);
+        lastSavedDescription.current = descriptions[selectedVariantIndex];
+      }
     } catch (err) {
-      console.error('Failed to save:', err);
-      alert('保存失败');
+      setRegenerateError(err instanceof Error ? err.message : '生成失败');
     } finally {
-      setSaving(false);
+      setIsRegenerating(false);
     }
   };
 
   const handleGenerate = async () => {
+    const indicesToGenerate = Array.from(selectedVariantIndices).sort((a, b) => a - b);
+    if (indicesToGenerate.length === 0) return;
+
     try {
       setIsGenerating(true);
       setGenerationProgress(null);
-      await api.generate(
-        {
-          asset_type: 'portrait',
-          name: character.name,
-          description: editedDescription,
-          count: generateCount,
-        },
-        (progress) => {
-          setGenerationProgress(progress);
-          if (progress.type === 'done') {
-            loadSamples();
-            setActiveTab('samples');
-          }
+      setMultiVariantProgress(null);
+
+      for (let i = 0; i < indicesToGenerate.length; i++) {
+        const variantIdx = indicesToGenerate[i];
+        const variantToGenerate = character.variants[variantIdx];
+        const descriptionToUse = variantIdx === selectedVariantIndex
+          ? editedDescription
+          : (variantToGenerate?.description || '');
+
+        if (indicesToGenerate.length > 1) {
+          setMultiVariantProgress({ current: i + 1, total: indicesToGenerate.length });
         }
-      );
+
+        await api.generate(
+          {
+            asset_type: 'portrait',
+            name: character.name,
+            description: descriptionToUse,
+            count: generateCount,
+          },
+          (progress) => {
+            setGenerationProgress(progress);
+            if (progress.type === 'done') {
+              loadSamples();
+            }
+          }
+        );
+      }
     } catch (err) {
       console.error('Generation failed:', err);
       setGenerationProgress({
@@ -195,31 +277,8 @@ export default function CharacterDetail({
       });
     } finally {
       setIsGenerating(false);
+      setMultiVariantProgress(null);
     }
-  };
-
-  const handleAiGenerate = async () => {
-    if (!aiBio.trim()) {
-      setAiError('请先输入角色简介');
-      return;
-    }
-    try {
-      setIsAiGenerating(true);
-      setAiError(null);
-      setAiDescriptions([]);
-      const descs = await api.generateDescriptions({ name: character.name, bio: aiBio });
-      setAiDescriptions(descs);
-    } catch (err) {
-      setAiError(err instanceof Error ? err.message : 'AI 生成失败');
-    } finally {
-      setIsAiGenerating(false);
-    }
-  };
-
-  const handleApplyAiDescription = (desc: string) => {
-    setEditedDescription(desc);
-    setShowAiPanel(false);
-    setAiDescriptions([]);
   };
 
   // Profile handlers
@@ -287,7 +346,6 @@ export default function CharacterDetail({
         message: `部署成功！角色已${result.action === 'updated' ? '更新' : '新增'}到游戏数据。${result.portrait_copied ? ` 立绘已从「${result.portrait_source_filename}」复制。` : ' 立绘保持不变。'}`,
       });
       await loadDeployPreview();
-      // Refresh character list so thumbnail updates immediately (mtime changes after deploy)
       onUpdate();
     } catch (err) {
       setDeployResult({
@@ -322,8 +380,7 @@ export default function CharacterDetail({
 
         <div style={styles.tabs}>
           {([
-            ['variants', '变体配置', 'VARIANTS'],
-            ['samples', '样本图库', 'SAMPLES'],
+            ['workshop', '角色工坊', 'WORKSHOP'],
             ['profile', '角色属性', 'PROFILE'],
             ['deploy', '部署', 'DEPLOY'],
           ] as [DetailTab, string, string][]).map(([key, label, sublabel]) => (
@@ -343,13 +400,25 @@ export default function CharacterDetail({
       </div>
 
       <div style={styles.content}>
-        {activeTab === 'variants' && (
-          <div style={styles.variantsView}>
-            {/* Variant Selector */}
+        {activeTab === 'workshop' && (
+          <div style={styles.workshopView}>
+            {/* 1. VARIANT SELECTION */}
             <section style={styles.section}>
               <div style={styles.sectionHeader}>
                 <div style={styles.sectionTitle}>VARIANT SELECTION</div>
-                <div style={styles.sectionMeta}>{character.variants.length} available</div>
+                <div style={styles.variantHeaderRight}>
+                  <div style={styles.sectionMeta}>{character.variants.length} available</div>
+                  <button
+                    style={styles.regenerateBtn}
+                    onClick={() => {
+                      setShowRegeneratePanel(!showRegeneratePanel);
+                      setRegenerateError(null);
+                    }}
+                  >
+                    <span>✦ 重新生成</span>
+                    <span style={styles.buttonLabel}>REGENERATE</span>
+                  </button>
+                </div>
               </div>
               <div style={styles.variantGrid}>
                 {character.variants.map((variant, index) => (
@@ -368,131 +437,159 @@ export default function CharacterDetail({
                   </button>
                 ))}
               </div>
-            </section>
 
-            {/* Description Editor */}
-            <section style={styles.section}>
-              <div style={styles.sectionHeader}>
-                <div style={styles.sectionTitle}>DESCRIPTION EDITOR</div>
-                <div style={styles.sectionMeta}>Variant #{selectedVariant?.index}</div>
-              </div>
-              <textarea
-                style={styles.textarea}
-                value={editedDescription}
-                onChange={(e) => setEditedDescription(e.target.value)}
-                placeholder="输入角色描述..."
-              />
-              <div style={styles.descEditorActions}>
-                <button
-                  style={styles.saveButton}
-                  onClick={handleSave}
-                  disabled={saving || editedDescription === selectedVariant?.description}
-                >
-                  {saving ? (
-                    <>
-                      <div className="spinner"></div>
-                      <span>SAVING...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>保存</span>
-                      <span style={styles.buttonLabel}>SAVE</span>
-                    </>
-                  )}
-                </button>
-                <button
-                  style={styles.aiButton}
-                  onClick={() => {
-                    setShowAiPanel(!showAiPanel);
-                    setAiDescriptions([]);
-                    setAiError(null);
-                  }}
-                >
-                  <span>✦ AI 生成</span>
-                  <span style={styles.buttonLabel}>AI GENERATE</span>
-                </button>
-              </div>
-
-              {/* AI Generation Panel */}
-              {showAiPanel && (
-                <div style={styles.aiPanel}>
-                  <div style={styles.aiPanelTitle}>AI DESCRIPTION GENERATOR</div>
-                  <div style={styles.aiPanelSubtitle}>
-                    输入角色简介，AI 将生成 4 个不同场景的 description
+              {/* Regenerate Variants Panel */}
+              {showRegeneratePanel && (
+                <div style={styles.regeneratePanel}>
+                  <div style={styles.regeneratePanelTitle}>AI 重新生成 4 条 VARIANT</div>
+                  <div style={styles.regeneratePanelSubtitle}>
+                    输入角色简介，AI 将重新生成 4 条 variant description 并覆盖现有内容
                   </div>
                   <textarea
-                    style={styles.aiBioInput}
-                    value={aiBio}
-                    onChange={(e) => setAiBio(e.target.value)}
-                    placeholder="角色简介（如：北凉世子，武功绝顶，外表纨绔内心坚毅...）"
+                    style={styles.regenerateBioInput}
+                    value={regenerateBio}
+                    onChange={(e) => setRegenerateBio(e.target.value)}
+                    placeholder="角色简介（可选，如：北凉世子，武功绝顶，外表纨绔内心坚毅...）"
                     rows={3}
                   />
-                  {aiError && <div style={styles.aiError}>⚠ {aiError}</div>}
-                  <div style={styles.aiActions}>
+                  {regenerateError && <div style={styles.regenerateError}>⚠ {regenerateError}</div>}
+                  <div style={styles.regenerateActions}>
                     <button
-                      style={styles.aiGenerateBtn}
-                      onClick={handleAiGenerate}
-                      disabled={isAiGenerating}
+                      style={styles.regenerateConfirmBtn}
+                      onClick={handleRegenerateVariants}
+                      disabled={isRegenerating}
                     >
-                      {isAiGenerating ? (
+                      {isRegenerating ? (
                         <>
                           <div className="spinner"></div>
                           <span>AI 生成中...</span>
                         </>
                       ) : (
-                        <span>{aiDescriptions.length > 0 ? '重新生成' : '生成 Description'}</span>
+                        <span>确认生成（覆盖全部4条）</span>
                       )}
                     </button>
                     <button
-                      style={styles.aiCancelBtn}
+                      style={styles.regenerateCancelBtn}
                       onClick={() => {
-                        setShowAiPanel(false);
-                        setAiDescriptions([]);
-                        setAiError(null);
+                        setShowRegeneratePanel(false);
+                        setRegenerateError(null);
                       }}
                     >
                       取消
                     </button>
                   </div>
-
-                  {/* AI Generated Options */}
-                  {aiDescriptions.length > 0 && (
-                    <div style={styles.aiResults}>
-                      <div style={styles.aiResultsTitle}>选择一个 description 应用：</div>
-                      {aiDescriptions.map((desc, idx) => (
-                        <button
-                          key={idx}
-                          style={styles.aiResultCard}
-                          onClick={() => handleApplyAiDescription(desc)}
-                        >
-                          <div style={styles.aiResultIndex}>#{idx + 1}</div>
-                          <div style={styles.aiResultText}>{desc}</div>
-                          <div style={styles.aiResultApply}>点击应用 →</div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
                 </div>
               )}
             </section>
 
-            {/* Assembled Prompt Preview */}
+            {/* 2. DESCRIPTION EDITOR */}
             <section style={styles.section}>
               <div style={styles.sectionHeader}>
-                <div style={styles.sectionTitle}>ASSEMBLED PROMPT</div>
-                <div style={styles.sectionMeta}>Final output</div>
+                <div style={styles.sectionTitle}>DESCRIPTION EDITOR</div>
+                <div style={styles.descEditorMeta}>
+                  <span style={styles.sectionMeta}>Variant #{selectedVariant?.index}</span>
+                  {saveStatus === 'saving' && (
+                    <span style={styles.autoSaveIndicator}>保存中...</span>
+                  )}
+                  {saveStatus === 'saved' && (
+                    <span style={{ ...styles.autoSaveIndicator, color: 'var(--success)' }}>✓ 已保存</span>
+                  )}
+                </div>
               </div>
-              <div style={styles.promptPreview}>
-                <pre style={styles.promptText}>{assembledPrompt}</pre>
-              </div>
+              <textarea
+                style={styles.textarea}
+                value={editedDescription}
+                onChange={(e) => setEditedDescription(e.target.value)}
+                onFocus={() => { isEditingDescriptionRef.current = true; }}
+                onBlur={() => { isEditingDescriptionRef.current = false; }}
+                placeholder="输入角色描述..."
+              />
             </section>
 
-            {/* Generation Controls */}
+            {/* 3. ASSEMBLED PROMPT (collapsible) */}
+            <section style={styles.section}>
+              <div
+                style={styles.sectionHeaderClickable}
+                onClick={() => setPromptExpanded(!promptExpanded)}
+              >
+                <div style={styles.sectionTitle}>ASSEMBLED PROMPT</div>
+                <div style={styles.promptToggleRight}>
+                  <span style={styles.sectionMeta}>Final output</span>
+                  <span style={styles.expandToggle}>{promptExpanded ? '▲ 收起' : '▼ 展开'}</span>
+                </div>
+              </div>
+              {promptExpanded && (
+                <div style={styles.promptPreview}>
+                  <pre style={styles.promptText}>{assembledPrompt}</pre>
+                </div>
+              )}
+            </section>
+
+            {/* 4. GENERATION CONTROLS */}
             <section style={styles.section}>
               <div style={styles.sectionHeader}>
                 <div style={styles.sectionTitle}>GENERATION CONTROLS</div>
               </div>
               <div style={styles.generatePanel}>
+                {/* Variant multi-select checkboxes */}
+                <div style={styles.variantSelector}>
+                  <div style={styles.variantCheckboxHeader}>
+                    <div style={styles.countLabel}>VARIANT</div>
+                    <label style={styles.selectAllLabel}>
+                      <input
+                        type="checkbox"
+                        style={styles.checkbox}
+                        checked={selectedVariantIndices.size === character.variants.length}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedVariantIndices(new Set(character.variants.map((_, i) => i)));
+                          } else {
+                            setSelectedVariantIndices(new Set([0]));
+                          }
+                        }}
+                        disabled={isGenerating}
+                      />
+                      <span style={styles.selectAllText}>全选</span>
+                    </label>
+                  </div>
+                  <div style={styles.variantCheckboxList}>
+                    {character.variants.map((v, idx) => {
+                      const checked = selectedVariantIndices.has(idx);
+                      return (
+                        <label
+                          key={idx}
+                          style={{
+                            ...styles.variantCheckboxRow,
+                            ...(checked ? styles.variantCheckboxRowActive : {}),
+                            ...(isGenerating ? { opacity: 0.5, cursor: 'not-allowed' } : {}),
+                          }}
+                        >
+                          <input
+                            type="checkbox"
+                            style={styles.checkbox}
+                            checked={checked}
+                            disabled={isGenerating}
+                            onChange={(e) => {
+                              const next = new Set(selectedVariantIndices);
+                              if (e.target.checked) {
+                                next.add(idx);
+                              } else {
+                                next.delete(idx);
+                              }
+                              setSelectedVariantIndices(next);
+                            }}
+                          />
+                          <span style={styles.variantCheckboxIndex}>#{v.index}</span>
+                          <span style={styles.variantCheckboxDesc}>
+                            {v.description ? v.description.slice(0, 30) + (v.description.length > 30 ? '...' : '') : '(未设置)'}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Count selector */}
                 <div style={styles.countSelector}>
                   <div style={styles.countLabel}>COUNT</div>
                   <div style={styles.countButtons}>
@@ -511,20 +608,32 @@ export default function CharacterDetail({
                     ))}
                   </div>
                 </div>
+
                 <button
-                  style={styles.generateButton}
+                  style={{
+                    ...styles.generateButton,
+                    ...(selectedVariantIndices.size === 0 ? { opacity: 0.4, cursor: 'not-allowed' } : {}),
+                  }}
                   onClick={handleGenerate}
-                  disabled={isGenerating}
+                  disabled={isGenerating || selectedVariantIndices.size === 0}
                 >
                   {isGenerating ? (
                     <>
                       <div className="spinner"></div>
-                      <span>GENERATING...</span>
+                      <span>
+                        {multiVariantProgress
+                          ? `正在生成 ${multiVariantProgress.current}/${multiVariantProgress.total}...`
+                          : 'GENERATING...'}
+                      </span>
                     </>
                   ) : (
                     <>
                       <span>生成</span>
-                      <span style={styles.buttonLabel}>GENERATE</span>
+                      <span style={styles.buttonLabel}>
+                        {selectedVariantIndices.size > 1
+                          ? `GENERATE × ${selectedVariantIndices.size}`
+                          : 'GENERATE'}
+                      </span>
                     </>
                   )}
                 </button>
@@ -567,23 +676,28 @@ export default function CharacterDetail({
                 </div>
               )}
             </section>
-          </div>
-        )}
 
-        {activeTab === 'samples' && (
-          <div style={styles.samplesView}>
-            {loadingSamples ? (
-              <div style={styles.loadingState}>
-                <div className="spinner"></div>
-                <div style={styles.loadingText}>LOADING SAMPLES...</div>
+            {/* 5. Gallery */}
+            <section style={styles.section}>
+              <div style={styles.sectionHeader}>
+                <div style={styles.sectionTitle}>SAMPLE GALLERY</div>
+                <button style={styles.refreshGalleryBtn} onClick={loadSamples} disabled={loadingSamples}>
+                  {loadingSamples ? '...' : '刷新'}
+                </button>
               </div>
-            ) : (
-              <Gallery
-                images={samples}
-                characterName={character.name}
-                onSelect={loadSamples}
-              />
-            )}
+              {loadingSamples ? (
+                <div style={styles.loadingState}>
+                  <div className="spinner"></div>
+                  <div style={styles.loadingText}>LOADING SAMPLES...</div>
+                </div>
+              ) : (
+                <Gallery
+                  images={samples}
+                  characterName={character.name}
+                  onSelect={loadSamples}
+                />
+              )}
+            </section>
           </div>
         )}
 
@@ -1002,14 +1116,11 @@ const styles: Record<string, React.CSSProperties> = {
     flex: '1',
     overflow: 'auto',
   },
-  variantsView: {
+  workshopView: {
     padding: '32px 40px',
     display: 'flex',
     flexDirection: 'column',
     gap: '32px',
-  },
-  samplesView: {
-    padding: '32px 40px',
   },
   profileView: {
     padding: '32px 40px',
@@ -1046,6 +1157,15 @@ const styles: Record<string, React.CSSProperties> = {
     paddingBottom: '12px',
     borderBottom: '1px solid var(--border-subtle)',
   },
+  sectionHeaderClickable: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: '12px',
+    borderBottom: '1px solid var(--border-subtle)',
+    cursor: 'pointer',
+    userSelect: 'none',
+  },
   sectionTitle: {
     fontSize: '11px',
     fontWeight: '700',
@@ -1056,6 +1176,23 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '10px',
     fontWeight: '400',
     color: 'var(--text-tertiary)',
+  },
+  variantHeaderRight: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+  },
+  regenerateBtn: {
+    padding: '6px 14px',
+    background: 'var(--bg-tertiary)',
+    border: '1px solid #7c6af5',
+    color: '#a89cf7',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    cursor: 'pointer',
+    fontSize: '12px',
+    transition: 'all 0.15s ease',
   },
   variantGrid: {
     display: 'grid',
@@ -1093,67 +1230,27 @@ const styles: Record<string, React.CSSProperties> = {
     WebkitLineClamp: 2,
     WebkitBoxOrient: 'vertical',
   },
-  textarea: {
-    width: '100%',
-    minHeight: '120px',
-    marginBottom: '16px',
-    fontFamily: 'var(--font-mono)',
-    fontSize: '13px',
-    lineHeight: '1.6',
-  },
-  descEditorActions: {
-    display: 'flex',
-    gap: '12px',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-  },
-  saveButton: {
-    padding: '12px 24px',
-    background: 'var(--bg-elevated)',
-    border: '1px solid var(--border-accent)',
-    color: 'var(--text-accent)',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    cursor: 'pointer',
-  },
-  aiButton: {
-    padding: '12px 24px',
-    background: 'var(--bg-tertiary)',
-    border: '1px solid #7c6af5',
-    color: '#a89cf7',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    cursor: 'pointer',
-    transition: 'all 0.15s ease',
-  },
-  buttonLabel: {
-    fontSize: '9px',
-    opacity: 0.6,
-    letterSpacing: '0.05em',
-  },
-  // AI Panel
-  aiPanel: {
+  // Regenerate panel
+  regeneratePanel: {
     marginTop: '20px',
     padding: '20px',
     background: 'var(--bg-primary)',
     border: '1px solid #7c6af5',
     borderLeft: '3px solid #7c6af5',
   },
-  aiPanelTitle: {
+  regeneratePanelTitle: {
     fontSize: '11px',
     fontWeight: '700',
     letterSpacing: '0.1em',
     color: '#a89cf7',
     marginBottom: '6px',
   },
-  aiPanelSubtitle: {
+  regeneratePanelSubtitle: {
     fontSize: '12px',
     color: 'var(--text-tertiary)',
     marginBottom: '14px',
   },
-  aiBioInput: {
+  regenerateBioInput: {
     width: '100%',
     marginBottom: '12px',
     fontFamily: 'var(--font-mono)',
@@ -1164,18 +1261,19 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-primary)',
     padding: '10px 12px',
     resize: 'vertical' as const,
+    boxSizing: 'border-box',
   },
-  aiError: {
+  regenerateError: {
     fontSize: '12px',
     color: 'var(--error)',
     marginBottom: '10px',
   },
-  aiActions: {
+  regenerateActions: {
     display: 'flex',
     gap: '10px',
     alignItems: 'center',
   },
-  aiGenerateBtn: {
+  regenerateConfirmBtn: {
     padding: '10px 20px',
     background: '#4a3fa0',
     border: '1px solid #7c6af5',
@@ -1187,7 +1285,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '13px',
     cursor: 'pointer',
   },
-  aiCancelBtn: {
+  regenerateCancelBtn: {
     padding: '10px 16px',
     background: 'transparent',
     border: '1px solid var(--border-primary)',
@@ -1195,49 +1293,38 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '12px',
     cursor: 'pointer',
   },
-  aiResults: {
-    marginTop: '16px',
-  },
-  aiResultsTitle: {
-    fontSize: '10px',
-    fontWeight: '600',
-    letterSpacing: '0.05em',
-    color: 'var(--text-tertiary)',
-    marginBottom: '10px',
-  },
-  aiResultCard: {
-    width: '100%',
-    padding: '14px 16px',
-    background: 'var(--bg-secondary)',
-    border: '1px solid var(--border-primary)',
-    textAlign: 'left',
-    marginBottom: '8px',
-    cursor: 'pointer',
-    transition: 'all 0.15s ease',
+  // Description editor
+  descEditorMeta: {
     display: 'flex',
+    alignItems: 'center',
     gap: '12px',
-    alignItems: 'flex-start',
   },
-  aiResultIndex: {
+  autoSaveIndicator: {
     fontSize: '10px',
-    fontWeight: '700',
-    color: '#a89cf7',
-    flexShrink: 0,
-    paddingTop: '2px',
-  },
-  aiResultText: {
-    flex: '1',
-    fontSize: '13px',
-    color: 'var(--text-secondary)',
-    lineHeight: '1.6',
+    color: 'var(--text-tertiary)',
     fontFamily: 'var(--font-mono)',
+    letterSpacing: '0.03em',
   },
-  aiResultApply: {
+  textarea: {
+    width: '100%',
+    minHeight: '120px',
+    marginBottom: '0',
+    fontFamily: 'var(--font-mono)',
+    fontSize: '13px',
+    lineHeight: '1.6',
+    boxSizing: 'border-box',
+  },
+  // Assembled prompt
+  promptToggleRight: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+  },
+  expandToggle: {
     fontSize: '10px',
-    color: '#7c6af5',
-    flexShrink: 0,
-    paddingTop: '2px',
-    opacity: 0.7,
+    fontWeight: '500',
+    color: 'var(--text-accent)',
+    letterSpacing: '0.05em',
   },
   promptPreview: {
     background: 'var(--bg-primary)',
@@ -1245,6 +1332,7 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '16px',
     maxHeight: '200px',
     overflow: 'auto',
+    marginTop: '12px',
   },
   promptText: {
     fontFamily: 'var(--font-mono)',
@@ -1254,10 +1342,76 @@ const styles: Record<string, React.CSSProperties> = {
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word',
   },
+  // Generation controls
   generatePanel: {
     display: 'flex',
     gap: '24px',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
+  },
+  variantSelector: {
+    flex: '1',
+    minWidth: '220px',
+  },
+  variantCheckboxHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '8px',
+  },
+  selectAllLabel: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    cursor: 'pointer',
+  },
+  selectAllText: {
+    fontSize: '10px',
+    color: 'var(--text-tertiary)',
+    letterSpacing: '0.03em',
+  },
+  variantCheckboxList: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '6px',
+    maxHeight: '160px',
+    overflowY: 'auto' as const,
+  },
+  variantCheckboxRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '8px 10px',
+    background: 'var(--bg-tertiary)',
+    border: '1px solid var(--border-primary)',
+    cursor: 'pointer',
+    transition: 'all 0.12s ease',
+  },
+  variantCheckboxRowActive: {
+    background: 'var(--bg-elevated)',
+    borderColor: 'var(--border-accent)',
+  },
+  checkbox: {
+    accentColor: 'var(--accent-cyan)',
+    width: '14px',
+    height: '14px',
+    flexShrink: 0,
+    cursor: 'pointer',
+  },
+  variantCheckboxIndex: {
+    fontSize: '10px',
+    fontWeight: '700',
+    letterSpacing: '0.05em',
+    color: 'var(--text-accent)',
+    flexShrink: 0,
+    width: '24px',
+  },
+  variantCheckboxDesc: {
+    fontSize: '11px',
+    color: 'var(--text-secondary)',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap' as const,
+    flex: '1',
   },
   countSelector: {
     flex: '0 0 auto',
@@ -1289,7 +1443,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-accent)',
   },
   generateButton: {
-    flex: '1',
+    flex: '0 0 auto',
     padding: '12px 32px',
     background: 'var(--accent-cyan)',
     border: '1px solid var(--accent-cyan)',
@@ -1302,6 +1456,11 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '14px',
     height: '48px',
     cursor: 'pointer',
+  },
+  buttonLabel: {
+    fontSize: '9px',
+    opacity: 0.6,
+    letterSpacing: '0.05em',
   },
   progressPanel: {
     marginTop: '24px',
@@ -1339,6 +1498,15 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '12px',
     color: 'var(--error)',
     fontWeight: '500',
+  },
+  // Gallery section
+  refreshGalleryBtn: {
+    padding: '4px 12px',
+    background: 'var(--bg-tertiary)',
+    border: '1px solid var(--border-primary)',
+    color: 'var(--text-tertiary)',
+    fontSize: '11px',
+    cursor: 'pointer',
   },
   loadingState: {
     display: 'flex',

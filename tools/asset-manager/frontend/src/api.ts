@@ -132,6 +132,20 @@ export const api = {
     return response.json();
   },
 
+  async regenerateVariants(characterName: string, bio: string): Promise<string[]> {
+    const response = await fetch(`/api/characters/${encodeURIComponent(characterName)}/regenerate-variants`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bio }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to regenerate variants');
+    }
+    const data = await response.json();
+    return data.descriptions as string[];
+  },
+
   async generate(
     request: GenerateRequest,
     onProgress: (progress: GenerationProgress) => void
