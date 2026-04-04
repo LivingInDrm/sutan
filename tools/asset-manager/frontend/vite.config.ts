@@ -8,6 +8,7 @@ export default defineConfig({
       '/api': 'http://localhost:8100',
       '/images': 'http://localhost:8100',
       '/portraits': 'http://localhost:8100',
+      '/items': 'http://localhost:8100',
     }
   }
 })

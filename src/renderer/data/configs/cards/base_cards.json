@@ -261,23 +261,21 @@
     "card_id": "equip_004",
     "name": "大凉龙雀",
     "type": "equipment",
-    "rarity": "gold",
-    "description": "北凉王妃吴素佩剑，吴家剑冢四大神兵之一，剑匣刻\"此剑抚平天下不平事，此剑无愧世间有愧人\"；吴素死后由徐凤年转赠姜泥，是两代北凉王妃的象征，一剑可破百甲。",
-    "image": "/assets/items/item_sword_01.png",
+    "rarity": "divine",
+    "description": "北凉王府传世宝剑，锋芒沉雄如龙雀长鸣，出鞘自有压阵之威。",
+    "image": "/assets/items/大凉龙雀_1775304857_1.png",
     "equipment_type": "weapon",
     "attribute_bonus": {
       "combat": 10,
       "charm": 3,
       "wisdom": 2
     },
-    "special_bonus": {
-      "reroll": 2
-    },
+    "special_bonus": {},
     "gem_slots": 2,
     "tags": [
       "weapon",
-      "divine",
-      "heirloom"
+      "rare",
+      "legendary"
     ]
   },
   {
@@ -307,22 +305,26 @@
     "card_id": "equip_006",
     "name": "木马牛",
     "type": "equipment",
-    "rarity": "gold",
-    "description": "剑神李淳罡的佩剑，天外陨石所铸，与符将红甲同源；\"三尺木马牛，可折天下兵\"，可惜在与王仙芝一战中被折断。",
-    "image": "/assets/items/item_sword_02.png",
+    "rarity": "divine",
+    "description": "上古名剑木马牛，剑身黝黑粗粝，夜中隐有微光流转，出鞘则锋意惊人。",
+    "image": "/assets/items/木马牛_1775304408_1.png",
     "equipment_type": "weapon",
     "attribute_bonus": {
-      "combat": 12
+      "combat": 12,
+      "physique": 2,
+      "wisdom": 2
     },
     "special_bonus": {
-      "support": -1,
+      "support": 2,
       "reroll": 1
     },
-    "gem_slots": 0,
+    "gem_slots": 3,
     "tags": [
       "weapon",
-      "divine",
-      "broken"
+      "legendary",
+      "ancient",
+      "magical",
+      "rare"
     ]
   },
   {
@@ -637,5 +639,46 @@
       "ally"
     ],
     "equipment_slots": 4
+  },
+  {
+    "card_id": "equip_item_9347",
+    "name": "寒玉戒指",
+    "type": "equipment",
+    "rarity": "silver",
+    "description": "寒玉所琢，入手沁凉，能宁神定意，亦可微御邪祟与心火。",
+    "image": "/assets/items/寒玉戒指_1775300250_1.png",
+    "equipment_type": "accessory",
+    "attribute_bonus": {
+      "wisdom": 6,
+      "magic": 5,
+      "charm": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "accessory",
+      "magical",
+      "rare"
+    ]
+  },
+  {
+    "card_id": "equip_item_9247",
+    "name": "梅子酒",
+    "type": "equipment",
+    "rarity": "gold",
+    "description": "枪势如梅落寒江，锋芒内敛却杀机极盛，最宜马上破阵与近身鏖战。",
+    "image": "/assets/items/梅子酒_1775304603_1.png",
+    "equipment_type": "weapon",
+    "attribute_bonus": {
+      "combat": 11,
+      "physique": 6
+    },
+    "special_bonus": {},
+    "gem_slots": 2,
+    "tags": [
+      "weapon",
+      "legendary",
+      "rare"
+    ]
   }
 ]

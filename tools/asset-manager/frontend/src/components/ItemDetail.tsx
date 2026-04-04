@@ -1,27 +1,23 @@
-import { useState, useEffect } from 'react';
-import type { Character, Templates, CharacterProfile, DeployPreview } from '../types';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import type { Item, ItemProfile, ItemDeployPreview } from '../types';
 import { api } from '../api';
-import Gallery from './Gallery';
 import WorkshopTab from './WorkshopTab';
-import type { WorkshopConfig } from './WorkshopTab';
+import type { WorkshopConfig, WorkshopVariant } from './WorkshopTab';
+import Gallery from './Gallery';
 
-interface CharacterDetailProps {
-  character: Character;
-  templates: Templates | null;
+interface ItemDetailProps {
+  item: Item;
   onUpdate: () => void | Promise<void>;
 }
 
 type DetailTab = 'workshop' | 'profile' | 'deploy';
 
-const ATTR_LABELS: Record<string, string> = {
-  physique: '体魄',
-  charm: '魅力',
-  wisdom: '智慧',
-  combat: '武力',
-  social: '社交',
-  survival: '生存',
-  stealth: '潜行',
-  magic: '法术',
+const EQUIPMENT_TYPE_OPTIONS = ['weapon', 'armor', 'accessory', 'mount'];
+const EQUIPMENT_TYPE_LABELS: Record<string, string> = {
+  weapon: '武器',
+  armor: '甲胄',
+  accessory: '饰品/法器',
+  mount: '坐骑',
 };
 
 const RARITY_LABELS: Record<string, string> = {
@@ -29,6 +25,7 @@ const RARITY_LABELS: Record<string, string> = {
   silver: '银 · SILVER',
   copper: '铜 · COPPER',
   stone: '石 · STONE',
+  divine: '神 · DIVINE',
 };
 
 const RARITY_COLORS: Record<string, string> = {
@@ -36,104 +33,210 @@ const RARITY_COLORS: Record<string, string> = {
   silver: '#b0b8c8',
   copper: '#c87040',
   stone: '#808080',
+  divine: '#c8a8ff',
 };
 
-const DEFAULT_PROFILE: CharacterProfile = {
-  description: '',
+const ATTRIBUTE_KEYS = ['physique', 'charm', 'wisdom', 'combat', 'social', 'survival', 'stealth', 'magic'];
+const ATTRIBUTE_LABELS: Record<string, string> = {
+  physique: '体魄',
+  charm: '魅力',
+  wisdom: '智谋',
+  combat: '武力',
+  social: '交际',
+  survival: '生存',
+  stealth: '隐匿',
+  magic: '灵力',
+};
+
+const DEFAULT_PROFILE: ItemProfile = {
+  card_type: 'item',
+  equipment_type: 'weapon',
   rarity: 'copper',
-  attributes: {
-    physique: 5, charm: 5, wisdom: 5, combat: 5,
-    social: 5, survival: 5, stealth: 5, magic: 5,
-  },
-  special_attributes: { support: 0, reroll: 0 },
+  description: '',
+  lore: '',
+  attribute_bonus: {},
+  special_bonus: {},
+  gem_slots: 0,
   tags: [],
-  equipment_slots: 1,
 };
 
 const WORKSHOP_CONFIG: WorkshopConfig = {
-  generateButtonText: '生成立绘',
-  regeneratePanelTitle: 'AI 重新生成 4 条 VARIANT',
-  regeneratePanelSubtitle: '输入角色简介，AI 将重新生成 4 条 variant description 并覆盖现有内容',
-  regeneratePlaceholder: '角色简介（可选，如：北凉世子，武功绝顶，外表纨绔内心坚毅...）',
-  descriptionPlaceholder: '输入角色描述...',
+  generateButtonText: '生成物品图片',
+  generateButtonSubtext: '水墨风格',
+  regeneratePanelTitle: 'AI 重新生成 VARIANT DESCRIPTIONS',
+  regeneratePanelSubtitle: '输入物品简介，AI 将重新生成所有 variant descriptions 并覆盖现有内容',
+  regeneratePlaceholder: '物品简介（可选，如：古老的天阶神剑，剑身流光溢彩...）',
+  descriptionPlaceholder: '输入物品的视觉描述...',
 };
 
-export default function CharacterDetail({
-  character,
-  templates,
-  onUpdate,
-}: CharacterDetailProps) {
+/** Rarity-based visual enhancement phrases (must mirror backend RARITY_VISUAL_ENHANCEMENTS) */
+const RARITY_ENHANCEMENTS: Record<string, { descSuffix: string; styleAddition: string }> = {
+  stone: {
+    descSuffix: '',
+    styleAddition:
+      'Muted earthy tones — dark charcoal ink with faint ochre and stone-gray washes, ' +
+      'rough unfinished texture, minimal color, rustic and unadorned appearance. ',
+  },
+  copper: {
+    descSuffix: ', showing warm bronze and copper tones',
+    styleAddition:
+      'Warm copper-brown and bronze color washes, earthy amber hues with reddish-brown tints, ' +
+      'aged patina effect, modest craftsmanship rendered in warm ink tones. ',
+  },
+  silver: {
+    descSuffix: ', refined craftsmanship visible in every detail',
+    styleAddition:
+      'Cool silver-blue color palette, pale cyan and steel-gray ink washes, ' +
+      'subtle ornamental patterns, polished metallic sheen rendered with cool-toned highlights, ' +
+      'exquisite workmanship with precise crisp ink strokes. ',
+  },
+  gold: {
+    descSuffix: ', adorned with ornate engravings and radiant golden accents',
+    styleAddition:
+      'Rich warm golden-yellow and amber color washes, vivid jewel-tone accents (deep red, emerald green, sapphire blue), ' +
+      'ornate engravings with golden ink-wash luminescence, ' +
+      'luxurious masterwork quality with warm glowing highlights and rich color contrast. ',
+  },
+  divine: {
+    descSuffix: ', emanating sacred divine aura with ethereal celestial light',
+    styleAddition:
+      'Vivid multicolor celestial palette — glowing azure, violet, and gold radiating outward, ' +
+      'intense luminous color contrasts with sacred white-gold light beams, ' +
+      'intricate ancient runes shimmering in vibrant hues, ' +
+      'celestial energy wisps in brilliant blues and purples surrounding the object, ' +
+      'transcendent divine presence expressed through dramatic color and light. ',
+  },
+};
+
+/** Build the full assembled prompt for an item description, with rarity-layered visual enhancement */
+function buildItemPrompt(description: string, rarity: string = 'silver'): string {
+  if (!description) return '（请先选择或编辑一个 variant description）';
+  const enh = RARITY_ENHANCEMENTS[rarity] ?? RARITY_ENHANCEMENTS['silver'];
+  return (
+    `Game equipment illustration icon: ${description}${enh.descSuffix}. Rendered in traditional xieyi (写意) ink wash painting style. ` +
+    `Style: semi-realistic Chinese ink wash (shui mo), expressive brushwork with feibi dry-brush highlights, ` +
+    `ink washes with natural color accents, traditional Chinese painting aesthetics, elegant restraint. ` +
+    `${enh.styleAddition}` +
+    `Pure transparent background, PNG with alpha channel. ` +
+    `Display the complete object in full view — do not crop or truncate any part of the item. ` +
+    `For elongated items such as spears, staves, or long swords, fit the entire object within the frame using a slight diagonal composition. ` +
+    `Centered composition, single object displayed on its own. ` +
+    `CRITICAL REQUIREMENT: The image must be completely free of any text, letters, words, characters, writing systems, ` +
+    `calligraphy, seals, stamps, chop marks, red seal marks, watermarks, signatures, inscriptions, or labels of any kind.`
+  );
+}
+
+export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
   const [activeTab, setActiveTab] = useState<DetailTab>('workshop');
 
-  // Profile tab state
-  const [profile, setProfile] = useState<CharacterProfile>(DEFAULT_PROFILE);
+  // Variants state (loaded from API, passed to WorkshopTab)
+  const [variants, setVariants] = useState<WorkshopVariant[]>([]);
+
+  // Profile state
+  const [profile, setProfile] = useState<ItemProfile>(DEFAULT_PROFILE);
   const [loadingProfile, setLoadingProfile] = useState(false);
-  const [savingProfile, setSavingProfile] = useState(false);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [profileSaved, setProfileSaved] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
-  const [isAiProfileGenerating, setIsAiProfileGenerating] = useState(false);
+  const [isGeneratingProfile, setIsGeneratingProfile] = useState(false);
+  const [attrBonusInput, setAttrBonusInput] = useState<Record<string, string>>({});
+  const [specialBonusInput, setSpecialBonusInput] = useState<Record<string, string>>({});
   const [tagInput, setTagInput] = useState('');
 
-  // Deploy tab state
-  const [deployPreview, setDeployPreview] = useState<DeployPreview | null>(null);
+  // Deploy state
+  const [deployPreview, setDeployPreview] = useState<ItemDeployPreview | null>(null);
   const [loadingDeployPreview, setLoadingDeployPreview] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployResult, setDeployResult] = useState<{ success: boolean; message: string } | null>(null);
 
+  // ─── Load variants from API ───────────────────────────────────────────────
+  const loadVariants = useCallback(async () => {
+    try {
+      const data = await api.getItemVariants(item.name);
+      setVariants(data.map((v) => ({ index: v.index, description: v.description })));
+    } catch (err) {
+      console.error('Failed to load item variants', err);
+    }
+  }, [item.name]);
+
+  // ─── Load profile ─────────────────────────────────────────────────────────
+  const loadProfile = useCallback(async () => {
+    try {
+      setLoadingProfile(true);
+      const data = await api.getItemProfile(item.name);
+      setProfile(data);
+      const ab: Record<string, string> = {};
+      Object.entries(data.attribute_bonus || {}).forEach(([k, v]) => { ab[k] = String(v); });
+      setAttrBonusInput(ab);
+      const sb: Record<string, string> = {};
+      Object.entries(data.special_bonus || {}).forEach(([k, v]) => { sb[k] = String(v); });
+      setSpecialBonusInput(sb);
+    } catch (err) {
+      console.error('Failed to load item profile', err);
+    } finally {
+      setLoadingProfile(false);
+    }
+  }, [item.name]);
+
+  // ─── Load deploy preview ──────────────────────────────────────────────────
+  const loadDeployPreview = useCallback(async () => {
+    try {
+      setLoadingDeployPreview(true);
+      setDeployResult(null);
+      const data = await api.getItemDeployPreview(item.name);
+      setDeployPreview(data);
+    } catch (err) {
+      console.error('Failed to load item deploy preview', err);
+    } finally {
+      setLoadingDeployPreview(false);
+    }
+  }, [item.name]);
+
+  // ─── Reset on item switch ─────────────────────────────────────────────────
   useEffect(() => {
-    // Reset state when switching character
+    setVariants([]);
     setProfileSaved(false);
     setProfileError(null);
     setDeployResult(null);
     setDeployPreview(null);
-  }, [character.name]);
+  }, [item.name]);
 
+  // ─── Initial data load ────────────────────────────────────────────────────
   useEffect(() => {
-    if (activeTab === 'profile') {
-      loadProfile();
-    } else if (activeTab === 'deploy') {
-      loadDeployPreview();
-    }
-  }, [activeTab, character.name]);
+    loadVariants();
+  }, [item.name, loadVariants]);
 
-  const loadProfile = async () => {
-    try {
-      setLoadingProfile(true);
-      const p = await api.getCharacterProfile(character.name);
-      setProfile(p);
-    } catch (err) {
-      console.error('Failed to load profile:', err);
-    } finally {
-      setLoadingProfile(false);
-    }
-  };
+  // ─── Tab-specific data load ───────────────────────────────────────────────
+  useEffect(() => {
+    if (activeTab === 'profile') loadProfile();
+    if (activeTab === 'deploy') loadDeployPreview();
+  }, [activeTab, loadProfile, loadDeployPreview]);
 
-  const loadDeployPreview = async () => {
-    try {
-      setLoadingDeployPreview(true);
-      setDeployResult(null);
-      const preview = await api.getDeployPreview(character.name);
-      setDeployPreview(preview);
-    } catch (err) {
-      console.error('Failed to load deploy preview:', err);
-    } finally {
-      setLoadingDeployPreview(false);
+  // ─── Profile handlers ─────────────────────────────────────────────────────
+  const handleAttrBonusChange = (key: string, value: string) => {
+    setAttrBonusInput((prev) => ({ ...prev, [key]: value }));
+    const num = parseInt(value, 10);
+    if (!isNaN(num)) {
+      setProfile((prev) => {
+        const ab = { ...prev.attribute_bonus };
+        if (num === 0) delete ab[key];
+        else ab[key] = num;
+        return { ...prev, attribute_bonus: ab };
+      });
     }
   };
 
-  // Profile handlers
-  const handleAttrChange = (key: string, value: number) => {
-    setProfile((p) => ({
-      ...p,
-      attributes: { ...p.attributes, [key]: value },
-    }));
-  };
-
-  const handleSpecialAttrChange = (key: 'support' | 'reroll', value: number) => {
-    setProfile((p) => ({
-      ...p,
-      special_attributes: { ...p.special_attributes, [key]: value },
-    }));
+  const handleSpecialBonusChange = (key: string, value: string) => {
+    setSpecialBonusInput((prev) => ({ ...prev, [key]: value }));
+    const num = parseInt(value, 10);
+    if (!isNaN(num)) {
+      setProfile((prev) => {
+        const sb = { ...prev.special_bonus };
+        if (num === 0) delete sb[key];
+        else sb[key] = num;
+        return { ...prev, special_bonus: sb };
+      });
+    }
   };
 
   const handleTagAdd = () => {
@@ -150,40 +253,48 @@ export default function CharacterDetail({
 
   const handleSaveProfile = async () => {
     try {
-      setSavingProfile(true);
+      setIsSavingProfile(true);
       setProfileError(null);
-      const updated = await api.updateCharacterProfile(character.name, profile);
+      const updated = await api.updateItemProfile(item.name, profile);
       setProfile(updated);
       setProfileSaved(true);
       setTimeout(() => setProfileSaved(false), 3000);
+      onUpdate();
     } catch (err) {
       setProfileError(err instanceof Error ? err.message : '保存失败');
     } finally {
-      setSavingProfile(false);
+      setIsSavingProfile(false);
     }
   };
 
-  const handleAiProfileGenerate = async () => {
+  const handleGenerateProfile = async () => {
     try {
-      setIsAiProfileGenerating(true);
+      setIsGeneratingProfile(true);
       setProfileError(null);
-      const generated = await api.generateCharacterProfile(character.name);
+      const generated = await api.generateItemProfile(item.name);
       setProfile(generated);
+      const ab: Record<string, string> = {};
+      Object.entries(generated.attribute_bonus || {}).forEach(([k, v]) => { ab[k] = String(v); });
+      setAttrBonusInput(ab);
+      const sb: Record<string, string> = {};
+      Object.entries(generated.special_bonus || {}).forEach(([k, v]) => { sb[k] = String(v); });
+      setSpecialBonusInput(sb);
     } catch (err) {
       setProfileError(err instanceof Error ? err.message : 'AI 生成失败');
     } finally {
-      setIsAiProfileGenerating(false);
+      setIsGeneratingProfile(false);
     }
   };
 
+  // ─── Deploy handler ───────────────────────────────────────────────────────
   const handleDeploy = async () => {
     try {
       setIsDeploying(true);
       setDeployResult(null);
-      const result = await api.deployCharacter(character.name);
+      const result = await api.deployItem(item.name);
       setDeployResult({
         success: true,
-        message: `部署成功！角色已${result.action === 'updated' ? '更新' : '新增'}到游戏数据。${result.portrait_copied ? ` 立绘已从「${result.portrait_source_filename}」复制。` : ' 立绘保持不变。'}`,
+        message: `部署成功！物品已${result.action === 'updated' ? '更新' : '新增'}到游戏数据。`,
       });
       await loadDeployPreview();
       onUpdate();
@@ -197,32 +308,29 @@ export default function CharacterDetail({
     }
   };
 
-  // Build assembled prompt from templates
-  const assemblePrompt = (description: string): string => {
-    if (!templates) return description;
-    return (templates.portrait_template || '')
-      .replace('{style}', templates.style_base || '')
-      .replace('{no_text}', templates.no_text_constraint || '')
-      .replace('{name}', character.name)
-      .replace('{description}', description)
-      .replace('{negative}', templates.style_negative || '');
-  };
-
   const rarityColor = RARITY_COLORS[profile.rarity] || '#808080';
-  const attrTotal = Object.values(profile.attributes).reduce((a, b) => a + b, 0);
+
+  // Memoized assemblePrompt that reflects the current profile.rarity —
+  // so the ASSEMBLED PROMPT preview in WorkshopTab updates as rarity changes.
+  const assembleItemPrompt = useMemo(
+    () => (description: string) => buildItemPrompt(description, profile.rarity),
+    [profile.rarity],
+  );
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>{character.name}</h2>
-          <div style={styles.subtitle}>ID: {character.figure_id}</div>
+          <h2 style={styles.title}>{item.name}</h2>
+          <div style={styles.subtitle}>
+            {EQUIPMENT_TYPE_LABELS[item.equipment_type] || item.equipment_type}
+          </div>
         </div>
 
         <div style={styles.tabs}>
           {([
-            ['workshop', '角色工坊', 'WORKSHOP'],
-            ['profile', '角色属性', 'PROFILE'],
+            ['workshop', '物品工坊', 'WORKSHOP'],
+            ['profile', '物品属性', 'PROFILE'],
             ['deploy', '部署', 'DEPLOY'],
           ] as [DetailTab, string, string][]).map(([key, label, sublabel]) => (
             <button
@@ -241,38 +349,53 @@ export default function CharacterDetail({
       </div>
 
       <div style={styles.content}>
+        {/* ─── WORKSHOP TAB ──────────────────────────────────────────────── */}
         {activeTab === 'workshop' && (
           <WorkshopTab
-            entityName={character.name}
-            variants={character.variants}
+            entityName={item.name}
+            variants={variants}
             config={WORKSHOP_CONFIG}
-            assemblePrompt={assemblePrompt}
+            assemblePrompt={assembleItemPrompt}
             onSaveDescription={async (variantIndex, description) => {
-              await api.updateCharacter(character.figure_id, { variant_index: variantIndex, description });
+              await api.updateItemVariant(item.name, variantIndex, description);
             }}
             onRegenerateVariants={async (bio) => {
-              return api.regenerateVariants(character.name, bio);
+              return api.regenerateItemVariants(item.name, bio);
             }}
             onGenerateImages={async (_variantIndex, description, count, onProgress) => {
-              await api.generate(
-                { asset_type: 'portrait', name: character.name, description, count },
+              await api.generateItemImages(
+                { asset_type: 'item', name: item.name, description, count },
                 onProgress,
               );
             }}
-            onLoadSamples={() => api.getSamples(character.name)}
-            onVariantsRegenerated={async () => {
-              await onUpdate();
+            onLoadSamples={() => api.getItemSamples(item.name)}
+            onVariantsRegenerated={(descriptions) => {
+              // Update local variants state with new descriptions
+              setVariants((prev) =>
+                prev.map((v, i) => ({
+                  ...v,
+                  description: descriptions[i] ?? v.description,
+                })),
+              );
+              onUpdate();
             }}
             galleryRenderer={({ samples, onRefresh }) => (
               <Gallery
                 images={samples}
-                characterName={character.name}
+                characterName={item.name}
                 onSelect={onRefresh}
+                onSelectImage={async (img) => {
+                  await api.selectItemImage(item.name, img.abs_path);
+                  onRefresh();
+                  onUpdate();
+                }}
+                selectLabel="物品图"
               />
             )}
           />
         )}
 
+        {/* ─── PROFILE TAB ─────────────────────────────────────────────── */}
         {activeTab === 'profile' && (
           <div style={styles.profileView}>
             {loadingProfile ? (
@@ -284,16 +407,13 @@ export default function CharacterDetail({
               <>
                 {/* Profile Actions Bar */}
                 <div style={styles.profileActionsBar}>
-                  <div style={styles.profileAttrTotal}>
-                    属性总和: <span style={{ color: rarityColor, fontWeight: 700 }}>{attrTotal}</span>
-                  </div>
                   <div style={styles.profileActionsRight}>
                     <button
                       style={styles.aiProfileBtn}
-                      onClick={handleAiProfileGenerate}
-                      disabled={isAiProfileGenerating}
+                      onClick={handleGenerateProfile}
+                      disabled={isGeneratingProfile}
                     >
-                      {isAiProfileGenerating ? (
+                      {isGeneratingProfile ? (
                         <><div className="spinner"></div><span>AI 生成中...</span></>
                       ) : (
                         <span>✦ AI 重新生成</span>
@@ -305,9 +425,9 @@ export default function CharacterDetail({
                         ...(profileSaved ? styles.saveProfileBtnSuccess : {}),
                       }}
                       onClick={handleSaveProfile}
-                      disabled={savingProfile}
+                      disabled={isSavingProfile}
                     >
-                      {savingProfile ? (
+                      {isSavingProfile ? (
                         <><div className="spinner"></div><span>保存中...</span></>
                       ) : profileSaved ? (
                         <span>✓ 已保存</span>
@@ -322,6 +442,27 @@ export default function CharacterDetail({
                   <div style={styles.profileError}>⚠ {profileError}</div>
                 )}
 
+                {/* Equipment Type */}
+                <section style={styles.profileSection}>
+                  <div style={styles.sectionHeader}>
+                    <div style={styles.sectionTitle}>装备类型 EQUIPMENT TYPE</div>
+                  </div>
+                  <div style={styles.equipTypeGrid}>
+                    {EQUIPMENT_TYPE_OPTIONS.map((opt) => (
+                      <button
+                        key={opt}
+                        style={{
+                          ...styles.equipTypeBtn,
+                          ...(profile.equipment_type === opt ? styles.equipTypeBtnActive : {}),
+                        }}
+                        onClick={() => setProfile((p) => ({ ...p, equipment_type: opt }))}
+                      >
+                        {EQUIPMENT_TYPE_LABELS[opt]}
+                      </button>
+                    ))}
+                  </div>
+                </section>
+
                 {/* Rarity */}
                 <section style={styles.profileSection}>
                   <div style={styles.sectionHeader}>
@@ -331,7 +472,7 @@ export default function CharacterDetail({
                     </div>
                   </div>
                   <div style={styles.rarityGrid}>
-                    {(['gold', 'silver', 'copper', 'stone'] as const).map((r) => (
+                    {(['divine', 'gold', 'silver', 'copper', 'stone'] as const).map((r) => (
                       <button
                         key={r}
                         style={{
@@ -346,93 +487,73 @@ export default function CharacterDetail({
                       </button>
                     ))}
                   </div>
-                  <div style={styles.rarityHint}>
-                    gold: 36-60 &nbsp;|&nbsp; silver: 21-35 &nbsp;|&nbsp; copper: 11-20 &nbsp;|&nbsp; stone: 5-10
-                  </div>
                 </section>
 
-                {/* 8 Attributes */}
+                {/* Attribute Bonus */}
                 <section style={styles.profileSection}>
                   <div style={styles.sectionHeader}>
-                    <div style={styles.sectionTitle}>属性 ATTRIBUTES</div>
-                    <div style={styles.sectionMeta}>总和 {attrTotal}</div>
+                    <div style={styles.sectionTitle}>属性加成 ATTRIBUTE BONUS</div>
                   </div>
                   <div style={styles.attrGrid}>
-                    {Object.entries(ATTR_LABELS).map(([key, label]) => {
-                      const val = profile.attributes[key as keyof typeof profile.attributes] ?? 5;
-                      return (
-                        <div key={key} style={styles.attrRow}>
-                          <div style={styles.attrLabel}>
-                            <span style={styles.attrLabelCn}>{label}</span>
-                            <span style={styles.attrLabelEn}>{key.toUpperCase()}</span>
-                          </div>
-                          <input
-                            type="range"
-                            min={1}
-                            max={10}
-                            value={val}
-                            onChange={(e) => handleAttrChange(key, Number(e.target.value))}
-                            style={styles.attrSlider}
-                          />
-                          <input
-                            type="number"
-                            min={1}
-                            max={10}
-                            value={val}
-                            onChange={(e) => handleAttrChange(key, Math.min(10, Math.max(1, Number(e.target.value))))}
-                            style={styles.attrInput}
-                          />
+                    {ATTRIBUTE_KEYS.map((key) => (
+                      <div key={key} style={styles.attrRow}>
+                        <div style={styles.attrLabel}>
+                          <span style={styles.attrLabelCn}>{ATTRIBUTE_LABELS[key]}</span>
+                          <span style={styles.attrLabelEn}>{key.toUpperCase()}</span>
                         </div>
-                      );
-                    })}
+                        <input
+                          type="number"
+                          value={attrBonusInput[key] ?? ''}
+                          onChange={(e) => handleAttrBonusChange(key, e.target.value)}
+                          placeholder="0"
+                          min={-5}
+                          max={15}
+                          style={styles.attrInput}
+                        />
+                      </div>
+                    ))}
                   </div>
                 </section>
 
-                {/* Special Attributes */}
+                {/* Special Bonus */}
                 <section style={styles.profileSection}>
                   <div style={styles.sectionHeader}>
-                    <div style={styles.sectionTitle}>特殊属性 SPECIAL</div>
+                    <div style={styles.sectionTitle}>特殊加成 SPECIAL BONUS</div>
                   </div>
                   <div style={styles.specialAttrGrid}>
+                    {(['support', 'reroll'] as const).map((key) => (
+                      <div key={key} style={styles.attrRow}>
+                        <div style={styles.attrLabel}>
+                          <span style={styles.attrLabelCn}>{key === 'support' ? '支援' : '重骰'}</span>
+                          <span style={styles.attrLabelEn}>{key.toUpperCase()}</span>
+                        </div>
+                        <input
+                          type="number"
+                          value={specialBonusInput[key] ?? ''}
+                          onChange={(e) => handleSpecialBonusChange(key, e.target.value)}
+                          placeholder="0"
+                          min={-5}
+                          max={10}
+                          style={styles.attrInput}
+                        />
+                      </div>
+                    ))}
                     <div style={styles.attrRow}>
                       <div style={styles.attrLabel}>
-                        <span style={styles.attrLabelCn}>支援</span>
-                        <span style={styles.attrLabelEn}>SUPPORT</span>
+                        <span style={styles.attrLabelCn}>宝石槽</span>
+                        <span style={styles.attrLabelEn}>GEM SLOTS</span>
                       </div>
                       <input
                         type="number"
-                        min={-3}
-                        max={5}
-                        value={profile.special_attributes.support}
-                        onChange={(e) => handleSpecialAttrChange('support', Number(e.target.value))}
-                        style={styles.attrInput}
-                      />
-                    </div>
-                    <div style={styles.attrRow}>
-                      <div style={styles.attrLabel}>
-                        <span style={styles.attrLabelCn}>重骰</span>
-                        <span style={styles.attrLabelEn}>REROLL</span>
-                      </div>
-                      <input
-                        type="number"
+                        value={profile.gem_slots ?? 0}
+                        onChange={(e) =>
+                          setProfile((p) => ({
+                            ...p,
+                            gem_slots: Math.min(5, Math.max(0, Number(e.target.value))),
+                          }))
+                        }
                         min={0}
                         max={5}
-                        value={profile.special_attributes.reroll}
-                        onChange={(e) => handleSpecialAttrChange('reroll', Number(e.target.value))}
-                        style={styles.attrInput}
-                      />
-                    </div>
-                    <div style={styles.attrRow}>
-                      <div style={styles.attrLabel}>
-                        <span style={styles.attrLabelCn}>装备槽</span>
-                        <span style={styles.attrLabelEn}>EQ SLOTS</span>
-                      </div>
-                      <input
-                        type="number"
-                        min={1}
-                        max={4}
-                        value={profile.equipment_slots}
-                        onChange={(e) => setProfile((p) => ({ ...p, equipment_slots: Math.min(4, Math.max(1, Number(e.target.value))) }))}
                         style={styles.attrInput}
                       />
                     </div>
@@ -458,26 +579,40 @@ export default function CharacterDetail({
                       value={tagInput}
                       onChange={(e) => setTagInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleTagAdd()}
-                      placeholder="输入标签后回车添加 (如: male, warrior...)"
+                      placeholder="输入标签后回车添加 (如: weapon, legendary, ancient...)"
                     />
                     <button style={styles.tagAddBtn} onClick={handleTagAdd}>添加</button>
                   </div>
                   <div style={styles.tagHint}>
-                    常用: male female warrior swordsman merchant scholar rogue wanderer exile clan protagonist antagonist mentor ally
+                    常用: weapon armor accessory mount legendary rare ancient cursed blessed fire ice
                   </div>
                 </section>
 
-                {/* Bio / Description */}
+                {/* Description */}
                 <section style={styles.profileSection}>
                   <div style={styles.sectionHeader}>
-                    <div style={styles.sectionTitle}>人物小传 BIOGRAPHY</div>
-                    <div style={styles.sectionMeta}>游戏内展示文字 50-100字</div>
+                    <div style={styles.sectionTitle}>物品描述 DESCRIPTION</div>
+                    <div style={styles.sectionMeta}>游戏内展示文字</div>
+                  </div>
+                  <textarea
+                    style={{ ...styles.textarea, minHeight: '80px' }}
+                    value={profile.description}
+                    onChange={(e) => setProfile((p) => ({ ...p, description: e.target.value }))}
+                    placeholder="游戏内展示的物品描述..."
+                  />
+                </section>
+
+                {/* Lore */}
+                <section style={styles.profileSection}>
+                  <div style={styles.sectionHeader}>
+                    <div style={styles.sectionTitle}>背景故事 LORE</div>
+                    <div style={styles.sectionMeta}>物品传说</div>
                   </div>
                   <textarea
                     style={{ ...styles.textarea, minHeight: '100px' }}
-                    value={profile.description}
-                    onChange={(e) => setProfile((p) => ({ ...p, description: e.target.value }))}
-                    placeholder="角色的游戏内背景故事简介..."
+                    value={profile.lore}
+                    onChange={(e) => setProfile((p) => ({ ...p, lore: e.target.value }))}
+                    placeholder="物品的历史背景和传说..."
                   />
                 </section>
               </>
@@ -485,6 +620,7 @@ export default function CharacterDetail({
           </div>
         )}
 
+        {/* ─── DEPLOY TAB ──────────────────────────────────────────────── */}
         {activeTab === 'deploy' && (
           <div style={styles.deployView}>
             {loadingDeployPreview ? (
@@ -494,7 +630,6 @@ export default function CharacterDetail({
               </div>
             ) : (
               <>
-                {/* Status Banner */}
                 {deployPreview && (
                   <section style={styles.deployStatusSection}>
                     <div style={styles.sectionHeader}>
@@ -511,7 +646,7 @@ export default function CharacterDetail({
                         </div>
                       </div>
                       <div style={styles.deployStatusItem}>
-                        <div style={styles.deployStatusLabel}>角色属性</div>
+                        <div style={styles.deployStatusLabel}>物品属性</div>
                         <div style={{
                           ...styles.deployStatusValue,
                           color: deployPreview.has_profile ? 'var(--success)' : 'var(--error)',
@@ -520,46 +655,36 @@ export default function CharacterDetail({
                         </div>
                       </div>
                       <div style={styles.deployStatusItem}>
-                        <div style={styles.deployStatusLabel}>立绘素材</div>
+                        <div style={styles.deployStatusLabel}>图片素材</div>
                         <div style={{
                           ...styles.deployStatusValue,
-                          color: deployPreview.has_portrait ? 'var(--success)' : 'var(--text-tertiary)',
+                          color: deployPreview.has_image ? 'var(--success)' : 'var(--text-tertiary)',
                         }}>
-                          {deployPreview.has_portrait ? '✓ 有素材' : '○ 无素材'}
-                        </div>
-                      </div>
-                      <div style={styles.deployStatusItem}>
-                        <div style={styles.deployStatusLabel}>立绘文件</div>
-                        <div style={styles.deployStatusValue}>
-                          {deployPreview.game_file || '(自动分配)'}
+                          {deployPreview.has_image ? '✓ 有素材' : '○ 无素材'}
                         </div>
                       </div>
                     </div>
 
-                    {/* Portrait change info */}
-                    <div style={styles.portraitChangeRow}>
-                      {deployPreview.portrait_change?.has_change ? (
-                        <div style={styles.portraitChangeAlert}>
-                          <span style={styles.portraitChangeIcon}>⇄</span>
+                    <div style={styles.imageChangeRow}>
+                      {deployPreview.image_change?.has_change ? (
+                        <div style={styles.imageChangeAlert}>
+                          <span style={styles.imageChangeIcon}>⇄</span>
                           <span>
-                            立绘将从{' '}
-                            <strong>{deployPreview.portrait_change.current_game_file || '(当前)'}</strong>
-                            {' '}更换为{' '}
+                            待部署图片：{' '}
                             <strong style={{ color: '#4a9eff' }}>
-                              {deployPreview.portrait_change.selected_portrait_filename}
+                              {deployPreview.image_change.selected_image_filename}
                             </strong>
                           </span>
                         </div>
                       ) : (
-                        <div style={styles.portraitChangeNeutral}>
-                          <span>○ 立绘保持不变（无选定的新立绘）</span>
+                        <div style={styles.imageChangeNeutral}>
+                          <span>○ 图片保持不变（无选定的新图片）</span>
                         </div>
                       )}
                     </div>
                   </section>
                 )}
 
-                {/* Preview JSON */}
                 {deployPreview?.preview_card && (
                   <section style={styles.section}>
                     <div style={styles.sectionHeader}>
@@ -573,13 +698,12 @@ export default function CharacterDetail({
                   </section>
                 )}
 
-                {!deployPreview?.has_profile && (
+                {deployPreview && !deployPreview.has_profile && (
                   <div style={styles.deployWarning}>
-                    ⚠ 角色尚未配置属性，请先前往「角色属性」tab 配置或 AI 生成属性。
+                    ⚠ 物品尚未配置属性，请先前往「物品属性」tab 配置或 AI 生成属性。
                   </div>
                 )}
 
-                {/* Deploy Result */}
                 {deployResult && (
                   <div style={{
                     ...styles.deployResult,
@@ -590,7 +714,6 @@ export default function CharacterDetail({
                   </div>
                 )}
 
-                {/* Deploy Button */}
                 <section style={styles.section}>
                   <div style={styles.deployBtnRow}>
                     <button
@@ -605,7 +728,7 @@ export default function CharacterDetail({
                         <><div className="spinner"></div><span>部署中...</span></>
                       ) : (
                         <>
-                          <span>一键部署到游戏</span>
+                          <span>{deployPreview?.is_deployed ? '更新部署' : '一键部署到游戏'}</span>
                           <span style={styles.buttonLabel}>DEPLOY TO GAME</span>
                         </>
                       )}
@@ -748,16 +871,12 @@ const styles: Record<string, React.CSSProperties> = {
     letterSpacing: '0.1em',
     color: 'var(--text-tertiary)',
   },
-  // ── Profile tab styles ──
+  // ── Profile tab ──
   profileActionsBar: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     padding: '12px 0',
-  },
-  profileAttrTotal: {
-    fontSize: '13px',
-    color: 'var(--text-secondary)',
   },
   profileActionsRight: {
     display: 'flex',
@@ -800,6 +919,26 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--error)',
     fontSize: '13px',
   },
+  equipTypeGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: '10px',
+  },
+  equipTypeBtn: {
+    padding: '10px 12px',
+    background: 'var(--bg-tertiary)',
+    border: '1px solid var(--border-primary)',
+    color: 'var(--text-tertiary)',
+    fontSize: '13px',
+    fontWeight: '500',
+    cursor: 'pointer',
+    transition: 'all 0.15s ease',
+  },
+  equipTypeBtnActive: {
+    background: 'var(--bg-elevated)',
+    borderColor: 'var(--border-accent)',
+    color: 'var(--text-accent)',
+  },
   rarityBadge: {
     fontSize: '11px',
     fontWeight: '700',
@@ -809,9 +948,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   rarityGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
+    gridTemplateColumns: 'repeat(5, 1fr)',
     gap: '10px',
-    marginBottom: '10px',
   },
   rarityBtn: {
     padding: '10px 12px',
@@ -823,12 +961,12 @@ const styles: Record<string, React.CSSProperties> = {
     transition: 'all 0.15s ease',
     letterSpacing: '0.03em',
   },
-  rarityHint: {
-    fontSize: '10px',
-    color: 'var(--text-tertiary)',
-    letterSpacing: '0.03em',
-  },
   attrGrid: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+  },
+  specialAttrGrid: {
     display: 'flex',
     flexDirection: 'column',
     gap: '12px',
@@ -855,12 +993,8 @@ const styles: Record<string, React.CSSProperties> = {
     letterSpacing: '0.08em',
     color: 'var(--text-tertiary)',
   },
-  attrSlider: {
-    flex: '1',
-    accentColor: 'var(--accent-cyan)',
-  },
   attrInput: {
-    width: '56px',
+    width: '72px',
     padding: '6px 8px',
     background: 'var(--bg-tertiary)',
     border: '1px solid var(--border-primary)',
@@ -869,11 +1003,6 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: '700',
     textAlign: 'center' as const,
     fontFamily: 'var(--font-mono)',
-  },
-  specialAttrGrid: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
   },
   tagList: {
     display: 'flex',
@@ -932,17 +1061,16 @@ const styles: Record<string, React.CSSProperties> = {
   },
   textarea: {
     width: '100%',
-    minHeight: '120px',
     marginBottom: '0',
     fontFamily: 'var(--font-mono)',
     fontSize: '13px',
     lineHeight: '1.6',
     boxSizing: 'border-box',
   },
-  // ── Deploy tab styles ──
+  // ── Deploy tab ──
   deployStatusGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
+    gridTemplateColumns: 'repeat(3, 1fr)',
     gap: '16px',
   },
   deployStatusItem: {
@@ -961,6 +1089,37 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: '600',
     color: 'var(--text-secondary)',
     fontFamily: 'var(--font-mono)',
+  },
+  imageChangeRow: {
+    marginTop: '16px',
+    paddingTop: '16px',
+    borderTop: '1px solid var(--border-subtle)',
+  },
+  imageChangeAlert: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    padding: '10px 14px',
+    background: 'rgba(74, 158, 255, 0.08)',
+    border: '1px solid rgba(74, 158, 255, 0.35)',
+    color: 'var(--text-secondary)',
+    fontSize: '13px',
+    lineHeight: '1.5',
+  },
+  imageChangeIcon: {
+    fontSize: '18px',
+    color: '#4a9eff',
+    flexShrink: 0,
+  },
+  imageChangeNeutral: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '10px 14px',
+    background: 'var(--bg-tertiary)',
+    border: '1px solid var(--border-subtle)',
+    color: 'var(--text-tertiary)',
+    fontSize: '12px',
   },
   deployWarning: {
     padding: '14px 18px',
@@ -1006,36 +1165,10 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '13px',
     cursor: 'pointer',
   },
-  portraitChangeRow: {
-    marginTop: '16px',
-    paddingTop: '16px',
-    borderTop: '1px solid var(--border-subtle)',
-  },
-  portraitChangeAlert: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    padding: '10px 14px',
-    background: 'rgba(74, 158, 255, 0.08)',
-    border: '1px solid rgba(74, 158, 255, 0.35)',
-    color: 'var(--text-secondary)',
-    fontSize: '13px',
-    lineHeight: '1.5',
-  },
-  portraitChangeIcon: {
-    fontSize: '18px',
-    color: '#4a9eff',
-    flexShrink: 0,
-  },
-  portraitChangeNeutral: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    padding: '10px 14px',
-    background: 'var(--bg-tertiary)',
-    border: '1px solid var(--border-subtle)',
-    color: 'var(--text-tertiary)',
-    fontSize: '12px',
+  buttonLabel: {
+    fontSize: '9px',
+    opacity: 0.6,
+    letterSpacing: '0.05em',
   },
   promptPreview: {
     background: 'var(--bg-primary)',
@@ -1052,10 +1185,5 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-secondary)',
     whiteSpace: 'pre-wrap',
     wordBreak: 'break-word',
-  },
-  buttonLabel: {
-    fontSize: '9px',
-    opacity: 0.6,
-    letterSpacing: '0.05em',
   },
 };

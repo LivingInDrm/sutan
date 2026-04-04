@@ -1,0 +1,85 @@
+{
+  "木马牛": {
+    "card_type": "equipment",
+    "equipment_type": "weapon",
+    "rarity": "divine",
+    "description": "上古名剑木马牛，剑身黝黑粗粝，夜中隐有微光流转，出鞘则锋意惊人。",
+    "lore": "木马牛乃上古遗留神兵，形制古拙，不饰华彩，唯有黝黑剑筒与粗粝剑体示人。平日沉寂如朽木，入夜却有幽光浮动。此剑一旦认主，锋芒内敛而杀机深藏，向来被视作可镇气运、亦可决生死的绝品宝剑。",
+    "attribute_bonus": {
+      "combat": 12,
+      "physique": 2,
+      "wisdom": 2
+    },
+    "special_bonus": {
+      "support": 2,
+      "reroll": 1
+    },
+    "gem_slots": 3,
+    "tags": [
+      "weapon",
+      "legendary",
+      "ancient",
+      "magical",
+      "rare"
+    ],
+    "selected_image": "/Users/xiaochunliu/program/sutan/scripts/samples/item_木马牛/木马牛_1775306152_1.png"
+  },
+  "梅子酒": {
+    "card_type": "equipment",
+    "equipment_type": "weapon",
+    "rarity": "divine",
+    "description": "枪势如梅落寒江，锋芒内敛却杀机极盛，最宜马上破阵与近身鏖战。",
+    "lore": "梅子酒是徐凤年常用名枪，枪名风雅，实则杀伐凌厉。随其历经江湖与庙堂风波，见惯生死离合，枪锋所至，既有北凉铁骑的悍勇，也藏几分饮酒赏梅的疏狂意气。",
+    "attribute_bonus": {
+      "combat": 11,
+      "physique": 6
+    },
+    "special_bonus": {},
+    "gem_slots": 2,
+    "tags": [
+      "weapon",
+      "legendary",
+      "rare"
+    ],
+    "selected_image": "/Users/xiaochunliu/program/sutan/scripts/samples/item_梅子酒/梅子酒_1775306439_1.png"
+  },
+  "寒玉戒指": {
+    "card_type": "equipment",
+    "equipment_type": "accessory",
+    "rarity": "silver",
+    "description": "寒玉所琢，入手沁凉，能宁神定意，亦可微御邪祟与心火。",
+    "lore": "北莽寒地曾出异玉，埋于冻土百年不裂。匠人取其芯髓磨成戒指，佩之可清心敛气，最宜修习旁门术法之人随身携带，于乱局中守住一线灵台清明。",
+    "attribute_bonus": {
+      "wisdom": 6,
+      "magic": 5,
+      "charm": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "accessory",
+      "magical",
+      "rare"
+    ]
+  },
+  "大凉龙雀": {
+    "card_type": "equipment",
+    "equipment_type": "weapon",
+    "rarity": "divine",
+    "description": "北凉王府传世宝剑，锋芒沉雄如龙雀长鸣，出鞘自有压阵之威。",
+    "lore": "大凉龙雀为北凉王府所藏名剑，剑势不走轻灵诡道，而以堂皇雄浑见长。传闻其随北凉铁骑见惯边关风雪与沙场血火，持之者既可斩敌破阵，亦自带王府器物的威仪气度。",
+    "attribute_bonus": {
+      "combat": 10,
+      "charm": 3,
+      "wisdom": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 2,
+    "tags": [
+      "weapon",
+      "rare",
+      "legendary"
+    ],
+    "selected_image": "/Users/xiaochunliu/program/sutan/scripts/samples/item_大凉龙雀/大凉龙雀_1775305027_1.png"
+  }
+}

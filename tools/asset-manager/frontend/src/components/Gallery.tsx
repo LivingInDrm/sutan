@@ -6,12 +6,18 @@ interface GalleryProps {
   images: SampleImage[];
   characterName: string;
   onSelect: () => void;
+  /** Override the default portrait-select API with a custom handler */
+  onSelectImage?: (image: SampleImage) => Promise<void>;
+  /** Label for the select button in the modal (default: "立绘") */
+  selectLabel?: string;
 }
 
 export default function Gallery({
   images,
   characterName,
   onSelect,
+  onSelectImage,
+  selectLabel,
 }: GalleryProps) {
   const [selectedImage, setSelectedImage] = useState<SampleImage | null>(null);
 
@@ -98,6 +104,8 @@ export default function Gallery({
             setSelectedImage(null);
             onSelect();
           }}
+          onSelectImage={onSelectImage}
+          selectLabel={selectLabel}
         />
       )}
     </>

@@ -1,4 +1,4 @@
-import type { Character, Templates, SampleImage, GenerateRequest, GenerationProgress, GenerateDescriptionRequest, CreateCharacterRequest, CharacterProfile, DeployPreview } from './types';
+import type { Character, Templates, SampleImage, GenerateRequest, GenerationProgress, GenerateDescriptionRequest, CreateCharacterRequest, CharacterProfile, DeployPreview, Item, ItemProfile, ItemDeployPreview, CreateItemRequest } from './types';
 
 export const api = {
   async getCharacters(): Promise<Character[]> {
@@ -158,6 +158,167 @@ export const api = {
 
     if (!response.ok) {
       throw new Error('Failed to start generation');
+    }
+
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const data = JSON.parse(line.slice(6));
+            onProgress(data);
+          } catch (e) {
+            console.error('Failed to parse SSE data:', e);
+          }
+        }
+      }
+    }
+  },
+
+  // ─────────────────────────────────────────────
+  // Item API
+  // ─────────────────────────────────────────────
+  async getItems(): Promise<Item[]> {
+    const response = await fetch('/api/items');
+    if (!response.ok) throw new Error('Failed to fetch items');
+    return response.json();
+  },
+
+  async createItem(request: CreateItemRequest): Promise<Item> {
+    const response = await fetch('/api/items', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to create item');
+    }
+    const data = await response.json();
+    return data.item as Item;
+  },
+
+  async getItemVariants(itemName: string): Promise<{ index: number; description: string; output: string }[]> {
+    const response = await fetch(`/api/items/${encodeURIComponent(itemName)}/variants`);
+    if (!response.ok) throw new Error('Failed to fetch item variants');
+    return response.json();
+  },
+
+  async updateItemVariant(itemName: string, variantIndex: number, description: string): Promise<void> {
+    const response = await fetch(`/api/items/${encodeURIComponent(itemName)}/variants/${variantIndex}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ variant_index: variantIndex, description }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to update item variant');
+    }
+  },
+
+  async regenerateItemVariants(itemName: string, bio: string): Promise<string[]> {
+    const response = await fetch(`/api/items/${encodeURIComponent(itemName)}/regenerate-variants`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bio }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to regenerate item variants');
+    }
+    const data = await response.json();
+    return data.descriptions as string[];
+  },
+
+  async getItemProfile(itemName: string): Promise<ItemProfile> {
+    const response = await fetch(`/api/items/${encodeURIComponent(itemName)}/profile`);
+    if (!response.ok) throw new Error('Failed to fetch item profile');
+    return response.json();
+  },
+
+  async updateItemProfile(itemName: string, profile: Partial<ItemProfile>): Promise<ItemProfile> {
+    const response = await fetch(`/api/items/${encodeURIComponent(itemName)}/profile`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profile),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to update item profile');
+    }
+    const data = await response.json();
+    return data.profile as ItemProfile;
+  },
+
+  async generateItemProfile(itemName: string): Promise<ItemProfile> {
+    const response = await fetch(`/api/items/${encodeURIComponent(itemName)}/generate-profile`, {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to generate item profile');
+    }
+    const data = await response.json();
+    return data.profile as ItemProfile;
+  },
+
+  async getItemSamples(itemName: string): Promise<SampleImage[]> {
+    const response = await fetch(`/api/item-samples/${encodeURIComponent(itemName)}`);
+    if (!response.ok) throw new Error('Failed to fetch item samples');
+    return response.json();
+  },
+
+  async selectItemImage(itemName: string, imagePath: string): Promise<void> {
+    const response = await fetch(`/api/items/${encodeURIComponent(itemName)}/select-image`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image_path: imagePath }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to select item image');
+    }
+  },
+
+  async getItemDeployPreview(itemName: string): Promise<ItemDeployPreview> {
+    const response = await fetch(`/api/items/${encodeURIComponent(itemName)}/deploy-preview`);
+    if (!response.ok) throw new Error('Failed to fetch item deploy preview');
+    return response.json();
+  },
+
+  async deployItem(itemName: string): Promise<any> {
+    const response = await fetch(`/api/items/${encodeURIComponent(itemName)}/deploy`, {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to deploy item');
+    }
+    return response.json();
+  },
+
+  async generateItemImages(
+    request: GenerateRequest,
+    onProgress: (progress: GenerationProgress) => void
+  ): Promise<void> {
+    const response = await fetch('/api/item-generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to start item image generation');
     }
 
     const reader = response.body!.getReader();

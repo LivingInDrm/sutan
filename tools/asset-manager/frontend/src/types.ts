@@ -94,3 +94,54 @@ export interface DeployPreview {
   preview_card: Record<string, unknown> | null;
   portrait_change: PortraitChange | null;
 }
+
+// ─────────────────────────────────────────────
+// Item types
+// ─────────────────────────────────────────────
+
+export interface ItemVariant {
+  index: number;
+  description: string;
+  output: string;
+}
+
+export interface Item {
+  name: string;
+  id: string;
+  equipment_type: string;
+  rarity: string;
+  current_image: string;
+  has_pending_image: boolean;
+  variants: ItemVariant[];
+}
+
+export interface ItemProfile {
+  card_type: string;
+  equipment_type: string;
+  rarity: 'gold' | 'silver' | 'copper' | 'stone' | 'divine';
+  description: string;
+  lore: string;
+  attribute_bonus: Record<string, number>;
+  special_bonus: Record<string, number>;
+  gem_slots: number;
+  tags: string[];
+  selected_image?: string;
+}
+
+export interface ItemDeployPreview {
+  item_name: string;
+  is_deployed: boolean;
+  has_profile: boolean;
+  has_image: boolean;
+  preview_card: Record<string, unknown> | null;
+  image_change: {
+    has_change: boolean;
+    selected_image_filename: string | null;
+  };
+}
+
+export interface CreateItemRequest {
+  name: string;
+  bio: string;
+  equipment_type: string;
+}

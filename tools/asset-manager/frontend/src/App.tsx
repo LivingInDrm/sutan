@@ -1,17 +1,21 @@
 import { useState, useEffect } from 'react';
 import { api } from './api';
-import type { Character, Templates } from './types';
+import type { Character, Templates, Item } from './types';
 import CharacterList from './components/CharacterList';
 import CharacterDetail from './components/CharacterDetail';
+import ItemList from './components/ItemList';
+import ItemDetail from './components/ItemDetail';
 import TemplateSettings from './components/TemplateSettings';
 
-type Tab = 'characters' | 'templates' | 'history';
+type Tab = 'characters' | 'items' | 'templates' | 'history';
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('characters');
   const [characters, setCharacters] = useState<Character[]>([]);
   const [templates, setTemplates] = useState<Templates | null>(null);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [items, setItems] = useState<Item[]>([]);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,12 +27,14 @@ function App() {
     try {
       setLoading(true);
       setError(null);
-      const [chars, temps] = await Promise.all([
+      const [chars, temps, itemList] = await Promise.all([
         api.getCharacters(),
         api.getTemplates(),
+        api.getItems(),
       ]);
       setCharacters(chars);
       setTemplates(temps);
+      setItems(itemList);
       if (chars.length > 0 && !selectedCharacter) {
         setSelectedCharacter(chars[0]);
       }
@@ -44,10 +50,8 @@ function App() {
   };
 
   const handleCharacterCreated = async (newCharacter: import('./types').Character) => {
-    // Reload full list from server to ensure consistency
     const chars = await api.getCharacters();
     setCharacters(chars);
-    // Select the newly created character
     const found = chars.find((c) => c.figure_id === newCharacter.figure_id) || newCharacter;
     setSelectedCharacter(found);
   };
@@ -55,6 +59,16 @@ function App() {
   const handleTemplateUpdate = async () => {
     const temps = await api.getTemplates();
     setTemplates(temps);
+  };
+
+  const handleItemChange = async () => {
+    const itemList = await api.getItems();
+    setItems(itemList);
+    // Refresh selected item
+    if (selectedItem) {
+      const updated = itemList.find((i) => i.id === selectedItem.id);
+      if (updated) setSelectedItem(updated);
+    }
   };
 
   return (
@@ -65,8 +79,8 @@ function App() {
           <div style={styles.logo}>
             <div style={styles.logoIcon}></div>
             <div>
-              <div style={styles.logoTitle}>角色管理器</div>
-              <div style={styles.logoSubtitle}>CHARACTER MANAGEMENT SYSTEM</div>
+              <div style={styles.logoTitle}>资产管理器</div>
+              <div style={styles.logoSubtitle}>ASSET MANAGEMENT SYSTEM</div>
             </div>
           </div>
         </div>
@@ -79,8 +93,18 @@ function App() {
             }}
             onClick={() => setActiveTab('characters')}
           >
-            <span style={styles.navLabel}>角色立绘</span>
+            <span style={styles.navLabel}>角色管理</span>
             <span style={styles.navSublabel}>CHARACTERS</span>
+          </button>
+          <button
+            style={{
+              ...styles.navButton,
+              ...(activeTab === 'items' ? styles.navButtonActive : {}),
+            }}
+            onClick={() => setActiveTab('items')}
+          >
+            <span style={styles.navLabel}>物品管理</span>
+            <span style={styles.navSublabel}>EQUIPMENT</span>
           </button>
           <button
             style={{
@@ -154,6 +178,37 @@ function App() {
                     <div style={styles.emptyState}>
                       <div style={styles.emptyIcon}>◼</div>
                       <div style={styles.emptyText}>SELECT A CHARACTER</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'items' && (
+              <div style={styles.charactersLayout}>
+                <aside style={styles.sidebar}>
+                  <div style={styles.sidebarHeader}>
+                    <div style={styles.sidebarTitle}>EQUIPMENT DATABASE</div>
+                    <div style={styles.sidebarCount}>{items.length} ENTRIES</div>
+                  </div>
+                  <ItemList
+                    items={items}
+                    selectedItem={selectedItem}
+                    onSelectItem={setSelectedItem}
+                    onItemCreated={handleItemChange}
+                  />
+                </aside>
+                <div style={styles.content}>
+                  {selectedItem ? (
+                    <ItemDetail
+                      item={selectedItem}
+                      onUpdate={handleItemChange}
+                    />
+                  ) : (
+                    <div style={styles.emptyState}>
+                      <div style={styles.emptyIcon}>◈</div>
+                      <div style={styles.emptyText}>SELECT AN ITEM</div>
+                      <div style={styles.emptySubtext}>或点击「新增物品」创建</div>
                     </div>
                   )}
                 </div>
@@ -249,6 +304,7 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '2px',
     position: 'relative',
     overflow: 'hidden',
+    cursor: 'pointer',
   },
   navButtonActive: {
     background: 'var(--bg-elevated)',
@@ -376,6 +432,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: 'var(--bg-elevated)',
     border: '1px solid var(--border-accent)',
     color: 'var(--text-accent)',
+    cursor: 'pointer',
   },
   emptyState: {
     display: 'flex',

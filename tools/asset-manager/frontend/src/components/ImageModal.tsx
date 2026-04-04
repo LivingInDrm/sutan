@@ -8,6 +8,10 @@ interface ImageModalProps {
   hasSelected: boolean;
   onClose: () => void;
   onSelect: () => void;
+  /** Override the default portrait-select API call with a custom handler */
+  onSelectImage?: (image: SampleImage) => Promise<void>;
+  /** Label for the select button (default: "设为立绘") */
+  selectLabel?: string;
 }
 
 export default function ImageModal({
@@ -16,8 +20,11 @@ export default function ImageModal({
   hasSelected,
   onClose,
   onSelect,
+  onSelectImage,
+  selectLabel,
 }: ImageModalProps) {
   const [selecting, setSelecting] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -33,15 +40,20 @@ export default function ImageModal({
   const handleSetPortrait = async () => {
     if (image.is_selected || image.is_current_in_game) return;
 
-    const confirmed = window.confirm(`设为立绘？\n\n将选定「${image.filename}」作为部署时使用的立绘。`);
+    const label = selectLabel || '立绘';
+    const confirmed = window.confirm(`设为${label}？\n\n将选定「${image.filename}」作为部署时使用的${label}。`);
     if (!confirmed) return;
 
     try {
       setSelecting(true);
-      await api.selectPortrait(characterName, image.abs_path);
+      if (onSelectImage) {
+        await onSelectImage(image);
+      } else {
+        await api.selectPortrait(characterName, image.abs_path);
+      }
       onSelect();
     } catch (err) {
-      console.error('Failed to select portrait:', err);
+      console.error('Failed to select image:', err);
       alert('选定失败：' + (err instanceof Error ? err.message : '未知错误'));
     } finally {
       setSelecting(false);
@@ -66,29 +78,28 @@ export default function ImageModal({
 
   // Button state
   const isDisabled = selecting || image.is_selected;
+  const defaultLabel = selectLabel || '立绘';
   const buttonLabel = image.is_selected
     ? '已选定'
     : image.is_current_in_game && !hasSelected
-    ? '当前立绘'
+    ? `当前${defaultLabel}`
     : selecting
     ? '选定中...'
-    : '设为立绘';
+    : `设为${defaultLabel}`;
 
   const isCurrentGameOnly = image.is_current_in_game && !image.is_selected;
 
+  const overlayOpacity = hovered ? 1 : 0.3;
+
   return (
     <div style={styles.backdrop} onClick={onClose}>
-      <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <div style={styles.header}>
-          <div style={styles.headerInfo}>
-            <div style={styles.filename}>{image.filename}</div>
-            <div style={styles.path}>{image.path}</div>
-          </div>
-          <button style={styles.closeButton} onClick={onClose}>
-            ✕
-          </button>
-        </div>
-
+      <div
+        style={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {/* Image fills entire modal */}
         <div style={styles.imageContainer}>
           <img src={image.url} alt={image.filename} style={styles.image} />
           {gameBadge && (
@@ -100,7 +111,19 @@ export default function ImageModal({
           )}
         </div>
 
-        <div style={styles.actions}>
+        {/* Top overlay: filename + close button */}
+        <div style={{ ...styles.headerOverlay, opacity: overlayOpacity }}>
+          <div style={styles.headerInfo}>
+            <div style={styles.filename}>{image.filename}</div>
+            <div style={styles.path}>{image.path}</div>
+          </div>
+          <button style={styles.closeButton} onClick={onClose}>
+            ✕
+          </button>
+        </div>
+
+        {/* Bottom overlay: action button */}
+        <div style={{ ...styles.actionsOverlay, opacity: overlayOpacity }}>
           <button
             style={{
               ...styles.selectButton,
@@ -122,7 +145,7 @@ export default function ImageModal({
                     ? 'SELECTED'
                     : isCurrentGameOnly
                     ? 'CURRENT'
-                    : 'SET AS PORTRAIT'}
+                    : 'SET AS IMAGE'}
                 </span>
               </>
             )}
@@ -148,71 +171,30 @@ const styles: Record<string, React.CSSProperties> = {
   modal: {
     width: '100%',
     maxWidth: '900px',
-    maxHeight: '100%',
-    background: 'var(--bg-secondary)',
+    height: 'calc(100vh - 80px)',
+    background: 'var(--bg-primary)',
     border: '1px solid var(--border-accent)',
     boxShadow: '0 0 40px var(--accent-cyan-glow)',
-    display: 'flex',
-    flexDirection: 'column',
     position: 'relative',
-  },
-  header: {
-    padding: '20px 24px',
-    borderBottom: '1px solid var(--border-primary)',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    background: 'var(--bg-tertiary)',
-  },
-  headerInfo: {
-    flex: '1',
-  },
-  filename: {
-    fontSize: '14px',
-    fontWeight: '600',
-    color: 'var(--text-primary)',
-    marginBottom: '4px',
-    fontFamily: 'var(--font-mono)',
-  },
-  path: {
-    fontSize: '11px',
-    fontWeight: '400',
-    color: 'var(--text-tertiary)',
-    fontFamily: 'var(--font-mono)',
-  },
-  closeButton: {
-    width: '32px',
-    height: '32px',
-    background: 'transparent',
-    border: '1px solid var(--border-primary)',
-    color: 'var(--text-secondary)',
-    fontSize: '16px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'all 0.15s ease',
+    overflow: 'hidden',
   },
   imageContainer: {
-    flex: '1',
+    position: 'absolute',
+    inset: '0',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '40px',
     background: 'var(--bg-primary)',
-    position: 'relative',
-    overflow: 'auto',
   },
   image: {
     maxWidth: '100%',
     maxHeight: '100%',
     objectFit: 'contain',
-    border: '1px solid var(--border-primary)',
-    boxShadow: 'var(--shadow-lg)',
   },
   gameBadgeOverlay: {
     position: 'absolute',
-    top: '40px',
-    right: '40px',
+    top: '60px',
+    right: '16px',
   },
   gameBadge: {
     display: 'flex',
@@ -227,30 +209,87 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: '700',
     letterSpacing: '0.1em',
   },
-  actions: {
-    padding: '20px 24px',
-    borderTop: '1px solid var(--border-primary)',
-    background: 'var(--bg-tertiary)',
+  headerOverlay: {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    right: '0',
+    padding: '10px 16px',
+    background: 'rgba(0, 0, 0, 0.65)',
+    backdropFilter: 'blur(6px)',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    zIndex: 10,
+    transition: 'opacity 0.25s ease',
+  },
+  headerInfo: {
+    flex: '1',
+    minWidth: 0,
+  },
+  filename: {
+    fontSize: '12px',
+    fontWeight: '600',
+    color: 'rgba(255,255,255,0.9)',
+    fontFamily: 'var(--font-mono)',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  path: {
+    fontSize: '10px',
+    fontWeight: '400',
+    color: 'rgba(255,255,255,0.5)',
+    fontFamily: 'var(--font-mono)',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  closeButton: {
+    width: '28px',
+    height: '28px',
+    background: 'transparent',
+    border: '1px solid rgba(255,255,255,0.3)',
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: '14px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    flexShrink: 0,
+    marginLeft: '12px',
+    transition: 'all 0.15s ease',
+  },
+  actionsOverlay: {
+    position: 'absolute',
+    bottom: '0',
+    left: '0',
+    right: '0',
+    padding: '10px 16px',
+    background: 'rgba(0, 0, 0, 0.65)',
+    backdropFilter: 'blur(6px)',
     display: 'flex',
     justifyContent: 'flex-end',
+    alignItems: 'center',
+    zIndex: 10,
+    transition: 'opacity 0.25s ease',
   },
   selectButton: {
-    padding: '12px 32px',
+    padding: '8px 24px',
     background: 'var(--accent-cyan)',
     border: '1px solid var(--accent-cyan)',
     color: 'var(--bg-primary)',
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
+    gap: '10px',
     fontWeight: '700',
-    fontSize: '13px',
+    fontSize: '12px',
     cursor: 'pointer',
   },
   selectButtonDisabled: {
-    background: 'var(--bg-elevated)',
-    borderColor: 'var(--border-primary)',
-    color: 'var(--text-tertiary)',
-    opacity: 0.6,
+    background: 'rgba(255,255,255,0.1)',
+    borderColor: 'rgba(255,255,255,0.2)',
+    color: 'rgba(255,255,255,0.4)',
     cursor: 'not-allowed',
   },
   buttonLabel: {

@@ -1,40 +1,60 @@
 import { useState } from 'react';
-import type { Character } from '../types';
+import type { Item } from '../types';
 import { api } from '../api';
 import AssetThumbnail from './AssetThumbnail';
 
-interface CharacterListProps {
-  characters: Character[];
-  selectedCharacter: Character | null;
-  onSelectCharacter: (character: Character) => void;
-  onCharacterCreated: (character: Character) => void;
+interface ItemListProps {
+  items: Item[];
+  selectedItem: Item | null;
+  onSelectItem: (item: Item) => void;
+  onItemCreated: (item: Item) => void;
 }
 
-export default function CharacterList({
-  characters,
-  selectedCharacter,
-  onSelectCharacter,
-  onCharacterCreated,
-}: CharacterListProps) {
+const EQUIPMENT_TYPE_LABELS: Record<string, string> = {
+  weapon: '武器',
+  armor: '甲胄',
+  accessory: '饰品',
+  mount: '坐骑',
+};
+
+const RARITY_COLORS: Record<string, string> = {
+  gold: '#f5c842',
+  silver: '#b0b8c8',
+  copper: '#c87040',
+  stone: '#808080',
+};
+
+export default function ItemList({
+  items,
+  selectedItem,
+  onSelectItem,
+  onItemCreated,
+}: ItemListProps) {
   const [showModal, setShowModal] = useState(false);
   const [newName, setNewName] = useState('');
   const [newBio, setNewBio] = useState('');
+  const [newEquipType, setNewEquipType] = useState('weapon');
   const [isCreating, setIsCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
 
   const handleCreate = async () => {
     if (!newName.trim()) {
-      setCreateError('请输入角色名');
+      setCreateError('请输入物品名称');
       return;
     }
     try {
       setIsCreating(true);
       setCreateError(null);
-      const character = await api.createCharacter({ name: newName.trim(), bio: newBio.trim() });
-      onCharacterCreated(character);
+      const item = await api.createItem({
+        name: newName.trim(),
+        bio: newBio.trim(),
+        equipment_type: newEquipType,
+      });
+      onItemCreated(item);
       setShowModal(false);
       setNewName('');
       setNewBio('');
+      setNewEquipType('weapon');
     } catch (err) {
       setCreateError(err instanceof Error ? err.message : '创建失败');
     } finally {
@@ -46,37 +66,43 @@ export default function CharacterList({
     setShowModal(false);
     setNewName('');
     setNewBio('');
+    setNewEquipType('weapon');
     setCreateError(null);
   };
 
   return (
     <>
       <div style={styles.list}>
-        {characters.map((character) => {
-          const isSelected = selectedCharacter?.id === character.id;
+        {items.map((item) => {
+          const isSelected = selectedItem?.id === item.id;
+          const rarityColor = RARITY_COLORS[item.rarity] || '#808080';
           return (
             <button
-              key={character.id}
+              key={item.id}
               style={{
                 ...styles.card,
                 ...(isSelected ? styles.cardActive : {}),
               }}
-              onClick={() => onSelectCharacter(character)}
+              onClick={() => onSelectItem(item)}
             >
               <AssetThumbnail
-                src={character.current_portrait || `/portraits/${character.figure_id}.png`}
-                alt={character.name}
+                src={item.current_image || null}
+                alt={item.name}
                 isSelected={isSelected}
-                hasPending={!!character.has_pending_portrait}
-                pendingTitle="有未部署的立绘选定"
+                hasPending={item.has_pending_image}
+                pendingTitle="有未部署的图片选定"
               />
               <div style={styles.cardContent}>
-                <div style={styles.cardName}>{character.name}</div>
+                <div style={styles.cardName}>{item.name}</div>
                 <div style={styles.cardMeta}>
-                  <span style={styles.cardId}>{character.figure_id}</span>
-                  <span style={styles.cardVariants}>
-                    {character.variants.length} VAR
+                  <span style={styles.cardEquipType}>
+                    {EQUIPMENT_TYPE_LABELS[item.equipment_type] || item.equipment_type}
                   </span>
+                  {item.rarity && (
+                    <span style={{ ...styles.cardRarity, color: rarityColor }}>
+                      {item.rarity.toUpperCase()}
+                    </span>
+                  )}
                 </div>
               </div>
               {isSelected && (
@@ -90,54 +116,77 @@ export default function CharacterList({
         })}
       </div>
 
-      {/* Add Character Button */}
+      {/* Add Item Button */}
       <div style={styles.addButtonWrapper}>
         <button style={styles.addButton} onClick={() => setShowModal(true)}>
           <span style={styles.addIcon}>+</span>
           <div>
-            <div style={styles.addLabel}>新增角色</div>
-            <div style={styles.addSublabel}>ADD CHARACTER</div>
+            <div style={styles.addLabel}>新增物品</div>
+            <div style={styles.addSublabel}>ADD ITEM</div>
           </div>
         </button>
       </div>
 
-      {/* New Character Modal */}
+      {/* New Item Modal */}
       {showModal && (
         <div style={styles.modalOverlay} onClick={handleClose}>
           <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div style={styles.modalHeader}>
-              <div style={styles.modalTitle}>NEW CHARACTER</div>
-              <div style={styles.modalSubtitle}>新增角色</div>
+              <div style={styles.modalTitle}>NEW ITEM</div>
+              <div style={styles.modalSubtitle}>新增物品</div>
               <button style={styles.closeBtn} onClick={handleClose}>✕</button>
             </div>
 
             <div style={styles.modalBody}>
               <div style={styles.fieldGroup}>
-                <label style={styles.fieldLabel}>角色名 <span style={styles.fieldRequired}>*</span></label>
+                <label style={styles.fieldLabel}>
+                  物品名称 <span style={styles.fieldRequired}>*</span>
+                </label>
                 <input
                   style={styles.fieldInput}
                   type="text"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  placeholder="如：叶二娘、李淳罡..."
+                  onKeyDown={(e) => e.key === 'Enter' && !isCreating && handleCreate()}
+                  placeholder="如：青鸾刀、玄铁重剑、寒玉戒指..."
+                  autoFocus
                   disabled={isCreating}
                 />
               </div>
 
               <div style={styles.fieldGroup}>
-                <label style={styles.fieldLabel}>角色简介 <span style={styles.fieldOptional}>可选</span></label>
+                <label style={styles.fieldLabel}>
+                  装备类型 <span style={styles.fieldOptional}>必选</span>
+                </label>
+                <select
+                  style={styles.fieldSelect}
+                  value={newEquipType}
+                  onChange={(e) => setNewEquipType(e.target.value)}
+                  disabled={isCreating}
+                >
+                  <option value="weapon">武器</option>
+                  <option value="armor">甲胄</option>
+                  <option value="accessory">饰品/法器</option>
+                  <option value="mount">坐骑</option>
+                </select>
+              </div>
+
+              <div style={styles.fieldGroup}>
+                <label style={styles.fieldLabel}>
+                  补充描述 <span style={styles.fieldOptional}>可选</span>
+                </label>
                 <textarea
                   style={styles.fieldTextarea}
                   value={newBio}
                   onChange={(e) => setNewBio(e.target.value)}
-                  placeholder="可选，补充模型可能不了解的特征（如外貌细节、特殊道具等），留空则由 AI 根据原著自行理解"
+                  placeholder="可选，描述物品的外观、来历或特性，AI 将参考此内容生成描述"
                   rows={4}
                   disabled={isCreating}
                 />
               </div>
 
               <div style={styles.modalHint}>
-                ✦ AI 将自动为该角色生成 4 个不同场景的 description，并写入 batch_config.json
+                ✦ AI 将自动为该物品生成 variant descriptions，并写入配置
               </div>
 
               {createError && (
@@ -160,9 +209,7 @@ export default function CharacterList({
                     <span>AI 生成中...</span>
                   </>
                 ) : (
-                  <>
-                    <span>✦ AI 生成 & 创建</span>
-                  </>
+                  <span>✦ AI 生成 & 创建</span>
                 )}
               </button>
             </div>
@@ -193,6 +240,7 @@ const styles: Record<string, React.CSSProperties> = {
     textAlign: 'left',
     position: 'relative',
     transition: 'all 0.15s ease',
+    cursor: 'pointer',
   },
   cardActive: {
     background: 'var(--bg-elevated)',
@@ -203,8 +251,9 @@ const styles: Record<string, React.CSSProperties> = {
     flex: '1',
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '6px',
     minWidth: 0,
+    padding: '4px 0',
   },
   cardName: {
     fontFamily: 'var(--font-display)',
@@ -217,20 +266,23 @@ const styles: Record<string, React.CSSProperties> = {
   },
   cardMeta: {
     display: 'flex',
-    gap: '12px',
+    gap: '8px',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
-  cardId: {
+  cardEquipType: {
     fontSize: '10px',
-    fontWeight: '400',
-    color: 'var(--text-tertiary)',
-    letterSpacing: '0.02em',
-  },
-  cardVariants: {
-    fontSize: '9px',
     fontWeight: '600',
     color: 'var(--text-accent)',
     letterSpacing: '0.05em',
+    padding: '2px 6px',
+    background: 'var(--bg-elevated)',
+    border: '1px solid var(--border-accent)',
+  },
+  cardRarity: {
+    fontSize: '9px',
+    fontWeight: '700',
+    letterSpacing: '0.08em',
   },
   cornerTL: {
     position: 'absolute',
@@ -371,6 +423,18 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-primary)',
     fontSize: '14px',
     fontFamily: 'var(--font-display)',
+    boxSizing: 'border-box',
+  },
+  fieldSelect: {
+    width: '100%',
+    padding: '10px 12px',
+    background: 'var(--bg-primary)',
+    border: '1px solid var(--border-primary)',
+    color: 'var(--text-primary)',
+    fontSize: '14px',
+    fontFamily: 'var(--font-display)',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
   },
   fieldTextarea: {
     width: '100%',
@@ -382,6 +446,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: 'var(--font-mono)',
     lineHeight: '1.6',
     resize: 'vertical' as const,
+    boxSizing: 'border-box',
   },
   modalHint: {
     fontSize: '12px',
