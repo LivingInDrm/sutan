@@ -2,6 +2,8 @@ import React from 'react';
 import { useUIStore } from './stores/uiStore';
 import { GameLayout } from './ui/layouts/GameLayout';
 import { TitleScreen } from './ui/screens/TitleScreen';
+import { WorldMapScreen } from './ui/screens/WorldMapScreen';
+import { LocationScreen } from './ui/screens/LocationScreen';
 import { MapScreen } from './ui/screens/MapScreen';
 import { SceneScreen } from './ui/screens/SceneScreen';
 import { SettlementScreen } from './ui/screens/SettlementScreen';
@@ -15,8 +17,13 @@ export function App() {
     return <TitleScreen />;
   }
 
+  if (currentScreen === 'world_map') {
+    return <WorldMapScreen />;
+  }
+
   return (
     <GameLayout>
+      {currentScreen === 'location' && <LocationScreen />}
       {currentScreen === 'map' && <MapScreen />}
       {currentScreen === 'scene' && <SceneScreen />}
       {currentScreen === 'settlement' && <SettlementScreen />}

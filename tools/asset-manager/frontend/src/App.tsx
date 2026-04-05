@@ -5,8 +5,8 @@ import CharacterList from './components/CharacterList';
 import CharacterDetail from './components/CharacterDetail';
 import ItemList from './components/ItemList';
 import ItemDetail from './components/ItemDetail';
-import SceneList from './components/SceneList';
-import SceneDetail from './components/SceneDetail';
+import LocationList from './components/LocationList';
+import LocationDetail from './components/LocationDetail';
 import TemplateSettings from './components/TemplateSettings';
 
 type Tab = 'characters' | 'items' | 'scenes' | 'templates' | 'history';
@@ -157,8 +157,8 @@ function App() {
             }}
             onClick={() => setActiveTab('scenes')}
           >
-            <span style={styles.navLabel}>场景管理</span>
-            <span style={styles.navSublabel}>SCENES</span>
+            <span style={styles.navLabel}>地点管理</span>
+            <span style={styles.navSublabel}>LOCATIONS</span>
           </button>
           <button
             style={{
@@ -273,15 +273,15 @@ function App() {
               <div style={styles.charactersLayout}>
                 <aside style={styles.sceneSidebar}>
                   <div style={styles.sidebarHeader}>
-                    <div style={styles.sidebarTitle}>SCENE DATABASE</div>
-                    <div style={styles.sidebarCount}>{totalScenes} SCENES · 7 MAPS</div>
+                    <div style={styles.sidebarTitle}>LOCATION DATABASE</div>
+                    <div style={styles.sidebarCount}>{totalScenes} LOCATIONS · 7 MAPS</div>
                   </div>
                   {!scenesData ? (
                     <div style={styles.sidebarLoading}>
                       <div className="spinner"></div>
                     </div>
                   ) : (
-                    <SceneList
+                    <LocationList
                       maps={scenesData.maps}
                       selectedScene={selectedScene}
                       onSelectScene={setSelectedScene}
@@ -290,7 +290,7 @@ function App() {
                 </aside>
                 <div style={styles.content}>
                   {selectedScene && selectedSceneMap ? (
-                    <SceneDetail
+                    <LocationDetail
                       scene={selectedScene}
                       mapData={selectedSceneMap}
                       templates={templates}
@@ -299,8 +299,8 @@ function App() {
                   ) : (
                     <div style={styles.emptyState}>
                       <div style={styles.emptyIcon}>◈</div>
-                      <div style={styles.emptyText}>SELECT A SCENE</div>
-                      <div style={styles.emptySubtext}>从左侧列表选择场景以编辑和生成图标</div>
+                      <div style={styles.emptyText}>SELECT A LOCATION</div>
+                      <div style={styles.emptySubtext}>从左侧列表选择地点以编辑和生成图标</div>
                     </div>
                   )}
                 </div>

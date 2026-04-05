@@ -18,6 +18,8 @@ const sceneImages = import.meta.glob<{ default: string }>(
 
 function getSceneImageUrl(filename: string): string | null {
   if (!filename) return null;
+  // If it's an absolute path (starts with /), use it directly as a public URL
+  if (filename.startsWith('/')) return filename;
   const key = Object.keys(sceneImages).find(k => k.endsWith('/' + filename));
   return key ? sceneImages[key].default : null;
 }
@@ -54,6 +56,7 @@ export function SceneScreen() {
   const syncState = useGameStore(s => s.syncState);
   const handCardIds = useGameStore(s => s.handCardIds);
   const selectedSceneId = useUIStore(s => s.selectedSceneId);
+  const selectedLocationId = useUIStore(s => s.selectedLocationId);
   const setScreen = useUIStore(s => s.setScreen);
 
   const [selectedCards, setSelectedCards] = useState<Record<number, string>>({});
@@ -104,7 +107,7 @@ export function SceneScreen() {
     if (investedIds.length === 0) return;
     game.sceneManager.participateScene(selectedSceneId, investedIds);
     syncState();
-    setScreen('map');
+    setScreen(selectedLocationId ? 'location' : 'map');
   };
 
   const requiredSlotsFilled = scene
@@ -115,7 +118,7 @@ export function SceneScreen() {
     return (
       <div className="h-full flex items-center justify-center">
         <div className="text-gold-dim">未选择场景</div>
-        <button onClick={() => setScreen('map')} className="ml-4 text-gold hover:text-gold-bright">
+        <button onClick={() => setScreen(selectedLocationId ? 'location' : 'map')} className="ml-4 text-gold hover:text-gold-bright">
           返回地图
         </button>
       </div>
@@ -180,7 +183,7 @@ export function SceneScreen() {
 
           {/* Back button */}
           <button
-            onClick={() => setScreen('map')}
+            onClick={() => setScreen(selectedLocationId ? 'location' : 'map')}
             className="absolute top-4 left-4 z-10 flex items-center gap-1.5
                        text-xs text-parchment/60 hover:text-parchment/90 transition-colors
                        bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded px-3 py-1.5"

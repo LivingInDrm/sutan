@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type ScreenType = 'title' | 'map' | 'scene' | 'settlement' | 'dialog' | 'shop' | 'inventory';
+export type ScreenType = 'title' | 'map' | 'scene' | 'settlement' | 'dialog' | 'shop' | 'inventory' | 'world_map' | 'location';
 
 interface ModalState {
   id: string;
@@ -22,6 +22,8 @@ interface UIStoreState {
   isLoading: boolean;
   selectedCardId: string | null;
   selectedSceneId: string | null;
+  selectedMapId: string | null;
+  selectedLocationId: string | null;
 }
 
 interface UIStoreActions {
@@ -35,6 +37,10 @@ interface UIStoreActions {
   setLoading: (loading: boolean) => void;
   selectCard: (cardId: string | null) => void;
   selectScene: (sceneId: string | null) => void;
+  setSelectedMapId: (mapId: string | null) => void;
+  setSelectedLocationId: (locationId: string | null) => void;
+  navigateToWorldMap: () => void;
+  navigateToLocation: (locationId: string) => void;
 }
 
 type UIStore = UIStoreState & UIStoreActions;
@@ -47,6 +53,8 @@ export const useUIStore = create<UIStore>()((set, get) => ({
   isLoading: false,
   selectedCardId: null,
   selectedSceneId: null,
+  selectedMapId: 'map_001_beiliang',
+  selectedLocationId: null,
 
   setScreen: (screen) => {
     set({ previousScreen: get().currentScreen, currentScreen: screen });
@@ -93,5 +101,29 @@ export const useUIStore = create<UIStore>()((set, get) => ({
 
   selectScene: (sceneId) => {
     set({ selectedSceneId: sceneId });
+  },
+
+  setSelectedMapId: (mapId) => {
+    set({ selectedMapId: mapId });
+  },
+
+  setSelectedLocationId: (locationId) => {
+    set({ selectedLocationId: locationId });
+  },
+
+  navigateToWorldMap: () => {
+    set({
+      previousScreen: get().currentScreen,
+      currentScreen: 'world_map',
+      selectedLocationId: null,
+    });
+  },
+
+  navigateToLocation: (locationId) => {
+    set({
+      previousScreen: get().currentScreen,
+      currentScreen: 'location',
+      selectedLocationId: locationId,
+    });
   },
 }));

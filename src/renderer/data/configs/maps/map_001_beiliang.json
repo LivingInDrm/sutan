@@ -1,0 +1,133 @@
+{
+  "map_id": "map_001_beiliang",
+  "name": "北凉道",
+  "description": "清凉山到葫芦口一线，铁血家国之地",
+  "background_image": "/maps/beiliang/terrain_bg.png",
+  "locations": [
+    {
+      "location_id": "location_001",
+      "name": "清凉山王府",
+      "icon_image": "/maps/beiliang/icon_01_qingliangshan.png",
+      "backdrop_image": "/maps/map_001/location_001_backdrop.png",
+      "position": {
+        "x": 0.62,
+        "y": 0.55
+      },
+      "scene_ids": [
+        "scene_006",
+        "scene_001"
+      ],
+      "unlock_conditions": {}
+    },
+    {
+      "location_id": "location_002",
+      "name": "听潮亭",
+      "icon_image": "/maps/beiliang/icon_02_tingchaoting.png",
+      "backdrop_image": "/maps/map_001/location_002_backdrop.png",
+      "position": {
+        "x": 0.72,
+        "y": 0.45
+      },
+      "scene_ids": [],
+      "unlock_conditions": {}
+    },
+    {
+      "location_id": "location_003",
+      "name": "陵州城市集",
+      "icon_image": "/maps/beiliang/icon_03_lingzhou.png",
+      "backdrop_image": "/maps/map_001/location_003_backdrop.png",
+      "position": {
+        "x": 0.5,
+        "y": 0.6
+      },
+      "scene_ids": [],
+      "unlock_conditions": {}
+    },
+    {
+      "location_id": "location_004",
+      "name": "芦苇荡渡口",
+      "icon_image": "/maps/beiliang/icon_04_luweidang.png",
+      "backdrop_image": "/maps/map_001/location_004_backdrop.png",
+      "position": {
+        "x": 0.38,
+        "y": 0.55
+      },
+      "scene_ids": [
+        "scene_007"
+      ],
+      "unlock_conditions": {}
+    },
+    {
+      "location_id": "location_005",
+      "name": "白马游弩校场",
+      "icon_image": "/maps/beiliang/icon_05_baima.png",
+      "backdrop_image": "/maps/beiliang/terrain_bg.png",
+      "position": {
+        "x": 0.3,
+        "y": 0.3
+      },
+      "scene_ids": [],
+      "unlock_conditions": {}
+    },
+    {
+      "location_id": "location_006",
+      "name": "龙睛郡牧场",
+      "icon_image": "/maps/beiliang/icon_06_longjing.png",
+      "backdrop_image": "/maps/beiliang/terrain_bg.png",
+      "position": {
+        "x": 0.2,
+        "y": 0.7
+      },
+      "scene_ids": [],
+      "unlock_conditions": {}
+    },
+    {
+      "location_id": "location_007",
+      "name": "幽州马市",
+      "icon_image": "/maps/beiliang/icon_07_youzhou.png",
+      "backdrop_image": "/maps/beiliang/terrain_bg.png",
+      "position": {
+        "x": 0.55,
+        "y": 0.2
+      },
+      "scene_ids": [],
+      "unlock_conditions": {}
+    },
+    {
+      "location_id": "location_008",
+      "name": "北凉暗驿",
+      "icon_image": "/maps/beiliang/icon_08_anji.png",
+      "backdrop_image": "/maps/beiliang/terrain_bg.png",
+      "position": {
+        "x": 0.45,
+        "y": 0.4
+      },
+      "scene_ids": [],
+      "unlock_conditions": {}
+    },
+    {
+      "location_id": "location_009",
+      "name": "流州边关",
+      "icon_image": "/maps/beiliang/icon_09_liuzhou.png",
+      "backdrop_image": "/maps/beiliang/terrain_bg.png",
+      "position": {
+        "x": 0.15,
+        "y": 0.5
+      },
+      "scene_ids": [],
+      "unlock_conditions": {}
+    },
+    {
+      "location_id": "location_010",
+      "name": "葫芦口前哨",
+      "icon_image": "/maps/beiliang/icon_10_hulukou.png",
+      "backdrop_image": "/maps/beiliang/terrain_bg.png",
+      "position": {
+        "x": 0.25,
+        "y": 0.8
+      },
+      "scene_ids": [],
+      "unlock_conditions": {}
+    }
+  ]
+}

@@ -290,7 +290,7 @@ function SummaryView({ results }: { results: SettlementResult[] }) {
       </div>
 
       <div className="text-center mt-8">
-        <Button variant="primary" size="lg" glow onClick={() => setScreen('map')}>
+        <Button variant="primary" size="lg" glow onClick={() => setScreen('world_map')}>
           继续
         </Button>
       </div>

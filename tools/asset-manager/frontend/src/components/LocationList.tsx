@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Scene, SceneMap } from '../types';
 import AssetThumbnail from './AssetThumbnail';
 
-interface SceneListProps {
+interface LocationListProps {
   maps: Record<string, SceneMap>;
   selectedScene: Scene | null;
   onSelectScene: (scene: Scene) => void;
@@ -17,7 +17,7 @@ const SCENE_TYPE_COLORS: Record<string, string> = {
   功能: '#a89cf7',
 };
 
-export default function SceneList({ maps, selectedScene, onSelectScene }: SceneListProps) {
+export default function LocationList({ maps, selectedScene, onSelectScene }: LocationListProps) {
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
   const toggleMap = (mapId: string) => {
@@ -30,8 +30,8 @@ export default function SceneList({ maps, selectedScene, onSelectScene }: SceneL
     <div style={styles.container}>
       {mapEntries.length === 0 && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyText}>无场景数据</div>
-          <div style={styles.emptyHint}>请检查 scripts/scene_profiles.json</div>
+          <div style={styles.emptyText}>无地点数据</div>
+          <div style={styles.emptyHint}>请检查 scripts/location_profiles.json</div>
         </div>
       )}
 

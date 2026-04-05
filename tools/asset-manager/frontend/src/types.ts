@@ -178,6 +178,10 @@ export interface Scene {
   // Workshop variants
   icon_variants?: SceneVariant[];
   backdrop_variants?: SceneVariant[];
+  // Location runtime fields (align with game map config)
+  position?: { x: number; y: number };
+  scene_ids?: string[];
+  unlock_conditions?: Record<string, unknown>;
 }
 
 export interface SceneTerrain {

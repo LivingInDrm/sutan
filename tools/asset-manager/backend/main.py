@@ -2049,8 +2049,27 @@ async def generate_item_images(body: GenerateRequest):
 # ─────────────────────────────────────────────
 # Scene constants
 # ─────────────────────────────────────────────
-SCENE_PROFILES_PATH = PROJECT_ROOT / "scripts" / "scene_profiles.json"
+LOCATION_PROFILES_PATH = PROJECT_ROOT / "scripts" / "location_profiles.json"
 MAPS_DIR = BACKEND_DIR / "maps"  # tools/asset-manager/backend/maps/{map_id}/
+
+# Game runtime paths (for deploy sync)
+GAME_MAPS_CONFIG_DIR = PROJECT_ROOT / "src" / "renderer" / "data" / "configs" / "maps"
+# Vite root is src/renderer, so public assets are served from src/renderer/public/
+GAME_PUBLIC_MAPS_DIR = PROJECT_ROOT / "src" / "renderer" / "public" / "maps"
+
+# Mapping from asset manager map_id → game map JSON filename stem
+_ASSET_MAP_TO_GAME_FILE: Dict[str, str] = {
+    "map_001": "map_001_beiliang",
+}
+
+# Mapping from asset manager map_id → game public subdir name
+# (used to construct the correct /maps/{subdir}/ URL for game access)
+_ASSET_MAP_TO_PUBLIC_SUBDIR: Dict[str, str] = {
+    "map_001": "beiliang",
+}
+
+# Back-compat alias (keep SCENE_PROFILES_PATH so any lingering references compile)
+SCENE_PROFILES_PATH = LOCATION_PROFILES_PATH
 
 # ─────────────────────────────────────────────
 # Scene / map icon prompt style constants
@@ -2107,23 +2126,36 @@ app.mount("/maps", StaticFiles(directory=str(MAPS_DIR)), name="map_assets")
 # Scene helpers
 # ─────────────────────────────────────────────
 def _read_scene_profiles() -> Dict[str, Any]:
-    if not SCENE_PROFILES_PATH.exists():
+    """Read location_profiles.json (formerly scene_profiles.json)."""
+    if not LOCATION_PROFILES_PATH.exists():
         return {"maps": {}}
     try:
-        with open(SCENE_PROFILES_PATH, "r", encoding="utf-8") as f:
+        with open(LOCATION_PROFILES_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
     except (json.JSONDecodeError, OSError):
         return {"maps": {}}
 
 
 def _write_scene_profiles(data: Dict[str, Any]) -> None:
-    with open(SCENE_PROFILES_PATH, "w", encoding="utf-8") as f:
+    """Write to location_profiles.json."""
+    with open(LOCATION_PROFILES_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
 def _scene_samples_folder(scene_id: str) -> Path:
-    """Return the samples subfolder for a scene: scene_{scene_id}."""
-    return SAMPLES_DIR / f"scene_{scene_id}"
+    """Return the samples subfolder for a location.
+
+    Uses the location_id directly (e.g. 'location_001/').
+    Falls back to legacy 'scene_{scene_id}/' if the new folder does not exist.
+    """
+    new_folder = SAMPLES_DIR / scene_id
+    if new_folder.exists():
+        return new_folder
+    # Legacy name (pre-rename): scene_map_001_scene_001 etc.
+    legacy_folder = SAMPLES_DIR / f"scene_{scene_id}"
+    if legacy_folder.exists():
+        return legacy_folder
+    return new_folder  # default to new format even if it doesn't exist yet
 
 
 def _find_scene_by_id(profiles: Dict[str, Any], scene_id: str) -> Optional[Dict[str, Any]]:
@@ -2232,11 +2264,20 @@ def _scene_icon_url(scene: Dict[str, Any]) -> str:
 # ─────────────────────────────────────────────
 # Scene Pydantic models
 # ─────────────────────────────────────────────
+class LocationPosition(BaseModel):
+    x: float
+    y: float
+
+
 class UpdateSceneRequest(BaseModel):
     description: Optional[str] = None
     prompt: Optional[str] = None
     name: Optional[str] = None
     backdrop_prompt: Optional[str] = None
+    # Location runtime fields (sync to game map config on save)
+    position: Optional[LocationPosition] = None
+    scene_ids: Optional[List[str]] = None
+    unlock_conditions: Optional[Dict[str, Any]] = None
 
 
 class SelectSceneIconRequest(BaseModel):
@@ -2355,9 +2396,10 @@ def get_scene(scene_id: str) -> Dict[str, Any]:
 # ─────────────────────────────────────────────
 @app.put("/api/scenes/{scene_id}")
 def update_scene(scene_id: str, body: UpdateSceneRequest) -> Dict[str, Any]:
-    """Update scene description, prompt, backdrop_prompt, or name."""
+    """Update scene description, prompt, backdrop_prompt, name, position, scene_ids, or unlock_conditions."""
     profiles = _read_scene_profiles()
     updated = False
+    map_id_found = None
     for _map_id, map_data in profiles.get("maps", {}).items():
         for scene in map_data.get("scenes", []):
             if scene.get("id") == scene_id:
@@ -2369,7 +2411,14 @@ def update_scene(scene_id: str, body: UpdateSceneRequest) -> Dict[str, Any]:
                     scene["name"] = body.name
                 if body.backdrop_prompt is not None:
                     scene["backdrop_prompt"] = body.backdrop_prompt
+                if body.position is not None:
+                    scene["position"] = {"x": body.position.x, "y": body.position.y}
+                if body.scene_ids is not None:
+                    scene["scene_ids"] = body.scene_ids
+                if body.unlock_conditions is not None:
+                    scene["unlock_conditions"] = body.unlock_conditions
                 updated = True
+                map_id_found = _map_id
                 break
         if updated:
             break
@@ -2378,6 +2427,28 @@ def update_scene(scene_id: str, body: UpdateSceneRequest) -> Dict[str, Any]:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
 
     _write_scene_profiles(profiles)
+
+    # Sync runtime fields (position, scene_ids) to game map config if applicable
+    if (body.position is not None or body.scene_ids is not None) and map_id_found:
+        game_map_stem = _ASSET_MAP_TO_GAME_FILE.get(map_id_found)
+        if game_map_stem:
+            game_map_file = GAME_MAPS_CONFIG_DIR / f"{game_map_stem}.json"
+            if game_map_file.exists():
+                try:
+                    with open(game_map_file, "r", encoding="utf-8") as f:
+                        game_map_data = json.load(f)
+                    for loc in game_map_data.get("locations", []):
+                        if loc.get("location_id") == scene_id:
+                            if body.position is not None:
+                                loc["position"] = {"x": body.position.x, "y": body.position.y}
+                            if body.scene_ids is not None:
+                                loc["scene_ids"] = body.scene_ids
+                            break
+                    with open(game_map_file, "w", encoding="utf-8") as f:
+                        json.dump(game_map_data, f, ensure_ascii=False, indent=2)
+                except (json.JSONDecodeError, OSError):
+                    pass  # Non-fatal
+
     scene = _find_scene_by_id(profiles, scene_id)
     return {"success": True, "scene": scene}
 
@@ -2592,18 +2663,21 @@ async def generate_scene_icon(body: SceneGenerateRequest):
 @app.post("/api/scenes/{scene_id}/deploy")
 def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]:
     """
-    Deploy the selected icon or backdrop for a scene.
+    Deploy the selected icon or backdrop for a location.
     Query param: image_type = "icon" (default) | "backdrop"
 
     icon flow:
-      1. Copy selected_icon to maps/{map_id}/ directory
-      2. Update icon_path in scene_profiles.json
+      1. Copy selected_icon to maps/{map_id}/ directory (asset manager)
+      2. Update icon_path in location_profiles.json
       3. Clear selected_icon
+      4. Copy to public/maps/{map_id}/{scene_id}.png for game access
+      5. Update src/renderer/data/configs/maps/{game_map}.json icon_image field
 
     backdrop flow:
       1. Copy selected_backdrop to maps/{map_id}/{scene_id}_backdrop.png
-      2. Update backdrop_path in scene_profiles.json
+      2. Update backdrop_path in location_profiles.json
       3. Clear selected_backdrop
+      4. Copy to public/maps/{map_id}/ for game access
     """
     profiles = _read_scene_profiles()
     map_id, scene = _find_scene_and_map(profiles, scene_id)
@@ -2622,7 +2696,7 @@ def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]
         if not selected_path.exists():
             raise HTTPException(status_code=404, detail=f"Selected backdrop file not found: {selected_backdrop}")
 
-        # Deploy to maps/{map_id}/{scene_id}_backdrop.png
+        # Deploy to asset-manager maps/{map_id}/{scene_id}_backdrop.png
         filename = f"{scene_id}_backdrop.png"
         dest = map_dir / filename
         shutil.copy2(str(selected_path), str(dest))
@@ -2633,12 +2707,39 @@ def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]
 
         _write_scene_profiles(profiles)
 
+        # Also copy to public/maps/{map_id}/ for game access
+        game_public_dir = GAME_PUBLIC_MAPS_DIR / map_id
+        game_public_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(str(selected_path), str(game_public_dir / filename))
+
+        # Update backdrop_image in game map JSON (mirrors icon deploy logic)
+        backdrop_game_url = f"/maps/{map_id}/{filename}"
+        game_map_updated = False
+        game_map_stem = _ASSET_MAP_TO_GAME_FILE.get(map_id)
+        if game_map_stem:
+            game_map_file = GAME_MAPS_CONFIG_DIR / f"{game_map_stem}.json"
+            if game_map_file.exists():
+                try:
+                    with open(game_map_file, "r", encoding="utf-8") as f:
+                        game_map_data = json.load(f)
+                    for loc in game_map_data.get("locations", []):
+                        if loc.get("location_id") == scene_id:
+                            loc["backdrop_image"] = backdrop_game_url
+                            game_map_updated = True
+                            break
+                    with open(game_map_file, "w", encoding="utf-8") as f:
+                        json.dump(game_map_data, f, ensure_ascii=False, indent=2)
+                except (json.JSONDecodeError, OSError):
+                    pass  # Non-fatal: map update failure doesn't block deploy
+
         return {
             "success": True,
             "scene_id": scene_id,
             "image_type": "backdrop",
             "backdrop_path": rel_path,
             "deployed_to": str(dest),
+            "backdrop_game_url": backdrop_game_url,
+            "game_map_updated": game_map_updated,
         }
     else:
         # Default: icon
@@ -2660,12 +2761,44 @@ def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]
 
         _write_scene_profiles(profiles)
 
+        # Sync to game runtime: copy to src/renderer/public/maps/{subdir}/ and update map JSON
+        # Use the game-facing subdir name (e.g. "beiliang") if available, else fall back to map_id
+        public_subdir = _ASSET_MAP_TO_PUBLIC_SUBDIR.get(map_id, map_id)
+        game_public_dir = GAME_PUBLIC_MAPS_DIR / public_subdir
+        game_public_dir.mkdir(parents=True, exist_ok=True)
+        public_icon_filename = f"{scene_id}.png"
+        dest_public = game_public_dir / public_icon_filename
+        shutil.copy2(str(selected_path), str(dest_public))
+
+        icon_game_url = f"/maps/{public_subdir}/{public_icon_filename}"
+
+        # Update game map JSON if a mapping exists
+        game_map_updated = False
+        game_map_stem = _ASSET_MAP_TO_GAME_FILE.get(map_id)
+        if game_map_stem:
+            game_map_file = GAME_MAPS_CONFIG_DIR / f"{game_map_stem}.json"
+            if game_map_file.exists():
+                try:
+                    with open(game_map_file, "r", encoding="utf-8") as f:
+                        game_map_data = json.load(f)
+                    for loc in game_map_data.get("locations", []):
+                        if loc.get("location_id") == scene_id:
+                            loc["icon_image"] = icon_game_url
+                            game_map_updated = True
+                            break
+                    with open(game_map_file, "w", encoding="utf-8") as f:
+                        json.dump(game_map_data, f, ensure_ascii=False, indent=2)
+                except (json.JSONDecodeError, OSError):
+                    pass  # Non-fatal: map update failure doesn't block deploy
+
         return {
             "success": True,
             "scene_id": scene_id,
             "image_type": "icon",
             "icon_path": rel_icon,
             "deployed_to": str(dest),
+            "game_icon_url": icon_game_url,
+            "game_map_updated": game_map_updated,
         }
 
 

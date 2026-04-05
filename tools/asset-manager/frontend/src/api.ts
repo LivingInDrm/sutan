@@ -361,7 +361,15 @@ export const api = {
     return response.json();
   },
 
-  async updateScene(sceneId: string, data: { description?: string; prompt?: string; name?: string; backdrop_prompt?: string }): Promise<{ scene: Scene }> {
+  async updateScene(sceneId: string, data: {
+    description?: string;
+    prompt?: string;
+    name?: string;
+    backdrop_prompt?: string;
+    position?: { x: number; y: number };
+    scene_ids?: string[];
+    unlock_conditions?: Record<string, unknown>;
+  }): Promise<{ scene: Scene }> {
     const response = await fetch(`/api/scenes/${encodeURIComponent(sceneId)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

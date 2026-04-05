@@ -5,14 +5,14 @@ import Gallery from './Gallery';
 import WorkshopTab from './WorkshopTab';
 import type { WorkshopConfig, WorkshopVariant } from './WorkshopTab';
 
-interface SceneDetailProps {
+interface LocationDetailProps {
   scene: Scene;
   mapData: SceneMap;
   templates: Templates | null;
   onUpdate: () => void | Promise<void>;
 }
 
-type DetailTab = 'icon-workshop' | 'backdrop-workshop' | 'terrain';
+type DetailTab = 'icon-workshop' | 'backdrop-workshop' | 'location-info';
 
 const SCENE_TYPE_COLORS: Record<string, string> = {
   枢纽: '#f5c842',
@@ -24,20 +24,20 @@ const SCENE_TYPE_COLORS: Record<string, string> = {
 };
 
 const ICON_WORKSHOP_CONFIG: WorkshopConfig = {
-  generateButtonText: '生成场景图标',
+  generateButtonText: '生成地点图标',
   generateButtonSubtext: '水墨建筑风格 · 1024×1024',
   regeneratePanelTitle: 'AI 重新生成 4 条 VARIANT',
-  regeneratePanelSubtitle: '输入场景简介（可选），AI 将重新生成 4 条图标描述变体',
-  regeneratePlaceholder: '场景简介（可选，如：北凉王城正门，宏伟城楼，旌旗猎猎...）',
+  regeneratePanelSubtitle: '输入地点简介（可选），AI 将重新生成 4 条图标描述变体',
+  regeneratePlaceholder: '地点简介（可选，如：北凉王城正门，宏伟城楼，旌旗猎猎...）',
   descriptionPlaceholder: '输入图标描述（英文，如：towering city gate with ornate curved rooftops...）',
 };
 
 const BACKDROP_WORKSHOP_CONFIG: WorkshopConfig = {
-  generateButtonText: '生成场景背景图',
+  generateButtonText: '生成地点背景图',
   generateButtonSubtext: '水墨全景背景 · 1536×1024',
   regeneratePanelTitle: 'AI 重新生成 4 条 VARIANT',
-  regeneratePanelSubtitle: '输入场景简介（可选），AI 将重新生成 4 条背景图描述变体',
-  regeneratePlaceholder: '场景简介（可选，如：北凉王城正门，宏伟城楼，旌旗猎猎...）',
+  regeneratePanelSubtitle: '输入地点简介（可选），AI 将重新生成 4 条背景图描述变体',
+  regeneratePlaceholder: '地点简介（可选，如：北凉王城正门，宏伟城楼，旌旗猎猎...）',
   descriptionPlaceholder: '输入背景图描述（英文，如：panoramic view of ancient city gates at sunset...）',
 };
 
@@ -48,12 +48,23 @@ function toWorkshopVariants(variants: SceneVariant[] | undefined, fallback: stri
   return [{ index: 0, description: fallback }];
 }
 
-export default function SceneDetail({ scene, mapData, templates, onUpdate }: SceneDetailProps) {
+export default function LocationDetail({ scene, mapData, templates, onUpdate }: LocationDetailProps) {
   const [activeTab, setActiveTab] = useState<DetailTab>('icon-workshop');
+  const [editingPosition, setEditingPosition] = useState(false);
+  const [posX, setPosX] = useState<string>(String(scene.position?.x ?? ''));
+  const [posY, setPosY] = useState<string>(String(scene.position?.y ?? ''));
+  const [editingSceneIds, setEditingSceneIds] = useState(false);
+  const [sceneIdsText, setSceneIdsText] = useState((scene.scene_ids ?? []).join(', '));
+  const [savingRuntime, setSavingRuntime] = useState(false);
 
-  // Reset tab on scene change
+  // Reset tab and runtime fields on scene change
   useEffect(() => {
     setActiveTab('icon-workshop');
+    setPosX(String(scene.position?.x ?? ''));
+    setPosY(String(scene.position?.y ?? ''));
+    setSceneIdsText((scene.scene_ids ?? []).join(', '));
+    setEditingPosition(false);
+    setEditingSceneIds(false);
   }, [scene.id]);
 
   const typeColor = SCENE_TYPE_COLORS[scene.type] || '#808080';
@@ -111,9 +122,9 @@ export default function SceneDetail({ scene, mapData, templates, onUpdate }: Sce
         {/* Tab switcher */}
         <div style={styles.tabs}>
           {([
-            ['icon-workshop', '图标工坊', 'ICON WORKSHOP'],
-            ['backdrop-workshop', '背景图工坊', 'BACKDROP WORKSHOP'],
-            ['terrain', '地形', 'TERRAIN'],
+            ['icon-workshop', '地点图标工坊', 'ICON WORKSHOP'],
+            ['backdrop-workshop', '地点背景图工坊', 'BACKDROP WORKSHOP'],
+            ['location-info', '地点信息', 'LOCATION INFO'],
           ] as [DetailTab, string, string][]).map(([key, label, sublabel]) => (
             <button
               key={key}
@@ -208,48 +219,128 @@ export default function SceneDetail({ scene, mapData, templates, onUpdate }: Sce
           />
         )}
 
-        {/* ─── TERRAIN TAB ───────────────────────────────────────────────── */}
-        {activeTab === 'terrain' && (
+        {/* ─── LOCATION INFO TAB ─────────────────────────────────────────── */}
+        {activeTab === 'location-info' && (
           <div style={styles.terrainView}>
+            {/* Position */}
             <section style={styles.section}>
               <div style={styles.sectionHeader}>
-                <div style={styles.sectionTitle}>地形背景 TERRAIN BACKGROUND</div>
+                <div style={styles.sectionTitle}>地图坐标 POSITION</div>
                 <div style={styles.sectionHint}>{mapData.name}</div>
               </div>
-
-              {mapData.terrain.current_icon ? (
-                <div style={styles.terrainImgWrapper}>
-                  <img
-                    src={mapData.terrain.current_icon}
-                    alt={`${mapData.name} terrain`}
-                    style={styles.terrainImg}
+              {editingPosition ? (
+                <div style={infoStyles.editRow}>
+                  <label style={infoStyles.fieldLabel}>X</label>
+                  <input
+                    type="number" step="0.01" min="0" max="1"
+                    value={posX}
+                    onChange={(e) => setPosX(e.target.value)}
+                    style={infoStyles.inputField}
                   />
+                  <label style={infoStyles.fieldLabel}>Y</label>
+                  <input
+                    type="number" step="0.01" min="0" max="1"
+                    value={posY}
+                    onChange={(e) => setPosY(e.target.value)}
+                    style={infoStyles.inputField}
+                  />
+                  <button
+                    style={infoStyles.saveBtn}
+                    disabled={savingRuntime}
+                    onClick={async () => {
+                      setSavingRuntime(true);
+                      try {
+                        await api.updateScene(scene.id, {
+                          position: { x: parseFloat(posX), y: parseFloat(posY) },
+                        });
+                        setEditingPosition(false);
+                        await onUpdate();
+                      } finally {
+                        setSavingRuntime(false);
+                      }
+                    }}
+                  >
+                    {savingRuntime ? '保存中...' : '保存'}
+                  </button>
+                  <button style={infoStyles.cancelBtn} onClick={() => {
+                    setPosX(String(scene.position?.x ?? ''));
+                    setPosY(String(scene.position?.y ?? ''));
+                    setEditingPosition(false);
+                  }}>取消</button>
                 </div>
               ) : (
-                <div style={styles.terrainEmpty}>
-                  <div style={styles.terrainEmptyIcon}>◈</div>
-                  <div style={styles.terrainEmptyText}>地形背景图尚未生成</div>
-                  <div style={styles.terrainEmptyHint}>
-                    路径：tools/asset-manager/backend/maps/{mapData.id}/terrain.png
-                  </div>
+                <div style={infoStyles.displayRow}>
+                  <span style={infoStyles.fieldValue}>
+                    x: {scene.position?.x ?? '未设置'} &nbsp;&nbsp; y: {scene.position?.y ?? '未设置'}
+                  </span>
+                  <button style={infoStyles.editBtn} onClick={() => setEditingPosition(true)}>编辑</button>
                 </div>
               )}
-
-              <div style={styles.terrainPromptSection}>
-                <div style={styles.terrainPromptLabel}>地形生成 Prompt</div>
-                <div style={styles.terrainPromptText}>{mapData.terrain.prompt}</div>
-              </div>
-
-              <div style={styles.terrainPathSection}>
-                <div style={styles.terrainPathLabel}>目标路径</div>
-                <div style={styles.terrainPathValue}>{mapData.terrain.icon_path}</div>
-              </div>
             </section>
 
+            {/* Scene IDs */}
             <section style={styles.section}>
               <div style={styles.sectionHeader}>
-                <div style={styles.sectionTitle}>地图场景总览 MAP OVERVIEW</div>
-                <div style={styles.sectionHint}>{mapData.scenes.length} 个场景</div>
+                <div style={styles.sectionTitle}>关联事件 SCENE IDs</div>
+                <div style={styles.sectionHint}>{(scene.scene_ids ?? []).length} 个事件</div>
+              </div>
+              {editingSceneIds ? (
+                <div style={infoStyles.editCol}>
+                  <div style={infoStyles.fieldHint}>输入 scene_id，多个用英文逗号分隔 (如 scene_001, scene_007)</div>
+                  <input
+                    type="text"
+                    value={sceneIdsText}
+                    onChange={(e) => setSceneIdsText(e.target.value)}
+                    style={infoStyles.inputFieldWide}
+                    placeholder="scene_001, scene_007"
+                  />
+                  <div style={infoStyles.editRow}>
+                    <button
+                      style={infoStyles.saveBtn}
+                      disabled={savingRuntime}
+                      onClick={async () => {
+                        setSavingRuntime(true);
+                        try {
+                          const ids = sceneIdsText
+                            .split(',')
+                            .map((s) => s.trim())
+                            .filter(Boolean);
+                          await api.updateScene(scene.id, { scene_ids: ids });
+                          setEditingSceneIds(false);
+                          await onUpdate();
+                        } finally {
+                          setSavingRuntime(false);
+                        }
+                      }}
+                    >
+                      {savingRuntime ? '保存中...' : '保存并同步到地图'}
+                    </button>
+                    <button style={infoStyles.cancelBtn} onClick={() => {
+                      setSceneIdsText((scene.scene_ids ?? []).join(', '));
+                      setEditingSceneIds(false);
+                    }}>取消</button>
+                  </div>
+                </div>
+              ) : (
+                <div style={infoStyles.displayRow}>
+                  <div style={infoStyles.tagList}>
+                    {(scene.scene_ids ?? []).length === 0
+                      ? <span style={infoStyles.emptyHint}>暂无关联事件</span>
+                      : (scene.scene_ids ?? []).map((sid) => (
+                          <span key={sid} style={infoStyles.tag}>{sid}</span>
+                        ))
+                    }
+                  </div>
+                  <button style={infoStyles.editBtn} onClick={() => setEditingSceneIds(true)}>编辑</button>
+                </div>
+              )}
+            </section>
+
+            {/* Map overview */}
+            <section style={styles.section}>
+              <div style={styles.sectionHeader}>
+                <div style={styles.sectionTitle}>地图地点总览 MAP OVERVIEW</div>
+                <div style={styles.sectionHint}>{mapData.scenes.length} 个地点</div>
               </div>
               <div style={styles.overviewGrid}>
                 {mapData.scenes.map((s) => {
@@ -307,7 +398,7 @@ function SceneGallery({ samples, scene, imageType, onRefresh, onUpdate }: SceneG
       await api.deploySceneIcon(scene.id, imageType);
       setDeployResult({
         success: true,
-        message: imageType === 'backdrop' ? '场景背景图已部署成功！' : '场景图标已部署成功！',
+        message: imageType === 'backdrop' ? '地点背景图已部署成功！' : '地点图标已部署成功！',
       });
       onRefresh();
       onUpdate();
@@ -335,7 +426,7 @@ function SceneGallery({ samples, scene, imageType, onRefresh, onUpdate }: SceneG
         characterName={scene.name}
         onSelect={onRefresh}
         onSelectImage={handleSelectImage}
-        selectLabel={imageType === 'backdrop' ? '选为背景图' : '选为场景图标'}
+        selectLabel={imageType === 'backdrop' ? '选为背景图' : '选为地点图标'}
       />
 
       {/* Deploy pending icon or backdrop */}
@@ -691,5 +782,106 @@ const deployStyles: Record<string, React.CSSProperties> = {
     fontWeight: '400',
     letterSpacing: '0.05em',
     opacity: 0.7,
+  },
+};
+
+const infoStyles: Record<string, React.CSSProperties> = {
+  displayRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '12px',
+    padding: '8px 0',
+  },
+  fieldValue: {
+    fontSize: '13px',
+    color: 'var(--text-primary)',
+    fontFamily: 'var(--font-mono)',
+  },
+  editRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    flexWrap: 'wrap' as const,
+    padding: '8px 0',
+  },
+  editCol: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '8px',
+    padding: '8px 0',
+  },
+  fieldLabel: {
+    fontSize: '11px',
+    fontWeight: '600',
+    color: 'var(--text-tertiary)',
+    letterSpacing: '0.05em',
+  },
+  fieldHint: {
+    fontSize: '11px',
+    color: 'var(--text-tertiary)',
+    opacity: 0.8,
+  },
+  inputField: {
+    width: '80px',
+    padding: '6px 8px',
+    background: 'var(--bg-tertiary)',
+    border: '1px solid var(--border-primary)',
+    color: 'var(--text-primary)',
+    fontSize: '13px',
+    fontFamily: 'var(--font-mono)',
+  },
+  inputFieldWide: {
+    width: '100%',
+    padding: '8px 10px',
+    background: 'var(--bg-tertiary)',
+    border: '1px solid var(--border-primary)',
+    color: 'var(--text-primary)',
+    fontSize: '13px',
+    fontFamily: 'var(--font-mono)',
+  },
+  saveBtn: {
+    padding: '6px 16px',
+    background: 'var(--accent-cyan)',
+    border: '1px solid var(--accent-cyan)',
+    color: 'var(--bg-primary)',
+    fontSize: '12px',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  cancelBtn: {
+    padding: '6px 12px',
+    background: 'transparent',
+    border: '1px solid var(--border-primary)',
+    color: 'var(--text-secondary)',
+    fontSize: '12px',
+    cursor: 'pointer',
+  },
+  editBtn: {
+    padding: '4px 12px',
+    background: 'transparent',
+    border: '1px solid var(--border-primary)',
+    color: 'var(--text-tertiary)',
+    fontSize: '11px',
+    cursor: 'pointer',
+    flexShrink: 0,
+  },
+  tagList: {
+    display: 'flex',
+    gap: '6px',
+    flexWrap: 'wrap' as const,
+  },
+  tag: {
+    padding: '3px 10px',
+    background: 'var(--bg-tertiary)',
+    border: '1px solid var(--border-primary)',
+    color: 'var(--text-secondary)',
+    fontSize: '11px',
+    fontFamily: 'var(--font-mono)',
+  },
+  emptyHint: {
+    fontSize: '12px',
+    color: 'var(--text-tertiary)',
+    opacity: 0.6,
   },
 };

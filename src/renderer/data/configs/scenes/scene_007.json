@@ -2,7 +2,7 @@
   "scene_id": "scene_007",
   "name": "芦苇荡畔・剑甲初逢",
   "description": "北凉道秋风渐紧，官道旁的芦苇荡里藏着一座破旧渡口。徐凤年在此遇见一个抱着酒葫芦、满身落魄气的老头，谁也想不到，这竟是曾经一剑压江湖的李淳罡。",
-  "background_image": "/assets/scenes/scene07.png",
+  "background_image": "/maps/map_001/scene_007.png",
   "type": "event",
   "duration": 3,
   "slots": [

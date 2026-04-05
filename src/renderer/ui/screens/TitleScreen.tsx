@@ -13,7 +13,7 @@ export function TitleScreen() {
 
   const handleStart = (difficulty: string) => {
     startNewGame(difficulty, baseCards as Card[], baseScenes);
-    setScreen('map');
+    setScreen('world_map');
   };
 
   return (
