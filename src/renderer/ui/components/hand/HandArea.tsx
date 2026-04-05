@@ -116,9 +116,10 @@ interface CardStripProps {
   onCardClick?: (card: Card, e: React.MouseEvent) => void;
   onCardDoubleClick?: (card: Card, e: React.MouseEvent) => void;
   selectedCardId?: string | null;
+  lockedCardIds?: string[];
 }
 
-function CardStrip({ cards, onCardClick, onCardDoubleClick, selectedCardId }: CardStripProps) {
+function CardStrip({ cards, onCardClick, onCardDoubleClick, selectedCardId, lockedCardIds }: CardStripProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -244,6 +245,7 @@ function CardStrip({ cards, onCardClick, onCardDoubleClick, selectedCardId }: Ca
                   card={card}
                   compact
                   selected={selectedCardId === card.card_id}
+                  locked={lockedCardIds?.includes(card.card_id)}
                   onClick={(e) => onCardClick?.(card, e)}
                   onDoubleClick={(e) => onCardDoubleClick?.(card, e)}
                 />
@@ -261,6 +263,7 @@ export interface HandAreaProps {
   onCardClick?: (card: Card, e: React.MouseEvent) => void;
   onCardDoubleClick?: (card: Card, e: React.MouseEvent) => void;
   selectedCardId?: string | null;
+  lockedCardIds?: string[];
   className?: string;
 }
 
@@ -269,11 +272,11 @@ export function HandArea({
   onCardClick,
   onCardDoubleClick,
   selectedCardId,
+  lockedCardIds,
   className = '',
 }: HandAreaProps) {
   const [activeGroup, setActiveGroup] = useState<string>('character');
   const [detailCard, setDetailCard] = useState<Card | null>(null);
-  const [detailPos, setDetailPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const grouped = useMemo(() => groupCards(cards), [cards]);
   const counts = useMemo(() => {
@@ -286,7 +289,6 @@ export function HandArea({
 
   const handleCardClick = useCallback((card: Card, e: React.MouseEvent) => {
     setDetailCard(card);
-    setDetailPos({ x: e.clientX, y: e.clientY });
     onCardClick?.(card, e);
   }, [onCardClick]);
 
@@ -341,13 +343,14 @@ export function HandArea({
               onCardClick={handleCardClick}
               onCardDoubleClick={onCardDoubleClick}
               selectedCardId={selectedCardId}
+              lockedCardIds={lockedCardIds}
             />
           </motion.div>
         </AnimatePresence>
       </div>
 
       {detailCard && (
-        <CardDetailPanel card={detailCard} position={detailPos} onClose={handleCloseDetail} />
+        <CardDetailPanel card={detailCard} onClose={handleCloseDetail} />
       )}
     </div>
   );

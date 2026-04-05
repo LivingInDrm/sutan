@@ -1,0 +1,376 @@
+{
+  "scene_id": "scene_007",
+  "name": "芦苇荡畔・剑甲初逢",
+  "description": "北凉道秋风渐紧，官道旁的芦苇荡里藏着一座破旧渡口。徐凤年在此遇见一个抱着酒葫芦、满身落魄气的老头，谁也想不到，这竟是曾经一剑压江湖的李淳罡。",
+  "background_image": "/assets/scenes/scene07.png",
+  "type": "event",
+  "duration": 3,
+  "slots": [
+    {
+      "type": "character",
+      "required": true,
+      "locked": false
+    },
+    {
+      "type": "item",
+      "required": false,
+      "locked": false
+    }
+  ],
+  "entry_stage": "opening",
+  "stages": [
+    {
+      "stage_id": "opening",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "秋风吹得芦花乱颤，渡口边一条破船半搁浅在淤泥里。天色灰白，像一张揉皱了的旧纸。"
+        },
+        {
+          "type": "narration",
+          "text": "徐凤年踩着木板下马，老黄抱着剑匣跟在后头，脚步慢吞吞，像是怕惊着什么。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "这鬼地方连个像样茶摊都没有，倒适合藏高人，或者藏酒鬼。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "narration",
+          "text": "船头坐着个羊皮裘老头，头发乱得像鸟窝，怀里抱着旧酒葫芦，眯眼看天，像是在晒太阳，也像是在等谁。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "李淳罡",
+          "text": "小子，借口酒喝。你这身皮囊瞧着金贵，腰间那葫芦，倒有点江湖味。",
+          "portrait": "/assets/portraits/figure_li_chungang.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "老黄",
+          "text": "少爷，这老头眼神不一般哩。",
+          "portrait": "/assets/portraits/figure07.png"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "面对这个来历不明却气势古怪的老头，徐凤年决定先试试对方深浅。进行「社交」鉴定。",
+        "check": {
+          "attribute": "social",
+          "calc_mode": "max",
+          "target": 5
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年不急不躁，先递过去半壶酒，自己却只笑不语。老头接酒时眼皮一抬，像是终于看见了个有点意思的晚辈。",
+            "effects": {
+              "cards_add": [
+                "temp_generosity"
+              ]
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年把酒葫芦晃了晃，嘴上调侃，手上却没小气。老头喝了一口，哼了一声，没夸酒好，只说人还凑合。",
+            "effects": {
+              "cards_add": [
+                "temp_generosity"
+              ]
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年先拿话刺了两句，想逼这老头露底。羊皮裘老头也不恼，只是斜眼看他，像在看一个不知天高地厚的小混账。",
+            "effects": {
+              "cards_add": [
+                "temp_mockery"
+              ]
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年嘴上不饶人，半点不肯先让。老头抱着葫芦冷笑，渡口风声一下子就凉了几分，像有柄无形长剑横在两人中间。",
+            "effects": {
+              "cards_add": [
+                "temp_mockery"
+              ]
+            }
+          }
+        }
+      },
+      "branches": [
+        {
+          "condition": "success",
+          "next_stage": "wine_talk"
+        },
+        {
+          "condition": "partial_success",
+          "next_stage": "wine_talk"
+        },
+        {
+          "condition": "failure",
+          "next_stage": "sword_test"
+        },
+        {
+          "condition": "critical_failure",
+          "next_stage": "sword_test"
+        }
+      ]
+    },
+    {
+      "stage_id": "wine_talk",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "老头仰头灌了一口酒，喉结滚动，像是把半生风霜都一并咽了下去。芦苇荡里风声簌簌，渡口忽然安静得只剩酒香。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "李淳罡",
+          "text": "酒一般，人倒不俗。你小子不像寻常纨绔，倒像是披了层纨绔皮的狐狸。",
+          "portrait": "/assets/portraits/figure_li_chungang.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "老头，你也不像寻常酒鬼。寻常酒鬼只会讨酒，你这眼神，像是讨债。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "李淳罡",
+          "text": "讨债？老夫这辈子只向天讨过一剑。可惜天不给脸。",
+          "portrait": "/assets/portraits/figure_li_chungang.png"
+        },
+        {
+          "type": "narration",
+          "text": "老黄缩了缩脖子，抱紧剑匣没吭声。徐凤年却从这句轻飘飘的话里，听出了一股压过江湖的旧锋芒。"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "这老头话里藏锋，徐凤年若想再进一步，就得接得住这份锋芒。进行「智慧」鉴定。",
+        "check": {
+          "attribute": "wisdom",
+          "calc_mode": "max",
+          "target": 4
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年没有追问来历，只轻声道：「天不给脸，人就自己挣回来。」 老头沉默片刻，忽然笑了，笑声不大，却像旧剑出鞘时的一声清鸣。他看徐凤年的眼神，终于多了几分真正的认可。",
+            "effects": {
+              "reputation": 6,
+              "cards_add": [
+                "card_李淳罡"
+              ],
+              "cards_remove": [
+                "temp_generosity"
+              ]
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年顺着话头陪他喝了两口，没有多问，也没有怯场。老头点点头，说了句「还算顺眼」，算是给了面子。",
+            "effects": {
+              "reputation": 3,
+              "cards_add": [
+                "temp_owe_favor"
+              ],
+              "cards_remove": [
+                "temp_generosity"
+              ]
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年听出了不凡，却还是差了半步火候，只当这老头是个有故事的江湖客。老头也懒得点破，喝完酒便闭目养神，不再多说。",
+            "effects": {
+              "cards_remove": [
+                "temp_generosity"
+              ]
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年一句话没接稳，气氛顿时散了。老头翻了个白眼，骂了句「朽木」，抱着葫芦转过身去，像是连多看一眼都嫌费劲。",
+            "effects": {
+              "reputation": -2,
+              "cards_remove": [
+                "temp_generosity"
+              ]
+            }
+          }
+        }
+      },
+      "is_final": true
+    },
+    {
+      "stage_id": "sword_test",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "羊皮裘老头把酒葫芦往船头一搁，抬手折下一根芦苇。那根芦苇在他指间轻得像风，却让老黄眼皮猛地一跳。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "李淳罡",
+          "text": "嘴皮子挺利索。江湖上，嘴利没用，得看骨头硬不硬。来，接老夫一苇。",
+          "portrait": "/assets/portraits/figure_li_chungang.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "拿芦苇当剑？老头，你这是瞧不起我，还是瞧不起剑？",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "李淳罡",
+          "text": "等你接得住，再问这话。",
+          "portrait": "/assets/portraits/figure_li_chungang.png"
+        },
+        {
+          "type": "narration",
+          "text": "话音刚落，那根芦苇已破风而来，轻飘飘，却像整座芦苇荡的秋风都压在了上头。"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "这一击看似随意，实则是试心也是试骨。进行「combat」鉴定。",
+        "check": {
+          "attribute": "combat",
+          "calc_mode": "max",
+          "target": 5
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年侧身避锋，脚下连退三步，虽未还手，却稳稳站住。老头手里的芦苇停在他眉前三寸，风也跟着停了。李淳罡咧嘴一笑：「不错，至少不像个绣花枕头。」",
+            "effects": {
+              "reputation": 4,
+              "cards_add": [
+                "temp_friendly_rivalry"
+              ]
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年勉强接下这一苇，袖口被划开一道口子，人也踉跄了半步。老头看了眼那道裂口，哼道：「差点意思，但胆气没丢。」",
+            "effects": {
+              "reputation": 2
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年被这一苇逼得狼狈后退，差点踩空跌进泥水里。老黄赶紧上前扶住，老头却哈哈大笑：「本事不大，脾气倒不小。」",
+            "effects": {
+              "gold": -5,
+              "reputation": -1
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年连那根芦苇的来路都没看清，额前已被轻轻点中，整个人僵在原地。老头收手，满脸嫌弃：「这点眼力，也敢在老夫面前耍横？」",
+            "effects": {
+              "reputation": -4
+            }
+          }
+        }
+      },
+      "branches": [
+        {
+          "condition": "success",
+          "next_stage": "reveal"
+        },
+        {
+          "condition": "partial_success",
+          "next_stage": "reveal"
+        },
+        {
+          "condition": "failure",
+          "next_stage": "reveal"
+        },
+        {
+          "condition": "critical_failure",
+          "next_stage": "reveal"
+        }
+      ]
+    },
+    {
+      "stage_id": "reveal",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "风又起了，芦花漫天。羊皮裘老头把那根芦苇随手一丢，像丢掉一柄用旧了的名剑。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "老黄",
+          "text": "少爷，这位前辈……怕是了不得。",
+          "portrait": "/assets/portraits/figure07.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "我看出来了。就是不知道，了不得到哪一步。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "李淳罡",
+          "text": "名字不过是个累赘。可你若真想知道，江湖上以前有人叫我一声剑甲。",
+          "portrait": "/assets/portraits/figure_li_chungang.png"
+        },
+        {
+          "type": "narration",
+          "text": "渡口一时无声。连风都像是慢了半拍。徐凤年眯起眼，终于把这满身酒气与尘土的老头，和那个压过一代江湖的名字，慢慢对上。"
+        }
+      ],
+      "settlement": {
+        "type": "choice",
+        "narrative": "面对这位落魄却仍锋芒刺骨的剑甲，徐凤年决定如何回应？",
+        "options": [
+          {
+            "label": "再奉上一壶酒，以礼相待",
+            "effects": {
+              "gold": -8,
+              "reputation": 5,
+              "cards_add": [
+                "card_李淳罡"
+              ],
+              "cards_remove": [
+                "temp_mockery",
+                "temp_friendly_rivalry"
+              ]
+            }
+          },
+          {
+            "label": "笑着调侃两句，试探到底",
+            "effects": {
+              "reputation": 2,
+              "cards_add": [
+                "temp_mockery"
+              ]
+            }
+          },
+          {
+            "label": "沉默记下这个名字，暂不多言",
+            "effects": {
+              "cards_add": [
+                "intel_001"
+              ],
+              "cards_remove": [
+                "temp_mockery",
+                "temp_friendly_rivalry"
+              ]
+            }
+          }
+        ]
+      },
+      "is_final": true
+    }
+  ],
+  "unlock_conditions": {
+    "reputation_min": 10,
+    "required_tags": [
+      "北凉游历"
+    ]
+  },
+  "absence_penalty": {
+    "effects": {
+      "reputation": -3
+    },
+    "narrative": "你错过了渡口边那场看似寻常的偶遇。后来再想起，只剩一句江湖传闻：有些人一旦擦肩，便是一生都补不上的遗憾。"
+  }
+}

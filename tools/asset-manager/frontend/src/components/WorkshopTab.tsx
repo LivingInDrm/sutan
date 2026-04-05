@@ -96,6 +96,13 @@ export default function WorkshopTab({
   // This prevents focus loss caused by parent re-renders updating the variants prop.
   const isEditingDescriptionRef = useRef(false);
 
+  // Per-variant local description cache — source of truth for edited descriptions.
+  // Prevents stale props from overwriting unsaved/saved-but-not-propagated edits
+  // when the user switches between variants.
+  // The ref is used in stable callbacks; the state copy drives re-renders of variant lists.
+  const localDescriptionsRef = useRef<Map<number, string>>(new Map());
+  const [localDescriptions, setLocalDescriptions] = useState<Map<number, string>>(new Map());
+
   // Stable refs for callback props so handlers are not recreated on every render
   const onSaveDescriptionRef = useRef(onSaveDescription);
   const onLoadSamplesRef = useRef(onLoadSamples);
@@ -115,6 +122,8 @@ export default function WorkshopTab({
   // ── Reset on entity switch ─────────────────────────────────────────────────
   useEffect(() => {
     isEditingDescriptionRef.current = false;
+    localDescriptionsRef.current = new Map(); // clear per-variant edit cache
+    setLocalDescriptions(new Map());
     setShowRegeneratePanel(false);
     setRegenerateError(null);
     setRegenerateBio('');
@@ -133,8 +142,12 @@ export default function WorkshopTab({
     // prevents focus loss caused by parent re-renders passing a new variants prop.
     if (isEditingDescriptionRef.current) return;
     if (selectedVariant) {
-      setEditedDescription(selectedVariant.description);
-      lastSavedDescription.current = selectedVariant.description;
+      // Prefer locally-cached description (includes edits made since last parent refresh)
+      // so that switching variants and back does not discard unsaved/saved-but-not-propagated edits.
+      const localDesc = localDescriptionsRef.current.get(selectedVariant.index);
+      const desc = localDesc !== undefined ? localDesc : selectedVariant.description;
+      setEditedDescription(desc);
+      lastSavedDescription.current = desc;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedVariant?.index, entityName]);
@@ -202,6 +215,12 @@ export default function WorkshopTab({
       const descriptions = await onRegenerateVariantsRef.current(regenerateBio);
       setShowRegeneratePanel(false);
       setRegenerateBio('');
+      // Populate local cache with all newly generated descriptions so that
+      // switching between variants after regeneration shows fresh content.
+      descriptions.forEach((desc, idx) => {
+        localDescriptionsRef.current.set(idx, desc);
+      });
+      setLocalDescriptions(new Map(localDescriptionsRef.current));
       // Update currently viewed description if it changed
       if (descriptions[selectedVariantIndex] !== undefined) {
         setEditedDescription(descriptions[selectedVariantIndex]);
@@ -230,11 +249,11 @@ export default function WorkshopTab({
         const variantIdx = indicesToGenerate[i];
         const variantToGenerate = variants[variantIdx];
         // Use the live edited description for the currently selected variant,
-        // and the saved description for others.
+        // and the locally-cached description (which includes unsaved edits) for others.
         const descriptionToUse =
           variantIdx === selectedVariantIndex
             ? editedDescription
-            : (variantToGenerate?.description || '');
+            : (localDescriptionsRef.current.get(variantIdx) ?? variantToGenerate?.description ?? '');
 
         if (indicesToGenerate.length > 1) {
           setMultiVariantProgress({ current: i + 1, total: indicesToGenerate.length });
@@ -292,7 +311,7 @@ export default function WorkshopTab({
             >
               <div style={styles.variantIndex}>#{variant.index}</div>
               <div style={styles.variantDesc}>
-                {variant.description || '(未设置)'}
+                {(localDescriptions.get(index) ?? variant.description) || '(未设置)'}
               </div>
             </button>
           ))}
@@ -357,7 +376,11 @@ export default function WorkshopTab({
         <textarea
           style={styles.textarea}
           value={editedDescription}
-          onChange={(e) => setEditedDescription(e.target.value)}
+          onChange={(e) => {
+            setEditedDescription(e.target.value);
+            localDescriptionsRef.current.set(selectedVariantIndex, e.target.value);
+            setLocalDescriptions(new Map(localDescriptionsRef.current));
+          }}
           onFocus={() => { isEditingDescriptionRef.current = true; }}
           onBlur={() => { isEditingDescriptionRef.current = false; }}
           placeholder={config.descriptionPlaceholder || '输入描述...'}
@@ -439,9 +462,12 @@ export default function WorkshopTab({
                     />
                     <span style={styles.variantCheckboxIndex}>#{v.index}</span>
                     <span style={styles.variantCheckboxDesc}>
-                      {v.description
-                        ? v.description.slice(0, 30) + (v.description.length > 30 ? '...' : '')
-                        : '(未设置)'}
+                      {(() => {
+                        const desc = localDescriptions.get(idx) ?? v.description;
+                        return desc
+                          ? desc.slice(0, 30) + (desc.length > 30 ? '...' : '')
+                          : '(未设置)';
+                      })()}
                     </span>
                   </label>
                 );

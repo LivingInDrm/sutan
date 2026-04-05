@@ -301,5 +301,133 @@
       "ally"
     ],
     "equipment_slots": 4
+  },
+  "轩辕青锋测试": {
+    "description": "轩辕世家天之骄女，姿容冷艳，心性孤绝刚烈。早年受家族桎梏，后凭狠绝手段与卓绝天资崛起，武道进境惊人。行事决断，不轻信他人，却自有傲骨与担当。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 7,
+      "charm": 9,
+      "wisdom": 7,
+      "combat": 9,
+      "social": 4,
+      "survival": 5,
+      "stealth": 3,
+      "magic": 2
+    },
+    "special_attributes": {
+      "support": 1,
+      "reroll": 3
+    },
+    "tags": [
+      "female",
+      "swordsman",
+      "clan",
+      "ally"
+    ],
+    "equipment_slots": 4
+  },
+  "轩辕青锋": {
+    "description": "轩辕世家女子，性情孤傲凌厉，心机与胆魄并重。出身名门却不甘受制，于家族倾轧中强势崛起，行事果决狠辣。兼具姿容与锋芒，善借势谋局，是极具压迫感的江湖女子。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 7,
+      "charm": 9,
+      "wisdom": 8,
+      "combat": 8,
+      "social": 6,
+      "survival": 5,
+      "stealth": 4,
+      "magic": 2
+    },
+    "special_attributes": {
+      "support": 1,
+      "reroll": 3
+    },
+    "tags": [
+      "female",
+      "warrior",
+      "clan",
+      "ally"
+    ],
+    "equipment_slots": 4
+  },
+  "南宫仆射": {
+    "description": "南宫仆射，白狐儿脸，姿容绝世而性情冷冽孤峭。痴于刀道，行走江湖只为登顶武学与了却旧怨，出手凌厉决绝，心思深沉寡言，却对徐凤年颇有惺惺相惜之意。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 8,
+      "charm": 10,
+      "wisdom": 7,
+      "combat": 10,
+      "social": 3,
+      "survival": 6,
+      "stealth": 7,
+      "magic": 1
+    },
+    "special_attributes": {
+      "support": 1,
+      "reroll": 4
+    },
+    "tags": [
+      "female",
+      "swordsman",
+      "wanderer",
+      "ally"
+    ],
+    "equipment_slots": 4
+  },
+  "青鸟": {
+    "description": "青鸟为北凉王府死士出身，寡言冷冽，素以忠心护主。擅使刹那枪，身法凌厉，近战杀伐果断，兼具隐忍与机警，是徐凤年身边最可靠的贴身护卫之一。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 8,
+      "charm": 6,
+      "wisdom": 6,
+      "combat": 9,
+      "social": 3,
+      "survival": 6,
+      "stealth": 7,
+      "magic": 1
+    },
+    "special_attributes": {
+      "support": 4,
+      "reroll": 2
+    },
+    "tags": [
+      "female",
+      "warrior",
+      "rogue",
+      "clan",
+      "ally"
+    ],
+    "equipment_slots": 4
+  },
+  "轩辕敬城": {
+    "description": "轩辕敬城，徽山轩辕家读书人，隐忍多年，表面迂弱无争，实则胸有丘壑。为护妻女与家族尊严，不惜以命入局，终在大雪坪一朝问天，尽显书生风骨与决绝气魄。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 4,
+      "charm": 6,
+      "wisdom": 10,
+      "combat": 7,
+      "social": 5,
+      "survival": 4,
+      "stealth": 3,
+      "magic": 9
+    },
+    "special_attributes": {
+      "support": 2,
+      "reroll": 3
+    },
+    "tags": [
+      "male",
+      "scholar",
+      "clan",
+      "mentor",
+      "ally",
+      "mage"
+    ],
+    "equipment_slots": 3
   }
 }

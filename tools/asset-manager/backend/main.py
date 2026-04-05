@@ -156,7 +156,7 @@ def _save_templates(data: Dict[str, str]) -> None:
 
 
 def _get_openai_client():
-    api_key = os.environ.get("OPENAI_API_KEY", "")
+    api_key = os.environ.get("OPENAI_API_KEY", "").strip()
     if not api_key:
         raise HTTPException(
             status_code=500,
@@ -676,16 +676,14 @@ def _generate_descriptions_blocking(client, name: str, bio: str) -> List[str]:
         f"请基于《雪中悍刀行》原著中 {name} 的外貌、性格、武器、标志性场景，"
         f"生成 4 条不同场景的 description，以 JSON 数组格式输出。"
     )
-    response = client.chat.completions.create(
+    response = client.responses.create(
         model=DESCRIPTION_MODEL,
-        messages=[
-            {"role": "system", "content": _DESCRIPTION_SYSTEM_PROMPT},
-            {"role": "user", "content": user_msg},
-        ],
+        instructions=_DESCRIPTION_SYSTEM_PROMPT,
+        input=user_msg,
         temperature=0.9,
-        max_completion_tokens=1000,
+        max_output_tokens=1000,
     )
-    content = response.choices[0].message.content.strip()
+    content = response.output_text.strip()
     # Strip markdown code fences if present
     if content.startswith("```"):
         content = re.sub(r"^```[^\n]*\n?", "", content)
@@ -903,16 +901,14 @@ def _generate_profile_blocking(client, name: str, reference_cards: List[Dict]) -
         f"生成符合稀有度规则的游戏属性和人物小传（50-100字）。"
     )
 
-    response = client.chat.completions.create(
+    response = client.responses.create(
         model=DESCRIPTION_MODEL,
-        messages=[
-            {"role": "system", "content": _PROFILE_SYSTEM_PROMPT},
-            {"role": "user", "content": user_msg},
-        ],
+        instructions=_PROFILE_SYSTEM_PROMPT,
+        input=user_msg,
         temperature=0.7,
-        max_completion_tokens=800,
+        max_output_tokens=800,
     )
-    content = response.choices[0].message.content.strip()
+    content = response.output_text.strip()
     if content.startswith("```"):
         content = re.sub(r"^```[^\n]*\n?", "", content)
         content = re.sub(r"\n?```$", "", content)
@@ -1351,16 +1347,14 @@ def _generate_item_descriptions_blocking(client, name: str, equipment_type: str,
         f"请基于《雪中悍刀行》世界观（如物品在原著中存在），"
         f"为该物品生成 4 条不同视觉方向的水墨风格 description，以 JSON 数组格式输出。"
     )
-    response = client.chat.completions.create(
+    response = client.responses.create(
         model=DESCRIPTION_MODEL,
-        messages=[
-            {"role": "system", "content": _ITEM_VARIANT_SYSTEM_PROMPT},
-            {"role": "user", "content": user_msg},
-        ],
+        instructions=_ITEM_VARIANT_SYSTEM_PROMPT,
+        input=user_msg,
         temperature=0.9,
-        max_completion_tokens=800,
+        max_output_tokens=800,
     )
-    content = response.choices[0].message.content.strip()
+    content = response.output_text.strip()
     if content.startswith("```"):
         content = re.sub(r"^```[^\n]*\n?", "", content)
         content = re.sub(r"\n?```$", "", content)
@@ -1436,16 +1430,14 @@ def _generate_item_profile_blocking(client, name: str, equipment_type: str, bio:
         f"{ref_text}\n\n"
         f"请基于《雪中悍刀行》世界观，为该物品生成游戏属性配置。"
     )
-    response = client.chat.completions.create(
+    response = client.responses.create(
         model=DESCRIPTION_MODEL,
-        messages=[
-            {"role": "system", "content": _ITEM_PROFILE_SYSTEM_PROMPT},
-            {"role": "user", "content": user_msg},
-        ],
+        instructions=_ITEM_PROFILE_SYSTEM_PROMPT,
+        input=user_msg,
         temperature=0.7,
-        max_completion_tokens=600,
+        max_output_tokens=600,
     )
-    content = response.choices[0].message.content.strip()
+    content = response.output_text.strip()
     if content.startswith("```"):
         content = re.sub(r"^```[^\n]*\n?", "", content)
         content = re.sub(r"\n?```$", "", content)
