@@ -9,6 +9,7 @@ export default defineConfig({
       '/images': 'http://localhost:8100',
       '/portraits': 'http://localhost:8100',
       '/items': 'http://localhost:8100',
+      '/maps': 'http://localhost:8100',
     }
   }
 })

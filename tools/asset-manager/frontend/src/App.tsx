@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { api } from './api';
-import type { Character, Templates, Item } from './types';
+import type { Character, Templates, Item, Scene, ScenesResponse } from './types';
 import CharacterList from './components/CharacterList';
 import CharacterDetail from './components/CharacterDetail';
 import ItemList from './components/ItemList';
 import ItemDetail from './components/ItemDetail';
+import SceneList from './components/SceneList';
+import SceneDetail from './components/SceneDetail';
 import TemplateSettings from './components/TemplateSettings';
 
-type Tab = 'characters' | 'items' | 'templates' | 'history';
+type Tab = 'characters' | 'items' | 'scenes' | 'templates' | 'history';
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('characters');
@@ -16,6 +18,8 @@ function App() {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [scenesData, setScenesData] = useState<ScenesResponse | null>(null);
+  const [selectedScene, setSelectedScene] = useState<Scene | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,6 +49,32 @@ function App() {
     }
   };
 
+  const loadScenes = async () => {
+    try {
+      const data = await api.getScenes();
+      setScenesData(data);
+      // Refresh selectedScene from updated data
+      if (selectedScene) {
+        for (const mapData of Object.values(data.maps)) {
+          const found = mapData.scenes.find((s) => s.id === selectedScene.id);
+          if (found) {
+            setSelectedScene(found);
+            break;
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load scenes', err);
+    }
+  };
+
+  // Load scenes when tab becomes active
+  useEffect(() => {
+    if (activeTab === 'scenes' && !scenesData) {
+      loadScenes();
+    }
+  }, [activeTab]);
+
   const handleCharacterUpdate = async () => {
     await loadData();
   };
@@ -70,6 +100,20 @@ function App() {
       if (updated) setSelectedItem(updated);
     }
   };
+
+  const handleSceneUpdate = async () => {
+    await loadScenes();
+  };
+
+  // Determine total scene count
+  const totalScenes = scenesData
+    ? Object.values(scenesData.maps).reduce((sum, m) => sum + m.scenes.length, 0)
+    : 0;
+
+  // Find the map containing the selected scene
+  const selectedSceneMap = selectedScene && scenesData
+    ? Object.values(scenesData.maps).find((m) => m.id === selectedScene.map_id)
+    : null;
 
   return (
     <div style={styles.app}>
@@ -105,6 +149,16 @@ function App() {
           >
             <span style={styles.navLabel}>物品管理</span>
             <span style={styles.navSublabel}>EQUIPMENT</span>
+          </button>
+          <button
+            style={{
+              ...styles.navButton,
+              ...(activeTab === 'scenes' ? styles.navButtonActive : {}),
+            }}
+            onClick={() => setActiveTab('scenes')}
+          >
+            <span style={styles.navLabel}>场景管理</span>
+            <span style={styles.navSublabel}>SCENES</span>
           </button>
           <button
             style={{
@@ -215,6 +269,44 @@ function App() {
               </div>
             )}
 
+            {activeTab === 'scenes' && (
+              <div style={styles.charactersLayout}>
+                <aside style={styles.sceneSidebar}>
+                  <div style={styles.sidebarHeader}>
+                    <div style={styles.sidebarTitle}>SCENE DATABASE</div>
+                    <div style={styles.sidebarCount}>{totalScenes} SCENES · 7 MAPS</div>
+                  </div>
+                  {!scenesData ? (
+                    <div style={styles.sidebarLoading}>
+                      <div className="spinner"></div>
+                    </div>
+                  ) : (
+                    <SceneList
+                      maps={scenesData.maps}
+                      selectedScene={selectedScene}
+                      onSelectScene={setSelectedScene}
+                    />
+                  )}
+                </aside>
+                <div style={styles.content}>
+                  {selectedScene && selectedSceneMap ? (
+                    <SceneDetail
+                      scene={selectedScene}
+                      mapData={selectedSceneMap}
+                      templates={templates}
+                      onUpdate={handleSceneUpdate}
+                    />
+                  ) : (
+                    <div style={styles.emptyState}>
+                      <div style={styles.emptyIcon}>◈</div>
+                      <div style={styles.emptyText}>SELECT A SCENE</div>
+                      <div style={styles.emptySubtext}>从左侧列表选择场景以编辑和生成图标</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {activeTab === 'templates' && templates && (
               <div style={styles.templatesLayout}>
                 <TemplateSettings
@@ -294,7 +386,7 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: 'center',
   },
   navButton: {
-    padding: '8px 20px',
+    padding: '8px 16px',
     background: 'transparent',
     border: '1px solid var(--border-subtle)',
     color: 'var(--text-secondary)',
@@ -364,6 +456,14 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: 'column',
     overflow: 'hidden',
   },
+  sceneSidebar: {
+    width: '280px',
+    background: 'var(--bg-secondary)',
+    borderRight: '1px solid var(--border-primary)',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
   sidebarHeader: {
     padding: '20px',
     borderBottom: '1px solid var(--border-primary)',
@@ -380,6 +480,12 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '10px',
     fontWeight: '400',
     color: 'var(--text-tertiary)',
+  },
+  sidebarLoading: {
+    flex: '1',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     flex: '1',

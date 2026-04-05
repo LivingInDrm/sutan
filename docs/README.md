@@ -18,6 +18,7 @@
 | 数值平衡、难度 | [data/balance.md](data/balance.md) |
 | 各类卡牌设计 | [content/cards.md](content/cards.md) |
 | 场景参与、锁定 | [content/scenes.md](content/scenes.md) |
+| 雪中地图规划 | [content/xuezhong_map_design.md](content/xuezhong_map_design.md) |
 | 声望、俺寻思、成就 | [content/features.md](content/features.md) |
 | UI 布局 | [ui/layout.md](ui/layout.md) |
 | 美术风格 | [ui/visual_style.md](ui/visual_style.md) |
@@ -41,6 +42,7 @@ docs/
 ├── content/                     # 内容设计（策划填充）
 │   ├── cards.md                # 卡牌设计：各类型卡牌规则、标签系统
 │   ├── scenes.md               # 场景设计：卡槽、参与机制、锁定规则
+│   ├── xuezhong_map_design.md  # 雪中悍刀行世界大地图与场景规划
 │   └── features.md             # 功能系统：声望、俺寻思、成就
 ├── ui/                          # UI/美术规格
 │   ├── visual_style.md         # 视觉风格：美术主题、配色、质感

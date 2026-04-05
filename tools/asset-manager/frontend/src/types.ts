@@ -29,6 +29,8 @@ export interface Templates {
   portrait_template: string;
   item_template: string;
   scene_template: string;
+  scene_icon_style: string;
+  scene_backdrop_style: string;
 }
 
 export interface GenerateRequest {
@@ -144,4 +146,75 @@ export interface CreateItemRequest {
   name: string;
   bio: string;
   equipment_type: string;
+}
+
+// ─────────────────────────────────────────────
+// Scene types
+// ─────────────────────────────────────────────
+
+export type SceneImageType = 'icon' | 'backdrop';
+
+export interface SceneVariant {
+  index: number;
+  description: string;
+}
+
+export interface Scene {
+  id: string;
+  name: string;
+  map_id: string;
+  type: string;
+  description: string;
+  prompt: string;
+  icon_path: string;
+  current_icon: string;
+  has_pending_icon: boolean;
+  has_pending_backdrop?: boolean;
+  selected_icon?: string;
+  // Backdrop fields
+  backdrop_prompt?: string;
+  backdrop_path?: string;
+  selected_backdrop?: string;
+  // Workshop variants
+  icon_variants?: SceneVariant[];
+  backdrop_variants?: SceneVariant[];
+}
+
+export interface SceneTerrain {
+  prompt: string;
+  icon_path: string;
+  current_icon: string;
+}
+
+export interface SceneMap {
+  id: string;
+  name: string;
+  terrain: SceneTerrain;
+  scenes: Scene[];
+}
+
+export interface ScenesResponse {
+  maps: Record<string, SceneMap>;
+}
+
+export interface SceneGenerateRequest {
+  scene_id: string;
+  prompt: string;
+  count: number;
+  image_type?: SceneImageType;
+}
+
+export interface SceneGeneratePromptsRequest {
+  scene_id: string;
+  image_type: SceneImageType;
+}
+
+export interface SceneGeneratePromptsResponse {
+  prompts: string[];
+  scene_id: string;
+  image_type: SceneImageType;
+}
+
+export interface SelectBackdropRequest {
+  image_path: string;
 }

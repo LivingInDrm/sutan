@@ -1,4 +1,4 @@
-import type { Character, Templates, SampleImage, GenerateRequest, GenerationProgress, GenerateDescriptionRequest, CreateCharacterRequest, CharacterProfile, DeployPreview, Item, ItemProfile, ItemDeployPreview, CreateItemRequest } from './types';
+import type { Character, Templates, SampleImage, GenerateRequest, GenerationProgress, GenerateDescriptionRequest, CreateCharacterRequest, CharacterProfile, DeployPreview, Item, ItemProfile, ItemDeployPreview, CreateItemRequest, ScenesResponse, Scene, SceneGenerateRequest, SceneImageType, SceneGeneratePromptsResponse } from './types';
 
 export const api = {
   async getCharacters(): Promise<Character[]> {
@@ -344,5 +344,184 @@ export const api = {
         }
       }
     }
+  },
+
+  // ─────────────────────────────────────────────
+  // Scene API
+  // ─────────────────────────────────────────────
+  async getScenes(): Promise<ScenesResponse> {
+    const response = await fetch('/api/scenes');
+    if (!response.ok) throw new Error('Failed to fetch scenes');
+    return response.json();
+  },
+
+  async getScene(sceneId: string): Promise<Scene> {
+    const response = await fetch(`/api/scenes/${encodeURIComponent(sceneId)}`);
+    if (!response.ok) throw new Error('Failed to fetch scene');
+    return response.json();
+  },
+
+  async updateScene(sceneId: string, data: { description?: string; prompt?: string; name?: string; backdrop_prompt?: string }): Promise<{ scene: Scene }> {
+    const response = await fetch(`/api/scenes/${encodeURIComponent(sceneId)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to update scene');
+    }
+    return response.json();
+  },
+
+  async getSceneSamples(sceneId: string, imageType?: SceneImageType): Promise<SampleImage[]> {
+    const url = imageType
+      ? `/api/scene-samples/${encodeURIComponent(sceneId)}?image_type=${imageType}`
+      : `/api/scene-samples/${encodeURIComponent(sceneId)}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to fetch scene samples');
+    return response.json();
+  },
+
+  async selectSceneIcon(sceneId: string, imagePath: string): Promise<void> {
+    const response = await fetch(`/api/scenes/${encodeURIComponent(sceneId)}/select-icon`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image_path: imagePath }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to select scene icon');
+    }
+  },
+
+  async deploySceneIcon(sceneId: string, imageType: 'icon' | 'backdrop' = 'icon'): Promise<any> {
+    const url = imageType === 'backdrop'
+      ? `/api/scenes/${encodeURIComponent(sceneId)}/deploy?image_type=backdrop`
+      : `/api/scenes/${encodeURIComponent(sceneId)}/deploy`;
+    const response = await fetch(url, {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to deploy scene icon');
+    }
+    return response.json();
+  },
+
+  async generateSceneIcon(
+    request: SceneGenerateRequest,
+    onProgress: (progress: GenerationProgress) => void
+  ): Promise<void> {
+    const response = await fetch('/api/scene-generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to start scene icon generation');
+    }
+
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const data = JSON.parse(line.slice(6));
+            onProgress(data);
+          } catch (e) {
+            console.error('Failed to parse SSE data:', e);
+          }
+        }
+      }
+    }
+  },
+
+  async generateScenePrompts(sceneId: string, imageType: SceneImageType): Promise<SceneGeneratePromptsResponse> {
+    const response = await fetch('/api/scene-generate-prompts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ scene_id: sceneId, image_type: imageType }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to generate scene prompts');
+    }
+    return response.json();
+  },
+
+  async selectSceneBackdrop(sceneId: string, imagePath: string): Promise<void> {
+    const response = await fetch(`/api/scenes/${encodeURIComponent(sceneId)}/select-backdrop`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image_path: imagePath }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to select scene backdrop');
+    }
+  },
+
+  async updateSceneIconVariant(sceneId: string, variantIndex: number, description: string): Promise<void> {
+    const response = await fetch(`/api/scenes/${encodeURIComponent(sceneId)}/icon-variants/${variantIndex}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to update scene icon variant');
+    }
+  },
+
+  async updateSceneBackdropVariant(sceneId: string, variantIndex: number, description: string): Promise<void> {
+    const response = await fetch(`/api/scenes/${encodeURIComponent(sceneId)}/backdrop-variants/${variantIndex}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to update scene backdrop variant');
+    }
+  },
+
+  async regenerateSceneIconVariants(sceneId: string, bio: string): Promise<string[]> {
+    const response = await fetch(`/api/scenes/${encodeURIComponent(sceneId)}/regenerate-icon-variants`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bio }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to regenerate scene icon variants');
+    }
+    const data = await response.json();
+    return data.descriptions as string[];
+  },
+
+  async regenerateSceneBackdropVariants(sceneId: string, bio: string): Promise<string[]> {
+    const response = await fetch(`/api/scenes/${encodeURIComponent(sceneId)}/regenerate-backdrop-variants`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bio }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to regenerate scene backdrop variants');
+    }
+    const data = await response.json();
+    return data.descriptions as string[];
   },
 };

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>北凉地图 · 建筑展示</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0d0a06;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      font-family: "Noto Serif SC", "SimSun", serif;
+      color: #e8d5a3;
+    }
+
+    header {
+      padding: 18px 0 12px;
+      text-align: center;
+      letter-spacing: 0.25em;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      color: #f0d88a;
+      text-shadow: 0 0 18px rgba(240, 200, 80, 0.5);
+    }
+
+    header p {
+      font-size: 0.75rem;
+      color: #a08060;
+      margin-top: 4px;
+      letter-spacing: 0.15em;
+    }
+
+    .map-wrapper {
+      position: relative;
+      width: 1536px;
+      max-width: 95vw;
+      aspect-ratio: 1536 / 1024;
+      margin: 0 auto 24px;
+      border: 2px solid #5a3e1e;
+      box-shadow: 0 0 40px rgba(180, 120, 40, 0.25), inset 0 0 60px rgba(0,0,0,0.4);
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    .map-wrapper img.terrain {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ──────────── 路线连线 SVG ──────────── */
+    .route-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* ──────────── 建筑图标 ──────────── */
+    .landmark {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: transform 0.2s ease;
+    }
+
+    .landmark:hover {
+      transform: translate(-50%, -50%) scale(1.18);
+      z-index: 20;
+    }
+
+    .landmark img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.6));
+      transition: filter 0.2s ease;
+    }
+
+    .landmark:hover img {
+      filter: drop-shadow(0 4px 14px rgba(240, 190, 60, 0.75));
+    }
+
+    .landmark .label {
+      margin-top: 4px;
+      font-size: 0.7rem;
+      background: rgba(10, 6, 2, 0.72);
+      color: #f0d88a;
+      padding: 2px 7px;
+      border-radius: 3px;
+      border: 1px solid rgba(200, 150, 60, 0.45);
+      white-space: nowrap;
+      letter-spacing: 0.05em;
+      pointer-events: none;
+    }
+
+    /* ──────────── 图例 ──────────── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      justify-content: center;
+      max-width: 900px;
+      padding: 12px 16px;
+      background: rgba(20, 12, 4, 0.7);
+      border: 1px solid #5a3e1e;
+      border-radius: 4px;
+      margin-bottom: 28px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.72rem;
+      color: #c8a870;
+    }
+
+    .legend-item img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+    }
+
+    /* 指南针 */
+    .compass {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      width: 52px;
+      height: 52px;
+      background: radial-gradient(circle, rgba(30,18,6,0.85) 60%, transparent 100%);
+      border: 1px solid rgba(200,150,60,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: #f0d88a;
+      flex-direction: column;
+      gap: 1px;
+      z-index: 15;
+    }
+
+    .compass .north { font-size: 1rem; line-height: 1; color: #f05050; }
+    .compass .south { font-size: 0.65rem; color: #a0a0a0; }
+
+    footer {
+      font-size: 0.65rem;
+      color: #5a4020;
+      padding-bottom: 16px;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>北 凉 · 疆 域 全 图</h1>
+    <p>从清凉山王府至葫芦口前哨 · 北凉十景</p>
+  </header>
+
+  <div class="map-wrapper" id="mapWrap">
+    <!-- 地形背景 -->
+    <img class="terrain" src="terrain_bg.png" alt="北凉地形图" />
+
+    <!-- 指南针 -->
+    <div class="compass">
+      <span class="north">北</span>
+      <span class="south">南</span>
+    </div>
+
+    <!-- 路线连线（SVG，百分比坐标） -->
+    <svg class="route-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <defs>
+        <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="rgba(200,150,60,0.5)" />
+        </marker>
+      </defs>
+      <!-- 主干道：王府 → 陵州 → 白马 → 幽州 → 流州 → 葫芦口 -->
+      <polyline
+        points="50,82 36,66 38,52 50,38 50,22 50,8"
+        fill="none"
+        stroke="rgba(200,150,60,0.35)"
+        stroke-width="0.5"
+        stroke-dasharray="2,1.5"
+        marker-mid="url(#arr)"
+      />
+      <!-- 支线：王府 → 听潮亭 -->
+      <line x1="50" y1="82" x2="36" y2="86" stroke="rgba(200,150,60,0.25)" stroke-width="0.4" stroke-dasharray="1.5,1.5"/>
+      <!-- 支线：陵州 → 芦苇荡 -->
+      <line x1="36" y1="66" x2="62" y2="64" stroke="rgba(200,150,60,0.25)" stroke-width="0.4" stroke-dasharray="1.5,1.5"/>
+      <!-- 支线：白马 → 龙睛 -->
+      <line x1="38" y1="52" x2="62" y2="50" stroke="rgba(200,150,60,0.25)" stroke-width="0.4" stroke-dasharray="1.5,1.5"/>
+      <!-- 支线：幽州 → 暗驿 -->
+      <line x1="50" y1="38" x2="34" y2="34" stroke="rgba(200,150,60,0.25)" stroke-width="0.4" stroke-dasharray="1.5,1.5"/>
+    </svg>
+
+    <!-- ① 清凉山王府 —— 南部中央 -->
+    <div class="landmark" style="left:50%; top:82%">
+      <img src="icon_01_qingliangshan.png" alt="清凉山王府" />
+      <div class="label">清凉山王府</div>
+    </div>
+
+    <!-- ② 听潮亭 —— 王府左侧 -->
+    <div class="landmark" style="left:36%; top:87%">
+      <img src="icon_02_tingchaoting.png" alt="听潮亭" />
+      <div class="label">听潮亭</div>
+    </div>
+
+    <!-- ③ 陵州城市集 —— 中南偏左 -->
+    <div class="landmark" style="left:36%; top:67%">
+      <img src="icon_03_lingzhou.png" alt="陵州城市集" />
+      <div class="label">陵州城市集</div>
+    </div>
+
+    <!-- ④ 芦苇荡渡口 —— 中南偏右 -->
+    <div class="landmark" style="left:62%; top:65%">
+      <img src="icon_04_luweidang.png" alt="芦苇荡渡口" />
+      <div class="label">芦苇荡渡口</div>
+    </div>
+
+    <!-- ⑤ 白马游弩校场 —— 中部偏左 -->
+    <div class="landmark" style="left:38%; top:52%">
+      <img src="icon_05_baima.png" alt="白马游弩校场" />
+      <div class="label">白马游弩校场</div>
+    </div>
+
+    <!-- ⑥ 龙睛郡牧场 —— 中部偏右 -->
+    <div class="landmark" style="left:62%; top:50%">
+      <img src="icon_06_longjing.png" alt="龙睛郡牧场" />
+      <div class="label">龙睛郡牧场</div>
+    </div>
+
+    <!-- ⑦ 幽州马市 —— 中北部中央 -->
+    <div class="landmark" style="left:50%; top:38%">
+      <img src="icon_07_youzhou.png" alt="幽州马市" />
+      <div class="label">幽州马市</div>
+    </div>
+
+    <!-- ⑧ 北凉暗驿 —— 中北偏左 -->
+    <div class="landmark" style="left:34%; top:34%">
+      <img src="icon_08_anji.png" alt="北凉暗驿" />
+      <div class="label">北凉暗驿</div>
+    </div>
+
+    <!-- ⑨ 流州边关 —— 北部中央 -->
+    <div class="landmark" style="left:50%; top:22%">
+      <img src="icon_09_liuzhou.png" alt="流州边关" />
+      <div class="label">流州边关</div>
+    </div>
+
+    <!-- ⑩ 葫芦口前哨 —— 最北端中央 -->
+    <div class="landmark" style="left:50%; top:8%">
+      <img src="icon_10_hulukou.png" alt="葫芦口前哨" />
+      <div class="label">葫芦口前哨</div>
+    </div>
+  </div>
+
+  <!-- 图例 -->
+  <div class="legend">
+    <div class="legend-item"><img src="icon_01_qingliangshan.png"/>清凉山王府</div>
+    <div class="legend-item"><img src="icon_02_tingchaoting.png"/>听潮亭</div>
+    <div class="legend-item"><img src="icon_03_lingzhou.png"/>陵州城市集</div>
+    <div class="legend-item"><img src="icon_04_luweidang.png"/>芦苇荡渡口</div>
+    <div class="legend-item"><img src="icon_05_baima.png"/>白马游弩校场</div>
+    <div class="legend-item"><img src="icon_06_longjing.png"/>龙睛郡牧场</div>
+    <div class="legend-item"><img src="icon_07_youzhou.png"/>幽州马市</div>
+    <div class="legend-item"><img src="icon_08_anji.png"/>北凉暗驿</div>
+    <div class="legend-item"><img src="icon_09_liuzhou.png"/>流州边关</div>
+    <div class="legend-item"><img src="icon_10_hulukou.png"/>葫芦口前哨</div>
+  </div>
+
+  <footer>北凉 · 徐骁坐镇三十年 · 疆土虽寒 · 骨气如铁</footer>
+
+</body>
+</html>

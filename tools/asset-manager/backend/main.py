@@ -348,7 +348,11 @@ def get_characters() -> List[Dict]:
 # ─────────────────────────────────────────────
 @app.get("/api/templates")
 def get_templates() -> Dict[str, str]:
-    return _load_templates()
+    result = _load_templates()
+    # Append scene style template strings (read-only, derived from code constants)
+    result["scene_icon_style"] = SCENE_ICON_STYLE
+    result["scene_backdrop_style"] = SCENE_BACKDROP_STYLE
+    return result
 
 
 # ─────────────────────────────────────────────
@@ -2036,6 +2040,877 @@ async def generate_item_images(body: GenerateRequest):
         yield f"data: {done_event}\n\n"
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+# ═════════════════════════════════════════════════════════════════
+# SCENE MANAGER API
+# ═════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────
+# Scene constants
+# ─────────────────────────────────────────────
+SCENE_PROFILES_PATH = PROJECT_ROOT / "scripts" / "scene_profiles.json"
+MAPS_DIR = BACKEND_DIR / "maps"  # tools/asset-manager/backend/maps/{map_id}/
+
+# ─────────────────────────────────────────────
+# Scene / map icon prompt style constants
+# Mirrors generate_beiliang_assets.py exactly:
+#   MAP_STYLE_BASE + " " + ICON_STYLE_SUFFIX + "\n\n" + Subject + details
+# ─────────────────────────────────────────────
+_MAP_STYLE_BASE = (
+    "Traditional East Asian ink wash painting (水墨画) style. "
+    "East Asian ink wash painting style with vibrant natural color accents, rich and varied color palette, "
+    "expressive brushwork, classical Chinese painting aesthetics. "
+    "NO human figures, NO portraits, NO characters, NO people, NO faces, NO text, NO labels, NO UI elements."
+)
+
+# Scene icon style prompt template (map building/location icons — NOT character style)
+# Structure exactly matches ICON_STYLE in generate_beiliang_assets.py:
+#   {MAP_STYLE_BASE} {icon_style_suffix}\n\nSubject: {prompt} {details}
+SCENE_ICON_STYLE = (
+    _MAP_STYLE_BASE + " "
+    "Single architectural landmark illustration, icon composition, "
+    "clear silhouette suitable for overlaying on a map, "
+    "centered subject, transparent-compatible edges."
+    "\n\n"
+    "Subject: {prompt} "
+    "Architectural landmark viewed at a slight elevation angle, "
+    "well-defined silhouette, fine ink line detail on rooftops and structural elements, "
+    "rich color washes to highlight material and atmosphere. "
+    "Square icon composition with generous negative space around the subject. "
+    "NO human figures, NO text, NO labels."
+)
+
+# Scene backdrop style prompt template (wide panoramic scene backgrounds)
+# Used for generating 1536×1024 widescreen background images for game scenes.
+SCENE_BACKDROP_STYLE = (
+    _MAP_STYLE_BASE + " "
+    "Wide panoramic landscape backdrop, cinematic widescreen composition (1536×1024), "
+    "suitable as an atmospheric full-screen scene background, "
+    "horizon line at upper third, rich layered depth with foreground details and atmospheric distance haze."
+    "\n\n"
+    "Scene: {prompt} "
+    "Horizontal panoramic landscape layout, wide cinematic composition, "
+    "rich environmental storytelling with architectural or natural features, "
+    "atmospheric ink washes with vivid natural color accents, "
+    "layered depth: detailed foreground, atmospheric midground, hazy background. "
+    "Suitable as a full-screen widescreen background for game scenes. "
+    "NO human figures, NO text, NO labels, NO UI elements."
+)
+
+# Ensure maps directory exists and mount as static files
+MAPS_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/maps", StaticFiles(directory=str(MAPS_DIR)), name="map_assets")
+
+
+# ─────────────────────────────────────────────
+# Scene helpers
+# ─────────────────────────────────────────────
+def _read_scene_profiles() -> Dict[str, Any]:
+    if not SCENE_PROFILES_PATH.exists():
+        return {"maps": {}}
+    try:
+        with open(SCENE_PROFILES_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {"maps": {}}
+
+
+def _write_scene_profiles(data: Dict[str, Any]) -> None:
+    with open(SCENE_PROFILES_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def _scene_samples_folder(scene_id: str) -> Path:
+    """Return the samples subfolder for a scene: scene_{scene_id}."""
+    return SAMPLES_DIR / f"scene_{scene_id}"
+
+
+def _find_scene_by_id(profiles: Dict[str, Any], scene_id: str) -> Optional[Dict[str, Any]]:
+    """Find a scene dict and its map_id from the scene_profiles data."""
+    for map_id, map_data in profiles.get("maps", {}).items():
+        for scene in map_data.get("scenes", []):
+            if scene.get("id") == scene_id:
+                return scene
+    return None
+
+
+def _find_scene_and_map(profiles: Dict[str, Any], scene_id: str):
+    """Return (map_id, scene_dict) or (None, None)."""
+    for map_id, map_data in profiles.get("maps", {}).items():
+        for scene in map_data.get("scenes", []):
+            if scene.get("id") == scene_id:
+                return map_id, scene
+    return None, None
+
+
+def _with_scene_variants(scene: Dict[str, Any]) -> Dict[str, Any]:
+    """Return a copy of scene dict with icon_variants and backdrop_variants defaulted."""
+    result = dict(scene)
+    if not result.get("icon_variants"):
+        result["icon_variants"] = [{"index": 0, "description": result.get("prompt", "")}]
+    if not result.get("backdrop_variants"):
+        result["backdrop_variants"] = [{"index": 0, "description": result.get("backdrop_prompt", "")}]
+    return result
+
+
+def _build_scene_prompt(raw_prompt: str, image_type: str = "icon") -> str:
+    """Build the full generation prompt for a scene icon or backdrop."""
+    if image_type == "backdrop":
+        return SCENE_BACKDROP_STYLE.format(prompt=raw_prompt)
+    return SCENE_ICON_STYLE.format(prompt=raw_prompt)
+
+
+def _generate_scene_icon_direct(client, prompt: str, output_path: Path) -> Path:
+    """Generate a scene icon using the same API params as generate_beiliang_assets.py.
+
+    Exact match to generate_with_images() in generate_beiliang_assets.py:
+      model=gpt-image-1, size=1024x1024, quality=high, background=transparent,
+      output_format=png, n=1. Saves raw PNG bytes — no resize, no RGB conversion.
+    """
+    import base64 as _base64
+    response = client.images.generate(
+        model="gpt-image-1",
+        prompt=prompt,
+        size="1024x1024",
+        quality="high",
+        background="transparent",
+        output_format="png",
+        n=1,
+    )
+    if not response.data or not response.data[0].b64_json:
+        raise RuntimeError("Image generation response missing data")
+    image_bytes = _base64.b64decode(response.data[0].b64_json)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_bytes(image_bytes)
+    return output_path
+
+
+def _generate_scene_backdrop_direct(client, prompt: str, output_path: Path) -> Path:
+    """Generate a scene backdrop (1536x1024, opaque) using gpt-image-1."""
+    import base64 as _base64
+    response = client.images.generate(
+        model="gpt-image-1",
+        prompt=prompt,
+        size="1536x1024",
+        quality="high",
+        background="opaque",
+        output_format="png",
+        n=1,
+    )
+    if not response.data or not response.data[0].b64_json:
+        raise RuntimeError("Image generation response missing data")
+    image_bytes = _base64.b64decode(response.data[0].b64_json)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_bytes(image_bytes)
+    return output_path
+
+
+def _scene_icon_url(scene: Dict[str, Any]) -> str:
+    """Return the /maps/... URL for the scene's deployed icon, if it exists."""
+    icon_path = scene.get("icon_path", "")
+    if not icon_path:
+        return ""
+    # icon_path is like "tools/asset-manager/backend/maps/map_001/scene_001.png"
+    # We serve /maps/{map_id}/{filename}
+    path = Path(icon_path)
+    if path.is_absolute():
+        abs_path = path
+    else:
+        abs_path = PROJECT_ROOT / icon_path
+    if abs_path.exists():
+        # Build the URL from MAPS_DIR
+        try:
+            rel = abs_path.relative_to(MAPS_DIR)
+            mtime = int(abs_path.stat().st_mtime)
+            return f"/maps/{rel.as_posix()}?t={mtime}"
+        except ValueError:
+            pass
+    return ""
+
+
+# ─────────────────────────────────────────────
+# Scene Pydantic models
+# ─────────────────────────────────────────────
+class UpdateSceneRequest(BaseModel):
+    description: Optional[str] = None
+    prompt: Optional[str] = None
+    name: Optional[str] = None
+    backdrop_prompt: Optional[str] = None
+
+
+class SelectSceneIconRequest(BaseModel):
+    image_path: str
+
+
+class SelectBackdropRequest(BaseModel):
+    image_path: str
+
+
+class SceneGenerateRequest(BaseModel):
+    scene_id: str
+    prompt: str
+    count: int = 1
+    image_type: str = "icon"  # "icon" | "backdrop"
+
+
+class SceneGeneratePromptsRequest(BaseModel):
+    scene_id: str
+    image_type: str = "icon"  # "icon" | "backdrop"
+
+
+class UpdateSceneVariantRequest(BaseModel):
+    description: str
+
+
+class RegenerateSceneVariantsRequest(BaseModel):
+    bio: str = ""
+
+
+# ─────────────────────────────────────────────
+# S1. GET /api/scenes — all scenes grouped by map
+# ─────────────────────────────────────────────
+@app.get("/api/scenes")
+def get_scenes() -> Dict[str, Any]:
+    """Return all scenes grouped by map, with current_icon URLs."""
+    profiles = _read_scene_profiles()
+    result: Dict[str, Any] = {"maps": {}}
+
+    for map_id, map_data in profiles.get("maps", {}).items():
+        # Build terrain entry
+        terrain = map_data.get("terrain", {})
+        terrain_icon_path = terrain.get("icon_path", "")
+        terrain_icon_url = ""
+        if terrain_icon_path:
+            abs_t = PROJECT_ROOT / terrain_icon_path if not Path(terrain_icon_path).is_absolute() else Path(terrain_icon_path)
+            if abs_t.exists():
+                try:
+                    rel = abs_t.relative_to(MAPS_DIR)
+                    terrain_icon_url = f"/maps/{rel.as_posix()}?t={int(abs_t.stat().st_mtime)}"
+                except ValueError:
+                    pass
+
+        # Build scene entries
+        scene_list = []
+        for scene in map_data.get("scenes", []):
+            # Check for selected_icon (pending deploy)
+            selected_icon = scene.get("selected_icon", "")
+            current_icon = _scene_icon_url(scene)
+
+            # If no deployed icon, try pending selected
+            if not current_icon and selected_icon:
+                sel_path = Path(selected_icon)
+                if sel_path.exists():
+                    try:
+                        rel = sel_path.relative_to(SAMPLES_DIR)
+                        current_icon = f"/images/{rel.as_posix()}"
+                    except ValueError:
+                        pass
+
+            # Fallback: first sample image
+            if not current_icon:
+                folder = _scene_samples_folder(scene.get("id", ""))
+                if folder.exists():
+                    files = sorted(folder.glob("*.png"))
+                    if files:
+                        rel = files[0].relative_to(SAMPLES_DIR)
+                        current_icon = f"/images/{rel.as_posix()}"
+
+            scene_list.append({
+                **_with_scene_variants(scene),
+                "current_icon": current_icon,
+                "has_pending_icon": bool(scene.get("selected_icon")),
+                "has_pending_backdrop": bool(scene.get("selected_backdrop")),
+            })
+
+        result["maps"][map_id] = {
+            "id": map_id,
+            "name": map_data.get("name", map_id),
+            "terrain": {
+                **terrain,
+                "current_icon": terrain_icon_url,
+            },
+            "scenes": scene_list,
+        }
+
+    return result
+
+
+# ─────────────────────────────────────────────
+# S2. GET /api/scenes/{scene_id}
+# ─────────────────────────────────────────────
+@app.get("/api/scenes/{scene_id}")
+def get_scene(scene_id: str) -> Dict[str, Any]:
+    """Return a single scene by ID."""
+    profiles = _read_scene_profiles()
+    scene = _find_scene_by_id(profiles, scene_id)
+    if scene is None:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+    current_icon = _scene_icon_url(scene)
+    return {**_with_scene_variants(scene), "current_icon": current_icon, "has_pending_icon": bool(scene.get("selected_icon")), "has_pending_backdrop": bool(scene.get("selected_backdrop"))}
+
+
+# ─────────────────────────────────────────────
+# S3. PUT /api/scenes/{scene_id} — update scene fields
+# ─────────────────────────────────────────────
+@app.put("/api/scenes/{scene_id}")
+def update_scene(scene_id: str, body: UpdateSceneRequest) -> Dict[str, Any]:
+    """Update scene description, prompt, backdrop_prompt, or name."""
+    profiles = _read_scene_profiles()
+    updated = False
+    for _map_id, map_data in profiles.get("maps", {}).items():
+        for scene in map_data.get("scenes", []):
+            if scene.get("id") == scene_id:
+                if body.description is not None:
+                    scene["description"] = body.description
+                if body.prompt is not None:
+                    scene["prompt"] = body.prompt
+                if body.name is not None:
+                    scene["name"] = body.name
+                if body.backdrop_prompt is not None:
+                    scene["backdrop_prompt"] = body.backdrop_prompt
+                updated = True
+                break
+        if updated:
+            break
+
+    if not updated:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+
+    _write_scene_profiles(profiles)
+    scene = _find_scene_by_id(profiles, scene_id)
+    return {"success": True, "scene": scene}
+
+
+# ─────────────────────────────────────────────
+# S4. GET /api/scene-samples/{scene_id}
+# ─────────────────────────────────────────────
+@app.get("/api/scene-samples/{scene_id}")
+def get_scene_samples(scene_id: str, image_type: Optional[str] = None) -> List[Dict]:
+    """Return sample images for a given scene from scene_{scene_id}/ folder.
+    
+    Optional query param image_type: "icon" | "backdrop"
+    - "icon": only files matching icon_*.png pattern
+    - "backdrop": only files matching backdrop_*.png pattern
+    - None/omitted: all files (legacy behavior)
+    """
+    profiles = _read_scene_profiles()
+    scene = _find_scene_by_id(profiles, scene_id)
+    if scene is None:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+
+    folder = _scene_samples_folder(scene_id)
+
+    # Determine which selected/deployed values to compare
+    if image_type == "backdrop":
+        selected_item: Optional[str] = scene.get("selected_backdrop")
+        deployed_path_str = scene.get("backdrop_path", "")
+    else:
+        selected_item = scene.get("selected_icon")
+        deployed_path_str = scene.get("icon_path", "")
+
+    # Check if there's a deployed image to compare hash
+    deployed_hash: Optional[str] = None
+    if deployed_path_str:
+        abs_deployed = PROJECT_ROOT / deployed_path_str if not Path(deployed_path_str).is_absolute() else Path(deployed_path_str)
+        deployed_hash = _file_hash(abs_deployed)
+
+    results = []
+    if folder.exists():
+        for img_file in sorted(folder.glob("*.png")):
+            fname = img_file.name
+            # Apply image_type filter based on filename prefix
+            if image_type == "icon":
+                if not fname.startswith("icon_") and not fname.startswith(f"{scene_id}_"):
+                    # For backward compat: non-prefixed files are icons
+                    if fname.startswith("backdrop_"):
+                        continue
+            elif image_type == "backdrop":
+                if not fname.startswith("backdrop_"):
+                    continue
+
+            rel = img_file.relative_to(SAMPLES_DIR)
+            sample_hash = _file_hash(img_file) if deployed_hash else None
+            is_current = deployed_hash is not None and sample_hash == deployed_hash
+            is_selected = selected_item is not None and str(img_file) == selected_item
+            results.append({
+                "filename": fname,
+                "url": f"/images/{rel.as_posix()}",
+                "path": str(rel),
+                "abs_path": str(img_file),
+                "is_current_in_game": is_current,
+                "is_selected": is_selected,
+            })
+    return results
+
+
+# ─────────────────────────────────────────────
+# S5. POST /api/scenes/{scene_id}/select-icon
+# ─────────────────────────────────────────────
+@app.post("/api/scenes/{scene_id}/select-icon")
+def select_scene_icon(scene_id: str, body: SelectSceneIconRequest) -> Dict[str, Any]:
+    """Mark a sample image as the selected icon for deploy."""
+    image_path = Path(body.image_path)
+    if not image_path.exists():
+        raise HTTPException(status_code=404, detail=f"Image file not found: {body.image_path}")
+
+    profiles = _read_scene_profiles()
+    updated = False
+    for _map_id, map_data in profiles.get("maps", {}).items():
+        for scene in map_data.get("scenes", []):
+            if scene.get("id") == scene_id:
+                scene["selected_icon"] = str(image_path)
+                updated = True
+                break
+        if updated:
+            break
+
+    if not updated:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+
+    _write_scene_profiles(profiles)
+    return {"success": True, "selected_icon": str(image_path)}
+
+
+# ─────────────────────────────────────────────
+# S5b. POST /api/scenes/{scene_id}/select-backdrop
+# ─────────────────────────────────────────────
+@app.post("/api/scenes/{scene_id}/select-backdrop")
+def select_scene_backdrop(scene_id: str, body: SelectBackdropRequest) -> Dict[str, Any]:
+    """Mark a sample image as the selected backdrop for deploy."""
+    image_path = Path(body.image_path)
+    if not image_path.exists():
+        raise HTTPException(status_code=404, detail=f"Image file not found: {body.image_path}")
+
+    profiles = _read_scene_profiles()
+    updated = False
+    for _map_id, map_data in profiles.get("maps", {}).items():
+        for scene in map_data.get("scenes", []):
+            if scene.get("id") == scene_id:
+                scene["selected_backdrop"] = str(image_path)
+                updated = True
+                break
+        if updated:
+            break
+
+    if not updated:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+
+    _write_scene_profiles(profiles)
+    return {"success": True, "selected_backdrop": str(image_path)}
+
+
+# ─────────────────────────────────────────────
+# S6. POST /api/scene-generate — SSE, generate scene icon or backdrop
+# ─────────────────────────────────────────────
+@app.post("/api/scene-generate")
+async def generate_scene_icon(body: SceneGenerateRequest):
+    """Generate scene icon or backdrop using map style prompts. Streams SSE progress."""
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY environment variable is not set.")
+
+    profiles = _read_scene_profiles()
+    scene = _find_scene_by_id(profiles, body.scene_id)
+    if scene is None:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {body.scene_id}")
+
+    image_type = body.image_type if body.image_type in ("icon", "backdrop") else "icon"
+
+    async def event_stream():
+        from openai import OpenAI
+        client = OpenAI(api_key=api_key)
+        loop = asyncio.get_running_loop()
+        count = max(1, body.count)
+        timestamp = int(time.time())
+        folder = _scene_samples_folder(body.scene_id)
+        folder.mkdir(parents=True, exist_ok=True)
+
+        # Build the full prompt based on image_type
+        prompt = _build_scene_prompt(body.prompt, image_type)
+        generated_images = []
+
+        for i in range(1, count + 1):
+            type_label = "backdrop" if image_type == "backdrop" else "icon"
+            progress_event = json.dumps({
+                "type": "progress",
+                "message": f"Generating scene {type_label} {i} of {count} for {body.scene_id}…",
+                "current": i,
+                "total": count,
+            })
+            yield f"data: {progress_event}\n\n"
+
+            # Use prefix to distinguish icon vs backdrop files
+            if image_type == "backdrop":
+                filename = f"backdrop_{body.scene_id}_{timestamp}_{i}.png"
+                gen_fn = _generate_scene_backdrop_direct
+            else:
+                filename = f"icon_{body.scene_id}_{timestamp}_{i}.png"
+                gen_fn = _generate_scene_icon_direct
+
+            output_path = folder / filename
+
+            try:
+                saved_path = await loop.run_in_executor(
+                    None,
+                    gen_fn,
+                    client,
+                    prompt,
+                    output_path,
+                )
+                rel_path = saved_path.relative_to(SAMPLES_DIR)
+                generated_images.append({
+                    "path": str(rel_path),
+                    "url": f"/images/{rel_path.as_posix()}",
+                })
+            except Exception as exc:
+                error_event = json.dumps({
+                    "type": "error",
+                    "message": f"Failed to generate icon {i}: {exc}",
+                    "current": i,
+                    "total": count,
+                })
+                yield f"data: {error_event}\n\n"
+
+        history_entry = {
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "name": body.scene_id,
+            "asset_type": "scene",
+            "images": generated_images,
+        }
+        _append_history(history_entry)
+
+        done_event = json.dumps({"type": "done", "images": generated_images})
+        yield f"data: {done_event}\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+# ─────────────────────────────────────────────
+# S7. POST /api/scenes/{scene_id}/deploy — deploy selected icon or backdrop
+# ─────────────────────────────────────────────
+@app.post("/api/scenes/{scene_id}/deploy")
+def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]:
+    """
+    Deploy the selected icon or backdrop for a scene.
+    Query param: image_type = "icon" (default) | "backdrop"
+
+    icon flow:
+      1. Copy selected_icon to maps/{map_id}/ directory
+      2. Update icon_path in scene_profiles.json
+      3. Clear selected_icon
+
+    backdrop flow:
+      1. Copy selected_backdrop to maps/{map_id}/{scene_id}_backdrop.png
+      2. Update backdrop_path in scene_profiles.json
+      3. Clear selected_backdrop
+    """
+    profiles = _read_scene_profiles()
+    map_id, scene = _find_scene_and_map(profiles, scene_id)
+    if scene is None:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+
+    map_dir = MAPS_DIR / map_id
+    map_dir.mkdir(parents=True, exist_ok=True)
+
+    if image_type == "backdrop":
+        selected_backdrop = scene.get("selected_backdrop")
+        if not selected_backdrop:
+            raise HTTPException(status_code=400, detail="No backdrop selected for deploy.")
+
+        selected_path = Path(selected_backdrop)
+        if not selected_path.exists():
+            raise HTTPException(status_code=404, detail=f"Selected backdrop file not found: {selected_backdrop}")
+
+        # Deploy to maps/{map_id}/{scene_id}_backdrop.png
+        filename = f"{scene_id}_backdrop.png"
+        dest = map_dir / filename
+        shutil.copy2(str(selected_path), str(dest))
+
+        rel_path = f"tools/asset-manager/backend/maps/{map_id}/{filename}"
+        scene["backdrop_path"] = rel_path
+        scene.pop("selected_backdrop", None)
+
+        _write_scene_profiles(profiles)
+
+        return {
+            "success": True,
+            "scene_id": scene_id,
+            "image_type": "backdrop",
+            "backdrop_path": rel_path,
+            "deployed_to": str(dest),
+        }
+    else:
+        # Default: icon
+        selected_icon = scene.get("selected_icon")
+        if not selected_icon:
+            raise HTTPException(status_code=400, detail="No icon selected for deploy.")
+
+        selected_path = Path(selected_icon)
+        if not selected_path.exists():
+            raise HTTPException(status_code=404, detail=f"Selected icon file not found: {selected_icon}")
+
+        filename = selected_path.name
+        dest = map_dir / filename
+        shutil.copy2(str(selected_path), str(dest))
+
+        rel_icon = f"tools/asset-manager/backend/maps/{map_id}/{filename}"
+        scene["icon_path"] = rel_icon
+        scene.pop("selected_icon", None)
+
+        _write_scene_profiles(profiles)
+
+        return {
+            "success": True,
+            "scene_id": scene_id,
+            "image_type": "icon",
+            "icon_path": rel_icon,
+            "deployed_to": str(dest),
+        }
+
+
+# ─────────────────────────────────────────────
+# S8. POST /api/scene-generate-prompts — AI generate 4 candidate prompts
+# ─────────────────────────────────────────────
+
+_SCENE_ICON_PROMPT_SYSTEM = """\
+You are an expert AI art director for a Chinese ink wash painting style game set in the world of the Wuxia novel "雪中悍刀行" (A Sword in the Snow).
+
+Your task: generate 4 candidate English image prompts for a game scene icon (map building/location illustration).
+
+## Style Requirements
+- All prompts must describe a "Top-down map icon" (bird's-eye view architectural landmark illustration)
+- Chinese ink wash painting style, centered subject, clear silhouette, transparent background
+- NO human figures, NO characters, NO people, NO text, NO labels
+- Each prompt should be 50-100 English words
+- Each prompt describes a different visual angle, time of day, weather, or architectural emphasis
+- Focus on the scene's key architectural or landscape features
+
+## Output Format
+Output strictly as a JSON array of 4 English strings, nothing else.
+"""
+
+_SCENE_BACKDROP_PROMPT_SYSTEM = """\
+You are an expert AI art director for a Chinese ink wash painting style game set in the world of the Wuxia novel "雪中悍刀行" (A Sword in the Snow).
+
+Your task: generate 4 candidate English image prompts for a game scene backdrop (widescreen panoramic background image, 1536×1024).
+
+## Style Requirements
+- All prompts must describe a "Wide panoramic landscape" for use as a cinematic game scene background
+- Chinese ink wash painting style, horizontal composition, rich layered depth
+- NO human figures, NO characters, NO people, NO text, NO labels, NO UI elements
+- Each prompt should be 60-120 English words
+- Each prompt describes a different atmosphere, time of day, season, or mood
+- Include foreground details and atmospheric background haze for cinematic depth
+
+## Output Format
+Output strictly as a JSON array of 4 English strings, nothing else.
+"""
+
+
+def _generate_scene_prompts_blocking(client, scene_description: str, scene_name: str, image_type: str) -> List[str]:
+    """Call LLM to generate 4 candidate prompts for a scene. Blocking."""
+    system_prompt = _SCENE_BACKDROP_PROMPT_SYSTEM if image_type == "backdrop" else _SCENE_ICON_PROMPT_SYSTEM
+    type_label = "backdrop (widescreen background)" if image_type == "backdrop" else "icon (map illustration)"
+
+    user_msg = (
+        f"Scene name: {scene_name}\n"
+        f"Scene description (Chinese): {scene_description}\n\n"
+        f"Generate 4 candidate English prompts for a {type_label} of this scene. "
+        f"Each prompt should capture a different visual angle or atmosphere. "
+        f"Output as a JSON array of 4 strings."
+    )
+
+    response = client.responses.create(
+        model=DESCRIPTION_MODEL,
+        instructions=system_prompt,
+        input=user_msg,
+        temperature=0.9,
+        max_output_tokens=1200,
+    )
+    content = response.output_text.strip()
+    if content.startswith("```"):
+        content = re.sub(r"^```[^\n]*\n?", "", content)
+        content = re.sub(r"\n?```$", "", content)
+    prompts: List[str] = json.loads(content)
+    if not isinstance(prompts, list) or len(prompts) < 4:
+        raise ValueError(f"Unexpected LLM response: {content}")
+    return prompts[:4]
+
+
+@app.post("/api/scene-generate-prompts")
+async def generate_scene_prompts(body: SceneGeneratePromptsRequest) -> Dict[str, Any]:
+    """
+    Generate 4 candidate image prompts for a scene icon or backdrop using AI (GPT-5.4).
+    Reads the scene's Chinese description from scene_profiles.json and generates
+    4 diverse English prompts suitable for image generation.
+    """
+    profiles = _read_scene_profiles()
+    scene = _find_scene_by_id(profiles, body.scene_id)
+    if scene is None:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {body.scene_id}")
+
+    scene_description = scene.get("description", "")
+    scene_name = scene.get("name", body.scene_id)
+
+    if not scene_description.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Scene has no description. Please add a description first."
+        )
+
+    image_type = body.image_type if body.image_type in ("icon", "backdrop") else "icon"
+
+    client = _get_openai_client()
+    loop = asyncio.get_running_loop()
+    try:
+        prompts = await loop.run_in_executor(
+            None,
+            _generate_scene_prompts_blocking,
+            client,
+            scene_description,
+            scene_name,
+            image_type,
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"AI prompt generation failed: {exc}")
+
+    return {"prompts": prompts, "scene_id": body.scene_id, "image_type": image_type}
+
+
+# ─────────────────────────────────────────────
+# S9. PUT /api/scenes/{scene_id}/icon-variants/{variant_index}
+# ─────────────────────────────────────────────
+@app.put("/api/scenes/{scene_id}/icon-variants/{variant_index}")
+def update_scene_icon_variant(scene_id: str, variant_index: int, body: UpdateSceneVariantRequest) -> Dict[str, Any]:
+    """Update the description of a specific icon variant for a scene."""
+    profiles = _read_scene_profiles()
+    scene = _find_scene_by_id(profiles, scene_id)
+    if scene is None:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+
+    variants = scene.get("icon_variants")
+    if not variants:
+        variants = [{"index": 0, "description": scene.get("prompt", "")}]
+        scene["icon_variants"] = variants
+
+    # Find by index or extend the list
+    found = False
+    for v in variants:
+        if v.get("index") == variant_index:
+            v["description"] = body.description
+            found = True
+            break
+    if not found:
+        variants.append({"index": variant_index, "description": body.description})
+
+    _write_scene_profiles(profiles)
+    return {"success": True, "scene_id": scene_id, "variant_index": variant_index}
+
+
+# ─────────────────────────────────────────────
+# S10. PUT /api/scenes/{scene_id}/backdrop-variants/{variant_index}
+# ─────────────────────────────────────────────
+@app.put("/api/scenes/{scene_id}/backdrop-variants/{variant_index}")
+def update_scene_backdrop_variant(scene_id: str, variant_index: int, body: UpdateSceneVariantRequest) -> Dict[str, Any]:
+    """Update the description of a specific backdrop variant for a scene."""
+    profiles = _read_scene_profiles()
+    scene = _find_scene_by_id(profiles, scene_id)
+    if scene is None:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+
+    variants = scene.get("backdrop_variants")
+    if not variants:
+        variants = [{"index": 0, "description": scene.get("backdrop_prompt", "")}]
+        scene["backdrop_variants"] = variants
+
+    found = False
+    for v in variants:
+        if v.get("index") == variant_index:
+            v["description"] = body.description
+            found = True
+            break
+    if not found:
+        variants.append({"index": variant_index, "description": body.description})
+
+    _write_scene_profiles(profiles)
+    return {"success": True, "scene_id": scene_id, "variant_index": variant_index}
+
+
+# ─────────────────────────────────────────────
+# S11. POST /api/scenes/{scene_id}/regenerate-icon-variants
+# ─────────────────────────────────────────────
+@app.post("/api/scenes/{scene_id}/regenerate-icon-variants")
+async def regenerate_scene_icon_variants(scene_id: str, body: RegenerateSceneVariantsRequest) -> Dict[str, Any]:
+    """AI-generate 4 icon variant descriptions for a scene and save them."""
+    profiles = _read_scene_profiles()
+    scene = _find_scene_by_id(profiles, scene_id)
+    if scene is None:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+
+    scene_description = body.bio.strip() or scene.get("description", "")
+    scene_name = scene.get("name", scene_id)
+
+    if not scene_description:
+        raise HTTPException(status_code=400, detail="No description available. Please provide a bio or add a scene description first.")
+
+    client = _get_openai_client()
+    loop = asyncio.get_running_loop()
+    try:
+        prompts = await loop.run_in_executor(
+            None,
+            _generate_scene_prompts_blocking,
+            client,
+            scene_description,
+            scene_name,
+            "icon",
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"AI variant generation failed: {exc}")
+
+    new_variants = [{"index": i, "description": desc} for i, desc in enumerate(prompts)]
+    scene["icon_variants"] = new_variants
+    _write_scene_profiles(profiles)
+
+    return {"descriptions": prompts, "scene_id": scene_id}
+
+
+# ─────────────────────────────────────────────
+# S12. POST /api/scenes/{scene_id}/regenerate-backdrop-variants
+# ─────────────────────────────────────────────
+@app.post("/api/scenes/{scene_id}/regenerate-backdrop-variants")
+async def regenerate_scene_backdrop_variants(scene_id: str, body: RegenerateSceneVariantsRequest) -> Dict[str, Any]:
+    """AI-generate 4 backdrop variant descriptions for a scene and save them."""
+    profiles = _read_scene_profiles()
+    scene = _find_scene_by_id(profiles, scene_id)
+    if scene is None:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+
+    scene_description = body.bio.strip() or scene.get("description", "")
+    scene_name = scene.get("name", scene_id)
+
+    if not scene_description:
+        raise HTTPException(status_code=400, detail="No description available. Please provide a bio or add a scene description first.")
+
+    client = _get_openai_client()
+    loop = asyncio.get_running_loop()
+    try:
+        prompts = await loop.run_in_executor(
+            None,
+            _generate_scene_prompts_blocking,
+            client,
+            scene_description,
+            scene_name,
+            "backdrop",
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"AI variant generation failed: {exc}")
+
+    new_variants = [{"index": i, "description": desc} for i, desc in enumerate(prompts)]
+    scene["backdrop_variants"] = new_variants
+    _write_scene_profiles(profiles)
+
+    return {"descriptions": prompts, "scene_id": scene_id}
 
 
 # ─────────────────────────────────────────────
