@@ -15,7 +15,7 @@
       ],
       "settlement": {
         "type": "trade",
-        "shop_inventory": ["equip_001", "equip_002", "intel_001"],
+        "shop_inventory": ["equip_004", "equip_item_9347", "intel_001"],
         "allow_sell": true,
         "refresh_cycle": 7
       },

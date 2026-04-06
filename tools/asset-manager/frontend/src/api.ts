@@ -363,7 +363,7 @@ export const api = {
 
   async updateScene(sceneId: string, data: {
     description?: string;
-    prompt?: string;
+    icon_prompt?: string;
     name?: string;
     backdrop_prompt?: string;
     position?: { x: number; y: number };
@@ -460,7 +460,7 @@ export const api = {
     const response = await fetch('/api/scene-generate-prompts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ scene_id: sceneId, image_type: imageType }),
+      body: JSON.stringify({ location_id: sceneId, image_type: imageType }),
     });
     if (!response.ok) {
       const err = await response.json().catch(() => ({ detail: 'Unknown error' }));

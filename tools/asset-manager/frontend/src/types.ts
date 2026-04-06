@@ -4,6 +4,22 @@ export interface CharacterVariant {
   output: string;
 }
 
+// ─────────────────────────────────────────────
+// Phase 2: Workspace card meta — stored in scripts/data/cards/*.json
+// This is the asset-manager workspace layer. It is separate from the runtime
+// card files in src/renderer/data/configs/cards/ which the game loads.
+// NOTE (Phase 1): "workspace" ≠ "runtime scene"; do not conflate.
+// ─────────────────────────────────────────────
+export interface WorkspaceCardMeta {
+  /** 'draft' | 'ready' | 'published' */
+  publish_status: string;
+  /** Path to the currently-selected candidate image (surfaces as selected_portrait / selected_image in API responses) */
+  selected_asset: string;
+  asset_candidates: string[];
+  workshop_variants: unknown[];
+  updated_at: string;
+}
+
 export interface Character {
   name: string;
   id: string;
@@ -78,6 +94,11 @@ export interface CharacterProfile {
   special_attributes: { support: number; reroll: number };
   tags: string[];
   equipment_slots: number;
+  /**
+   * Path to the selected candidate portrait.
+   * Backed by WorkspaceCardMeta.selected_asset in scripts/data/cards/characters.json.
+   * Cleared by backend after a successful deploy.
+   */
   selected_portrait?: string;
 }
 
@@ -118,7 +139,7 @@ export interface Item {
 }
 
 export interface ItemProfile {
-  card_type: string;
+  type: string;
   equipment_type: string;
   rarity: 'gold' | 'silver' | 'copper' | 'stone' | 'divine';
   description: string;
@@ -127,6 +148,11 @@ export interface ItemProfile {
   special_bonus: Record<string, number>;
   gem_slots: number;
   tags: string[];
+  /**
+   * Path to the selected candidate image.
+   * Backed by WorkspaceCardMeta.selected_asset in scripts/data/cards/equipment.json.
+   * Cleared by backend after a successful deploy.
+   */
   selected_image?: string;
 }
 
@@ -159,26 +185,26 @@ export interface SceneVariant {
   description: string;
 }
 
+/**
+ * Location as returned by the Asset Manager API.
+ */
 export interface Scene {
-  id: string;
-  name: string;
   map_id: string;
   type: string;
   description: string;
-  prompt: string;
-  icon_path: string;
+  icon_prompt: string;
+  icon_image: string;
+  backdrop_prompt?: string;
+  backdrop_image?: string;
+  selected_icon?: string;
+  selected_backdrop?: string;
+  location_id: string;
+  name: string;
   current_icon: string;
   has_pending_icon: boolean;
   has_pending_backdrop?: boolean;
-  selected_icon?: string;
-  // Backdrop fields
-  backdrop_prompt?: string;
-  backdrop_path?: string;
-  selected_backdrop?: string;
-  // Workshop variants
   icon_variants?: SceneVariant[];
   backdrop_variants?: SceneVariant[];
-  // Location runtime fields (align with game map config)
   position?: { x: number; y: number };
   scene_ids?: string[];
   unlock_conditions?: Record<string, unknown>;
@@ -186,7 +212,7 @@ export interface Scene {
 
 export interface SceneTerrain {
   prompt: string;
-  icon_path: string;
+  icon_image: string;
   current_icon: string;
 }
 
@@ -202,20 +228,20 @@ export interface ScenesResponse {
 }
 
 export interface SceneGenerateRequest {
-  scene_id: string;
-  prompt: string;
+  location_id: string;
+  icon_prompt: string;
   count: number;
   image_type?: SceneImageType;
 }
 
 export interface SceneGeneratePromptsRequest {
-  scene_id: string;
+  location_id: string;
   image_type: SceneImageType;
 }
 
 export interface SceneGeneratePromptsResponse {
   prompts: string[];
-  scene_id: string;
+  location_id: string;
   image_type: SceneImageType;
 }
 

@@ -49,7 +49,7 @@ const ATTRIBUTE_LABELS: Record<string, string> = {
 };
 
 const DEFAULT_PROFILE: ItemProfile = {
-  card_type: 'item',
+  type: 'equipment',
   equipment_type: 'weapon',
   rarity: 'copper',
   description: '',

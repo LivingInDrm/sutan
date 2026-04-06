@@ -1,0 +1,129 @@
+[
+  {
+    "card_id": "card_sultan_01",
+    "name": "苏丹之印",
+    "type": "sultan",
+    "rarity": "gold",
+    "description": "苏丹的权力象征。在处刑日来临时持有此卡将被处决。",
+    "image": "sultan.png",
+    "tags": [
+      "sultan",
+      "dangerous"
+    ]
+  },
+  {
+    "card_id": "intel_001",
+    "name": "宫廷流言",
+    "type": "intel",
+    "rarity": "stone",
+    "description": "关于宫廷的流言蜚语，有助于社交场合。",
+    "image": "intel01.png",
+    "attribute_bonus": {
+      "social": 3,
+      "charm": 2
+    },
+    "tags": [
+      "intel",
+      "consumable"
+    ]
+  },
+  {
+    "card_id": "gem_001",
+    "name": "红宝石",
+    "type": "gem",
+    "rarity": "silver",
+    "description": "火红的宝石，蕴含强大能量。",
+    "image": "gem01.png",
+    "attribute_bonus": {
+      "physique": 2,
+      "charm": 2,
+      "wisdom": 2,
+      "combat": 2,
+      "social": 2,
+      "survival": 2,
+      "stealth": 2,
+      "magic": 2
+    },
+    "tags": [
+      "gem",
+      "valuable"
+    ]
+  },
+  {
+    "card_id": "temp_mockery",
+    "name": "调侃",
+    "type": "thought",
+    "rarity": "stone",
+    "description": "随性不羁的调侃，激起了少年的斗志。临时提升体魄鉴定修正。",
+    "image": "/assets/items/item_gourd_01.png",
+    "attribute_bonus": {
+      "physique": 1
+    },
+    "tags": [
+      "temporary",
+      "scene_006"
+    ]
+  },
+  {
+    "card_id": "temp_generosity",
+    "name": "仗义疏财",
+    "type": "thought",
+    "rarity": "stone",
+    "description": "世家气度，出手解围。临时提升社交鉴定修正。",
+    "image": "/assets/items/item_gourd_01.png",
+    "attribute_bonus": {
+      "social": 2
+    },
+    "tags": [
+      "temporary",
+      "scene_006"
+    ]
+  },
+  {
+    "card_id": "temp_friendly_rivalry",
+    "name": "不打不相识",
+    "type": "thought",
+    "rarity": "stone",
+    "description": "一场趣味切磋，反而拉近了彼此距离。可触发结伴剧情。",
+    "image": "/assets/items/item_swordcase_01.png",
+    "attribute_bonus": {
+      "social": 2
+    },
+    "tags": [
+      "temporary",
+      "scene_006",
+      "bond"
+    ]
+  },
+  {
+    "card_id": "temp_swordcase_mystery",
+    "name": "剑匣疑云",
+    "type": "thought",
+    "rarity": "stone",
+    "description": "温华对老黄的剑匣产生了好奇，好感度提升。",
+    "image": "/assets/items/item_swordcase_01.png",
+    "attribute_bonus": {
+      "charm": 1
+    },
+    "tags": [
+      "temporary",
+      "scene_006"
+    ]
+  },
+  {
+    "card_id": "temp_owe_favor",
+    "name": "欠人情",
+    "type": "thought",
+    "rarity": "stone",
+    "description": "温华欠下的人情，关键时刻可抵挡一次伤害。",
+    "image": "/assets/items/item_gourd_01.png",
+    "attribute_bonus": {
+      "survival": 2
+    },
+    "tags": [
+      "temporary",
+      "scene_006",
+      "favor"
+    ]
+  }
+]

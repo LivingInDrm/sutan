@@ -1,6 +1,10 @@
 import { z } from 'zod/v4';
-import { CardSchema, SceneSchema, MapSchema } from './schemas';
-import type { Card, Scene, MapConfig } from '../core/types';
+import { CardSchema, SceneSchema, MapSchema, RuntimeLocationSchema, RuntimeMapSchema } from './schemas';
+import type { Card, Scene, MapConfig, LocationConfig } from '../core/types';
+
+// Static imports for the split runtime map files (Phase-5)
+import locationsJson from './configs/maps/locations.json';
+import mapsJson from './configs/maps/maps.json';
 
 type SchemaType = typeof CardSchema | typeof SceneSchema | typeof MapSchema;
 
@@ -11,11 +15,6 @@ const sceneModules = import.meta.glob<{ default: unknown }>(
 
 const cardModules = import.meta.glob<{ default: unknown }>(
   './configs/cards/*.json',
-  { eager: true }
-);
-
-const mapModules = import.meta.glob<{ default: unknown }>(
-  './configs/maps/*.json',
   { eager: true }
 );
 
@@ -105,8 +104,9 @@ class DataLoader {
   }
 
   /**
-   * Dynamically load all maps from the maps directory.
-   * Each file is a single map JSON object.
+   * Load all maps from split runtime files (locations.json + maps.json).
+   * Joins the two files to produce assembled MapConfig objects with full
+   * location data including map-specific positions.
    * Returns a Map keyed by map_id.
    */
   loadMapsFromDirectory(): Map<string, MapConfig> {
@@ -114,16 +114,62 @@ class DataLoader {
       return this.cache.get('maps_dir') as Map<string, MapConfig>;
     }
 
-    const mapsById = new Map<string, MapConfig>();
-    for (const [path, mod] of Object.entries(mapModules)) {
+    // Validate and index locations by location_id
+    const rawLocations = Array.isArray(locationsJson) ? locationsJson : [];
+    const locById = new Map<string, z.infer<typeof RuntimeLocationSchema>>();
+    for (let i = 0; i < rawLocations.length; i++) {
       try {
-        const data = (mod as { default: unknown }).default ?? mod;
-        const validated = MapSchema.parse(data);
-        mapsById.set(validated.map_id, validated as MapConfig);
+        const loc = RuntimeLocationSchema.parse(rawLocations[i]);
+        locById.set(loc.location_id, loc);
       } catch (error) {
         if (error instanceof z.ZodError) {
           throw new Error(
-            `Map validation error in ${path}: ${error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')}`
+            `Location validation error in locations.json[${i}]: ${error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')}`
+          );
+        }
+        throw error;
+      }
+    }
+
+    // Validate maps and join with locations
+    const rawMaps = Array.isArray(mapsJson) ? mapsJson : [];
+    const mapsById = new Map<string, MapConfig>();
+    for (let i = 0; i < rawMaps.length; i++) {
+      try {
+        const runtimeMap = RuntimeMapSchema.parse(rawMaps[i]);
+
+        // Join: for each location_ref, find location data and merge with position
+        const locations: LocationConfig[] = runtimeMap.location_refs.map(ref => {
+          const locData = locById.get(ref.location_id);
+          if (!locData) {
+            throw new Error(
+              `Location '${ref.location_id}' referenced in maps.json map '${runtimeMap.map_id}' not found in locations.json`
+            );
+          }
+          return {
+            location_id: locData.location_id,
+            name: locData.name,
+            icon_image: locData.icon_image,
+            backdrop_image: locData.backdrop_image,
+            position: ref.position,
+            scene_ids: locData.scene_ids,
+            unlock_conditions: locData.unlock_conditions ?? {},
+          };
+        });
+
+        const mapConfig: MapConfig = {
+          map_id: runtimeMap.map_id,
+          name: runtimeMap.name,
+          description: runtimeMap.description,
+          background_image: runtimeMap.background_image,
+          locations,
+        };
+
+        mapsById.set(mapConfig.map_id, mapConfig);
+      } catch (error) {
+        if (error instanceof z.ZodError) {
+          throw new Error(
+            `Map validation error in maps.json[${i}]: ${error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')}`
           );
         }
         throw error;

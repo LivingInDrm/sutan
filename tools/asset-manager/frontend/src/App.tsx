@@ -56,7 +56,7 @@ function App() {
       // Refresh selectedScene from updated data
       if (selectedScene) {
         for (const mapData of Object.values(data.maps)) {
-          const found = mapData.scenes.find((s) => s.id === selectedScene.id);
+          const found = mapData.scenes.find((s) => s.location_id === selectedScene.location_id);
           if (found) {
             setSelectedScene(found);
             break;

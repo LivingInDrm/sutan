@@ -81,6 +81,10 @@ export const CardSchema = z.object({
   attribute_bonus: AttributeBonusSchema.optional(),
   special_bonus: SpecialBonusSchema.optional(),
   gem_slots: z.number().int().min(0).optional(),
+  // NOTE (Phase 2): meta is a workspace-only field from scripts/data/cards/*.json.
+  // It must NOT be present in the runtime card files (deploy strips it), but we
+  // declare it optional here so validation is resilient if it accidentally appears.
+  meta: z.unknown().optional(),
 });
 
 const EffectsSchema = z.object({
@@ -266,9 +270,40 @@ export const SaveDataSchema = z.object({
 });
 
 // ---------------------------------------------------------------------------
-// Map / Location schemas
+// Map / Location schemas (Phase-5: split runtime files)
 // ---------------------------------------------------------------------------
 
+// LocationRef: entry inside maps.json location_refs (carries map-specific position)
+const LocationRefSchema = z.object({
+  location_id: z.string().min(1),
+  position: z.object({
+    x: z.number().min(0).max(1),
+    y: z.number().min(0).max(1),
+  }),
+});
+
+// RuntimeLocationSchema: one entry in the runtime locations.json array (no position)
+export const RuntimeLocationSchema = z.object({
+  location_id: z.string().min(1),
+  name: z.string().min(1),
+  icon_image: z.string(),
+  backdrop_image: z.string().optional(),
+  scene_ids: z.array(z.string()),
+  unlock_conditions: z.record(z.string(), z.unknown()).optional().default({}),
+  meta: z.unknown().optional(),
+});
+
+// RuntimeMapSchema: one entry in the runtime maps.json array (location_refs, not locations)
+export const RuntimeMapSchema = z.object({
+  map_id: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string(),
+  background_image: z.string(),
+  location_refs: z.array(LocationRefSchema),
+  meta: z.unknown().optional(),
+});
+
+// LocationConfigSchema: assembled location with position (used by the game UI)
 const LocationConfigSchema = z.object({
   location_id: z.string().min(1),
   name: z.string().min(1),
@@ -280,15 +315,19 @@ const LocationConfigSchema = z.object({
   }),
   scene_ids: z.array(z.string()),
   unlock_conditions: z.record(z.string(), z.unknown()).optional().default({}),
+  meta: z.unknown().optional(),
 });
 
+// MapSchema: fully assembled map (after join) — the format consumed by the game UI.
+// NOTE: This is NOT directly stored on disk in Phase-5; it is assembled by the loader
+// from locations.json + maps.json.
 export const MapSchema = z.object({
-  _generated: z.string().optional(), // allow the meta comment field
   map_id: z.string().min(1),
   name: z.string().min(1),
   description: z.string(),
   background_image: z.string(),
   locations: z.array(LocationConfigSchema),
+  meta: z.unknown().optional(),
 });
 
 export {

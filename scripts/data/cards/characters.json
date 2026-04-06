@@ -26,7 +26,14 @@
       "clan",
       "ally"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T05:16:38.206846Z"
+    }
   },
   {
     "card_id": "card_002",
@@ -55,7 +62,14 @@
       "clan",
       "ally"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_003",
@@ -85,7 +99,14 @@
       "protagonist",
       "ally"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_004",
@@ -114,7 +135,14 @@
       "wanderer",
       "ally"
     ],
-    "equipment_slots": 2
+    "equipment_slots": 2,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_005",
@@ -142,7 +170,14 @@
       "ally",
       "clan"
     ],
-    "equipment_slots": 2
+    "equipment_slots": 2,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_006",
@@ -172,7 +207,14 @@
       "mentor",
       "ally"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_007",
@@ -202,7 +244,14 @@
       "ally",
       "wanderer"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_李淳罡",
@@ -231,7 +280,14 @@
       "mentor",
       "wanderer"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_徐脂虎",
@@ -259,7 +315,14 @@
       "clan",
       "ally"
     ],
-    "equipment_slots": 2
+    "equipment_slots": 2,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_徐骁",
@@ -289,7 +352,14 @@
       "mentor",
       "ally"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_陈芝豹",
@@ -319,7 +389,14 @@
       "clan",
       "antagonist"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_褚禄山",
@@ -348,7 +425,50 @@
       "clan",
       "ally"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
+  },
+  {
+    "card_id": "card_轩辕青锋测试",
+    "name": "轩辕青锋测试",
+    "type": "character",
+    "rarity": "gold",
+    "description": "轩辕世家天之骄女，姿容冷艳，心性孤绝刚烈。早年受家族桎梏，后凭狠绝手段与卓绝天资崛起，武道进境惊人。行事决断，不轻信他人，却自有傲骨与担当。",
+    "image": "",
+    "attributes": {
+      "physique": 7,
+      "charm": 9,
+      "wisdom": 7,
+      "combat": 9,
+      "social": 4,
+      "survival": 5,
+      "stealth": 3,
+      "magic": 2
+    },
+    "special_attributes": {
+      "support": 1,
+      "reroll": 3
+    },
+    "tags": [
+      "female",
+      "swordsman",
+      "clan",
+      "ally"
+    ],
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "draft",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_轩辕青锋",
@@ -377,7 +497,14 @@
       "clan",
       "ally"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_南宫仆射",
@@ -406,7 +533,14 @@
       "wanderer",
       "ally"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_青鸟",
@@ -436,7 +570,14 @@
       "clan",
       "ally"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_轩辕敬城",
@@ -467,7 +608,14 @@
       "ally",
       "mage"
     ],
-    "equipment_slots": 3
+    "equipment_slots": 3,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "card_王仙芝",
@@ -496,6 +644,13 @@
       "mentor",
       "antagonist"
     ],
-    "equipment_slots": 4
+    "equipment_slots": 4,
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   }
 ]

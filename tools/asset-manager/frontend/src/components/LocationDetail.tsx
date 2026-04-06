@@ -65,7 +65,7 @@ export default function LocationDetail({ scene, mapData, templates, onUpdate }: 
     setSceneIdsText((scene.scene_ids ?? []).join(', '));
     setEditingPosition(false);
     setEditingSceneIds(false);
-  }, [scene.id]);
+  }, [scene.location_id]);
 
   const typeColor = SCENE_TYPE_COLORS[scene.type] || '#808080';
 
@@ -80,7 +80,7 @@ export default function LocationDetail({ scene, mapData, templates, onUpdate }: 
     return templates.scene_backdrop_style.replace('{prompt}', description);
   };
 
-  const iconVariants = toWorkshopVariants(scene.icon_variants, scene.prompt || '');
+  const iconVariants = toWorkshopVariants(scene.icon_variants, scene.icon_prompt || '');
   const backdropVariants = toWorkshopVariants(scene.backdrop_variants, scene.backdrop_prompt || '');
 
   return (
@@ -101,7 +101,7 @@ export default function LocationDetail({ scene, mapData, templates, onUpdate }: 
             >
               {scene.type}
             </span>
-            <span style={styles.sceneId}>{scene.id}</span>
+            <span style={styles.sceneId}>{scene.location_id}</span>
           </div>
         </div>
 
@@ -146,26 +146,26 @@ export default function LocationDetail({ scene, mapData, templates, onUpdate }: 
         {/* ─── ICON WORKSHOP ─────────────────────────────────────────────── */}
         {activeTab === 'icon-workshop' && (
           <WorkshopTab
-            entityName={`${scene.id}:icon`}
+            entityName={`${scene.location_id}:icon`}
             variants={iconVariants}
             config={ICON_WORKSHOP_CONFIG}
             assemblePrompt={assembleIconPrompt}
             onSaveDescription={async (variantIndex, description) => {
-              await api.updateSceneIconVariant(scene.id, variantIndex, description);
+              await api.updateSceneIconVariant(scene.location_id, variantIndex, description);
             }}
             onRegenerateVariants={async (bio) => {
               if (!bio.trim() && !scene.description?.trim()) {
                 throw new Error('请先填写场景描述，或在简介输入框中提供场景简介');
               }
-              return api.regenerateSceneIconVariants(scene.id, bio);
+              return api.regenerateSceneIconVariants(scene.location_id, bio);
             }}
             onGenerateImages={async (_variantIndex, description, count, onProgress) => {
               await api.generateSceneIcon(
-                { scene_id: scene.id, prompt: description, count, image_type: 'icon' },
+                { location_id: scene.location_id, icon_prompt: description, count, image_type: 'icon' },
                 onProgress,
               );
             }}
-            onLoadSamples={() => api.getSceneSamples(scene.id, 'icon')}
+            onLoadSamples={() => api.getSceneSamples(scene.location_id, 'icon')}
             onVariantsRegenerated={async () => {
               await onUpdate();
             }}
@@ -184,26 +184,26 @@ export default function LocationDetail({ scene, mapData, templates, onUpdate }: 
         {/* ─── BACKDROP WORKSHOP ─────────────────────────────────────────── */}
         {activeTab === 'backdrop-workshop' && (
           <WorkshopTab
-            entityName={`${scene.id}:backdrop`}
+            entityName={`${scene.location_id}:backdrop`}
             variants={backdropVariants}
             config={BACKDROP_WORKSHOP_CONFIG}
             assemblePrompt={assembleBackdropPrompt}
             onSaveDescription={async (variantIndex, description) => {
-              await api.updateSceneBackdropVariant(scene.id, variantIndex, description);
+              await api.updateSceneBackdropVariant(scene.location_id, variantIndex, description);
             }}
             onRegenerateVariants={async (bio) => {
               if (!bio.trim() && !scene.description?.trim()) {
                 throw new Error('请先填写场景描述，或在简介输入框中提供场景简介');
               }
-              return api.regenerateSceneBackdropVariants(scene.id, bio);
+              return api.regenerateSceneBackdropVariants(scene.location_id, bio);
             }}
             onGenerateImages={async (_variantIndex, description, count, onProgress) => {
               await api.generateSceneIcon(
-                { scene_id: scene.id, prompt: description, count, image_type: 'backdrop' },
+                { location_id: scene.location_id, icon_prompt: description, count, image_type: 'backdrop' },
                 onProgress,
               );
             }}
-            onLoadSamples={() => api.getSceneSamples(scene.id, 'backdrop')}
+            onLoadSamples={() => api.getSceneSamples(scene.location_id, 'backdrop')}
             onVariantsRegenerated={async () => {
               await onUpdate();
             }}
@@ -250,7 +250,7 @@ export default function LocationDetail({ scene, mapData, templates, onUpdate }: 
                     onClick={async () => {
                       setSavingRuntime(true);
                       try {
-                        await api.updateScene(scene.id, {
+                        await api.updateScene(scene.location_id, {
                           position: { x: parseFloat(posX), y: parseFloat(posY) },
                         });
                         setEditingPosition(false);
@@ -305,7 +305,7 @@ export default function LocationDetail({ scene, mapData, templates, onUpdate }: 
                             .split(',')
                             .map((s) => s.trim())
                             .filter(Boolean);
-                          await api.updateScene(scene.id, { scene_ids: ids });
+                          await api.updateScene(scene.location_id, { scene_ids: ids });
                           setEditingSceneIds(false);
                           await onUpdate();
                         } finally {
@@ -346,7 +346,7 @@ export default function LocationDetail({ scene, mapData, templates, onUpdate }: 
                 {mapData.scenes.map((s) => {
                   const tc = SCENE_TYPE_COLORS[s.type] || '#808080';
                   return (
-                    <div key={s.id} style={styles.overviewItem}>
+                    <div key={s.location_id} style={styles.overviewItem}>
                       <div style={{ ...styles.overviewTypeDot, background: tc }} />
                       <div style={styles.overviewName}>{s.name}</div>
                       <div style={styles.overviewType}>{s.type}</div>
@@ -380,9 +380,9 @@ function SceneGallery({ samples, scene, imageType, onRefresh, onUpdate }: SceneG
   const handleSelectImage = async (img: SampleImage) => {
     try {
       if (imageType === 'backdrop') {
-        await api.selectSceneBackdrop(scene.id, img.abs_path);
+        await api.selectSceneBackdrop(scene.location_id, img.abs_path);
       } else {
-        await api.selectSceneIcon(scene.id, img.abs_path);
+        await api.selectSceneIcon(scene.location_id, img.abs_path);
       }
       onRefresh();
       onUpdate();
@@ -395,7 +395,7 @@ function SceneGallery({ samples, scene, imageType, onRefresh, onUpdate }: SceneG
     try {
       setIsDeploying(true);
       setDeployResult(null);
-      await api.deploySceneIcon(scene.id, imageType);
+      await api.deploySceneIcon(scene.location_id, imageType);
       setDeployResult({
         success: true,
         message: imageType === 'backdrop' ? '地点背景图已部署成功！' : '地点图标已部署成功！',

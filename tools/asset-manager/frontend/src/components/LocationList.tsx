@@ -31,7 +31,7 @@ export default function LocationList({ maps, selectedScene, onSelectScene }: Loc
       {mapEntries.length === 0 && (
         <div style={styles.emptyState}>
           <div style={styles.emptyText}>无地点数据</div>
-          <div style={styles.emptyHint}>请检查 scripts/location_profiles.json</div>
+          <div style={styles.emptyHint}>请检查 scripts/data/maps/locations.json 与 scripts/data/maps/maps.json</div>
         </div>
       )}
 
@@ -69,12 +69,12 @@ export default function LocationList({ maps, selectedScene, onSelectScene }: Loc
             {!isCollapsed && (
               <div style={styles.sceneList}>
                 {mapData.scenes.map((scene) => {
-                  const isSelected = selectedScene?.id === scene.id;
+                  const isSelected = selectedScene?.location_id === scene.location_id;
                   const typeColor = SCENE_TYPE_COLORS[scene.type] || '#808080';
 
                   return (
                     <button
-                      key={scene.id}
+                      key={scene.location_id}
                       style={{
                         ...styles.sceneCard,
                         ...(isSelected ? styles.sceneCardActive : {}),

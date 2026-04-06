@@ -24,7 +24,14 @@
       "magical",
       "rare"
     ],
-    "lore": "木马牛乃上古遗留神兵，形制古拙，不饰华彩，唯有黝黑剑筒与粗粝剑体示人。平日沉寂如朽木，入夜却有幽光浮动。此剑一旦认主，锋芒内敛而杀机深藏，向来被视作可镇气运、亦可决生死的绝品宝剑。"
+    "lore": "木马牛乃上古遗留神兵，形制古拙，不饰华彩，唯有黝黑剑筒与粗粝剑体示人。平日沉寂如朽木，入夜却有幽光浮动。此剑一旦认主，锋芒内敛而杀机深藏，向来被视作可镇气运、亦可决生死的绝品宝剑。",
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T05:16:38.209278Z"
+    }
   },
   {
     "card_id": "equip_item_9247",
@@ -45,7 +52,14 @@
       "legendary",
       "rare"
     ],
-    "lore": "梅子酒是徐凤年常用名枪，枪名风雅，实则杀伐凌厉。随其历经江湖与庙堂风波，见惯生死离合，枪锋所至，既有北凉铁骑的悍勇，也藏几分饮酒赏梅的疏狂意气。"
+    "lore": "梅子酒是徐凤年常用名枪，枪名风雅，实则杀伐凌厉。随其历经江湖与庙堂风波，见惯生死离合，枪锋所至，既有北凉铁骑的悍勇，也藏几分饮酒赏梅的疏狂意气。",
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "equip_item_9347",
@@ -67,7 +81,14 @@
       "magical",
       "rare"
     ],
-    "lore": "北莽寒地曾出异玉，埋于冻土百年不裂。匠人取其芯髓磨成戒指，佩之可清心敛气，最宜修习旁门术法之人随身携带，于乱局中守住一线灵台清明。"
+    "lore": "北莽寒地曾出异玉，埋于冻土百年不裂。匠人取其芯髓磨成戒指，佩之可清心敛气，最宜修习旁门术法之人随身携带，于乱局中守住一线灵台清明。",
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "equip_004",
@@ -89,7 +110,14 @@
       "rare",
       "legendary"
     ],
-    "lore": "大凉龙雀为北凉王府所藏名剑，剑势不走轻灵诡道，而以堂皇雄浑见长。传闻其随北凉铁骑见惯边关风雪与沙场血火，持之者既可斩敌破阵，亦自带王府器物的威仪气度。"
+    "lore": "大凉龙雀为北凉王府所藏名剑，剑势不走轻灵诡道，而以堂皇雄浑见长。传闻其随北凉铁骑见惯边关风雪与沙场血火，持之者既可斩敌破阵，亦自带王府器物的威仪气度。",
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "equip_item_1655",
@@ -109,7 +137,14 @@
       "weapon",
       "rare"
     ],
-    "lore": "绣冬与春雷并称，皆为徐凤年贴身名器。此刀名雅而意寒，刀身线条秀逸，实则最宜近身搏杀，落入真正懂刀之人手中，往往一线之间分生死。"
+    "lore": "绣冬与春雷并称，皆为徐凤年贴身名器。此刀名雅而意寒，刀身线条秀逸，实则最宜近身搏杀，落入真正懂刀之人手中，往往一线之间分生死。",
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   },
   {
     "card_id": "equip_005",
@@ -136,6 +171,13 @@
       "magical",
       "legendary"
     ],
-    "lore": "十二飞剑非寻常兵刃，重在以气御剑、以神驭形。剑出如游龙，收放只在一念之间，既可暗袭宗师，也可结阵困敌，是江湖中极罕见的玄妙杀器。"
+    "lore": "十二飞剑非寻常兵刃，重在以气御剑、以神驭形。剑出如游龙，收放只在一念之间，既可暗袭宗师，也可结阵困敌，是江湖中极罕见的玄妙杀器。",
+    "meta": {
+      "publish_status": "published",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "updated_at": "2026-04-06T04:21:00Z"
+    }
   }
 ]
