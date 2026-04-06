@@ -205,296 +205,6 @@
     "equipment_slots": 4
   },
   {
-    "card_id": "card_sultan_01",
-    "name": "苏丹之印",
-    "type": "sultan",
-    "rarity": "gold",
-    "description": "苏丹的权力象征。在处刑日来临时持有此卡将被处决。",
-    "image": "sultan.png",
-    "tags": [
-      "sultan",
-      "dangerous"
-    ]
-  },
-  {
-    "card_id": "equip_001",
-    "name": "弯刀",
-    "type": "equipment",
-    "rarity": "copper",
-    "description": "锋利的阿拉伯弯刀，增强战斗力。",
-    "image": "equip01.png",
-    "equipment_type": "weapon",
-    "attribute_bonus": {
-      "combat": 4
-    },
-    "special_bonus": {
-      "reroll": 1
-    },
-    "gem_slots": 1,
-    "tags": [
-      "weapon"
-    ]
-  },
-  {
-    "card_id": "equip_003",
-    "name": "绣冬",
-    "type": "equipment",
-    "rarity": "silver",
-    "description": "南宫仆射佩刀，与春雷成对，三尺二寸，十斤九两，钝锋重刀，十九停之根基，力沉势稳可镇千军，江湖双刀传奇之首。",
-    "image": "/assets/items/item_scimitar_01.png",
-    "equipment_type": "weapon",
-    "attribute_bonus": {
-      "combat": 7,
-      "physique": 5
-    },
-    "special_bonus": {
-      "support": 2
-    },
-    "gem_slots": 1,
-    "tags": [
-      "weapon",
-      "legendary",
-      "paired"
-    ]
-  },
-  {
-    "card_id": "equip_004",
-    "name": "大凉龙雀",
-    "type": "equipment",
-    "rarity": "divine",
-    "description": "北凉王府传世宝剑，锋芒沉雄如龙雀长鸣，出鞘自有压阵之威。",
-    "image": "/assets/items/大凉龙雀_1775304857_1.png",
-    "equipment_type": "weapon",
-    "attribute_bonus": {
-      "combat": 10,
-      "charm": 3,
-      "wisdom": 2
-    },
-    "special_bonus": {},
-    "gem_slots": 2,
-    "tags": [
-      "weapon",
-      "rare",
-      "legendary"
-    ]
-  },
-  {
-    "card_id": "equip_005",
-    "name": "十二飞剑",
-    "type": "equipment",
-    "rarity": "gold",
-    "description": "桃花剑神邓太阿的信物，后赠予徐凤年；分别为玄甲、青梅、竹马、朝露、春水、桃花、峨眉、朱雀、黄桐、蚍蜉、金缕、太阿，可御使群攻，灵动无双。",
-    "image": "/assets/items/item_daggers_01.png",
-    "equipment_type": "weapon",
-    "attribute_bonus": {
-      "combat": 6,
-      "magic": 8,
-      "stealth": 4
-    },
-    "special_bonus": {
-      "reroll": 3
-    },
-    "gem_slots": 3,
-    "tags": [
-      "weapon",
-      "divine",
-      "flying-sword"
-    ]
-  },
-  {
-    "card_id": "equip_006",
-    "name": "木马牛",
-    "type": "equipment",
-    "rarity": "divine",
-    "description": "上古名剑木马牛，剑身黝黑粗粝，夜中隐有微光流转，出鞘则锋意惊人。",
-    "image": "/assets/items/木马牛_1775304408_1.png",
-    "equipment_type": "weapon",
-    "attribute_bonus": {
-      "combat": 12,
-      "physique": 2,
-      "wisdom": 2
-    },
-    "special_bonus": {
-      "support": 2,
-      "reroll": 1
-    },
-    "gem_slots": 3,
-    "tags": [
-      "weapon",
-      "legendary",
-      "ancient",
-      "magical",
-      "rare"
-    ]
-  },
-  {
-    "card_id": "equip_002",
-    "name": "皮甲",
-    "type": "equipment",
-    "rarity": "stone",
-    "description": "基础防护装备。",
-    "image": "equip02.png",
-    "equipment_type": "armor",
-    "attribute_bonus": {
-      "physique": 3
-    },
-    "gem_slots": 0,
-    "tags": [
-      "armor"
-    ]
-  },
-  {
-    "card_id": "intel_001",
-    "name": "宫廷流言",
-    "type": "intel",
-    "rarity": "stone",
-    "description": "关于宫廷的流言蜚语，有助于社交场合。",
-    "image": "intel01.png",
-    "attribute_bonus": {
-      "social": 3,
-      "charm": 2
-    },
-    "tags": [
-      "intel",
-      "consumable"
-    ]
-  },
-  {
-    "card_id": "gem_001",
-    "name": "红宝石",
-    "type": "gem",
-    "rarity": "silver",
-    "description": "火红的宝石，蕴含强大能量。",
-    "image": "gem01.png",
-    "attribute_bonus": {
-      "physique": 2,
-      "charm": 2,
-      "wisdom": 2,
-      "combat": 2,
-      "social": 2,
-      "survival": 2,
-      "stealth": 2,
-      "magic": 2
-    },
-    "tags": [
-      "gem",
-      "valuable"
-    ]
-  },
-  {
-    "card_id": "equip_gourd_01",
-    "name": "旧酒葫芦",
-    "type": "equipment",
-    "rarity": "copper",
-    "description": "徐凤年随身携带的旧酒葫芦，破破烂烂却从不离身。里面的酒比外表好得多。",
-    "image": "/assets/items/item_gourd_01.png",
-    "equipment_type": "accessory",
-    "attribute_bonus": {
-      "charm": 2,
-      "social": 1
-    },
-    "gem_slots": 0,
-    "tags": [
-      "accessory",
-      "wine"
-    ]
-  },
-  {
-    "card_id": "equip_swordcase_01",
-    "name": "剑匣",
-    "type": "equipment",
-    "rarity": "copper",
-    "description": "老黄随身携带的剑匣，看似普通，内藏玄机。",
-    "image": "/assets/items/item_swordcase_01.png",
-    "equipment_type": "accessory",
-    "attribute_bonus": {
-      "combat": 2,
-      "stealth": 1
-    },
-    "gem_slots": 0,
-    "tags": [
-      "accessory",
-      "mystery"
-    ]
-  },
-  {
-    "card_id": "temp_mockery",
-    "name": "调侃",
-    "type": "thought",
-    "rarity": "stone",
-    "description": "随性不羁的调侃，激起了少年的斗志。临时提升体魄鉴定修正。",
-    "image": "/assets/items/item_gourd_01.png",
-    "attribute_bonus": {
-      "physique": 1
-    },
-    "tags": [
-      "temporary",
-      "scene_006"
-    ]
-  },
-  {
-    "card_id": "temp_generosity",
-    "name": "仗义疏财",
-    "type": "thought",
-    "rarity": "stone",
-    "description": "世家气度，出手解围。临时提升社交鉴定修正。",
-    "image": "/assets/items/item_gourd_01.png",
-    "attribute_bonus": {
-      "social": 2
-    },
-    "tags": [
-      "temporary",
-      "scene_006"
-    ]
-  },
-  {
-    "card_id": "temp_friendly_rivalry",
-    "name": "不打不相识",
-    "type": "thought",
-    "rarity": "stone",
-    "description": "一场趣味切磋，反而拉近了彼此距离。可触发结伴剧情。",
-    "image": "/assets/items/item_swordcase_01.png",
-    "attribute_bonus": {
-      "social": 2
-    },
-    "tags": [
-      "temporary",
-      "scene_006",
-      "bond"
-    ]
-  },
-  {
-    "card_id": "temp_swordcase_mystery",
-    "name": "剑匣疑云",
-    "type": "thought",
-    "rarity": "stone",
-    "description": "温华对老黄的剑匣产生了好奇，好感度提升。",
-    "image": "/assets/items/item_swordcase_01.png",
-    "attribute_bonus": {
-      "charm": 1
-    },
-    "tags": [
-      "temporary",
-      "scene_006"
-    ]
-  },
-  {
-    "card_id": "temp_owe_favor",
-    "name": "欠人情",
-    "type": "thought",
-    "rarity": "stone",
-    "description": "温华欠下的人情，关键时刻可抵挡一次伤害。",
-    "image": "/assets/items/item_gourd_01.png",
-    "attribute_bonus": {
-      "survival": 2
-    },
-    "tags": [
-      "temporary",
-      "scene_006",
-      "favor"
-    ]
-  },
-  {
     "card_id": "card_李淳罡",
     "name": "李淳罡",
     "type": "character",
@@ -641,47 +351,6 @@
     "equipment_slots": 4
   },
   {
-    "card_id": "equip_item_9347",
-    "name": "寒玉戒指",
-    "type": "equipment",
-    "rarity": "silver",
-    "description": "寒玉所琢，入手沁凉，能宁神定意，亦可微御邪祟与心火。",
-    "image": "/assets/items/寒玉戒指_1775300250_1.png",
-    "equipment_type": "accessory",
-    "attribute_bonus": {
-      "wisdom": 6,
-      "magic": 5,
-      "charm": 2
-    },
-    "special_bonus": {},
-    "gem_slots": 1,
-    "tags": [
-      "accessory",
-      "magical",
-      "rare"
-    ]
-  },
-  {
-    "card_id": "equip_item_9247",
-    "name": "梅子酒",
-    "type": "equipment",
-    "rarity": "gold",
-    "description": "枪势如梅落寒江，锋芒内敛却杀机极盛，最宜马上破阵与近身鏖战。",
-    "image": "/assets/items/梅子酒_1775304603_1.png",
-    "equipment_type": "weapon",
-    "attribute_bonus": {
-      "combat": 11,
-      "physique": 6
-    },
-    "special_bonus": {},
-    "gem_slots": 2,
-    "tags": [
-      "weapon",
-      "legendary",
-      "rare"
-    ]
-  },
-  {
     "card_id": "card_轩辕青锋",
     "name": "轩辕青锋",
     "type": "character",
@@ -799,5 +468,34 @@
       "mage"
     ],
     "equipment_slots": 3
+  },
+  {
+    "card_id": "card_王仙芝",
+    "name": "王仙芝",
+    "type": "character",
+    "rarity": "gold",
+    "description": "武帝城城主，独镇东海，号称天下第二却实为武道绝巅。王仙芝一生守城磨拳，不慕虚名，气度雄浑，既是江湖丰碑，也是后来者必须翻越的高峰。",
+    "image": "/assets/portraits/figure17.png",
+    "attributes": {
+      "physique": 10,
+      "charm": 6,
+      "wisdom": 8,
+      "combat": 10,
+      "social": 5,
+      "survival": 7,
+      "stealth": 1,
+      "magic": 2
+    },
+    "special_attributes": {
+      "support": 2,
+      "reroll": 5
+    },
+    "tags": [
+      "male",
+      "warrior",
+      "mentor",
+      "antagonist"
+    ],
+    "equipment_slots": 4
   }
 ]

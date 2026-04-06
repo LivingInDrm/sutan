@@ -429,5 +429,30 @@
       "mage"
     ],
     "equipment_slots": 3
+  },
+  "王仙芝": {
+    "description": "武帝城城主，独镇东海，号称天下第二却实为武道绝巅。王仙芝一生守城磨拳，不慕虚名，气度雄浑，既是江湖丰碑，也是后来者必须翻越的高峰。",
+    "rarity": "gold",
+    "attributes": {
+      "physique": 10,
+      "charm": 6,
+      "wisdom": 8,
+      "combat": 10,
+      "social": 5,
+      "survival": 7,
+      "stealth": 1,
+      "magic": 2
+    },
+    "special_attributes": {
+      "support": 2,
+      "reroll": 5
+    },
+    "tags": [
+      "male",
+      "warrior",
+      "mentor",
+      "antagonist"
+    ],
+    "equipment_slots": 4
   }
 }

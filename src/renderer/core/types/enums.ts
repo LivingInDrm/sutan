@@ -3,6 +3,7 @@ export enum Rarity {
   Silver = 'silver',
   Copper = 'copper',
   Stone = 'stone',
+  Divine = 'divine',
 }
 
 export enum Attribute {
@@ -114,6 +115,7 @@ export const REPUTATION_RANGES: Record<ReputationLevel, [number, number]> = {
 };
 
 export const RARITY_ATTRIBUTE_RANGES: Record<Rarity, [number, number]> = {
+  [Rarity.Divine]: [61, 100],
   [Rarity.Gold]: [36, 60],
   [Rarity.Silver]: [21, 35],
   [Rarity.Copper]: [11, 20],

@@ -30,5 +30,6 @@
       "@lib/*": ["src/renderer/lib/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["**/*.stories.tsx", "**/*.stories.ts"]
 }

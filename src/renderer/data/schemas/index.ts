@@ -4,7 +4,7 @@ import {
   SceneStatus, CheckResult, CalcMode, SlotType, NarrativeNodeType,
 } from '../../core/types/enums';
 
-const RarityEnum = z.enum([Rarity.Gold, Rarity.Silver, Rarity.Copper, Rarity.Stone]);
+const RarityEnum = z.enum([Rarity.Gold, Rarity.Silver, Rarity.Copper, Rarity.Stone, Rarity.Divine]);
 const CardTypeEnum = z.enum([
   CardType.Character, CardType.Equipment, CardType.Intel,
   CardType.Consumable, CardType.Book, CardType.Thought,
@@ -263,6 +263,32 @@ export const SaveDataSchema = z.object({
   scenes: ScenesStateSchema,
   achievements_unlocked: z.array(z.string()),
   npc_relations: z.record(z.string(), z.number()),
+});
+
+// ---------------------------------------------------------------------------
+// Map / Location schemas
+// ---------------------------------------------------------------------------
+
+const LocationConfigSchema = z.object({
+  location_id: z.string().min(1),
+  name: z.string().min(1),
+  icon_image: z.string(),
+  backdrop_image: z.string().optional(),
+  position: z.object({
+    x: z.number().min(0).max(1),
+    y: z.number().min(0).max(1),
+  }),
+  scene_ids: z.array(z.string()),
+  unlock_conditions: z.record(z.string(), z.unknown()).optional().default({}),
+});
+
+export const MapSchema = z.object({
+  _generated: z.string().optional(), // allow the meta comment field
+  map_id: z.string().min(1),
+  name: z.string().min(1),
+  description: z.string(),
+  background_image: z.string(),
+  locations: z.array(LocationConfigSchema),
 });
 
 export {

@@ -21,8 +21,7 @@
       "ancient",
       "magical",
       "rare"
-    ],
-    "selected_image": "/Users/xiaochunliu/program/sutan/scripts/samples/item_木马牛/木马牛_1775306152_1.png"
+    ]
   },
   "梅子酒": {
     "card_type": "equipment",
@@ -40,8 +39,7 @@
       "weapon",
       "legendary",
       "rare"
-    ],
-    "selected_image": "/Users/xiaochunliu/program/sutan/scripts/samples/item_梅子酒/梅子酒_1775306439_1.png"
+    ]
   },
   "寒玉戒指": {
     "card_type": "equipment",
@@ -79,7 +77,23 @@
       "weapon",
       "rare",
       "legendary"
-    ],
-    "selected_image": "/Users/xiaochunliu/program/sutan/scripts/samples/item_大凉龙雀/大凉龙雀_1775305027_1.png"
+    ]
+  },
+  "绣冬刀": {
+    "card_type": "equipment",
+    "equipment_type": "weapon",
+    "rarity": "silver",
+    "description": "北凉王府名刀之一，刀势清寒如冬雪，出鞘时锋芒内敛却杀机极盛。",
+    "lore": "绣冬与春雷并称，皆为徐凤年贴身名器。此刀名雅而意寒，刀身线条秀逸，实则最宜近身搏杀，落入真正懂刀之人手中，往往一线之间分生死。",
+    "attribute_bonus": {
+      "combat": 7,
+      "physique": 5
+    },
+    "special_bonus": {},
+    "gem_slots": 2,
+    "tags": [
+      "weapon",
+      "rare"
+    ]
   }
 }

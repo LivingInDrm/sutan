@@ -2,16 +2,10 @@ import React, { useState } from 'react';
 import { useUIStore } from '../../stores/uiStore';
 import { useGameStore } from '../../stores/gameStore';
 import { SceneStatus } from '../../core/types/enums';
-import mapConfig from '../../data/configs/maps/map_001_beiliang.json';
+import { dataLoader } from '../../data/loader';
+import type { MapConfig, LocationConfig } from '../../core/types';
 
-interface LocationConfig {
-  location_id: string;
-  name: string;
-  icon_image: string;
-  position: { x: number; y: number };
-  scene_ids: string[];
-  unlock_conditions: Record<string, unknown>;
-}
+const mapConfig: MapConfig = dataLoader.getMap('map_001_beiliang') ?? dataLoader.getFirstMap()!;
 
 function getLocationStatus(
   location: LocationConfig,
@@ -50,7 +44,7 @@ export function WorldMapScreen() {
     setScreen('settlement');
   };
 
-  const locations: LocationConfig[] = mapConfig.locations as LocationConfig[];
+  const locations: LocationConfig[] = mapConfig.locations;
 
   return (
     <div className="h-screen w-screen relative overflow-hidden bg-gray-950">

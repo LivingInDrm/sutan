@@ -2,18 +2,10 @@ import React from 'react';
 import { useUIStore } from '../../stores/uiStore';
 import { useGameStore } from '../../stores/gameStore';
 import { SceneStatus } from '../../core/types/enums';
-import mapConfig from '../../data/configs/maps/map_001_beiliang.json';
-import type { Scene } from '../../core/types';
+import { dataLoader } from '../../data/loader';
+import type { Scene, MapConfig, LocationConfig } from '../../core/types';
 
-interface LocationConfig {
-  location_id: string;
-  name: string;
-  icon_image: string;
-  backdrop_image?: string;
-  position: { x: number; y: number };
-  scene_ids: string[];
-  unlock_conditions: Record<string, unknown>;
-}
+const mapConfig: MapConfig = dataLoader.getMap('map_001_beiliang') ?? dataLoader.getFirstMap()!;
 
 const SCENE_TYPE_LABELS: Record<string, string> = {
   event: '事件',
@@ -77,7 +69,7 @@ export function LocationScreen() {
   const selectScene = useUIStore(s => s.selectScene);
   const setScreen = useUIStore(s => s.setScreen);
 
-  const locations: LocationConfig[] = mapConfig.locations as LocationConfig[];
+  const locations: LocationConfig[] = mapConfig.locations;
   const location = locations.find(l => l.location_id === selectedLocationId);
 
   if (!location) {

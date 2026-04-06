@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from .config import SCENES_DIR, CARDS_PATH
+from .config import SCENES_DIR, CARDS_DIR
 
 
 def load_scene(scene_id: str) -> Dict[str, Any]:
@@ -46,18 +46,28 @@ def load_all_scenes() -> List[Dict[str, Any]]:
     return scenes
 
 
+def _load_all_cards() -> List[Dict[str, Any]]:
+    """Load all card objects from all JSON files in the cards directory."""
+    all_cards: List[Dict[str, Any]] = []
+    if not CARDS_DIR.exists():
+        return all_cards
+    for card_file in sorted(CARDS_DIR.glob("*.json")):
+        try:
+            with open(card_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if isinstance(data, list):
+                all_cards.extend(data)
+        except (json.JSONDecodeError, OSError):
+            continue
+    return all_cards
+
+
 def load_card_ids() -> Dict[str, str]:
     """加载所有合法的卡牌 ID -> name 映射"""
-    if not CARDS_PATH.exists():
-        return {}
-    with open(CARDS_PATH, "r", encoding="utf-8") as f:
-        cards = json.load(f)
+    cards = _load_all_cards()
     return {c["card_id"]: c.get("name", c["card_id"]) for c in cards}
 
 
 def load_cards_data() -> List[Dict[str, Any]]:
     """加载完整卡牌数据"""
-    if not CARDS_PATH.exists():
-        return []
-    with open(CARDS_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+    return _load_all_cards()

@@ -39,7 +39,10 @@ PORTRAITS_SRC_DIR = PROJECT_ROOT / "src" / "renderer" / "assets" / "portraits"
 PORTRAITS_PUBLIC_DIR = PROJECT_ROOT / "public" / "portraits"
 BATCH_CONFIG_PATH = PROJECT_ROOT / "scripts" / "batch_config.json"
 CHARACTER_PROFILES_PATH = PROJECT_ROOT / "scripts" / "character_profiles.json"
-BASE_CARDS_PATH = PROJECT_ROOT / "src" / "renderer" / "data" / "configs" / "cards" / "base_cards.json"
+CARDS_DIR = PROJECT_ROOT / "src" / "renderer" / "data" / "configs" / "cards"
+CHARACTERS_CARDS_PATH = CARDS_DIR / "characters.json"
+EQUIPMENT_CARDS_PATH = CARDS_DIR / "equipment.json"
+SPECIAL_CARDS_PATH = CARDS_DIR / "special.json"
 BACKEND_DIR = Path(__file__).resolve().parent
 TEMPLATES_CONFIG_PATH = BACKEND_DIR / "templates.json"
 HISTORY_PATH = BACKEND_DIR / "history.json"
@@ -47,7 +50,7 @@ HISTORY_PATH = BACKEND_DIR / "history.json"
 # Mapping from character name → game portrait filename stem (e.g. "figure01")
 # Only needed for the replace-to-game feature; new characters won't have a game file until manually assigned.
 def _build_name_to_game_file() -> Dict[str, str]:
-    """Dynamically build name→figureNN mapping from base_cards.json."""
+    """Dynamically build name→figureNN mapping from card files."""
     mapping: Dict[str, str] = {}
     try:
         cards = _read_base_cards()
@@ -58,7 +61,7 @@ def _build_name_to_game_file() -> Dict[str, str]:
                 mapping[c["name"]] = stem
     except Exception:
         pass
-    # Fallback for original 7 if base_cards.json is missing
+    # Fallback for original 7 if card files are missing
     fallback = {
         "徐龙象": "figure01", "徐渭熊": "figure02", "徐凤年": "figure03",
         "温华": "figure04", "红薯": "figure05", "洪洗象": "figure06", "老黄": "figure07",
@@ -192,19 +195,49 @@ def _file_hash(path: Path) -> Optional[str]:
     return h.hexdigest()
 
 
-def _read_base_cards() -> List[Dict]:
-    if not BASE_CARDS_PATH.exists():
+def _read_cards_file(path: Path) -> List[Dict]:
+    """Read a single cards JSON file (array of card objects)."""
+    if not path.exists():
         return []
     try:
-        with open(BASE_CARDS_PATH, "r", encoding="utf-8") as f:
+        with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
     except (json.JSONDecodeError, OSError):
         return []
 
 
-def _write_base_cards(data: List[Dict]) -> None:
-    with open(BASE_CARDS_PATH, "w", encoding="utf-8") as f:
+def _write_cards_file(path: Path, data: List[Dict]) -> None:
+    """Write a list of card objects to a single JSON file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def _read_base_cards() -> List[Dict]:
+    """Read all cards from the split card files (characters + equipment + special)."""
+    all_cards: List[Dict] = []
+    all_cards.extend(_read_cards_file(CHARACTERS_CARDS_PATH))
+    all_cards.extend(_read_cards_file(EQUIPMENT_CARDS_PATH))
+    all_cards.extend(_read_cards_file(SPECIAL_CARDS_PATH))
+    return all_cards
+
+
+def _write_base_cards(data: List[Dict]) -> None:
+    """Split cards by type and write to the appropriate files."""
+    characters: List[Dict] = []
+    equipment: List[Dict] = []
+    special: List[Dict] = []
+    for card in data:
+        card_type = card.get("type", "")
+        if card_type == "character":
+            characters.append(card)
+        elif card_type == "equipment":
+            equipment.append(card)
+        else:
+            special.append(card)
+    _write_cards_file(CHARACTERS_CARDS_PATH, characters)
+    _write_cards_file(EQUIPMENT_CARDS_PATH, equipment)
+    _write_cards_file(SPECIAL_CARDS_PATH, special)
 
 
 def _next_figure_id() -> str:
@@ -703,7 +736,7 @@ async def generate_description(body: GenerateDescriptionRequest) -> Dict[str, An
     """
     Call LLM to generate description(s) for a character.
     Returns a list of 4 descriptions (or 1 if variant_index is specified).
-    Model defaults to gpt-4.1; override via DESCRIPTION_MODEL env var.
+    Model defaults to gpt-5.4; override via DESCRIPTION_MODEL env var.
     """
     client = _get_openai_client()
     loop = asyncio.get_running_loop()
@@ -949,7 +982,7 @@ def deploy_character(character_name: str) -> Dict[str, Any]:
     1. Read profile from character_profiles.json
     2. Determine portrait file (NAME_TO_GAME_FILE or auto-assign)
     3. If selected_portrait is set, copy it to game directories; otherwise keep existing
-    4. Upsert entry in base_cards.json
+    4. Upsert entry in characters.json
     5. Clear selected_portrait from profile
     """
     profiles = _read_character_profiles()
@@ -969,7 +1002,7 @@ def deploy_character(character_name: str) -> Dict[str, Any]:
     if not game_file:
         # Auto-assign next available figure ID and persist to in-memory map
         game_file = _next_figure_id()
-        _build_name_to_game_file()  # auto-refreshes from base_cards.json
+        _build_name_to_game_file()  # auto-refreshes from card files
 
     portrait_dest_src = PORTRAITS_SRC_DIR / f"{game_file}.png"
     portrait_dest_public = PORTRAITS_PUBLIC_DIR / f"{game_file}.png"
@@ -1006,8 +1039,8 @@ def deploy_character(character_name: str) -> Dict[str, Any]:
         "equipment_slots": profile.get("equipment_slots", 1),
     }
 
-    # Upsert in base_cards.json
-    cards = _read_base_cards()
+    # Upsert in characters.json
+    cards = _read_cards_file(CHARACTERS_CARDS_PATH)
     existing_idx = next((i for i, c in enumerate(cards) if c.get("name") == character_name), None)
     if existing_idx is not None:
         # Preserve existing card_id
@@ -1018,7 +1051,7 @@ def deploy_character(character_name: str) -> Dict[str, Any]:
         cards.append(card_entry)
         action = "added"
 
-    _write_base_cards(cards)
+    _write_cards_file(CHARACTERS_CARDS_PATH, cards)
 
     return {
         "success": True,
@@ -1879,7 +1912,7 @@ def deploy_item(item_name: str) -> Dict[str, Any]:
     Deploy an item to the game:
     1. Read profile from item_profiles.json
     2. If selected_image is set, copy it to game item directories
-    3. Upsert entry in base_cards.json
+    3. Upsert entry in equipment.json
     4. Clear selected_image from profile
     """
     profiles = _read_item_profiles()
@@ -1913,14 +1946,14 @@ def deploy_item(item_name: str) -> Dict[str, Any]:
         _write_item_profiles(profiles)
     else:
         # Use existing game image if already deployed
-        cards = _read_base_cards()
+        cards = _read_cards_file(EQUIPMENT_CARDS_PATH)
         existing = next((c for c in cards if c.get("name") == item_name and c.get("type") == "equipment"), None)
         if existing and existing.get("image"):
             img_filename = existing["image"].rsplit("/", 1)[-1]
 
     # Build card entry
     card_id = _item_to_card_id(item_name)
-    cards = _read_base_cards()
+    cards = _read_cards_file(EQUIPMENT_CARDS_PATH)
     existing = next((c for c in cards if c.get("name") == item_name and c.get("type") == "equipment"), None)
     if existing:
         card_id = existing.get("card_id", card_id)
@@ -1939,7 +1972,7 @@ def deploy_item(item_name: str) -> Dict[str, Any]:
         "tags": profile.get("tags", []),
     }
 
-    # Upsert in base_cards.json
+    # Upsert in equipment.json
     existing_idx = next((i for i, c in enumerate(cards) if c.get("name") == item_name and c.get("type") == "equipment"), None)
     if existing_idx is not None:
         cards[existing_idx] = card_entry
@@ -1948,7 +1981,7 @@ def deploy_item(item_name: str) -> Dict[str, Any]:
         cards.append(card_entry)
         action = "added"
 
-    _write_base_cards(cards)
+    _write_cards_file(EQUIPMENT_CARDS_PATH, cards)
 
     return {
         "success": True,
@@ -2055,21 +2088,42 @@ MAPS_DIR = BACKEND_DIR / "maps"  # tools/asset-manager/backend/maps/{map_id}/
 # Game runtime paths (for deploy sync)
 GAME_MAPS_CONFIG_DIR = PROJECT_ROOT / "src" / "renderer" / "data" / "configs" / "maps"
 # Vite root is src/renderer, so public assets are served from src/renderer/public/
+# Rule: runtime hot-deploy resources → src/renderer/public/  (NEVER root public/)
 GAME_PUBLIC_MAPS_DIR = PROJECT_ROOT / "src" / "renderer" / "public" / "maps"
 
-# Mapping from asset manager map_id → game map JSON filename stem
+# ── Map manifest (single source of truth for map_id → game file mappings) ──
+# Loaded from scripts/map_manifest.json; falls back to minimal hardcoded table
+# if the file is missing.  Add new maps to map_manifest.json, NOT here.
+_MAP_MANIFEST_PATH = PROJECT_ROOT / "scripts" / "map_manifest.json"
+
+
+def _load_map_manifest() -> Dict[str, Any]:
+    """Load scripts/map_manifest.json, falling back to a minimal built-in table."""
+    try:
+        with open(_MAP_MANIFEST_PATH, "r", encoding="utf-8") as _f:
+            return json.load(_f)
+    except (OSError, json.JSONDecodeError):
+        return {
+            "maps": {
+                "map_001": {
+                    "game_file": "map_001_beiliang",
+                    "public_subdir": "beiliang",
+                }
+            }
+        }
+
+
+_manifest = _load_map_manifest()
+
+# Build the two lookup dicts from the manifest (replaces the old hardcoded dicts).
 _ASSET_MAP_TO_GAME_FILE: Dict[str, str] = {
-    "map_001": "map_001_beiliang",
+    mid: entry["game_file"]
+    for mid, entry in _manifest.get("maps", {}).items()
 }
-
-# Mapping from asset manager map_id → game public subdir name
-# (used to construct the correct /maps/{subdir}/ URL for game access)
 _ASSET_MAP_TO_PUBLIC_SUBDIR: Dict[str, str] = {
-    "map_001": "beiliang",
+    mid: entry["public_subdir"]
+    for mid, entry in _manifest.get("maps", {}).items()
 }
-
-# Back-compat alias (keep SCENE_PROFILES_PATH so any lingering references compile)
-SCENE_PROFILES_PATH = LOCATION_PROFILES_PATH
 
 # ─────────────────────────────────────────────
 # Scene / map icon prompt style constants
@@ -2125,8 +2179,8 @@ app.mount("/maps", StaticFiles(directory=str(MAPS_DIR)), name="map_assets")
 # ─────────────────────────────────────────────
 # Scene helpers
 # ─────────────────────────────────────────────
-def _read_scene_profiles() -> Dict[str, Any]:
-    """Read location_profiles.json (formerly scene_profiles.json)."""
+def _read_location_profiles() -> Dict[str, Any]:
+    """Read location_profiles.json — the canonical source for all location/map data."""
     if not LOCATION_PROFILES_PATH.exists():
         return {"maps": {}}
     try:
@@ -2136,7 +2190,7 @@ def _read_scene_profiles() -> Dict[str, Any]:
         return {"maps": {}}
 
 
-def _write_scene_profiles(data: Dict[str, Any]) -> None:
+def _write_location_profiles(data: Dict[str, Any]) -> None:
     """Write to location_profiles.json."""
     with open(LOCATION_PROFILES_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
@@ -2159,7 +2213,7 @@ def _scene_samples_folder(scene_id: str) -> Path:
 
 
 def _find_scene_by_id(profiles: Dict[str, Any], scene_id: str) -> Optional[Dict[str, Any]]:
-    """Find a scene dict and its map_id from the scene_profiles data."""
+    """Find a location dict by its id from location_profiles data."""
     for map_id, map_data in profiles.get("maps", {}).items():
         for scene in map_data.get("scenes", []):
             if scene.get("id") == scene_id:
@@ -2288,6 +2342,18 @@ class SelectBackdropRequest(BaseModel):
     image_path: str
 
 
+class CreateLocationRequest(BaseModel):
+    location_id: str           # e.g. "location_011"
+    name: str                  # display name in Chinese
+    description: str = ""
+    type: str = ""
+    position: Optional[LocationPosition] = None
+    scene_ids: List[str] = []
+    unlock_conditions: Dict[str, Any] = {}
+    prompt: str = ""
+    backdrop_prompt: str = ""
+
+
 class SceneGenerateRequest(BaseModel):
     scene_id: str
     prompt: str
@@ -2314,7 +2380,7 @@ class RegenerateSceneVariantsRequest(BaseModel):
 @app.get("/api/scenes")
 def get_scenes() -> Dict[str, Any]:
     """Return all scenes grouped by map, with current_icon URLs."""
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     result: Dict[str, Any] = {"maps": {}}
 
     for map_id, map_data in profiles.get("maps", {}).items():
@@ -2383,7 +2449,7 @@ def get_scenes() -> Dict[str, Any]:
 @app.get("/api/scenes/{scene_id}")
 def get_scene(scene_id: str) -> Dict[str, Any]:
     """Return a single scene by ID."""
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     scene = _find_scene_by_id(profiles, scene_id)
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
@@ -2397,7 +2463,7 @@ def get_scene(scene_id: str) -> Dict[str, Any]:
 @app.put("/api/scenes/{scene_id}")
 def update_scene(scene_id: str, body: UpdateSceneRequest) -> Dict[str, Any]:
     """Update scene description, prompt, backdrop_prompt, name, position, scene_ids, or unlock_conditions."""
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     updated = False
     map_id_found = None
     for _map_id, map_data in profiles.get("maps", {}).items():
@@ -2426,10 +2492,16 @@ def update_scene(scene_id: str, body: UpdateSceneRequest) -> Dict[str, Any]:
     if not updated:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
 
-    _write_scene_profiles(profiles)
+    _write_location_profiles(profiles)
 
-    # Sync runtime fields (position, scene_ids) to game map config if applicable
-    if (body.position is not None or body.scene_ids is not None) and map_id_found:
+    # Sync all runtime fields to game map config (single source of truth: map JSON)
+    _runtime_fields_changed = (
+        body.position is not None
+        or body.scene_ids is not None
+        or body.name is not None
+        or body.unlock_conditions is not None
+    )
+    if _runtime_fields_changed and map_id_found:
         game_map_stem = _ASSET_MAP_TO_GAME_FILE.get(map_id_found)
         if game_map_stem:
             game_map_file = GAME_MAPS_CONFIG_DIR / f"{game_map_stem}.json"
@@ -2443,6 +2515,10 @@ def update_scene(scene_id: str, body: UpdateSceneRequest) -> Dict[str, Any]:
                                 loc["position"] = {"x": body.position.x, "y": body.position.y}
                             if body.scene_ids is not None:
                                 loc["scene_ids"] = body.scene_ids
+                            if body.name is not None:
+                                loc["name"] = body.name
+                            if body.unlock_conditions is not None:
+                                loc["unlock_conditions"] = body.unlock_conditions
                             break
                     with open(game_map_file, "w", encoding="utf-8") as f:
                         json.dump(game_map_data, f, ensure_ascii=False, indent=2)
@@ -2451,6 +2527,150 @@ def update_scene(scene_id: str, body: UpdateSceneRequest) -> Dict[str, Any]:
 
     scene = _find_scene_by_id(profiles, scene_id)
     return {"success": True, "scene": scene}
+
+
+# ─────────────────────────────────────────────
+# S3b. POST /api/maps/{map_id}/locations — create new location
+# ─────────────────────────────────────────────
+@app.post("/api/maps/{map_id}/locations")
+def create_location(map_id: str, body: CreateLocationRequest) -> Dict[str, Any]:
+    """
+    Create a new location in both workspace (location_profiles.json) and runtime (map JSON).
+    This is the single operation needed to add a new map location — no scripts needed.
+    """
+    # Validate location_id uniqueness across all maps
+    profiles = _read_location_profiles()
+    for _mid, map_data in profiles.get("maps", {}).items():
+        for scene in map_data.get("scenes", []):
+            if scene.get("id") == body.location_id:
+                raise HTTPException(
+                    status_code=409,
+                    detail=f"Location '{body.location_id}' already exists.",
+                )
+
+    # Ensure the map exists in location_profiles; create if needed
+    if map_id not in profiles.setdefault("maps", {}):
+        profiles["maps"][map_id] = {"name": map_id, "scenes": []}
+
+    pos = {"x": body.position.x, "y": body.position.y} if body.position else {"x": 0.5, "y": 0.5}
+
+    # Build workspace entry
+    new_scene: Dict[str, Any] = {
+        "id": body.location_id,
+        "name": body.name,
+        "map_id": map_id,
+        "type": body.type,
+        "description": body.description,
+        "prompt": body.prompt,
+        "backdrop_prompt": body.backdrop_prompt,
+        "icon_path": "",
+        "backdrop_path": "",
+        "position": pos,
+        "scene_ids": body.scene_ids,
+        "unlock_conditions": body.unlock_conditions,
+        "icon_variants": [],
+        "backdrop_variants": [],
+    }
+    profiles["maps"][map_id]["scenes"].append(new_scene)
+    _write_location_profiles(profiles)
+
+    # Build runtime entry and upsert in map JSON
+    runtime_entry: Dict[str, Any] = {
+        "location_id": body.location_id,
+        "name": body.name,
+        "icon_image": "",
+        "backdrop_image": "",
+        "position": pos,
+        "scene_ids": body.scene_ids,
+        "unlock_conditions": body.unlock_conditions,
+    }
+
+    game_map_stem = _ASSET_MAP_TO_GAME_FILE.get(map_id)
+    game_map_updated = False
+    if game_map_stem:
+        game_map_file = GAME_MAPS_CONFIG_DIR / f"{game_map_stem}.json"
+        try:
+            if game_map_file.exists():
+                with open(game_map_file, "r", encoding="utf-8") as f:
+                    game_map_data = json.load(f)
+            else:
+                game_map_data = {
+                    "_note": "Single source of truth for runtime map data.",
+                    "map_id": game_map_stem,
+                    "name": map_id,
+                    "locations": [],
+                }
+
+            # Check not duplicate in map JSON
+            existing_ids = {loc.get("location_id") for loc in game_map_data.get("locations", [])}
+            if body.location_id not in existing_ids:
+                game_map_data.setdefault("locations", []).append(runtime_entry)
+                with open(game_map_file, "w", encoding="utf-8") as f:
+                    json.dump(game_map_data, f, ensure_ascii=False, indent=2)
+                game_map_updated = True
+        except (json.JSONDecodeError, OSError) as exc:
+            # Non-fatal: workspace was already saved; return warning
+            return {
+                "success": True,
+                "warning": f"Workspace saved but failed to update map JSON: {exc}",
+                "location_id": body.location_id,
+                "game_map_updated": False,
+            }
+
+    return {
+        "success": True,
+        "location_id": body.location_id,
+        "game_map_updated": game_map_updated,
+        "scene": new_scene,
+    }
+
+
+# ─────────────────────────────────────────────
+# S3c. DELETE /api/scenes/{scene_id} — remove a location
+# ─────────────────────────────────────────────
+@app.delete("/api/scenes/{scene_id}")
+def delete_scene(scene_id: str) -> Dict[str, Any]:
+    """
+    Remove a location from both workspace (location_profiles.json) and runtime (map JSON).
+    Assets (icons, backdrops) are NOT deleted from disk.
+    """
+    profiles = _read_location_profiles()
+    map_id_found = None
+    for _map_id, map_data in profiles.get("maps", {}).items():
+        scenes = map_data.get("scenes", [])
+        for i, scene in enumerate(scenes):
+            if scene.get("id") == scene_id:
+                scenes.pop(i)
+                map_id_found = _map_id
+                break
+        if map_id_found:
+            break
+
+    if not map_id_found:
+        raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
+
+    _write_location_profiles(profiles)
+
+    # Remove from game map JSON
+    game_map_stem = _ASSET_MAP_TO_GAME_FILE.get(map_id_found)
+    game_map_updated = False
+    if game_map_stem:
+        game_map_file = GAME_MAPS_CONFIG_DIR / f"{game_map_stem}.json"
+        if game_map_file.exists():
+            try:
+                with open(game_map_file, "r", encoding="utf-8") as f:
+                    game_map_data = json.load(f)
+                locations = game_map_data.get("locations", [])
+                new_locations = [loc for loc in locations if loc.get("location_id") != scene_id]
+                if len(new_locations) < len(locations):
+                    game_map_data["locations"] = new_locations
+                    with open(game_map_file, "w", encoding="utf-8") as f:
+                        json.dump(game_map_data, f, ensure_ascii=False, indent=2)
+                    game_map_updated = True
+            except (json.JSONDecodeError, OSError):
+                pass
+
+    return {"success": True, "scene_id": scene_id, "game_map_updated": game_map_updated}
 
 
 # ─────────────────────────────────────────────
@@ -2465,7 +2685,7 @@ def get_scene_samples(scene_id: str, image_type: Optional[str] = None) -> List[D
     - "backdrop": only files matching backdrop_*.png pattern
     - None/omitted: all files (legacy behavior)
     """
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     scene = _find_scene_by_id(profiles, scene_id)
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
@@ -2525,7 +2745,7 @@ def select_scene_icon(scene_id: str, body: SelectSceneIconRequest) -> Dict[str, 
     if not image_path.exists():
         raise HTTPException(status_code=404, detail=f"Image file not found: {body.image_path}")
 
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     updated = False
     for _map_id, map_data in profiles.get("maps", {}).items():
         for scene in map_data.get("scenes", []):
@@ -2539,7 +2759,7 @@ def select_scene_icon(scene_id: str, body: SelectSceneIconRequest) -> Dict[str, 
     if not updated:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
 
-    _write_scene_profiles(profiles)
+    _write_location_profiles(profiles)
     return {"success": True, "selected_icon": str(image_path)}
 
 
@@ -2553,7 +2773,7 @@ def select_scene_backdrop(scene_id: str, body: SelectBackdropRequest) -> Dict[st
     if not image_path.exists():
         raise HTTPException(status_code=404, detail=f"Image file not found: {body.image_path}")
 
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     updated = False
     for _map_id, map_data in profiles.get("maps", {}).items():
         for scene in map_data.get("scenes", []):
@@ -2567,7 +2787,7 @@ def select_scene_backdrop(scene_id: str, body: SelectBackdropRequest) -> Dict[st
     if not updated:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
 
-    _write_scene_profiles(profiles)
+    _write_location_profiles(profiles)
     return {"success": True, "selected_backdrop": str(image_path)}
 
 
@@ -2581,7 +2801,7 @@ async def generate_scene_icon(body: SceneGenerateRequest):
     if not api_key:
         raise HTTPException(status_code=500, detail="OPENAI_API_KEY environment variable is not set.")
 
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     scene = _find_scene_by_id(profiles, body.scene_id)
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {body.scene_id}")
@@ -2679,7 +2899,7 @@ def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]
       3. Clear selected_backdrop
       4. Copy to public/maps/{map_id}/ for game access
     """
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     map_id, scene = _find_scene_and_map(profiles, scene_id)
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
@@ -2705,7 +2925,7 @@ def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]
         scene["backdrop_path"] = rel_path
         scene.pop("selected_backdrop", None)
 
-        _write_scene_profiles(profiles)
+        _write_location_profiles(profiles)
 
         # Also copy to public/maps/{map_id}/ for game access
         game_public_dir = GAME_PUBLIC_MAPS_DIR / map_id
@@ -2759,7 +2979,7 @@ def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]
         scene["icon_path"] = rel_icon
         scene.pop("selected_icon", None)
 
-        _write_scene_profiles(profiles)
+        _write_location_profiles(profiles)
 
         # Sync to game runtime: copy to src/renderer/public/maps/{subdir}/ and update map JSON
         # Use the game-facing subdir name (e.g. "beiliang") if available, else fall back to map_id
@@ -2875,10 +3095,10 @@ def _generate_scene_prompts_blocking(client, scene_description: str, scene_name:
 async def generate_scene_prompts(body: SceneGeneratePromptsRequest) -> Dict[str, Any]:
     """
     Generate 4 candidate image prompts for a scene icon or backdrop using AI (GPT-5.4).
-    Reads the scene's Chinese description from scene_profiles.json and generates
+    Reads the scene's Chinese description from location_profiles.json and generates
     4 diverse English prompts suitable for image generation.
     """
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     scene = _find_scene_by_id(profiles, body.scene_id)
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {body.scene_id}")
@@ -2917,7 +3137,7 @@ async def generate_scene_prompts(body: SceneGeneratePromptsRequest) -> Dict[str,
 @app.put("/api/scenes/{scene_id}/icon-variants/{variant_index}")
 def update_scene_icon_variant(scene_id: str, variant_index: int, body: UpdateSceneVariantRequest) -> Dict[str, Any]:
     """Update the description of a specific icon variant for a scene."""
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     scene = _find_scene_by_id(profiles, scene_id)
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
@@ -2937,7 +3157,7 @@ def update_scene_icon_variant(scene_id: str, variant_index: int, body: UpdateSce
     if not found:
         variants.append({"index": variant_index, "description": body.description})
 
-    _write_scene_profiles(profiles)
+    _write_location_profiles(profiles)
     return {"success": True, "scene_id": scene_id, "variant_index": variant_index}
 
 
@@ -2947,7 +3167,7 @@ def update_scene_icon_variant(scene_id: str, variant_index: int, body: UpdateSce
 @app.put("/api/scenes/{scene_id}/backdrop-variants/{variant_index}")
 def update_scene_backdrop_variant(scene_id: str, variant_index: int, body: UpdateSceneVariantRequest) -> Dict[str, Any]:
     """Update the description of a specific backdrop variant for a scene."""
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     scene = _find_scene_by_id(profiles, scene_id)
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
@@ -2966,7 +3186,7 @@ def update_scene_backdrop_variant(scene_id: str, variant_index: int, body: Updat
     if not found:
         variants.append({"index": variant_index, "description": body.description})
 
-    _write_scene_profiles(profiles)
+    _write_location_profiles(profiles)
     return {"success": True, "scene_id": scene_id, "variant_index": variant_index}
 
 
@@ -2976,7 +3196,7 @@ def update_scene_backdrop_variant(scene_id: str, variant_index: int, body: Updat
 @app.post("/api/scenes/{scene_id}/regenerate-icon-variants")
 async def regenerate_scene_icon_variants(scene_id: str, body: RegenerateSceneVariantsRequest) -> Dict[str, Any]:
     """AI-generate 4 icon variant descriptions for a scene and save them."""
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     scene = _find_scene_by_id(profiles, scene_id)
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
@@ -3003,7 +3223,7 @@ async def regenerate_scene_icon_variants(scene_id: str, body: RegenerateSceneVar
 
     new_variants = [{"index": i, "description": desc} for i, desc in enumerate(prompts)]
     scene["icon_variants"] = new_variants
-    _write_scene_profiles(profiles)
+    _write_location_profiles(profiles)
 
     return {"descriptions": prompts, "scene_id": scene_id}
 
@@ -3014,7 +3234,7 @@ async def regenerate_scene_icon_variants(scene_id: str, body: RegenerateSceneVar
 @app.post("/api/scenes/{scene_id}/regenerate-backdrop-variants")
 async def regenerate_scene_backdrop_variants(scene_id: str, body: RegenerateSceneVariantsRequest) -> Dict[str, Any]:
     """AI-generate 4 backdrop variant descriptions for a scene and save them."""
-    profiles = _read_scene_profiles()
+    profiles = _read_location_profiles()
     scene = _find_scene_by_id(profiles, scene_id)
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
@@ -3041,7 +3261,7 @@ async def regenerate_scene_backdrop_variants(scene_id: str, body: RegenerateScen
 
     new_variants = [{"index": i, "description": desc} for i, desc in enumerate(prompts)]
     scene["backdrop_variants"] = new_variants
-    _write_scene_profiles(profiles)
+    _write_location_profiles(profiles)
 
     return {"descriptions": prompts, "scene_id": scene_id}
 

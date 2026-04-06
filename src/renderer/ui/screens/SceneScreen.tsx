@@ -9,20 +9,7 @@ import type { Card, Slot } from '../../core/types';
 import { SlotType, CardType } from '../../core/types/enums';
 import bronzeTexture from '../../assets/textures/bronze-512.webp';
 import ricePaperTexture from '../../assets/textures/rice-paper-1024.webp';
-
-// Eagerly import all scene background images
-const sceneImages = import.meta.glob<{ default: string }>(
-  '../../assets/scenes/*.{png,jpg,webp}',
-  { eager: true }
-);
-
-function getSceneImageUrl(filename: string): string | null {
-  if (!filename) return null;
-  // If it's an absolute path (starts with /), use it directly as a public URL
-  if (filename.startsWith('/')) return filename;
-  const key = Object.keys(sceneImages).find(k => k.endsWith('/' + filename));
-  return key ? sceneImages[key].default : null;
-}
+import { getSceneBackdropUrl } from '../../lib/assetPaths';
 
 const SCENE_TYPE_LABELS: Record<string, string> = {
   event: '事件',
@@ -125,7 +112,7 @@ export function SceneScreen() {
     );
   }
 
-  const bgImageUrl = getSceneImageUrl(scene.background_image);
+  const bgImageUrl = getSceneBackdropUrl(scene.background_image);
 
   // Get entry stage for settlement info
   const entryStage = scene.stages.find(s => s.stage_id === scene.entry_stage);

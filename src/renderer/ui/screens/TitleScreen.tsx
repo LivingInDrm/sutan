@@ -2,17 +2,17 @@ import React from 'react';
 import { useUIStore } from '../../stores/uiStore';
 import { useGameStore } from '../../stores/gameStore';
 import type { Card, Scene } from '../../core/types';
-import baseCards from '../../data/configs/cards/base_cards.json';
 import { dataLoader } from '../../data/loader';
 
-const baseScenes = dataLoader.loadScenesFromDirectory();
+const baseCards: Card[] = dataLoader.loadCardsFromDirectory();
+const baseScenes: Scene[] = dataLoader.loadScenesFromDirectory();
 
 export function TitleScreen() {
   const setScreen = useUIStore(s => s.setScreen);
   const startNewGame = useGameStore(s => s.startNewGame);
 
   const handleStart = (difficulty: string) => {
-    startNewGame(difficulty, baseCards as Card[], baseScenes);
+    startNewGame(difficulty, baseCards, baseScenes);
     setScreen('world_map');
   };
 

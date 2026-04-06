@@ -56,8 +56,8 @@
 │                     Backend (FastAPI)                             │
 │                                                                  │
 │  ┌─────────────────────┐   ┌────────────────────────────┐        │
-│  │ scene_profiles.json │◀─▶│ Scene CRUD APIs             │        │
-│  │ (数据持久化)        │   │ GET/PUT /api/scenes/...     │        │
+│  │ location_profiles.json │◀─▶│ Location CRUD APIs          │        │
+│  │ (数据持久化)           │   │ GET/PUT /api/scenes/...     │        │
 │  └─────────────────────┘   └────────────────────────────┘        │
 │                                                                  │
 │  ┌─────────────────────────────────────────────────────────┐     │
@@ -331,8 +331,8 @@ async def generate_scene_prompts(body: SceneGeneratePromptsRequest) -> Dict[str,
     client = _get_openai_client()
     loop = asyncio.get_running_loop()
 
-    # 从 scene_profiles 中获取场景信息
-    profiles = _read_scene_profiles()
+    # 从 location_profiles 中获取地点信息
+    profiles = _read_location_profiles()
     scene = _find_scene_by_id(profiles, body.scene_id)
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {body.scene_id}")
@@ -812,7 +812,7 @@ export interface SampleImage {
 #### 向后兼容
 
 - 所有新增字段均有默认值（`image_type="icon"`），现有前端调用不受影响
-- `scene_profiles.json` 中新增字段为可选，不影响现有数据读取
+- `location_profiles.json` 中新增字段为可选，不影响现有数据读取
 - 文件命名约定：`icon_` 前缀 vs `backdrop_` 前缀，现有 `{scene_id}_{ts}_{n}.png` 命名的图片自动归类为 icon
 
 ### 6.2 前端集成
@@ -850,7 +850,7 @@ tools/asset-manager/backend/maps/
 
 ---
 
-## 7. scene_profiles.json 数据结构扩展
+## 7. location_profiles.json 数据结构扩展
 
 ### 7.1 现有结构（不变）
 
@@ -924,7 +924,7 @@ tools/asset-manager/backend/maps/
 |------|------|------|
 | P0 | 背景图 prompt 模板 + `_generate_scene_image()` 参数化 | 无 |
 | P0 | 修改 `/api/scene-generate` 支持 `image_type` | 上述 |
-| P0 | 修改 `scene_profiles.json` 读写支持新字段 | 无 |
+| P0 | 修改 `location_profiles.json` 读写支持新字段 | 无 |
 | P1 | 新增 `/api/scene-generate-prompts` AI 候选 API | 无 |
 | P1 | 前端图片类型切换 UI | P0 |
 | P1 | 前端 AI 候选 prompt 展示/选择 UI | P1 API |

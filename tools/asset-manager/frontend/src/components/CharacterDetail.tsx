@@ -563,7 +563,7 @@ export default function CharacterDetail({
                 {deployPreview?.preview_card && (
                   <section style={styles.section}>
                     <div style={styles.sectionHeader}>
-                      <div style={styles.sectionTitle}>PREVIEW · 将写入 base_cards.json</div>
+                      <div style={styles.sectionTitle}>PREVIEW · 将写入 characters.json</div>
                     </div>
                     <div style={styles.promptPreview}>
                       <pre style={styles.promptText}>

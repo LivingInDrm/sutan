@@ -166,6 +166,24 @@ export interface SceneState {
   stage_results?: Record<string, CheckResult>;
 }
 
+export interface LocationConfig {
+  location_id: string;
+  name: string;
+  icon_image: string;
+  backdrop_image?: string;
+  position: { x: number; y: number };
+  scene_ids: string[];
+  unlock_conditions: Record<string, unknown>;
+}
+
+export interface MapConfig {
+  map_id: string;
+  name: string;
+  description: string;
+  background_image: string;
+  locations: LocationConfig[];
+}
+
 export interface GameState {
   current_day: number;
   execution_countdown: number;

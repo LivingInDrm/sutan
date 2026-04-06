@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { CardSchema, SceneSchema } from '@data/schemas';
-import cardsData from '@data/configs/cards/base_cards.json';
+import charactersData from '@data/configs/cards/characters.json';
+import equipmentData from '@data/configs/cards/equipment.json';
+import specialData from '@data/configs/cards/special.json';
+
+const cardsData = [...charactersData, ...equipmentData, ...specialData];
 import scene001 from '@data/configs/scenes/scene_001.json';
 import scene002 from '@data/configs/scenes/scene_002.json';
 import scene003 from '@data/configs/scenes/scene_003.json';

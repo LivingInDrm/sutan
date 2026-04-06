@@ -6,7 +6,7 @@ from pathlib import Path
 # Project paths
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 SCENES_DIR = PROJECT_ROOT / "src" / "renderer" / "data" / "configs" / "scenes"
-CARDS_PATH = PROJECT_ROOT / "src" / "renderer" / "data" / "configs" / "cards" / "base_cards.json"
+CARDS_DIR = PROJECT_ROOT / "src" / "renderer" / "data" / "configs" / "cards"
 SCHEMAS_PATH = PROJECT_ROOT / "src" / "renderer" / "data" / "schemas" / "index.ts"
 API_KEY_PATH = Path("/tmp/oai.key")
 

@@ -1,4 +1,5 @@
 {
+  "_note": "Single source of truth for runtime map data. Edit via asset-manager deploy, or directly. Do NOT re-run export-runtime-map-data.py (it would overwrite deploy changes).",
   "map_id": "map_001_beiliang",
   "name": "北凉道",
   "description": "清凉山到葫芦口一线，铁血家国之地",

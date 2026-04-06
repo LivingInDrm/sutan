@@ -688,7 +688,7 @@ export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
                 {deployPreview?.preview_card && (
                   <section style={styles.section}>
                     <div style={styles.sectionHeader}>
-                      <div style={styles.sectionTitle}>PREVIEW · 将写入 base_cards.json</div>
+                      <div style={styles.sectionTitle}>PREVIEW · 将写入 equipment.json</div>
                     </div>
                     <div style={styles.promptPreview}>
                       <pre style={styles.promptText}>
