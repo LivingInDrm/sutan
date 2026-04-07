@@ -16,28 +16,28 @@ interface CardDetailPanelProps {
 
 const RARITY_ACCENT: Record<string, { border: string; glow: string; badge: string; text: string }> = {
   [Rarity.Gold]: {
-    border: 'border-yellow-500/60',
-    glow: '0 0 24px rgba(234,179,8,0.25), 0 0 48px rgba(234,179,8,0.10)',
-    badge: 'bg-gradient-to-r from-yellow-600 to-amber-500 text-yellow-50',
-    text: 'text-yellow-700',
+    border: 'border-gold-300/50',
+    glow: 'var(--shadow-rarity-gold)',
+    badge: 'bg-gradient-to-r from-gold-300 to-gold-400 text-leather-900',
+    text: 'text-gold-400',
   },
   [Rarity.Silver]: {
-    border: 'border-gray-400/50',
-    glow: '0 0 20px rgba(156,163,175,0.20), 0 0 40px rgba(156,163,175,0.08)',
-    badge: 'bg-gradient-to-r from-gray-400 to-slate-300 text-gray-800',
-    text: 'text-gray-500',
+    border: 'border-parchment-400/40',
+    glow: 'var(--shadow-rarity-silver)',
+    badge: 'bg-gradient-to-r from-parchment-300 to-parchment-400 text-leather-900',
+    text: 'text-parchment-400',
   },
   [Rarity.Copper]: {
-    border: 'border-amber-600/50',
-    glow: '0 0 16px rgba(180,83,9,0.18), 0 0 32px rgba(180,83,9,0.06)',
-    badge: 'bg-gradient-to-r from-amber-700 to-orange-600 text-amber-50',
-    text: 'text-amber-700',
+    border: 'border-gold-500/40',
+    glow: 'var(--shadow-rarity-copper)',
+    badge: 'bg-gradient-to-r from-gold-400 to-gold-500 text-parchment-50',
+    text: 'text-gold-400',
   },
   [Rarity.Stone]: {
-    border: 'border-stone-400/40',
-    glow: '0 0 12px rgba(120,113,108,0.12)',
-    badge: 'bg-gradient-to-r from-stone-500 to-stone-400 text-stone-50',
-    text: 'text-stone-500',
+    border: 'border-leather-600/30',
+    glow: 'var(--shadow-rarity-stone)',
+    badge: 'bg-gradient-to-r from-leather-600 to-leather-700 text-parchment-200',
+    text: 'text-parchment-500',
   },
 };
 
@@ -91,7 +91,7 @@ export function CardDetailPanel({ card, onClose }: CardDetailPanelProps) {
             style={{
               backgroundImage: `url(${ricePaperTexture})`,
               backgroundSize: 'cover',
-              boxShadow: `${accent.glow}, 0 32px 64px -12px rgba(0,0,0,0.5)`,
+              boxShadow: `${accent.glow}, var(--shadow-ink-lg)`,
             }}
           >
             <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-gold-dim/60 to-transparent" />

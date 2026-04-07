@@ -5,17 +5,17 @@ import { ATTR_LABELS, CARD_TYPE_LABELS } from '../../constants/labels';
 import ricePaperTexture from '../../../assets/textures/rice-paper-256.webp';
 
 const RARITY_STYLES: Record<string, string> = {
-  gold: 'border-yellow-400 bg-yellow-950/30 shadow-yellow-500/20',
-  silver: 'border-gray-300 bg-gray-900/40 shadow-gray-400/20',
-  copper: 'border-amber-600 bg-amber-950/30 shadow-amber-600/20',
-  stone: 'border-stone-500 bg-stone-900/30 shadow-stone-500/20',
+  gold: 'border-gold-300/50 bg-gold-600/10 shadow-rarity-gold',
+  silver: 'border-parchment-400/40 bg-parchment-500/10 shadow-rarity-silver',
+  copper: 'border-gold-500/40 bg-gold-600/10 shadow-rarity-copper',
+  stone: 'border-leather-600/30 bg-leather-800/20 shadow-rarity-stone',
 };
 
 const RARITY_BADGE: Record<string, string> = {
-  gold: 'bg-yellow-500 text-yellow-950',
-  silver: 'bg-gray-300 text-gray-900',
-  copper: 'bg-amber-600 text-amber-950',
-  stone: 'bg-stone-500 text-stone-900',
+  gold: 'bg-gradient-to-b from-gold-300 to-gold-400 text-leather-900',
+  silver: 'bg-gradient-to-b from-parchment-300 to-parchment-400 text-leather-900',
+  copper: 'bg-gradient-to-b from-gold-400 to-gold-500 text-parchment-50',
+  stone: 'bg-gradient-to-b from-leather-600 to-leather-700 text-parchment-200',
 };
 
 const COMPACT_RARITY: Record<string, {
@@ -26,31 +26,31 @@ const COMPACT_RARITY: Record<string, {
   label: string;
 }> = {
   gold: {
-    border: 'border-yellow-500/50',
-    glow: '0 0 12px rgba(234,179,8,0.20), 0 2px 8px rgba(0,0,0,0.3)',
-    accent: 'from-yellow-600 to-amber-500',
-    badge: 'bg-gradient-to-b from-yellow-500 to-amber-600 text-yellow-950',
+    border: 'border-gold-300/50',
+    glow: 'var(--shadow-rarity-gold)',
+    accent: 'from-gold-300 to-gold-400',
+    badge: 'bg-gradient-to-b from-gold-300 to-gold-400 text-leather-900',
     label: '金',
   },
   silver: {
-    border: 'border-gray-300/40',
-    glow: '0 0 10px rgba(156,163,175,0.15), 0 2px 8px rgba(0,0,0,0.3)',
-    accent: 'from-gray-300 to-slate-400',
-    badge: 'bg-gradient-to-b from-gray-300 to-slate-400 text-gray-800',
+    border: 'border-parchment-400/40',
+    glow: 'var(--shadow-rarity-silver)',
+    accent: 'from-parchment-300 to-parchment-400',
+    badge: 'bg-gradient-to-b from-parchment-300 to-parchment-400 text-leather-900',
     label: '银',
   },
   copper: {
-    border: 'border-amber-600/40',
-    glow: '0 0 10px rgba(180,83,9,0.15), 0 2px 8px rgba(0,0,0,0.3)',
-    accent: 'from-amber-600 to-orange-700',
-    badge: 'bg-gradient-to-b from-amber-600 to-orange-700 text-amber-50',
+    border: 'border-gold-500/40',
+    glow: 'var(--shadow-rarity-copper)',
+    accent: 'from-gold-400 to-gold-500',
+    badge: 'bg-gradient-to-b from-gold-400 to-gold-500 text-parchment-50',
     label: '铜',
   },
   stone: {
-    border: 'border-stone-400/30',
-    glow: '0 2px 8px rgba(0,0,0,0.3)',
-    accent: 'from-stone-400 to-stone-500',
-    badge: 'bg-gradient-to-b from-stone-400 to-stone-500 text-stone-800',
+    border: 'border-leather-600/30',
+    glow: 'var(--shadow-rarity-stone)',
+    accent: 'from-leather-600 to-leather-700',
+    badge: 'bg-gradient-to-b from-leather-600 to-leather-700 text-parchment-200',
     label: '石',
   },
 };
@@ -153,16 +153,16 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
           <span className={`text-xs px-2 py-0.5 rounded ${badgeStyle} font-bold`}>
             {card.rarity.toUpperCase()}
           </span>
-          <span className="text-xs text-gray-400">{CARD_TYPE_LABELS[card.type] || card.type}</span>
+          <span className="text-xs text-parchment/50">{CARD_TYPE_LABELS[card.type] || card.type}</span>
         </div>
         <h3 className="text-sm font-bold text-amber-100 mb-1">{card.name}</h3>
-        <p className="text-xs text-gray-400 line-clamp-2 mb-2">{card.description}</p>
+        <p className="text-xs text-parchment/50 line-clamp-2 mb-2">{card.description}</p>
         
         {card.attributes && (
           <div className="grid grid-cols-4 gap-1 text-[10px]">
             {Object.entries(card.attributes).map(([attr, val]) => (
               <div key={attr} className="text-center">
-                <div className="text-gray-500">{ATTR_LABELS[attr] || attr.slice(0, 3).toUpperCase()}</div>
+                <div className="text-parchment/40">{ATTR_LABELS[attr] || attr.slice(0, 3).toUpperCase()}</div>
                 <div className="text-amber-300 font-bold">{val}</div>
               </div>
             ))}
@@ -172,7 +172,7 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
         {card.tags && card.tags.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-2">
             {card.tags.map(tag => (
-              <span key={tag} className="text-[9px] px-1 py-0.5 bg-gray-800 rounded text-gray-400">
+              <span key={tag} className="text-[9px] px-1 py-0.5 bg-ink/60 rounded text-parchment/40">
                 {tag}
               </span>
             ))}

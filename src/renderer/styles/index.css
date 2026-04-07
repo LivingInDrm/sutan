@@ -9,6 +9,7 @@
 }
 
 @theme {
+  /* ── Existing tokens ── */
   --color-leather: #1a0f0a;
   --color-leather-light: #2a1810;
   --color-parchment: #d4c5a9;
@@ -22,11 +23,72 @@
   --color-ink: #1a1a2e;
   --color-ink-light: #252540;
 
+  /* ── Extended leather scale ── */
+  --color-leather-950: #0e0806;
+  --color-leather-900: #1a0f0a;
+  --color-leather-800: #2a1810;
+  --color-leather-700: #3d2418;
+  --color-leather-600: #5a3520;
+
+  /* ── Extended parchment scale ── */
+  --color-parchment-50:  #f5f0e8;
+  --color-parchment-100: #ede5d4;
+  --color-parchment-200: #e8dcc8;
+  --color-parchment-300: #d4c5a9;
+  --color-parchment-400: #c4b594;
+  --color-parchment-500: #b0a07e;
+
+  /* ── Extended gold scale ── */
+  --color-gold-100: #f0d060;
+  --color-gold-200: #e8c44c;
+  --color-gold-300: #c9a84c;
+  --color-gold-400: #b8860b;
+  --color-gold-500: #8a6d2b;
+  --color-gold-600: #6a5020;
+
+  /* ── Extended crimson scale ── */
+  --color-crimson-300: #d44040;
+  --color-crimson-500: #8b1a1a;
+  --color-crimson-700: #6b0f0f;
+  --color-crimson-900: #3d0808;
+
+  /* ── Extended ink scale ── */
+  --color-ink-950: #0a0a12;
+  --color-ink-900: #1a1a2e;
+  --color-ink-800: #252540;
+  --color-ink-700: #363655;
+
+  /* ── Bamboo / 竹青 — success, completed (replaces green-*) ── */
+  --color-bamboo-300: #8ab06a;
+  --color-bamboo-500: #5a7a3a;
+  --color-bamboo-700: #3d5525;
+  --color-bamboo-900: #1e2d10;
+
+  /* ── Cerulean / 青墨 — info, in-progress (replaces blue-*) ── */
+  --color-cerulean-300: #5a8080;
+  --color-cerulean-500: #2d5555;
+  --color-cerulean-700: #1a3535;
+  --color-cerulean-900: #0d1f1f;
+
+  /* ── Shadows ── */
   --shadow-gold-sm: 0 0 8px rgba(201, 168, 76, 0.2);
   --shadow-gold: 0 0 20px rgba(201, 168, 76, 0.3);
   --shadow-gold-lg: 0 0 40px rgba(201, 168, 76, 0.4);
+  --shadow-ink-sm: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-ink: 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-ink-lg: 0 8px 32px rgba(0,0,0,0.5);
+  --shadow-rarity-gold: 0 0 16px rgba(234,179,8,0.25), 0 0 32px rgba(234,179,8,0.10);
+  --shadow-rarity-silver: 0 0 14px rgba(156,163,175,0.20);
+  --shadow-rarity-copper: 0 0 12px rgba(180,83,9,0.18);
+  --shadow-rarity-stone: 0 0 8px rgba(120,113,108,0.12);
+  --shadow-danger: 0 0 16px rgba(139,26,26,0.3);
+  --shadow-danger-bright: 0 0 20px rgba(212,64,64,0.4);
 
+  /* ── Fonts ── */
   --font-display: 'Ma Shan Zheng', serif;
+  --font-body: 'Source Han Serif CN', 'Noto Serif SC', 'SimSun', serif;
+  --font-ui: 'Source Han Sans CN', 'Noto Sans SC', 'PingFang SC', sans-serif;
+  --font-mono: 'Source Code Pro', 'Consolas', monospace;
 }
 
 .bg-parchment-texture {

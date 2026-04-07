@@ -48,9 +48,19 @@ CARDS_DIR = PROJECT_ROOT / "src" / "renderer" / "data" / "configs" / "cards"
 CHARACTERS_CARDS_PATH = CARDS_DIR / "characters.json"
 EQUIPMENT_CARDS_PATH = CARDS_DIR / "equipment.json"
 SPECIAL_CARDS_PATH = CARDS_DIR / "special.json"
+WORKSPACE_SPECIAL_PATH = PROJECT_ROOT / "scripts" / "data" / "cards" / "special.json"
 BACKEND_DIR = Path(__file__).resolve().parent
 TEMPLATES_CONFIG_PATH = BACKEND_DIR / "templates.json"
 HISTORY_PATH = BACKEND_DIR / "history.json"
+
+
+def _sync_special_workspace() -> None:
+    """Sync special cards from workspace (scripts/data/cards/special.json) to runtime (src/renderer/data/configs/cards/special.json)."""
+    try:
+        special_records = _read_cards_file(WORKSPACE_SPECIAL_PATH)
+        _write_cards_file(SPECIAL_CARDS_PATH, special_records)
+    except Exception as exc:
+        print(f"[WARN] _sync_special_workspace failed: {exc}")
 
 # Mapping from character name → game portrait filename stem (e.g. "figure01")
 # Only needed for the replace-to-game feature; new characters won't have a game file until manually assigned.
@@ -3468,6 +3478,713 @@ async def regenerate_scene_backdrop_variants(scene_id: str, body: RegenerateScen
     return {"descriptions": prompts, "scene_id": scene_id}
 
 
+# ═════════════════════════════════════════════════════════════════
+# UI ASSET MANAGER API
+# ═════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────
+# UI Asset constants
+# ─────────────────────────────────────────────
+UI_ASSETS_WORKSPACE_PATH = PROJECT_ROOT / "scripts" / "data" / "ui" / "ui_assets.json"
+UI_BATCH_CONFIG_PATH = PROJECT_ROOT / "scripts" / "ui_batch_config.json"
+UI_ASSETS_SRC_DIR = PROJECT_ROOT / "src" / "renderer" / "assets" / "ui" / "generated"
+UI_ASSETS_PUBLIC_DIR = PROJECT_ROOT / "public" / "ui-assets"
+
+# Ensure directories exist and mount static files
+UI_ASSETS_SRC_DIR.mkdir(parents=True, exist_ok=True)
+UI_ASSETS_PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/ui-assets", StaticFiles(directory=str(UI_ASSETS_PUBLIC_DIR)), name="ui_assets")
+
+# ─────────────────────────────────────────────
+# UI Asset prompt style templates
+# ─────────────────────────────────────────────
+# UI_STYLE_BASE: shared base style for all UI assets
+UI_STYLE_BASE = (
+    "水墨风格，武侠题材，中国传统水墨画质感。"
+    "主色调：淡墨灰(#3a3a3a)为主线条色，暖白宣纸(#f5f0e8)为底色，朱砂红(#c14443)为点缀色。"
+    "线条规范：细墨线勾勒，线条均匀流畅，装饰从简不繁复，留白为主。"
+    "质感统一：轻度宣纸纹理，淡墨渲染，不要浓重泼墨效果，笔触温润色调淡雅。"
+    "NO text, NO labels, NO watermarks, NO signatures, NO characters, NO human figures."
+)
+
+# Per-category prompt templates
+UI_CATEGORY_TEMPLATES: Dict[str, str] = {
+    "background": (
+        "{style_base} "
+        "场景背景图，全幅构图，横向宽屏比例，层次丰富，意境深远，适合作为游戏界面背景。"
+        "Subject: {description}. "
+        "Wide panoramic composition, layered atmospheric depth, traditional Chinese landscape aesthetics."
+    ),
+    "frame": (
+        "{style_base} "
+        "边框/画框装饰素材，边缘有精美墨线装饰，四角精美纹样，中心区域透明，适合叠加在内容上方。"
+        "Subject: {description}. "
+        "Decorative border frame with ornate corner accents, ink-drawn patterns on edges, "
+        "center area transparent, suitable as an overlay border. "
+        "Transparent background, PNG with alpha channel."
+    ),
+    "panel": (
+        "{style_base} "
+        "完整UI面板素材，四周有精美墨线边缘装饰，中间填充宣纸卷轴质感底色，不要镂空。"
+        "适合作为对话框、商店、结算等界面容器。"
+        "Subject: {description}. "
+        "Complete UI panel with ornate ink-drawn border decorations, "
+        "center filled with aged parchment/scroll texture, NOT hollow, NOT empty center. "
+        "Exterior area outside panel is transparent. PNG with alpha channel."
+    ),
+    "button": (
+        "{style_base} "
+        "可点击按钮素材，强调质感与可交互感，形态完整，边缘清晰，适合游戏UI按钮使用。"
+        "Subject: {description}. "
+        "UI button element with clear clickable affordance, tactile texture, "
+        "subtle ink outline, centered composition. "
+        "Pure transparent background, PNG with alpha channel."
+    ),
+    "card-border": (
+        "{style_base} "
+        "卡牌边框装饰，古风简约纹样，四角有点缀装饰，适合作为角色/物品卡牌的外框装饰。"
+        "Subject: {description}. "
+        "Card border decoration with clean traditional patterns in corners, "
+        "elegant ink-drawn accents, inner area transparent for card content. "
+        "Pure transparent background, PNG with alpha channel."
+    ),
+    "icon": (
+        "{style_base} "
+        "UI图标素材，单一主体，造型简洁明确，适合在界面中快速识别。"
+        "Subject: {description}. "
+        "Single icon element, clean silhouette, centered composition, "
+        "minimal yet expressive, suitable for UI icon use. "
+        "Pure transparent background, PNG with alpha channel."
+    ),
+}
+
+# ─────────────────────────────────────────────
+# UI Asset helpers
+# ─────────────────────────────────────────────
+def _read_workspace_ui_assets() -> List[Dict]:
+    """Read scripts/data/ui/ui_assets.json (array of workspace UI asset records)."""
+    if not UI_ASSETS_WORKSPACE_PATH.exists():
+        return []
+    try:
+        with open(UI_ASSETS_WORKSPACE_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def _write_workspace_ui_assets(records: List[Dict]) -> None:
+    """Write scripts/data/ui/ui_assets.json."""
+    UI_ASSETS_WORKSPACE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(UI_ASSETS_WORKSPACE_PATH, "w", encoding="utf-8") as f:
+        json.dump(records, f, ensure_ascii=False, indent=2)
+
+
+def _read_ui_batch_config() -> List[Dict]:
+    if not UI_BATCH_CONFIG_PATH.exists():
+        return []
+    try:
+        with open(UI_BATCH_CONFIG_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def _write_ui_batch_config(data: List[Dict]) -> None:
+    with open(UI_BATCH_CONFIG_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def _ui_asset_folder(asset_id: str) -> Path:
+    """Return the samples subfolder for a UI asset: ui_{asset_id}/"""
+    return SAMPLES_DIR / f"ui_{asset_id}"
+
+
+def _build_ui_prompt(description: str, category: str) -> str:
+    """Build the full generation prompt for a UI asset based on its category."""
+    template = UI_CATEGORY_TEMPLATES.get(category, UI_CATEGORY_TEMPLATES["icon"])
+    return template.format(
+        style_base=UI_STYLE_BASE,
+        description=description,
+    )
+
+
+def _generate_ui_asset_image(client, prompt: str, output_path: Path, size: str = "1024x1024") -> Path:
+    """Generate a UI asset image with configurable size.
+
+    Supports gpt-image-1 sizes: 1024x1024, 1536x1024, 1024x1536, auto.
+    """
+    import base64 as _base64
+    # Validate size - gpt-image-1 only supports specific sizes
+    valid_sizes = {"1024x1024", "1536x1024", "1024x1536", "auto"}
+    if size not in valid_sizes:
+        size = "auto"
+    response = client.images.generate(
+        model="gpt-image-1",
+        prompt=prompt,
+        size=size,
+        quality="high",
+        background="transparent",
+        output_format="png",
+        n=1,
+    )
+    if not response.data or not response.data[0].b64_json:
+        raise RuntimeError("Image generation response missing data")
+    image_bytes = _base64.b64decode(response.data[0].b64_json)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_bytes(image_bytes)
+    return output_path
+
+
+def _next_ui_asset_id() -> str:
+    """Return the next available ui_NNN id."""
+    records = _read_workspace_ui_assets()
+    existing_ids = {r.get("asset_id", "") for r in records}
+    for i in range(1, 1000):
+        candidate = f"ui_{i:03d}"
+        if candidate not in existing_ids:
+            return candidate
+    raise RuntimeError("No available UI asset IDs")
+
+
+# ─────────────────────────────────────────────
+# UI Asset Pydantic models
+# ─────────────────────────────────────────────
+class CreateUIAssetRequest(BaseModel):
+    name: str
+    category: str  # background | frame | button | card-border | icon
+    dimensions: str = "1024x1024"
+    description: str = ""  # free-text user description used as basis for AI generation
+
+
+class UpdateUIAssetVariantRequest(BaseModel):
+    variant_index: int
+    description: str
+
+
+class RegenerateUIAssetVariantsRequest(BaseModel):
+    description: str = ""
+
+
+class UIAssetProfileModel(BaseModel):
+    name: Optional[str] = None
+    category: Optional[str] = None
+    dimensions: Optional[str] = None
+    description: Optional[str] = None
+
+
+class SelectUIAssetImageRequest(BaseModel):
+    image_path: str
+
+
+# ─────────────────────────────────────────────
+# UI Asset AI prompts
+# ─────────────────────────────────────────────
+_UI_ASSET_VARIANT_SYSTEM_PROMPT = """\
+你是一位精通水墨风格UI设计的提示词专家，擅长为武侠题材游戏界面素材生成英文图像生成提示词。
+
+## 任务
+为给定UI素材生成 4 条不同视觉方向的英文 description（即图像生成提示词的主体描述部分）。
+这些描述将被拼装到完整的 prompt 中，用于 gpt-image-1 生成图像。
+
+## 核心规范
+- 每条 description 描述同一素材的不同视觉重点/设计方向
+- 4 条各自强调不同侧重（如：简洁版、繁复华丽版、冷色系版、暖色系版）
+- 每条约 20-50 个英文单词，精炼词组为主，勿写完整句子
+- 使用古风、水墨风格的英文描述词汇
+- 描述的是视觉内容，强调形态、质感、色彩，不含游戏规则信息
+
+## 输出格式
+严格输出 JSON 数组，包含 4 个英文字符串，不含任何其他内容。
+"""
+
+
+def _generate_ui_asset_variants_blocking(client, name: str, category: str, description: str) -> List[str]:
+    """Call LLM to generate 4 UI asset variant descriptions (English). Blocking."""
+    category_cn = {
+        "background": "背景图",
+        "frame": "边框装饰",
+        "panel": "完整面板",
+        "button": "按钮",
+        "card-border": "卡牌边框",
+        "icon": "UI图标",
+    }.get(category, category)
+
+    desc_section = f"用户描述：{description}\n" if description.strip() else ""
+
+    user_msg = (
+        f"素材名称：{name}\n"
+        f"素材类型：{category_cn}（{category}）\n"
+        f"{desc_section}"
+        f"请为该UI素材生成 4 条不同视觉方向的英文 description，以 JSON 数组格式输出。"
+    )
+    response = client.responses.create(
+        model=DESCRIPTION_MODEL,
+        instructions=_UI_ASSET_VARIANT_SYSTEM_PROMPT,
+        input=user_msg,
+        temperature=0.9,
+        max_output_tokens=800,
+    )
+    content = response.output_text.strip()
+    if content.startswith("```"):
+        content = re.sub(r"^```[^\n]*\n?", "", content)
+        content = re.sub(r"\n?```$", "", content)
+    descriptions: List[str] = json.loads(content)
+    if not isinstance(descriptions, list) or len(descriptions) < 4:
+        raise ValueError(f"Unexpected LLM response: {content}")
+    return descriptions[:4]
+
+
+# ─────────────────────────────────────────────
+# UI1. GET /api/ui-assets
+# ─────────────────────────────────────────────
+@app.get("/api/ui-assets")
+def get_ui_assets() -> List[Dict]:
+    """List all UI assets from workspace, grouped with their variants."""
+    records = _read_workspace_ui_assets()
+    batch = _read_ui_batch_config()
+
+    # Group batch config entries by asset_id
+    batch_by_id: Dict[str, List[Dict]] = {}
+    for entry in batch:
+        aid = entry.get("asset_id", "")
+        batch_by_id.setdefault(aid, []).append(entry)
+
+    result = []
+    for record in records:
+        asset_id = record.get("asset_id", "")
+        meta = record.get("meta", {})
+        entries = batch_by_id.get(asset_id, [])
+
+        variants = [
+            {"index": i, "description": e.get("description", ""), "output": e.get("output", "")}
+            for i, e in enumerate(entries)
+        ]
+
+        # Build current_image URL
+        current_image = ""
+        selected_asset = meta.get("selected_asset", "")
+        if selected_asset:
+            sel_path = Path(selected_asset)
+            try:
+                rel = sel_path.relative_to(SAMPLES_DIR)
+                current_image = f"/images/{rel.as_posix()}"
+            except ValueError:
+                pass
+
+        # Fallback: use first sample
+        if not current_image:
+            folder = _ui_asset_folder(asset_id)
+            if folder.exists():
+                files = sorted(folder.glob("*.png"))
+                if files:
+                    rel = files[0].relative_to(SAMPLES_DIR)
+                    current_image = f"/images/{rel.as_posix()}"
+
+        # Check deployed image
+        deploy_filename = record.get("image", "")
+        if deploy_filename:
+            img_name = deploy_filename.rsplit("/", 1)[-1]
+            img_path = UI_ASSETS_PUBLIC_DIR / img_name
+            if img_path.exists():
+                mtime = int(img_path.stat().st_mtime)
+                current_image = f"/ui-assets/{img_name}?t={mtime}"
+
+        result.append({
+            "asset_id": asset_id,
+            "id": asset_id,
+            "name": record.get("name", ""),
+            "category": record.get("category", "icon"),
+            "dimensions": record.get("dimensions", "1024x1024"),
+            "description": record.get("description", ""),
+            "current_image": current_image,
+            "has_pending_image": bool(meta.get("selected_asset")),
+            "publish_status": meta.get("publish_status", "draft"),
+            "variants": variants,
+        })
+
+    return result
+
+
+# ─────────────────────────────────────────────
+# UI2. POST /api/ui-assets  (create)
+# ─────────────────────────────────────────────
+@app.post("/api/ui-assets")
+async def create_ui_asset(body: CreateUIAssetRequest) -> Dict[str, Any]:
+    """Create a new UI asset: generate 4 variant descriptions via AI, save to workspace."""
+    if not body.name.strip():
+        raise HTTPException(status_code=400, detail="UI asset name must not be empty.")
+
+    valid_categories = {"background", "frame", "panel", "button", "card-border", "icon"}
+    if body.category not in valid_categories:
+        raise HTTPException(status_code=400, detail=f"Invalid category: {body.category}. Must be one of {valid_categories}.")
+
+    asset_id = _next_ui_asset_id()
+    folder_name = f"ui_{asset_id}"
+
+    # Generate variant descriptions via AI
+    client = _get_openai_client()
+    loop = asyncio.get_running_loop()
+    try:
+        descriptions = await loop.run_in_executor(
+            None, _generate_ui_asset_variants_blocking, client, body.name, body.category, body.description
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"AI generation failed: {exc}")
+
+    # Build batch config entries
+    new_entries = []
+    for i, desc in enumerate(descriptions, start=1):
+        new_entries.append({
+            "type": "ui",
+            "asset_id": asset_id,
+            "name": body.name,
+            "category": body.category,
+            "description": desc,
+            "output": f"{folder_name}/{asset_id}_{i:02d}.png",
+        })
+
+    # Create samples folder
+    (SAMPLES_DIR / folder_name).mkdir(parents=True, exist_ok=True)
+
+    # Append to batch config
+    existing_batch = _read_ui_batch_config()
+    _write_ui_batch_config(existing_batch + new_entries)
+
+    # Create workspace record
+    new_record = {
+        "asset_id": asset_id,
+        "name": body.name,
+        "category": body.category,
+        "dimensions": body.dimensions,
+        "description": body.description,
+        "image": "",
+        "meta": {
+            "publish_status": "draft",
+            "selected_asset": "",
+            "asset_candidates": [],
+            "workshop_variants": [],
+            "created_at": datetime.utcnow().isoformat() + "Z",
+            "updated_at": datetime.utcnow().isoformat() + "Z",
+        },
+    }
+    records = _read_workspace_ui_assets()
+    records.append(new_record)
+    _write_workspace_ui_assets(records)
+
+    variants = [
+        {"index": i, "description": e["description"], "output": e["output"]}
+        for i, e in enumerate(new_entries)
+    ]
+    asset = {
+        "asset_id": asset_id,
+        "id": asset_id,
+        "name": body.name,
+        "category": body.category,
+        "dimensions": body.dimensions,
+        "description": body.description,
+        "current_image": "",
+        "has_pending_image": False,
+        "publish_status": "draft",
+        "variants": variants,
+    }
+    return {"success": True, "asset": asset}
+
+
+# ─────────────────────────────────────────────
+# UI3. GET /api/ui-assets/{asset_id}/profile
+# ─────────────────────────────────────────────
+@app.get("/api/ui-assets/{asset_id}/profile")
+def get_ui_asset_profile(asset_id: str) -> Dict[str, Any]:
+    """Return the UI asset profile from workspace."""
+    records = _read_workspace_ui_assets()
+    record = next((r for r in records if r.get("asset_id") == asset_id), None)
+    if record is None:
+        raise HTTPException(status_code=404, detail=f"UI asset not found: {asset_id}")
+    return {
+        "name": record.get("name", ""),
+        "category": record.get("category", "icon"),
+        "dimensions": record.get("dimensions", "1024x1024"),
+        "description": record.get("description", ""),
+    }
+
+
+# ─────────────────────────────────────────────
+# UI4. PUT /api/ui-assets/{asset_id}/profile
+# ─────────────────────────────────────────────
+@app.put("/api/ui-assets/{asset_id}/profile")
+def update_ui_asset_profile(asset_id: str, body: UIAssetProfileModel) -> Dict[str, Any]:
+    """Update a UI asset's profile fields in workspace."""
+    records = _read_workspace_ui_assets()
+    target_idx = next((i for i, r in enumerate(records) if r.get("asset_id") == asset_id), None)
+    if target_idx is None:
+        raise HTTPException(status_code=404, detail=f"UI asset not found: {asset_id}")
+
+    record = records[target_idx]
+    update_data = body.model_dump(exclude_none=True)
+    for key, val in update_data.items():
+        record[key] = val
+    record.setdefault("meta", {})["updated_at"] = datetime.utcnow().isoformat() + "Z"
+    records[target_idx] = record
+    _write_workspace_ui_assets(records)
+    return {"success": True, "profile": {k: record.get(k) for k in ("name", "category", "dimensions", "description")}}
+
+
+# ─────────────────────────────────────────────
+# UI5. GET /api/ui-assets/{asset_id}/variants
+# ─────────────────────────────────────────────
+@app.get("/api/ui-assets/{asset_id}/variants")
+def get_ui_asset_variants(asset_id: str) -> List[Dict]:
+    """Get all variant descriptions for a UI asset."""
+    batch = _read_ui_batch_config()
+    entries = [e for e in batch if e.get("asset_id") == asset_id]
+    if not entries:
+        raise HTTPException(status_code=404, detail=f"UI asset not found: {asset_id}")
+    return [
+        {"index": i, "description": e.get("description", ""), "output": e.get("output", "")}
+        for i, e in enumerate(entries)
+    ]
+
+
+# ─────────────────────────────────────────────
+# UI6. PUT /api/ui-assets/{asset_id}/variants/{index}
+# ─────────────────────────────────────────────
+@app.put("/api/ui-assets/{asset_id}/variants/{index}")
+def update_ui_asset_variant(asset_id: str, index: int, body: UpdateUIAssetVariantRequest) -> Dict[str, Any]:
+    """Update a single variant description for a UI asset."""
+    batch = _read_ui_batch_config()
+    asset_indices = [i for i, e in enumerate(batch) if e.get("asset_id") == asset_id]
+    if not asset_indices:
+        raise HTTPException(status_code=404, detail=f"UI asset not found: {asset_id}")
+    if body.variant_index < 0 or body.variant_index >= len(asset_indices):
+        raise HTTPException(status_code=400, detail=f"variant_index {body.variant_index} out of range.")
+    global_idx = asset_indices[body.variant_index]
+    batch[global_idx]["description"] = body.description
+    _write_ui_batch_config(batch)
+    return {"success": True}
+
+
+# ─────────────────────────────────────────────
+# UI7. POST /api/ui-assets/{asset_id}/regenerate-variants
+# ─────────────────────────────────────────────
+@app.post("/api/ui-assets/{asset_id}/regenerate-variants")
+async def regenerate_ui_asset_variants(asset_id: str, body: RegenerateUIAssetVariantsRequest) -> Dict[str, Any]:
+    """Regenerate all 4 variant descriptions for a UI asset via AI."""
+    records = _read_workspace_ui_assets()
+    record = next((r for r in records if r.get("asset_id") == asset_id), None)
+    if record is None:
+        raise HTTPException(status_code=404, detail=f"UI asset not found: {asset_id}")
+
+    name = record.get("name", "")
+    category = record.get("category", "icon")
+    description = body.description.strip() or record.get("description", "")
+
+    client = _get_openai_client()
+    loop = asyncio.get_running_loop()
+    try:
+        descriptions = await loop.run_in_executor(
+            None, _generate_ui_asset_variants_blocking, client, name, category, description
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"AI generation failed: {exc}")
+
+    batch = _read_ui_batch_config()
+    asset_indices = [i for i, e in enumerate(batch) if e.get("asset_id") == asset_id]
+    for variant_idx, global_idx in enumerate(asset_indices[:4]):
+        if variant_idx < len(descriptions):
+            batch[global_idx]["description"] = descriptions[variant_idx]
+    _write_ui_batch_config(batch)
+    return {"success": True, "descriptions": descriptions}
+
+
+# ─────────────────────────────────────────────
+# UI8. GET /api/ui-asset-samples/{asset_id}
+# ─────────────────────────────────────────────
+@app.get("/api/ui-asset-samples/{asset_id}")
+def get_ui_asset_samples(asset_id: str) -> List[Dict]:
+    """Return all sample images for a UI asset."""
+    folder = _ui_asset_folder(asset_id)
+
+    records = _read_workspace_ui_assets()
+    record = next((r for r in records if r.get("asset_id") == asset_id), None)
+    selected_asset: Optional[str] = record.get("meta", {}).get("selected_asset") if record else None
+
+    results = []
+    if folder.exists():
+        for img_file in sorted(folder.glob("*.png")):
+            rel = img_file.relative_to(SAMPLES_DIR)
+            is_selected = selected_asset is not None and str(img_file) == selected_asset
+            is_current = False  # no "game version" concept for UI assets (deploy = is_current)
+            results.append({
+                "filename": img_file.name,
+                "url": f"/images/{rel.as_posix()}",
+                "path": str(rel),
+                "abs_path": str(img_file),
+                "is_current_in_game": is_current,
+                "is_selected": is_selected,
+            })
+    return results
+
+
+# ─────────────────────────────────────────────
+# UI9. POST /api/ui-assets/{asset_id}/select-image
+# ─────────────────────────────────────────────
+@app.post("/api/ui-assets/{asset_id}/select-image")
+def select_ui_asset_image(asset_id: str, body: SelectUIAssetImageRequest) -> Dict[str, Any]:
+    """Mark a sample image as selected for next deploy."""
+    image_path = Path(body.image_path)
+    if not image_path.exists():
+        raise HTTPException(status_code=404, detail=f"Image file not found: {body.image_path}")
+
+    records = _read_workspace_ui_assets()
+    target_idx = next((i for i, r in enumerate(records) if r.get("asset_id") == asset_id), None)
+    if target_idx is None:
+        raise HTTPException(status_code=404, detail=f"UI asset not found: {asset_id}")
+
+    records[target_idx].setdefault("meta", {})["selected_asset"] = str(image_path)
+    records[target_idx]["meta"]["updated_at"] = datetime.utcnow().isoformat() + "Z"
+    _write_workspace_ui_assets(records)
+    return {"success": True, "selected_image": str(image_path)}
+
+
+# ─────────────────────────────────────────────
+# UI10. POST /api/ui-assets/{asset_id}/deploy
+# ─────────────────────────────────────────────
+@app.post("/api/ui-assets/{asset_id}/deploy")
+def deploy_ui_asset(asset_id: str) -> Dict[str, Any]:
+    """
+    Deploy a UI asset to game directories:
+    1. Copy selected image to src/renderer/assets/ui/generated/ and public/ui-assets/
+    2. Mark publish_status = published
+    3. Save workspace
+    """
+    records = _read_workspace_ui_assets()
+    target_idx = next((i for i, r in enumerate(records) if r.get("asset_id") == asset_id), None)
+    if target_idx is None:
+        raise HTTPException(status_code=404, detail=f"UI asset not found: {asset_id}")
+
+    record = records[target_idx]
+    meta = record.setdefault("meta", {})
+
+    image_copied = False
+    image_source_filename = None
+
+    selected_image_path = meta.get("selected_asset", "")
+    if selected_image_path:
+        selected_file = Path(selected_image_path)
+        if selected_file.exists():
+            img_filename = selected_file.name
+            dest_src = UI_ASSETS_SRC_DIR / img_filename
+            dest_public = UI_ASSETS_PUBLIC_DIR / img_filename
+            UI_ASSETS_SRC_DIR.mkdir(parents=True, exist_ok=True)
+            UI_ASSETS_PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(str(selected_file), str(dest_src))
+            shutil.copy2(str(selected_file), str(dest_public))
+            record["image"] = f"/assets/ui/generated/{img_filename}"
+            image_copied = True
+            image_source_filename = img_filename
+        meta.pop("selected_asset", None)
+
+    meta["publish_status"] = "published"
+    meta["updated_at"] = datetime.utcnow().isoformat() + "Z"
+    records[target_idx] = record
+    _write_workspace_ui_assets(records)
+
+    return {
+        "success": True,
+        "asset_id": asset_id,
+        "image_copied": image_copied,
+        "image_source_filename": image_source_filename,
+    }
+
+
+# ─────────────────────────────────────────────
+# UI11. POST /api/ui-generate  (SSE)
+# ─────────────────────────────────────────────
+@app.post("/api/ui-generate")
+async def generate_ui_asset_images(body: GenerateRequest):
+    """
+    Generate UI asset images using the category-specific prompt template.
+    Saves to ui_{asset_id} folder. Streams SSE progress.
+    body.name = asset_id (used as folder key)
+    body.asset_type = "ui" (validated here)
+    body.description = the variant description
+    """
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY environment variable is not set.")
+
+    # Look up category from workspace
+    records = _read_workspace_ui_assets()
+    record = next((r for r in records if r.get("asset_id") == body.name), None)
+    if record is None:
+        raise HTTPException(status_code=404, detail=f"UI asset not found: {body.name}")
+
+    category = record.get("category", "icon")
+    dimensions = record.get("dimensions", "1024x1024")
+
+    async def event_stream():
+        from openai import OpenAI
+        client = OpenAI(api_key=api_key)
+        loop = asyncio.get_running_loop()
+        count = max(1, body.count)
+        timestamp = int(time.time())
+        folder = _ui_asset_folder(body.name)
+        folder.mkdir(parents=True, exist_ok=True)
+
+        prompt = _build_ui_prompt(body.description, category)
+        generated_images = []
+
+        for i in range(1, count + 1):
+            progress_event = json.dumps({
+                "type": "progress",
+                "message": f"Generating UI asset image {i} of {count}…",
+                "current": i,
+                "total": count,
+            })
+            yield f"data: {progress_event}\n\n"
+
+            filename = f"{body.name}_{timestamp}_{i}.png"
+            output_path = folder / filename
+
+            try:
+                saved_path = await loop.run_in_executor(
+                    None,
+                    _generate_ui_asset_image,
+                    client,
+                    prompt,
+                    output_path,
+                    dimensions,
+                )
+                rel_path = saved_path.relative_to(SAMPLES_DIR)
+                generated_images.append({
+                    "path": str(rel_path),
+                    "url": f"/images/{rel_path.as_posix()}",
+                })
+            except Exception as exc:
+                error_event = json.dumps({
+                    "type": "error",
+                    "message": f"Failed to generate image {i}: {exc}",
+                    "current": i,
+                    "total": count,
+                })
+                yield f"data: {error_event}\n\n"
+
+        history_entry = {
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "name": body.name,
+            "asset_type": "ui",
+            "images": generated_images,
+        }
+        _append_history(history_entry)
+
+        done_event = json.dumps({"type": "done", "images": generated_images})
+        yield f"data: {done_event}\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+
+
 # ─────────────────────────────────────────────
 # Entry point
 # ─────────────────────────────────────────────
@@ -3475,4 +4192,4 @@ if __name__ == "__main__":
     import uvicorn
 
     _sync_special_workspace()
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8100, reload=True)

@@ -41,23 +41,23 @@ const STATUS_CONFIG: Record<SceneStatusLabel, { label: string; color: string; bg
   },
   participated: {
     label: '进行中',
-    color: 'text-blue-300',
-    bgColor: 'bg-blue-900/10',
-    borderColor: 'border-blue-700/30',
+    color: 'text-cerulean-300',
+    bgColor: 'bg-cerulean-900/10',
+    borderColor: 'border-cerulean-500/30',
     clickable: false,
   },
   completed: {
     label: '已完成',
-    color: 'text-gray-500',
-    bgColor: 'bg-gray-900/20',
-    borderColor: 'border-gray-700/20',
+    color: 'text-bamboo-300',
+    bgColor: 'bg-bamboo-900/20',
+    borderColor: 'border-bamboo-700/30',
     clickable: false,
   },
   locked: {
     label: '未解锁',
-    color: 'text-gray-600',
-    bgColor: 'bg-gray-950/20',
-    borderColor: 'border-gray-800/20',
+    color: 'text-parchment/30',
+    bgColor: 'bg-leather-950/20',
+    borderColor: 'border-leather-700/20',
     clickable: false,
   },
 };
@@ -74,7 +74,7 @@ export function LocationScreen() {
 
   if (!location) {
     return (
-      <div className="h-full flex items-center justify-center bg-gray-950">
+      <div className="h-full flex items-center justify-center bg-leather-900">
         <div className="text-amber-400/60">未找到场景地点</div>
         <button
           onClick={navigateToWorldMap}
@@ -127,8 +127,8 @@ export function LocationScreen() {
         </button>
 
         <h1
-          className="text-3xl font-bold text-amber-400 tracking-widest mb-1"
-          style={{ fontFamily: 'serif', textShadow: '0 0 20px rgba(217,119,6,0.5)' }}
+          className="text-3xl font-bold text-amber-400 tracking-widest mb-1 font-[family-name:var(--font-display)]"
+          style={{ textShadow: '0 0 20px rgba(217,119,6,0.5)' }}
         >
           {location.name}
         </h1>
@@ -136,14 +136,14 @@ export function LocationScreen() {
         {hasAvailable ? (
           <p className="text-xs text-amber-300/60 mt-1">选择一个剧情参与</p>
         ) : (
-          <p className="text-xs text-gray-400/60 mt-1">此地暂无可参与的剧情</p>
+          <p className="text-xs text-parchment/40 mt-1">此地暂无可参与的剧情</p>
         )}
       </div>
 
       {/* Scene List */}
       <div className="relative z-10 flex-1 overflow-y-auto px-6 py-5">
         {sceneEntries.length === 0 && (
-          <div className="text-center text-gray-300/60 py-12">此地暂无剧情</div>
+          <div className="text-center text-parchment/40 py-12">此地暂无剧情</div>
         )}
 
         <div className="flex flex-col gap-3 max-w-2xl mx-auto">
@@ -204,21 +204,20 @@ function SceneCard({
           </div>
 
           <div
-            className={`text-base font-bold mb-1.5 tracking-wide ${config.color}`}
-            style={{ fontFamily: 'serif' }}
+            className={`text-base font-bold mb-1.5 tracking-wide font-[family-name:var(--font-display)] ${config.color}`}
           >
             {scene?.name ?? sceneId}
           </div>
 
           {scene && (
-            <p className="text-xs text-gray-400/70 leading-relaxed line-clamp-2">
+            <p className="text-xs text-parchment/50 leading-relaxed line-clamp-2">
               {scene.description}
             </p>
           )}
 
           {/* Unlock conditions hint */}
           {status === 'locked' && scene?.unlock_conditions && (
-            <div className="mt-2 text-[10px] text-gray-600">
+            <div className="mt-2 text-[10px] text-parchment/30">
               {scene.unlock_conditions.reputation_min !== undefined && (
                 <span>需要声望 ≥ {scene.unlock_conditions.reputation_min}</span>
               )}
@@ -237,10 +236,10 @@ function SceneCard({
                         ${status === 'available'
                           ? 'border-amber-500/40 text-amber-400 bg-amber-900/20'
                           : status === 'participated'
-                          ? 'border-blue-500/30 text-blue-400/80 bg-blue-900/10'
+                          ? 'border-cerulean-500/30 text-cerulean-300 bg-cerulean-900/10'
                           : status === 'completed'
-                          ? 'border-green-700/30 text-green-600/70 bg-green-950/10'
-                          : 'border-gray-700/30 text-gray-600 bg-gray-900/10'
+                          ? 'border-bamboo-700/30 text-bamboo-300 bg-bamboo-900/10'
+                          : 'border-leather-700/30 text-parchment/30 bg-leather-950/10'
                         }`}
           >
             {config.label}

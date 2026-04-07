@@ -1,0 +1,65 @@
+[
+  {
+    "asset_id": "ui_001",
+    "name": "事件结算对话框",
+    "category": "frame",
+    "dimensions": "1792x1024",
+    "description": "宽幅横向面板边框，左右双区域布局，中间有竖向分隔装饰。左右侧等宽，左侧区域用于展示卡牌和骰子结果，右侧区域较宽用于文字滚动。整体造型如展开的卷轴或古籍翻页，边缘有墨线勾勒，四角有云纹装饰。",
+    "image": "",
+    "meta": {
+      "publish_status": "draft",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "created_at": "2026-04-06T11:51:02.469251Z",
+      "updated_at": "2026-04-06T11:51:02.469256Z"
+    }
+  },
+  {
+    "asset_id": "ui_002",
+    "name": "Event结算对话",
+    "category": "icon",
+    "dimensions": "1792x1024",
+    "description": "宽幅横向面板边框，左右双区域布局，中间有竖向分隔装饰。两侧区域等宽，左侧区域用于展示卡牌和骰子结果，右侧区域用于文字滚动。整体造型如展开的卷轴或古籍翻页，边缘有墨线勾勒，四角有云纹装饰。",
+    "image": "",
+    "meta": {
+      "publish_status": "draft",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "created_at": "2026-04-06T13:08:11.831577Z",
+      "updated_at": "2026-04-06T13:08:11.831583Z"
+    }
+  },
+  {
+    "asset_id": "ui_003",
+    "name": "Event结算对话框",
+    "category": "frame",
+    "dimensions": "1792x1024",
+    "description": "宽幅横向面板边框，左右双区域布局，中间有竖向分隔装饰。左右侧宽度相等，左侧区域用于展示卡牌和骰子结果，右侧区域用于文字滚动。整体造型如展开的卷轴或古籍翻页，边缘有墨线勾勒，四角有云纹装饰。",
+    "image": "",
+    "meta": {
+      "publish_status": "draft",
+      "selected_asset": "",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "created_at": "2026-04-06T13:16:14.932606Z",
+      "updated_at": "2026-04-06T13:16:14.932613Z"
+    }
+  },
+  {
+    "asset_id": "ui_004",
+    "name": "事件结算",
+    "category": "panel",
+    "dimensions": "1536x1024",
+    "description": "左右双区域布局，左右侧区域等款",
+    "image": "/assets/ui/generated/ui_004_1775484720_2.png",
+    "meta": {
+      "publish_status": "published",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "created_at": "2026-04-06T14:01:57.076951Z",
+      "updated_at": "2026-04-06T14:18:54.860686Z"
+    }
+  }
+]

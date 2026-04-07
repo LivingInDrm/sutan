@@ -31,24 +31,24 @@ function EffectDisplay({ effects }: { effects: Effects }) {
 }
 
 export function NarrativeNodeView({ node, isCurrent }: { node: NarrativeNode; isCurrent: boolean }) {
-  const opacity = isCurrent ? '' : 'opacity-60';
+  const historyClass = isCurrent ? '' : 'text-stone-500';
 
   if (node.type === 'dialogue') {
     return (
-      <div className={opacity}>
+      <div>
         <div className="flex items-start gap-3 mb-1">
           {node.portrait && (
-            <div className="w-10 h-10 shrink-0 rounded overflow-hidden border border-gold-dim/30 shadow-sm">
+            <div className={`w-10 h-10 shrink-0 rounded overflow-hidden border border-gold-dim/30 shadow-sm ${isCurrent ? '' : 'opacity-70'}`}>
               <img src={node.portrait} alt={node.speaker || ''} className="w-full h-full object-cover object-top" />
             </div>
           )}
           <div className="flex-1 min-w-0">
             {node.speaker && (
-              <div className="text-xs font-bold text-crimson-dark mb-0.5 font-[family-name:var(--font-display)]">
+              <div className={`text-xs font-bold mb-0.5 font-[family-name:var(--font-display)] ${isCurrent ? 'text-crimson-dark' : 'text-stone-400'}`}>
                 {node.speaker}
               </div>
             )}
-            <p className="text-leather leading-relaxed text-[15px]">{node.text}</p>
+            <p className={`leading-relaxed text-[15px] ${isCurrent ? 'text-black' : 'text-stone-500'}`}>{node.text}</p>
           </div>
         </div>
       </div>
@@ -57,16 +57,16 @@ export function NarrativeNodeView({ node, isCurrent }: { node: NarrativeNode; is
 
   if (node.type === 'narration') {
     return (
-      <div className={opacity}>
-        <p className="text-leather/80 leading-loose text-[15px] italic">{node.text}</p>
+      <div>
+        <p className={`leading-loose text-[15px] italic ${isCurrent ? 'text-black' : 'text-stone-500'}`}>{node.text}</p>
       </div>
     );
   }
 
   if (node.type === 'effect') {
     return (
-      <div className={opacity}>
-        {node.text && <p className="text-leather/80 leading-relaxed text-[15px] mb-1">{node.text}</p>}
+      <div className={historyClass}>
+        {node.text && <p className={`leading-relaxed text-[15px] mb-1 ${isCurrent ? 'text-black' : 'text-stone-500'}`}>{node.text}</p>}
         <EffectDisplay effects={node.effects} />
       </div>
     );
@@ -127,14 +127,14 @@ export function NarrativePlayer({ nodes, currentIndex, onAdvance, onChoice, hist
 
         {isChoice && (
           <div className="mt-6">
-            <p className="text-leather leading-relaxed text-[15px] mb-4">{currentNode.text}</p>
+            <p className="text-black leading-relaxed text-[15px] mb-4">{currentNode.text}</p>
             <div className="flex flex-col gap-2">
               {currentNode.options.map((option, idx) => (
                 <button
                   key={idx}
                   className="flex items-center gap-3 w-full text-left px-4 py-3 rounded-lg
                              border border-gold-dim/30 bg-leather/5 hover:bg-leather/10
-                             transition-colors text-leather text-sm group"
+                             transition-colors text-black text-sm group"
                   onClick={() => {
                     if (option.next_stage) {
                       onChoice(option.next_stage, option.effects);
@@ -166,7 +166,7 @@ export function NarrativePlayer({ nodes, currentIndex, onAdvance, onChoice, hist
           <button
             onClick={onAdvance}
             className="w-full flex items-center justify-center gap-2 py-2
-                       text-xs text-leather/40 hover:text-leather/70 transition-colors"
+                       text-xs text-black hover:text-gray-800 transition-colors"
           >
             <span>点击或按空格继续</span>
             <svg viewBox="0 0 16 16" className="w-3 h-3" fill="currentColor">

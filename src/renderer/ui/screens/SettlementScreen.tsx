@@ -1,19 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { useUIStore } from '../../stores/uiStore';
-import { NarrativePlayer, NarrativeNodeView } from '../components/narrative/NarrativePlayer';
-import { DiceResult } from '../components/dice/DiceComponent';
-import { CardComponent } from '../components/card/CardComponent';
 import { Panel } from '../components/common/Panel';
 import { Button } from '../components/common/Button';
-import { BookLayout } from '../layouts/BookLayout';
-import { DividerLine } from '../components/common/svg';
-import { ATTR_LABELS } from '../constants/labels';
+import { EventSettlementFrame } from '../components/settlement/EventSettlementFrame';
+import { SettlementLeftPanel, SettlementRightPanel } from '../components/settlement/SettlementPanels';
+import { DiceResult } from '../components/dice/DiceComponent';
 import type { Card, NarrativeNode, SettlementResult } from '../../core/types';
 import type { StageSettlementResult } from '../../core/settlement/SettlementExecutor';
 
 const RESULT_COLORS: Record<string, string> = {
-  success: 'text-green-400',
+  success: 'text-bamboo-300',
   partial_success: 'text-yellow-400',
   failure: 'text-red-400',
   critical_failure: 'text-red-600',
@@ -25,208 +22,6 @@ const RESULT_LABELS: Record<string, string> = {
   failure: '失败',
   critical_failure: '大失败',
 };
-
-function SettlementLeftPanel({
-  sceneName,
-  investedCards,
-  hasSettlement,
-  isNarrativeComplete,
-  settlementResult,
-  onExecute,
-}: {
-  sceneName: string;
-  investedCards: Card[];
-  hasSettlement: boolean;
-  isNarrativeComplete: boolean;
-  settlementResult: StageSettlementResult | null;
-  onExecute: () => void;
-}) {
-  const showCheckPrompt = isNarrativeComplete && hasSettlement && !settlementResult;
-  const checkConfig = settlementResult?.dice_check_state?.config;
-
-  return (
-    <>
-      <div className="text-xs text-gold-dim/70 mb-1 tracking-wider">当前场景</div>
-      <div className="text-base font-bold text-gold mb-4 font-[family-name:var(--font-display)]">
-        {sceneName}
-      </div>
-
-      {investedCards.length > 0 && (
-        <div className="mb-4">
-          <div className="text-xs text-gold-dim/60 mb-2">投入的卡牌</div>
-          <div className="flex flex-col gap-2">
-            {investedCards.map(card => (
-              <CardComponent key={card.card_id} card={card} compact />
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div className="flex-1" />
-
-      {showCheckPrompt && (
-        <div className="mt-4">
-          <DividerLine className="w-full h-1 text-gold-dim/30 pointer-events-none mb-3" preserveAspectRatio="none" />
-          <div className="text-center">
-            <div className="text-sm text-gold-dim mb-3">准备进行鉴定……</div>
-            <Button variant="primary" size="lg" glow onClick={onExecute}>
-              开始鉴定
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {settlementResult && (
-        <div className="mt-4">
-          <DividerLine className="w-full h-1 text-gold-dim/30 pointer-events-none mb-3" preserveAspectRatio="none" />
-
-          {checkConfig && (
-            <div className="text-center mb-3">
-              <span className="text-xs text-gold-dim/70">
-                {ATTR_LABELS[checkConfig.attribute] || checkConfig.attribute} 鉴定
-              </span>
-            </div>
-          )}
-
-          {settlementResult.dice_check_state && (
-            <div className="mb-3">
-              <DiceResult
-                dice={settlementResult.dice_check_state.initial_roll.all_dice}
-                explodedStartIndex={settlementResult.dice_check_state.initial_roll.dice.length}
-              />
-              <div className="text-center mt-2">
-                <span className="text-xs text-gold-dim">
-                  成功: {settlementResult.dice_check_state.final_successes} / 目标: {settlementResult.dice_check_state.config.target}
-                </span>
-              </div>
-            </div>
-          )}
-
-          {settlementResult.result_key && (
-            <div className={`text-center text-lg font-bold mb-2 ${RESULT_COLORS[settlementResult.result_key] || 'text-gold-dim'}`}>
-              {RESULT_LABELS[settlementResult.result_key] || settlementResult.result_key}
-            </div>
-          )}
-
-          {settlementResult.effects_applied && Object.keys(settlementResult.effects_applied).length > 0 && (
-            <div className="flex flex-wrap gap-2 justify-center mt-2">
-              {settlementResult.effects_applied.gold && (
-                <span className={`text-xs px-2 py-0.5 rounded ${settlementResult.effects_applied.gold > 0 ? 'bg-yellow-900/40 text-yellow-400' : 'bg-red-900/40 text-red-400'}`}>
-                  {settlementResult.effects_applied.gold > 0 ? '+' : ''}{settlementResult.effects_applied.gold} 金币
-                </span>
-              )}
-              {settlementResult.effects_applied.reputation && (
-                <span className={`text-xs px-2 py-0.5 rounded ${settlementResult.effects_applied.reputation > 0 ? 'bg-blue-900/40 text-blue-400' : 'bg-red-900/40 text-red-400'}`}>
-                  {settlementResult.effects_applied.reputation > 0 ? '+' : ''}{settlementResult.effects_applied.reputation} 声望
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-      )}
-    </>
-  );
-}
-
-function SettlementRightPanel({
-  narrative,
-  narrativeIndex,
-  onAdvance,
-  onChoice,
-  settlementResult,
-  onContinue,
-  isNarrativeComplete,
-  hasSettlement,
-  historyNodes,
-}: {
-  narrative: NarrativeNode[];
-  narrativeIndex: number;
-  onAdvance: () => void;
-  onChoice: (nextStageId: string, effects?: import('../../core/types').Effects) => void;
-  settlementResult: StageSettlementResult | null;
-  onContinue: () => void;
-  isNarrativeComplete: boolean;
-  hasSettlement: boolean;
-  historyNodes: NarrativeNode[];
-}) {
-  if (!isNarrativeComplete) {
-    return (
-      <NarrativePlayer
-        nodes={narrative}
-        currentIndex={narrativeIndex}
-        onAdvance={onAdvance}
-        onChoice={onChoice}
-        historyNodes={historyNodes}
-      />
-    );
-  }
-
-  if (settlementResult) {
-    const allPastNodes = [...historyNodes, ...narrative];
-    return (
-      <div className="flex flex-col h-full">
-        <div className="flex-1 overflow-auto px-8 py-6">
-          {allPastNodes.length > 0 && (
-            <div className="flex flex-col gap-4 mb-4">
-              {allPastNodes.map((node, idx) => (
-                <NarrativeNodeView key={`p-${idx}`} node={node} isCurrent={false} />
-              ))}
-            </div>
-          )}
-          <p className="text-leather leading-relaxed text-[15px] italic">
-            {settlementResult.narrative}
-          </p>
-        </div>
-        <div className="shrink-0 px-8 pb-4 pt-2">
-          <DividerLine className="w-full h-1 text-gold-dim/20 pointer-events-none mb-3" preserveAspectRatio="none" />
-          <button
-            onClick={onContinue}
-            className="w-full flex items-center justify-center gap-2 py-2
-                       text-xs text-leather/40 hover:text-leather/70 transition-colors"
-          >
-            <span>点击继续</span>
-            <svg viewBox="0 0 16 16" className="w-3 h-3" fill="currentColor">
-              <path d="M6 3l5 5-5 5V3z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (isNarrativeComplete && hasSettlement) {
-    const allPastNodes = [...historyNodes, ...narrative];
-    return (
-      <div className="flex flex-col h-full">
-        <div className="flex-1 overflow-auto px-8 py-6">
-          {allPastNodes.length > 0 && (
-            <div className="flex flex-col gap-4 mb-4">
-              {allPastNodes.map((node, idx) => (
-                <NarrativeNodeView key={`w-${idx}`} node={node} isCurrent={false} />
-              ))}
-            </div>
-          )}
-          <p className="text-leather/50 text-sm italic">等待鉴定……</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-auto px-8 py-6">
-        {historyNodes.length > 0 && (
-          <div className="flex flex-col gap-4 mb-4">
-            {historyNodes.map((node, idx) => (
-              <NarrativeNodeView key={`d-${idx}`} node={node} isCurrent={false} />
-            ))}
-          </div>
-        )}
-        <p className="text-leather/50 text-sm italic">阶段完成</p>
-      </div>
-    </div>
-  );
-}
 
 function SummaryView({ results }: { results: SettlementResult[] }) {
   const setScreen = useUIStore(s => s.setScreen);
@@ -279,7 +74,7 @@ function SummaryView({ results }: { results: SettlementResult[] }) {
                   </span>
                 )}
                 {result.effects_applied.reputation && (
-                  <span className={result.effects_applied.reputation > 0 ? 'text-blue-400' : 'text-red-400'}>
+                  <span className={result.effects_applied.reputation > 0 ? 'text-cerulean-300' : 'text-red-400'}>
                     声望: {result.effects_applied.reputation > 0 ? '+' : ''}{result.effects_applied.reputation}
                   </span>
                 )}
@@ -403,10 +198,11 @@ export function SettlementScreen() {
   );
 
   return (
-    <BookLayout
+    <EventSettlementFrame
       leftContent={leftContent}
       rightContent={rightContent}
       rightTitle={sceneName}
+      backgroundAssetId="ui_004"
     />
   );
 }

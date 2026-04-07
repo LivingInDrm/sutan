@@ -47,7 +47,7 @@ export function WorldMapScreen() {
   const locations: LocationConfig[] = mapConfig.locations;
 
   return (
-    <div className="h-screen w-screen relative overflow-hidden bg-gray-950">
+    <div className="h-screen w-screen relative overflow-hidden bg-leather-900">
       {/* Map Background */}
       {!bgError ? (
         <img
@@ -74,8 +74,8 @@ export function WorldMapScreen() {
       {/* Map name watermark */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <span
-          className="text-[180px] font-bold text-white/3 select-none"
-          style={{ fontFamily: 'serif', letterSpacing: '0.3em' }}
+          className="text-[180px] font-bold text-white/3 select-none font-[family-name:var(--font-display)]"
+          style={{ letterSpacing: '0.3em' }}
         >
           北凉
         </span>
@@ -100,7 +100,7 @@ export function WorldMapScreen() {
         <div className="flex items-center gap-5">
           <div className="text-center">
             <div className="text-xs text-amber-400/60 tracking-widest">第</div>
-            <div className="text-2xl font-bold text-amber-300" style={{ fontFamily: 'serif' }}>
+            <div className="text-2xl font-bold text-amber-300 font-[family-name:var(--font-display)]">
               {currentDay}
             </div>
             <div className="text-xs text-amber-400/60 tracking-widest">天</div>
@@ -108,8 +108,7 @@ export function WorldMapScreen() {
           <div className="h-8 w-px bg-amber-800/40" />
           <div className="text-center">
             <div className="text-xs text-red-400/60 tracking-widest">行刑</div>
-            <div className={`text-2xl font-bold ${executionCountdown <= 3 ? 'text-red-400 animate-pulse' : 'text-amber-300'}`}
-                 style={{ fontFamily: 'serif' }}>
+            <div className={`text-2xl font-bold font-[family-name:var(--font-display)] ${executionCountdown <= 3 ? 'text-red-400 animate-pulse' : 'text-amber-300'}`}>
               -{executionCountdown}
             </div>
             <div className="text-xs text-red-400/60 tracking-widest">天</div>
@@ -119,8 +118,8 @@ export function WorldMapScreen() {
             <span className="text-amber-200 text-sm">
               <span className="text-amber-500 mr-1">金</span>{gold}
             </span>
-            <span className="text-blue-200 text-sm">
-              <span className="text-blue-400 mr-1">望</span>{reputation}
+            <span className="text-cerulean-300 text-sm">
+              <span className="text-cerulean-300 mr-1">望</span>{reputation}
             </span>
           </div>
         </div>
@@ -139,7 +138,7 @@ export function WorldMapScreen() {
       {/* Map title bottom-left */}
       <div className="absolute bottom-6 left-6 z-20 pointer-events-none">
         <div className="text-xs text-amber-500/40 tracking-widest mb-1">当前地图</div>
-        <div className="text-lg font-bold text-amber-400/70" style={{ fontFamily: 'serif' }}>
+        <div className="text-lg font-bold text-amber-400/70 font-[family-name:var(--font-display)]">
           {mapConfig.name}
         </div>
         <div className="text-xs text-amber-300/40 mt-0.5">{mapConfig.description}</div>
@@ -215,12 +214,11 @@ function LocationIcon({
       {/* Name label */}
       <div
         className={`px-2 py-0.5 rounded text-xs font-bold tracking-wide whitespace-nowrap
-                    backdrop-blur-sm transition-all
+                    backdrop-blur-sm transition-all font-[family-name:var(--font-display)]
                     ${status === 'available'
                       ? 'bg-black/60 text-amber-300 border border-amber-500/30 group-hover:border-amber-400/60'
                       : 'bg-black/50 text-gray-400 border border-gray-700/30'
                     }`}
-        style={{ fontFamily: 'serif' }}
       >
         {location.name}
       </div>

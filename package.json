@@ -10,7 +10,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "ladle": "ladle serve",
-    "ladle:build": "ladle build"
+    "ladle:build": "ladle build",
+    "start:all": "./start-all.sh"
   },
   "repository": {
     "type": "git",

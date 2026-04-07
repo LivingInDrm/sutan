@@ -1,4 +1,4 @@
-import type { Character, Templates, SampleImage, GenerateRequest, GenerationProgress, GenerateDescriptionRequest, CreateCharacterRequest, CharacterProfile, DeployPreview, Item, ItemProfile, ItemDeployPreview, CreateItemRequest, ScenesResponse, Scene, SceneGenerateRequest, SceneImageType, SceneGeneratePromptsResponse } from './types';
+import type { Character, Templates, SampleImage, GenerateRequest, GenerationProgress, GenerateDescriptionRequest, CreateCharacterRequest, CharacterProfile, DeployPreview, Item, ItemProfile, ItemDeployPreview, CreateItemRequest, ScenesResponse, Scene, SceneGenerateRequest, SceneImageType, SceneGeneratePromptsResponse, UIAsset, UIAssetProfile, CreateUIAssetRequest } from './types';
 
 export const api = {
   async getCharacters(): Promise<Character[]> {
@@ -531,5 +531,148 @@ export const api = {
     }
     const data = await response.json();
     return data.descriptions as string[];
+  },
+
+  // ─────────────────────────────────────────────
+  // UI Asset API
+  // ─────────────────────────────────────────────
+  async getUIAssets(): Promise<UIAsset[]> {
+    const response = await fetch('/api/ui-assets');
+    if (!response.ok) throw new Error('Failed to fetch UI assets');
+    return response.json();
+  },
+
+  async createUIAsset(request: CreateUIAssetRequest): Promise<UIAsset> {
+    const response = await fetch('/api/ui-assets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to create UI asset');
+    }
+    const data = await response.json();
+    return data.asset as UIAsset;
+  },
+
+  async getUIAssetProfile(assetId: string): Promise<UIAssetProfile> {
+    const response = await fetch(`/api/ui-assets/${encodeURIComponent(assetId)}/profile`);
+    if (!response.ok) throw new Error('Failed to fetch UI asset profile');
+    return response.json();
+  },
+
+  async updateUIAssetProfile(assetId: string, profile: Partial<UIAssetProfile>): Promise<UIAssetProfile> {
+    const response = await fetch(`/api/ui-assets/${encodeURIComponent(assetId)}/profile`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profile),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to update UI asset profile');
+    }
+    const data = await response.json();
+    return data.profile as UIAssetProfile;
+  },
+
+  async updateUIAssetVariant(assetId: string, variantIndex: number, description: string): Promise<void> {
+    const response = await fetch(`/api/ui-assets/${encodeURIComponent(assetId)}/variants/${variantIndex}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ variant_index: variantIndex, description }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to update UI asset variant');
+    }
+  },
+
+  async regenerateUIAssetVariants(assetId: string, description: string): Promise<string[]> {
+    const response = await fetch(`/api/ui-assets/${encodeURIComponent(assetId)}/regenerate-variants`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ description }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to regenerate UI asset variants');
+    }
+    const data = await response.json();
+    return data.descriptions as string[];
+  },
+
+  async getUIAssetSamples(assetId: string): Promise<SampleImage[]> {
+    const response = await fetch(`/api/ui-asset-samples/${encodeURIComponent(assetId)}`);
+    if (!response.ok) throw new Error('Failed to fetch UI asset samples');
+    return response.json();
+  },
+
+  async getUIAssetVariants(assetId: string): Promise<{ index: number; description: string; output: string }[]> {
+    const response = await fetch(`/api/ui-assets/${encodeURIComponent(assetId)}/variants`);
+    if (!response.ok) throw new Error('Failed to fetch UI asset variants');
+    return response.json();
+  },
+
+  async selectUIAssetImage(assetId: string, imagePath: string): Promise<void> {
+    const response = await fetch(`/api/ui-assets/${encodeURIComponent(assetId)}/select-image`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image_path: imagePath }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to select UI asset image');
+    }
+  },
+
+  async deployUIAsset(assetId: string): Promise<any> {
+    const response = await fetch(`/api/ui-assets/${encodeURIComponent(assetId)}/deploy`, {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to deploy UI asset');
+    }
+    return response.json();
+  },
+
+  async generateUIAssetImages(
+    request: GenerateRequest,
+    onProgress: (progress: GenerationProgress) => void
+  ): Promise<void> {
+    const response = await fetch('/api/ui-generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to start UI asset image generation');
+    }
+
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const data = JSON.parse(line.slice(6));
+            onProgress(data);
+          } catch (e) {
+            console.error('Failed to parse SSE data:', e);
+          }
+        }
+      }
+    }
   },
 };

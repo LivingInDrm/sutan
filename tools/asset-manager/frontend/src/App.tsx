@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from './api';
-import type { Character, Templates, Item, Scene, ScenesResponse } from './types';
+import type { Character, Templates, Item, Scene, ScenesResponse, UIAsset } from './types';
 import CharacterList from './components/CharacterList';
 import CharacterDetail from './components/CharacterDetail';
 import ItemList from './components/ItemList';
@@ -8,8 +8,10 @@ import ItemDetail from './components/ItemDetail';
 import LocationList from './components/LocationList';
 import LocationDetail from './components/LocationDetail';
 import TemplateSettings from './components/TemplateSettings';
+import UIAssetList from './components/UIAssetList';
+import UIAssetDetail from './components/UIAssetDetail';
 
-type Tab = 'characters' | 'items' | 'scenes' | 'templates' | 'history';
+type Tab = 'characters' | 'items' | 'scenes' | 'ui-assets' | 'templates' | 'history';
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('characters');
@@ -20,6 +22,8 @@ function App() {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [scenesData, setScenesData] = useState<ScenesResponse | null>(null);
   const [selectedScene, setSelectedScene] = useState<Scene | null>(null);
+  const [uiAssets, setUiAssets] = useState<UIAsset[]>([]);
+  const [selectedUIAsset, setSelectedUIAsset] = useState<UIAsset | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -73,6 +77,9 @@ function App() {
     if (activeTab === 'scenes' && !scenesData) {
       loadScenes();
     }
+    if (activeTab === 'ui-assets') {
+      loadUIAssets();
+    }
   }, [activeTab]);
 
   const handleCharacterUpdate = async () => {
@@ -103,6 +110,19 @@ function App() {
 
   const handleSceneUpdate = async () => {
     await loadScenes();
+  };
+
+  const loadUIAssets = async () => {
+    try {
+      const assets = await api.getUIAssets();
+      setUiAssets(assets);
+      if (selectedUIAsset) {
+        const updated = assets.find((a) => a.asset_id === selectedUIAsset.asset_id);
+        if (updated) setSelectedUIAsset(updated);
+      }
+    } catch (err) {
+      console.error('Failed to load UI assets', err);
+    }
   };
 
   // Determine total scene count
@@ -159,6 +179,16 @@ function App() {
           >
             <span style={styles.navLabel}>地点管理</span>
             <span style={styles.navSublabel}>LOCATIONS</span>
+          </button>
+          <button
+            style={{
+              ...styles.navButton,
+              ...(activeTab === 'ui-assets' ? styles.navButtonActive : {}),
+            }}
+            onClick={() => setActiveTab('ui-assets')}
+          >
+            <span style={styles.navLabel}>UI 素材</span>
+            <span style={styles.navSublabel}>UI ASSETS</span>
           </button>
           <button
             style={{
@@ -313,6 +343,41 @@ function App() {
                   templates={templates}
                   onUpdate={handleTemplateUpdate}
                 />
+              </div>
+            )}
+
+            {activeTab === 'ui-assets' && (
+              <div style={styles.charactersLayout}>
+                <aside style={styles.sidebar}>
+                  <div style={styles.sidebarHeader}>
+                    <div style={styles.sidebarTitle}>UI ASSET DATABASE</div>
+                    <div style={styles.sidebarCount}>{uiAssets.length} ASSETS</div>
+                  </div>
+                  <UIAssetList
+                    assets={uiAssets}
+                    selectedAsset={selectedUIAsset}
+                    onSelectAsset={setSelectedUIAsset}
+                    onAssetCreated={(asset) => {
+                      setUiAssets((prev) => [...prev, asset]);
+                      setSelectedUIAsset(asset);
+                    }}
+                  />
+                </aside>
+                <div style={styles.content}>
+                  {selectedUIAsset ? (
+                    <UIAssetDetail
+                      key={selectedUIAsset.asset_id}
+                      asset={selectedUIAsset}
+                      onUpdate={loadUIAssets}
+                    />
+                  ) : (
+                    <div style={styles.emptyState}>
+                      <div style={styles.emptyIcon}>◻</div>
+                      <div style={styles.emptyText}>SELECT A UI ASSET</div>
+                      <div style={styles.emptySubtext}>或点击「新增 UI 素材」创建</div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 

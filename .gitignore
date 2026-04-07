@@ -9,3 +9,4 @@ FantasyAsiaUI/
 scripts/samples/
 __pycache__/
 *.pyc
+tools/asset-manager/backend/.env

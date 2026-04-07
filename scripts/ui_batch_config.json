@@ -1,0 +1,130 @@
+[
+  {
+    "type": "ui",
+    "asset_id": "ui_001",
+    "name": "事件结算对话框",
+    "category": "frame",
+    "description": "wide horizontal scroll-like frame, unfolded ancient book silhouette, equal left and right sections with a slim vertical ink divider, soft rice paper texture, rounded chibi proportions, clean ink outline, subtle cloud-corner ornaments, beige and light sepia palette",
+    "output": "ui_ui_001/ui_001_01.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_001",
+    "name": "事件结算对话框",
+    "category": "frame",
+    "description": "ornate panoramic event panel, layered scroll edges and carved ancient binding details, centered vertical decorative separator, dense swirling cloud motifs on all four corners, rich ink wash shading, warm gold, cinnabar, and dark brown accents, playful q-version fantasy elegance",
+    "output": "ui_ui_001/ui_001_02.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_001",
+    "name": "事件结算对话框",
+    "category": "frame",
+    "description": "cool-toned ink painting frame, horizontal parchment panel with dual-area composition, refined vertical divider like jade-inlaid book spine, misty blue-gray washes, silver ink traces, delicate cloud curls at corners, light watercolor bloom, cute stylized ancient Chinese aesthetic",
+    "output": "ui_ui_001/ui_001_03.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_001",
+    "name": "事件结算对话框",
+    "category": "frame",
+    "description": "warm lively storybook frame, open scroll and flipped-page fusion shape, symmetrical side compartments with decorative central strip, fluffy auspicious cloud corners, bold brush contours, peach, amber, and muted vermilion ink wash, charming chibi guofeng cartoon texture",
+    "output": "ui_ui_001/ui_001_04.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_002",
+    "name": "Event结算对话",
+    "category": "icon",
+    "description": "wide horizontal dialogue panel, unfolded scroll silhouette, equal left and right sections, ornate vertical divider at center, ink-brushed outline, aged parchment texture, cloud motifs on four corners, elegant wuxia ink wash interface",
+    "output": "ui_ui_002/ui_002_01.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_002",
+    "name": "Event结算对话",
+    "category": "icon",
+    "description": "broad ancient book frame, symmetrical dual-panel layout, central carved separator, dense auspicious cloud engravings, layered ink borders, weathered paper and silk details, rich bronze accents, refined and luxurious Jianghu scroll UI",
+    "output": "ui_ui_002/ui_002_02.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_002",
+    "name": "Event结算对话",
+    "category": "icon",
+    "description": "minimalist ink style horizontal banner frame, clean twin compartments, slim vertical ornamental split, cool gray-blue wash tones, soft rice paper grain, restrained cloud corners, light calligraphic contour, serene scholarly martial arts aesthetic",
+    "output": "ui_ui_002/ui_002_03.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_002",
+    "name": "Event结算对话",
+    "category": "icon",
+    "description": "warm antique scroll panel, balanced two-zone composition, decorative center spine like turning pages, sepia and cinnabar touches, bold ink edges, curling cloud-corner ornaments, textured xuan paper, nostalgic and ceremonial wuxia settlement interface",
+    "output": "ui_ui_002/ui_002_04.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_003",
+    "name": "Event结算对话框",
+    "category": "frame",
+    "description": "wide horizontal scroll-like frame, symmetrical left and right panels, central vertical ornamental divider, unfolded ancient manuscript silhouette, ink-outlined edges, subtle cloud-curl corners, pale rice paper texture, restrained black and sepia wash",
+    "output": "ui_ui_003/ui_003_01.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_003",
+    "name": "Event结算对话框",
+    "category": "frame",
+    "description": "ornate wuxia settlement frame, broad double-panel composition, elegant carved center separator, layered scroll and book-page structure, flowing ink brush contours, elaborate auspicious cloud corners, aged parchment surface, muted gold and cinnabar accents",
+    "output": "ui_ui_003/ui_003_02.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_003",
+    "name": "Event结算对话框",
+    "category": "frame",
+    "description": "cool-toned ink wash frame, panoramic horizontal layout, balanced dual sections, slender vertical divider with jade-like ornament, misty blue-gray paper, crisp black brush edging, refined cloud motifs on four corners, calm scholarly atmosphere",
+    "output": "ui_ui_003/ui_003_03.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_003",
+    "name": "Event结算对话框",
+    "category": "frame",
+    "description": "warm antique scroll border, wide bilateral panel design, equal left-right spaces, central hanging divider ornament, old silk-paper blend texture, soft umber and faded vermilion washes, expressive ink outlines, decorative cloud motifs, inviting classic Jianghu mood",
+    "output": "ui_ui_003/ui_003_04.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_004",
+    "name": "事件结算",
+    "category": "panel",
+    "description": "symmetrical dual-panel event settlement screen, equal left and right sections, refined ink-wash frame, pale rice paper texture, thin brushstroke borders, restrained negative space, muted black, ash gray, soft beige, elegant ancient Chinese UI panel",
+    "output": "ui_ui_004/ui_004_01.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_004",
+    "name": "事件结算",
+    "category": "panel",
+    "description": "ornate twin-panel settlement interface, balanced left-right composition, carved dark wood frame, gilded bronze corner ornaments, layered ink clouds, subtle mountain motifs, rich parchment surface, deep umber, antique gold, cinnabar accents, luxurious wuxia panel",
+    "output": "ui_ui_004/ui_004_02.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_004",
+    "name": "事件结算",
+    "category": "panel",
+    "description": "cool-toned double-column panel, perfectly even left and right areas, misty blue-gray ink gradients, frosted jade embellishments, flowing water-ripple patterns, brushed silver trims, translucent xuan paper texture, serene, distant, scholarly martial arts aesthetic",
+    "output": "ui_ui_004/ui_004_03.png"
+  },
+  {
+    "type": "ui",
+    "asset_id": "ui_004",
+    "name": "事件结算",
+    "category": "panel",
+    "description": "warm-toned mirrored settlement panel, equal bilateral sections, 中央有分隔线，sepia ink wash, aged silk and parchment texture, cinnabar seal details, soft amber glow, bamboo-shadow motifs, weathered gold edging, poetic jianghu atmosphere, graceful and immersive",
+    "output": "ui_ui_004/ui_004_04.png"
+  }
+]

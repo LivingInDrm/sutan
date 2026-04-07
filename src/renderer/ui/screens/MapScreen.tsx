@@ -36,17 +36,17 @@ export function MapScreen() {
         <div className="mb-6">
           <h2 className="text-xl font-bold text-amber-400 mb-2">World Map</h2>
 
-          <div className="flex items-center gap-4 mb-4 p-3 bg-gray-900/60 rounded-lg border border-gray-800">
+          <div className="flex items-center gap-4 mb-4 p-3 bg-ink/60 rounded border border-leather-700/40">
             <div className="text-center">
               <div className="text-2xl font-bold text-amber-300">{currentDay}</div>
-              <div className="text-xs text-gray-500">DAY</div>
+              <div className="text-xs text-parchment/40">DAY</div>
             </div>
             <div className="w-px h-10 bg-gray-700" />
             <div className="text-center">
               <div className={`text-2xl font-bold ${executionCountdown <= 3 ? 'text-red-400 animate-pulse' : 'text-amber-300'}`}>
                 {executionCountdown}
               </div>
-              <div className="text-xs text-gray-500">EXEC</div>
+              <div className="text-xs text-parchment/40">EXEC</div>
             </div>
             <div className="flex-1" />
             <button
@@ -71,7 +71,7 @@ export function MapScreen() {
                            hover:bg-amber-900/20 hover:border-amber-600/40 transition-all"
               >
                 <div className="text-sm font-bold text-amber-200">{scene.name}</div>
-                <div className="text-xs text-gray-400">{scene.description}</div>
+                <div className="text-xs text-parchment/50">{scene.description}</div>
                 <div className="text-xs text-amber-600 mt-1">
                   {scene.type} | {game?.sceneManager.getSceneState(id)?.remaining_turns} turns
                 </div>
@@ -86,16 +86,16 @@ export function MapScreen() {
             return (
               <div
                 key={id}
-                className="p-3 bg-green-950/30 border border-green-800/30 rounded-lg"
+                className="p-3 bg-bamboo/10 border border-bamboo-700/30 rounded"
               >
-                <div className="text-sm font-bold text-green-300">{scene.name}</div>
-                <div className="text-xs text-gray-400">Participated - {state.remaining_turns} turns left</div>
+                <div className="text-sm font-bold text-bamboo-300">{scene.name}</div>
+                <div className="text-xs text-parchment/50">Participated - {state.remaining_turns} turns left</div>
               </div>
             );
           })}
 
           {availableScenes.length === 0 && participatedScenes.length === 0 && (
-            <div className="col-span-2 text-center text-gray-600 py-8">
+            <div className="col-span-2 text-center text-parchment/30 py-8">
               No active scenes. Click "Next Day" to advance.
             </div>
           )}

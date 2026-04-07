@@ -10,7 +10,7 @@ export function ResourceBar() {
   const currentDay = useGameStore(s => s.currentDay);
 
   return (
-    <header className="h-12 bg-gray-900/90 border-b border-amber-900/40 flex items-center px-4 gap-6 shrink-0">
+    <header className="h-12 bg-ink/90 border-b border-gold-dim/40 flex items-center px-4 gap-6 shrink-0">
       <span className="text-amber-400 font-bold text-sm">
         Day {currentDay}
       </span>
@@ -19,8 +19,8 @@ export function ResourceBar() {
         <span className="text-yellow-300 font-mono font-bold">{gold}</span>
       </div>
       <div className="flex items-center gap-1">
-        <span className="text-blue-400 text-xs">REP</span>
-        <span className="text-blue-300 font-mono font-bold">{reputation}</span>
+        <span className="text-cerulean-300 text-xs">REP</span>
+        <span className="text-cerulean-300 font-bold">{reputation}</span>
       </div>
       <div className="flex items-center gap-1">
         <span className="text-red-400 text-xs">EXEC</span>

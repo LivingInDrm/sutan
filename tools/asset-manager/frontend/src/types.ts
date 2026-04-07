@@ -50,7 +50,7 @@ export interface Templates {
 }
 
 export interface GenerateRequest {
-  asset_type: 'portrait' | 'item' | 'scene';
+  asset_type: 'portrait' | 'item' | 'scene' | 'ui';
   name: string;
   description: string;
   count: number;
@@ -247,4 +247,43 @@ export interface SceneGeneratePromptsResponse {
 
 export interface SelectBackdropRequest {
   image_path: string;
+}
+
+// ─────────────────────────────────────────────
+// UI Asset types
+// ─────────────────────────────────────────────
+
+export type UIAssetCategory = 'background' | 'frame' | 'panel' | 'button' | 'card-border' | 'icon';
+
+export interface UIAssetVariant {
+  index: number;
+  description: string;
+  output: string;
+}
+
+export interface UIAsset {
+  asset_id: string;
+  id: string;
+  name: string;
+  category: UIAssetCategory;
+  dimensions: string;
+  description: string;
+  current_image: string;
+  has_pending_image: boolean;
+  publish_status: string;
+  variants: UIAssetVariant[];
+}
+
+export interface UIAssetProfile {
+  name: string;
+  category: UIAssetCategory;
+  dimensions: string;
+  description: string;
+}
+
+export interface CreateUIAssetRequest {
+  name: string;
+  category: UIAssetCategory;
+  dimensions: string;
+  description: string;
 }
