@@ -148,6 +148,8 @@ export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
   const [loadingDeployPreview, setLoadingDeployPreview] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
   const [deployResult, setDeployResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [isArchiving, setIsArchiving] = useState(false);
+  const [archiveError, setArchiveError] = useState<string | null>(null);
 
   // ─── Load variants from API ───────────────────────────────────────────────
   const loadVariants = useCallback(async () => {
@@ -305,6 +307,20 @@ export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
       });
     } finally {
       setIsDeploying(false);
+    }
+  };
+
+  const handleArchive = async () => {
+    if (!window.confirm(`确认归档「${item.name}」？归档后物品将从列表中隐藏，数据保留。`)) return;
+    try {
+      setIsArchiving(true);
+      setArchiveError(null);
+      await api.archiveItem(item.name);
+      await onUpdate();
+    } catch (err) {
+      setArchiveError(err instanceof Error ? err.message : '归档失败');
+    } finally {
+      setIsArchiving(false);
     }
   };
 
@@ -742,6 +758,26 @@ export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
                     </button>
                   </div>
                 </section>
+
+                {/* Archive Section */}
+                <section style={{ ...styles.section, marginTop: '8px' }}>
+                  <div style={styles.sectionHeader}>
+                    <div style={{ ...styles.sectionTitle, color: 'var(--error)', opacity: 0.7 }}>DANGER ZONE · 危险操作</div>
+                  </div>
+                  {archiveError && (
+                    <div style={{ color: 'var(--error)', fontSize: '12px', marginBottom: '8px' }}>{archiveError}</div>
+                  )}
+                  <button
+                    style={styles.archiveBtn}
+                    onClick={handleArchive}
+                    disabled={isArchiving}
+                  >
+                    {isArchiving ? '归档中...' : '归档此物品 ARCHIVE'}
+                  </button>
+                  <div style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '6px', opacity: 0.7 }}>
+                    归档后物品从列表隐藏，数据保留在工作区
+                  </div>
+                </section>
               </>
             )}
           </div>
@@ -1164,6 +1200,16 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-secondary)',
     fontSize: '13px',
     cursor: 'pointer',
+  },
+  archiveBtn: {
+    padding: '10px 20px',
+    background: 'transparent',
+    border: '1px solid var(--error)',
+    color: 'var(--error)',
+    fontSize: '12px',
+    letterSpacing: '0.05em',
+    cursor: 'pointer',
+    opacity: 0.8,
   },
   buttonLabel: {
     fontSize: '9px',

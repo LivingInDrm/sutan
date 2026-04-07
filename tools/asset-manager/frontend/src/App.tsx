@@ -11,7 +11,7 @@ import TemplateSettings from './components/TemplateSettings';
 import UIAssetList from './components/UIAssetList';
 import UIAssetDetail from './components/UIAssetDetail';
 
-type Tab = 'characters' | 'items' | 'scenes' | 'ui-assets' | 'templates' | 'history';
+type Tab = 'characters' | 'items' | 'scenes' | 'ui-assets' | 'templates';
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('characters');
@@ -45,6 +45,17 @@ function App() {
       setItems(itemList);
       if (chars.length > 0 && !selectedCharacter) {
         setSelectedCharacter(chars[0]);
+      }
+      // If the selected character was archived, it won't be in the list — select first
+      if (selectedCharacter && !chars.find((c) => c.figure_id === selectedCharacter.figure_id)) {
+        setSelectedCharacter(chars.length > 0 ? chars[0] : null);
+      }
+      if (itemList.length > 0 && !selectedItem) {
+        setSelectedItem(itemList[0]);
+      }
+      // If the selected item was archived, it won't be in the list — select first
+      if (selectedItem && !itemList.find((i) => i.id === selectedItem.id)) {
+        setSelectedItem(itemList.length > 0 ? itemList[0] : null);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load data');
@@ -105,6 +116,7 @@ function App() {
     if (selectedItem) {
       const updated = itemList.find((i) => i.id === selectedItem.id);
       if (updated) setSelectedItem(updated);
+      else if (itemList.length > 0) setSelectedItem(itemList[0]);
     }
   };
 
@@ -129,6 +141,8 @@ function App() {
   const totalScenes = scenesData
     ? Object.values(scenesData.maps).reduce((sum, m) => sum + m.scenes.length, 0)
     : 0;
+
+  const totalMaps = scenesData ? Object.keys(scenesData.maps).length : 0;
 
   // Find the map containing the selected scene
   const selectedSceneMap = selectedScene && scenesData
@@ -199,16 +213,6 @@ function App() {
           >
             <span style={styles.navLabel}>风格模板</span>
             <span style={styles.navSublabel}>TEMPLATES</span>
-          </button>
-          <button
-            style={{
-              ...styles.navButton,
-              ...(activeTab === 'history' ? styles.navButtonActive : {}),
-            }}
-            onClick={() => setActiveTab('history')}
-          >
-            <span style={styles.navLabel}>生成历史</span>
-            <span style={styles.navSublabel}>HISTORY</span>
           </button>
         </nav>
 
@@ -304,7 +308,7 @@ function App() {
                 <aside style={styles.sceneSidebar}>
                   <div style={styles.sidebarHeader}>
                     <div style={styles.sidebarTitle}>LOCATION DATABASE</div>
-                    <div style={styles.sidebarCount}>{totalScenes} LOCATIONS · 7 MAPS</div>
+                    <div style={styles.sidebarCount}>{totalScenes} LOCATIONS · {totalMaps} MAPS</div>
                   </div>
                   {!scenesData ? (
                     <div style={styles.sidebarLoading}>
@@ -377,16 +381,6 @@ function App() {
                       <div style={styles.emptySubtext}>或点击「新增 UI 素材」创建</div>
                     </div>
                   )}
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'history' && (
-              <div style={styles.historyLayout}>
-                <div style={styles.emptyState}>
-                  <div style={styles.emptyIcon}>□</div>
-                  <div style={styles.emptyText}>HISTORY VIEW</div>
-                  <div style={styles.emptySubtext}>Coming soon...</div>
                 </div>
               </div>
             )}
@@ -559,12 +553,6 @@ const styles: Record<string, React.CSSProperties> = {
   templatesLayout: {
     flex: '1',
     overflow: 'auto',
-  },
-  historyLayout: {
-    flex: '1',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   loading: {
     flex: '1',

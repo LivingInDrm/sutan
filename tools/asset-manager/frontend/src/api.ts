@@ -49,12 +49,6 @@ export const api = {
     }
   },
 
-  async getHistory(): Promise<any[]> {
-    const response = await fetch('/api/history');
-    if (!response.ok) throw new Error('Failed to fetch history');
-    return response.json();
-  },
-
   async generateDescriptions(request: GenerateDescriptionRequest): Promise<string[]> {
     const response = await fetch('/api/generate-description', {
       method: 'POST',
@@ -130,6 +124,26 @@ export const api = {
       throw new Error(err.detail || 'Failed to deploy character');
     }
     return response.json();
+  },
+
+  async archiveCharacter(characterName: string): Promise<void> {
+    const response = await fetch(`/api/characters/${encodeURIComponent(characterName)}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to archive character');
+    }
+  },
+
+  async archiveItem(itemName: string): Promise<void> {
+    const response = await fetch(`/api/items/${encodeURIComponent(itemName)}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to archive item');
+    }
   },
 
   async regenerateVariants(characterName: string, bio: string): Promise<string[]> {

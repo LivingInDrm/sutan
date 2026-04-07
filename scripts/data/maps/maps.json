@@ -3,6 +3,7 @@
     "map_id": "map_001_beiliang",
     "name": "北凉道",
     "description": "清凉山到葫芦口一线，铁血家国之地",
+    "public_subdir": "beiliang",
     "background_image": "/maps/beiliang/terrain_bg.png",
     "location_refs": [
       { "location_id": "location_001", "position": { "x": 0.62, "y": 0.55 } },

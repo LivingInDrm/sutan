@@ -232,6 +232,8 @@ def _read_character_profiles() -> Dict[str, Any]:
         meta = record.get("meta", {})
         if meta.get("selected_asset"):
             profile["selected_portrait"] = meta["selected_asset"]
+        if meta.get("archived"):
+            profile["archived"] = True
         result[name] = profile
     return result
 
@@ -435,6 +437,9 @@ def get_characters() -> List[Dict]:
 
     characters = []
     for name, entries in groups.items():
+        # Skip archived characters
+        if profiles.get(name, {}).get("archived"):
+            continue
         game_file = _get_game_file(name)
 
         variants = []
@@ -1247,6 +1252,25 @@ async def regenerate_variants(character_name: str, body: RegenerateVariantsReque
 
 
 # ─────────────────────────────────────────────
+# 17. DELETE /api/characters/{character_name} — soft-delete / archive
+# ─────────────────────────────────────────────
+@app.delete("/api/characters/{character_name}")
+def archive_character(character_name: str) -> Dict[str, Any]:
+    """Soft-delete a character by setting meta.archived = true in workspace.
+    The character is hidden from the list but not removed from disk."""
+    records = _read_workspace_characters()
+    found = False
+    for record in records:
+        if record.get("name") == character_name:
+            record.setdefault("meta", {})["archived"] = True
+            found = True
+    if not found:
+        raise HTTPException(status_code=404, detail=f"Character not found: {character_name}")
+    _write_workspace_characters(records)
+    return {"success": True, "character": character_name, "archived": True}
+
+
+# ─────────────────────────────────────────────
 # Health check
 # ─────────────────────────────────────────────
 @app.get("/api/health")
@@ -1406,6 +1430,8 @@ def _read_item_profiles() -> Dict[str, Any]:
         meta = record.get("meta", {})
         if meta.get("selected_asset"):
             profile["selected_image"] = meta["selected_asset"]
+        if meta.get("archived"):
+            profile["archived"] = True
         result[name] = profile
     return result
 
@@ -1681,6 +1707,9 @@ def get_items() -> List[Dict]:
     items = []
     for name, item_entries in groups.items():
         profile = profiles.get(name, {})
+        # Skip archived items
+        if profile.get("archived"):
+            continue
         has_pending_image = bool(profile.get("selected_image"))
 
         folder = _item_folder(name)
@@ -2152,6 +2181,25 @@ def deploy_item(item_name: str) -> Dict[str, Any]:
 
 
 # ─────────────────────────────────────────────
+# I13x. DELETE /api/items/{item_name} — soft-delete / archive
+# ─────────────────────────────────────────────
+@app.delete("/api/items/{item_name}")
+def archive_item(item_name: str) -> Dict[str, Any]:
+    """Soft-delete an item by setting meta.archived = true in workspace.
+    The item is hidden from the list but not removed from disk."""
+    records = _read_workspace_equipment()
+    found = False
+    for record in records:
+        if record.get("name") == item_name:
+            record.setdefault("meta", {})["archived"] = True
+            found = True
+    if not found:
+        raise HTTPException(status_code=404, detail=f"Item not found: {item_name}")
+    _write_workspace_equipment(records)
+    return {"success": True, "item": item_name, "archived": True}
+
+
+# ─────────────────────────────────────────────
 # I13. POST /api/item-generate  (SSE, Style B)
 # ─────────────────────────────────────────────
 @app.post("/api/item-generate")
@@ -2409,6 +2457,7 @@ def _read_location_profiles() -> Dict[str, Any]:
             "map_id": mid,
             "name": ws_map.get("name", mid),
             "description": ws_map.get("description", ""),
+            "public_subdir": ws_map.get("public_subdir", mid),
             "background_image": ws_map.get("background_image", ""),
             "meta": ws_map.get("meta", {}),
             "locations": full_locs,
@@ -3163,6 +3212,10 @@ def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]
     if scene is None:
         raise HTTPException(status_code=404, detail=f"Scene not found: {scene_id}")
 
+    # Resolve public_subdir dynamically from map data
+    map_data = profiles["maps"].get(map_id, {})
+    public_subdir = map_data.get("public_subdir", map_id)
+
     scene_meta = scene.setdefault("meta", {})
 
     if image_type == "backdrop":
@@ -3176,12 +3229,12 @@ def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]
 
         # Copy to game public dir
         filename = f"{scene_id}_backdrop.png"
-        game_public_dir = GAME_PUBLIC_MAPS_DIR / "map_001"
+        game_public_dir = GAME_PUBLIC_MAPS_DIR / public_subdir
         game_public_dir.mkdir(parents=True, exist_ok=True)
         dest = game_public_dir / filename
         shutil.copy2(str(selected_path), str(dest))
 
-        backdrop_game_url = f"/maps/map_001/{filename}"
+        backdrop_game_url = f"/maps/{public_subdir}/{filename}"
         scene["backdrop_image"] = backdrop_game_url
         scene_meta.pop("selected_backdrop", None)
 
@@ -3209,13 +3262,13 @@ def deploy_scene_icon(scene_id: str, image_type: str = "icon") -> Dict[str, Any]
             raise HTTPException(status_code=404, detail=f"Selected icon file not found: {selected_icon}")
 
         # Copy to game public dir
-        game_public_dir = GAME_PUBLIC_MAPS_DIR / "beiliang"
+        game_public_dir = GAME_PUBLIC_MAPS_DIR / public_subdir
         game_public_dir.mkdir(parents=True, exist_ok=True)
         public_icon_filename = f"{scene_id}.png"
         dest = game_public_dir / public_icon_filename
         shutil.copy2(str(selected_path), str(dest))
 
-        icon_game_url = f"/maps/beiliang/{public_icon_filename}"
+        icon_game_url = f"/maps/{public_subdir}/{public_icon_filename}"
         scene["icon_image"] = icon_game_url
         scene_meta.pop("selected_icon", None)
 
