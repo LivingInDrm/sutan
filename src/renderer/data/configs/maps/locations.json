@@ -41,7 +41,9 @@
     "name": "白马游弩校场",
     "icon_image": "/maps/beiliang/icon_05_baima.png",
     "backdrop_image": "/maps/beiliang/terrain_bg.png",
-    "scene_ids": [],
+    "scene_ids": [
+      "scene_008"
+    ],
     "unlock_conditions": {}
   },
   {
@@ -73,7 +75,9 @@
     "name": "流州边关",
     "icon_image": "/maps/beiliang/icon_09_liuzhou.png",
     "backdrop_image": "/maps/beiliang/terrain_bg.png",
-    "scene_ids": [],
+    "scene_ids": [
+      "scene_009"
+    ],
     "unlock_conditions": {}
   },
   {

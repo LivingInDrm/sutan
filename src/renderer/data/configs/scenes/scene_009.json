@@ -1,0 +1,289 @@
+{
+  "scene_id": "scene_009",
+  "name": "流州边关・雪中逢青锋",
+  "description": "流州边关风雪如刀，一位孤身入关的锦衣女子与徐凤年狭路相逢。两人从剑拔弩张到言语试锋，终在一场短促交手后彼此记住了对方。",
+  "background_image": "/maps/beiliang/terrain_bg.png",
+  "type": "event",
+  "duration": 2,
+  "slots": [
+    {
+      "type": "character",
+      "required": true,
+      "locked": false
+    },
+    {
+      "type": "item",
+      "required": false,
+      "locked": false
+    }
+  ],
+  "entry_stage": "border_meet",
+  "stages": [
+    {
+      "stage_id": "border_meet",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "流州边关，大雪压城。城头旌旗被北风扯得笔直，像一柄柄悬在天幕下的旧刀。"
+        },
+        {
+          "type": "narration",
+          "text": "徐凤年策马巡边，远远便见关道尽头立着一名女子。她披一袭貂裘，立在雪地里不曾挪步半分，像是专程在等人，又像是谁都不放在眼里。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "神秘女子",
+          "text": "北凉边关，也不过如此。守城的人若都像你们这般慢，北莽骑军早该踏碎城门了。",
+          "portrait": "/assets/portraits/figure02.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "敢在流州边关说这种话，不是疯子，就是来头大得吓人。姑娘想做前者，还是后者？",
+          "portrait": "/assets/portraits/figure03.png"
+        }
+      ],
+      "settlement": {
+        "type": "player_choice",
+        "narrative": "女子气度凌人，眼神里却没有半点慌乱。徐凤年决定先如何应对。",
+        "choices": [
+          {
+            "id": "courteous_greeting",
+            "label": "以礼相待",
+            "description": "先按江湖礼数试探，不急着撕破脸。",
+            "effects": {},
+            "next_stage": "courtesy_probe"
+          },
+          {
+            "id": "question_intent",
+            "label": "质问来意",
+            "description": "边关重地，先把她的身份和来意逼出来。",
+            "effects": {},
+            "next_stage": "martial_standoff"
+          }
+        ]
+      }
+    },
+    {
+      "stage_id": "courtesy_probe",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "徐凤年勒住缰绳，没有急着靠近，只在风雪里拱了拱手。举止不卑不亢，倒叫那女子眉梢轻轻一挑。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "边关苦寒，姑娘若只是路过，北凉可备热酒一壶。若另有所图，也不妨把话挑明了说。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "神秘女子",
+          "text": "你倒比那些只会拔刀的北凉武夫顺眼些。可惜顺眼，不代表能让我高看。",
+          "portrait": "/assets/portraits/figure02.png"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "她话锋如刀，既在试北凉气度，也在试徐凤年的城府。进行「社交」鉴定。",
+        "check": {
+          "attribute": "social",
+          "calc_mode": "max",
+          "target": 5
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年神色不变，只笑道：「高看与否，本就是姑娘的事。北凉待客有酒，待敌有刀，端看你想见哪一样。」 女子沉默片刻，眼中冷意竟淡了三分，像是终于遇见了能接得住她话的人。",
+            "effects": {
+              "reputation": 8
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年接住了她大半锋芒，言语虽不算滴水不漏，却也让对方没能占尽上风。女子轻哼一声，没再继续逼压，只是目光愈发认真。",
+            "effects": {
+              "reputation": 6
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年话里慢了半拍，气势便被那女子压住。对方唇角讥诮更浓，却没有趁势羞辱，只像在看一个尚未长成的对手。",
+            "effects": {
+              "reputation": 4
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年一句话落错了分寸，边关风雪便像都偏向了那女子。她眼神微冷，似乎随时都能转身拔剑，幸好最终只是冷笑一声，给北凉留了最后一点体面。",
+            "effects": {
+              "reputation": 2
+            }
+          }
+        }
+      },
+      "branches": [
+        {
+          "condition": "success",
+          "next_stage": "parting_words"
+        },
+        {
+          "condition": "partial_success",
+          "next_stage": "parting_words"
+        },
+        {
+          "condition": "failure",
+          "next_stage": "parting_words"
+        },
+        {
+          "condition": "critical_failure",
+          "next_stage": "parting_words"
+        }
+      ]
+    },
+    {
+      "stage_id": "martial_standoff",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "徐凤年抬手按住刀柄，马蹄在雪地里刨出半圈霜泥。边军远远望见这一幕，气机顿时绷紧。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "流州不是谁都能来的地方。报上姓名，我还能当你是客；若再藏着掖着，就只能当你是敌。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "神秘女子",
+          "text": "敌？你北凉年轻一辈，口气倒比本事先到。既然想拦我，那便试试看。",
+          "portrait": "/assets/portraits/figure02.png"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "话已说尽，剩下便看谁能在这一线杀机前站得更稳。进行「武力」鉴定。",
+        "check": {
+          "attribute": "combat",
+          "calc_mode": "max",
+          "target": 5
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年不退反进，借着风雪遮眼抢先逼出半步。女子袖中寒光一闪，却在最后关头收了七分力，只留一缕锋气割断了徐凤年鬓边发丝。她盯着那半步，第一次认真点头：「北凉，倒还有个能看的。」",
+            "effects": {
+              "reputation": 10
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年勉强顶住了对方气势，两人一触即分，雪地上各退一步。女子眯眼看他，虽仍傲气十足，却没再把他当成寻常纨绔。",
+            "effects": {
+              "reputation": 8
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年被那一抹凌厉气机逼得肩头微沉，刀未出鞘，胜负高下已显。女子却没有追击，只淡淡道：「边关虽硬，人还差些火候。」",
+            "effects": {
+              "reputation": 5
+            }
+          },
+          "critical_failure": {
+            "narrative": "风雪里那女子一步未动，只凭一身压人的气势，便叫徐凤年身后边军齐齐变色。她若真起杀心，这座关前怕是已经见血。女子最终只是拂了拂衣袖，神情里多了几分无趣。",
+            "effects": {
+              "reputation": 3
+            }
+          }
+        }
+      },
+      "branches": [
+        {
+          "condition": "success",
+          "next_stage": "parting_words"
+        },
+        {
+          "condition": "partial_success",
+          "next_stage": "parting_words"
+        },
+        {
+          "condition": "failure",
+          "next_stage": "parting_words"
+        },
+        {
+          "condition": "critical_failure",
+          "next_stage": "parting_words"
+        }
+      ]
+    },
+    {
+      "stage_id": "parting_words",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "风停了一瞬，像天地都愿意给这场偶遇让出半口气。女子抬眼望向北方，眸子里有雪原，也有压不住的锋芒。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "轩辕青锋",
+          "text": "记住了，我叫轩辕青锋。今日不过路过流州，顺手看看北凉年青一辈，究竟有没有资格让北莽多看一眼。",
+          "portrait": "/assets/portraits/figure02.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "原来是北莽公主。难怪一身骄气像是天生刻进骨头里。可惜你看归看，想把人带走，北凉不答应。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "轩辕青锋",
+          "text": "谁说我要带你走？你这样的人，留在北凉更有意思。往后若在战场再见，我照样不会留情。",
+          "portrait": "/assets/portraits/figure02.png"
+        },
+        {
+          "type": "narration",
+          "text": "她说完便转身踏雪而去，貂裘曳过关前积雪，只留下一串极浅的脚印。徐凤年没有挽留，也知道这种女子从不会为谁停步。只是那道背影落进眼里，便再难轻易忘掉。"
+        }
+      ],
+      "settlement": {
+        "type": "player_choice",
+        "narrative": "临别之前，徐凤年最后回她一句。",
+        "choices": [
+          {
+            "id": "respectful_farewell",
+            "label": "笑言来日沙场再会",
+            "description": "以对手之礼相送，认下这份惺惺相惜。",
+            "effects": {
+              "reputation": 8,
+              "tags_add": {
+                "card_invested_0": [
+                  "轩辕旧识"
+                ]
+              }
+            }
+          },
+          {
+            "id": "cold_warning",
+            "label": "提醒她北凉不是可欺之地",
+            "description": "不失锋芒，却也承认彼此已经记住对方。",
+            "effects": {
+              "reputation": 5,
+              "tags_add": {
+                "card_invested_0": [
+                  "轩辕旧识"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "is_final": true
+    }
+  ],
+  "unlock_conditions": {
+    "reputation_min": 40
+  },
+  "absence_penalty": {
+    "effects": {
+      "reputation": -2
+    },
+    "narrative": "那场风雪里的偶遇终究错身而过。后来有人说，流州关前曾有一位北莽贵女驻足良久，只可惜你没能亲眼看见那份锋芒。"
+  }
+}
