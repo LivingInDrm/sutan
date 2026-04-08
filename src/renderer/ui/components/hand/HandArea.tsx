@@ -52,7 +52,7 @@ function CategoryTabs({ groups, counts, activeKey, onSelect }: CategoryTabsProps
             className={`
               relative flex items-center justify-center
               w-12 flex-1 transition-all duration-300 ease-out
-              ${idx > 0 ? 'border-t border-parchment/[0.06]' : ''}
+              ${idx > 0 ? 'border-t border-gold-500/[0.12]' : ''}
             `}
           >
             <div
@@ -67,24 +67,24 @@ function CategoryTabs({ groups, counts, activeKey, onSelect }: CategoryTabsProps
             <div className={`
               absolute inset-0 transition-all duration-300 pointer-events-none
               ${isActive
-                ? 'bg-parchment/[0.06]'
-                : 'bg-transparent hover:bg-parchment/[0.03]'
+                ? 'bg-[linear-gradient(180deg,rgba(201,168,76,0.16),rgba(26,26,46,0.12))]'
+                : 'bg-transparent hover:bg-[linear-gradient(180deg,rgba(212,197,169,0.05),rgba(26,26,46,0.08))]'
               }
             `} />
 
             <div className="relative flex flex-col items-center gap-0.5">
               <span className={`
-                writing-mode-vertical text-sm font-[family-name:var(--font-display)] leading-none
+                writing-mode-vertical text-[14px] font-[family-name:var(--font-display)] leading-none tracking-[0.08em]
                 transition-all duration-300 select-none
-                ${isActive ? 'text-parchment/80' : 'text-parchment/25 hover:text-parchment/35'}
+                ${isActive ? 'text-gold-300' : 'text-parchment-500/65 hover:text-parchment-300/75'}
               `}>
                 {g.label}
               </span>
 
               <span className={`
-                text-[9px] tabular-nums leading-none mt-0.5
+                text-[9px] tabular-nums leading-none mt-0.5 font-[family-name:var(--font-mono)]
                 transition-all duration-300
-                ${isActive ? 'text-parchment/35' : 'text-parchment/12'}
+                ${isActive ? 'text-gold-500/80' : 'text-parchment-500/35'}
               `}>
                 {count}
               </span>
@@ -95,7 +95,7 @@ function CategoryTabs({ groups, counts, activeKey, onSelect }: CategoryTabsProps
                 layoutId="hand-tab-ink"
                 className="absolute right-0 inset-y-2 w-[1.5px] rounded-full"
                 style={{
-                  background: 'linear-gradient(to bottom, transparent, rgba(212,197,169,0.4), transparent)',
+                  background: 'linear-gradient(to bottom, transparent, rgba(201,168,76,0.75), transparent)',
                 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               />
