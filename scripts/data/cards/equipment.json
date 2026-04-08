@@ -3,7 +3,7 @@
     "card_id": "equip_006",
     "name": "木马牛",
     "type": "equipment",
-    "rarity": "divine",
+    "rarity": "legendary",
     "description": "上古名剑木马牛，剑身黝黑粗粝，夜中隐有微光流转，出鞘则锋意惊人。",
     "image": "/assets/items/木马牛_1775306152_1.png",
     "equipment_type": "weapon",
@@ -30,14 +30,14 @@
       "selected_asset": "",
       "asset_candidates": [],
       "workshop_variants": [],
-      "updated_at": "2026-04-06T05:16:38.209278Z"
+      "updated_at": "2026-04-08T01:26:51.484283Z"
     }
   },
   {
     "card_id": "equip_item_9247",
     "name": "梅子酒",
     "type": "equipment",
-    "rarity": "divine",
+    "rarity": "legendary",
     "description": "枪势如梅落寒江，锋芒内敛却杀机极盛，最宜马上破阵与近身鏖战。",
     "image": "/assets/items/梅子酒_1775306439_1.png",
     "equipment_type": "weapon",
@@ -58,14 +58,14 @@
       "selected_asset": "",
       "asset_candidates": [],
       "workshop_variants": [],
-      "updated_at": "2026-04-06T04:21:00Z"
+      "updated_at": "2026-04-08T01:26:51.484295Z"
     }
   },
   {
     "card_id": "equip_item_9347",
     "name": "寒玉戒指",
     "type": "equipment",
-    "rarity": "silver",
+    "rarity": "rare",
     "description": "寒玉所琢，入手沁凉，能宁神定意，亦可微御邪祟与心火。",
     "image": "/assets/items/寒玉戒指_1775300198_1.png",
     "equipment_type": "accessory",
@@ -87,14 +87,14 @@
       "selected_asset": "",
       "asset_candidates": [],
       "workshop_variants": [],
-      "updated_at": "2026-04-06T04:21:00Z"
+      "updated_at": "2026-04-08T01:26:51.484299Z"
     }
   },
   {
     "card_id": "equip_004",
     "name": "大凉龙雀",
     "type": "equipment",
-    "rarity": "divine",
+    "rarity": "legendary",
     "description": "北凉王府传世宝剑，锋芒沉雄如龙雀长鸣，出鞘自有压阵之威。",
     "image": "/assets/items/大凉龙雀_1775307237_1.png",
     "equipment_type": "weapon",
@@ -116,14 +116,14 @@
       "selected_asset": "",
       "asset_candidates": [],
       "workshop_variants": [],
-      "updated_at": "2026-04-06T04:21:00Z"
+      "updated_at": "2026-04-08T01:26:51.484302Z"
     }
   },
   {
     "card_id": "equip_item_1655",
     "name": "绣冬刀",
     "type": "equipment",
-    "rarity": "silver",
+    "rarity": "rare",
     "description": "北凉王府名刀之一，刀势清寒如冬雪，出鞘时锋芒内敛却杀机极盛。",
     "image": "/assets/items/绣冬刀_1775445902_1.png",
     "equipment_type": "weapon",
@@ -143,14 +143,14 @@
       "selected_asset": "",
       "asset_candidates": [],
       "workshop_variants": [],
-      "updated_at": "2026-04-06T04:21:00Z"
+      "updated_at": "2026-04-08T01:26:51.484305Z"
     }
   },
   {
     "card_id": "equip_005",
     "name": "十二飞剑",
     "type": "equipment",
-    "rarity": "gold",
+    "rarity": "epic",
     "description": "剑匣一开，十二飞剑循念而动，杀机藏于无形，最擅千里取首与阵中破局。",
     "image": "/assets/items/十二飞剑_1775446747_1.png",
     "equipment_type": "weapon",
@@ -177,7 +177,1002 @@
       "selected_asset": "",
       "asset_candidates": [],
       "workshop_variants": [],
-      "updated_at": "2026-04-06T04:21:00Z"
+      "updated_at": "2026-04-08T01:26:51.484308Z"
+    }
+  },
+  {
+    "card_id": "equip_春雷刀",
+    "name": "春雷刀",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "epic",
+    "description": "刀出如春雷乍响，势烈而不失灵动，最宜快意斩敌破阵。",
+    "lore": "春雷刀与绣冬并称，皆是世间罕见名刀。此刀锋意张扬，气势暴烈，一经出鞘便如惊雷滚地，最合杀伐凌厉之人执掌，在江湖与庙堂间都曾留下赫赫凶名。",
+    "attribute_bonus": {
+      "combat": 11,
+      "physique": 4
+    },
+    "special_bonus": {
+      "support": 2
+    },
+    "gem_slots": 3,
+    "tags": [
+      "weapon",
+      "legendary",
+      "paired",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484311Z"
+    }
+  },
+  {
+    "card_id": "equip_霜汀",
+    "name": "霜汀",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "common",
+    "description": "剑身如秋水凝霜，出鞘时寒意侵骨，最宜江湖快意厮杀。",
+    "lore": "霜汀乃北地名匠取寒潭陨铁所铸，剑脊细长，锋芒藏雪。传闻曾为一位游历离阳与北凉之间的剑客所佩，剑出不喜喧哗，只在汀岸霜夜见血封喉。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484314Z"
+    }
+  },
+  {
+    "card_id": "equip_照雪",
+    "name": "照雪",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "rare",
+    "description": "剑身清寒如雪，出鞘时锋芒映夜，最宜快意斩敌与雪中问剑。",
+    "lore": "照雪为名剑长剑，剑意清冽孤高，传闻曾随北地高手踏雪千里，连战不败。其锋不以厚重称雄，却胜在灵动凌厉，出剑如雪照寒江，最能压人心魄。",
+    "attribute_bonus": {
+      "combat": 11,
+      "physique": 2,
+      "wisdom": 1
+    },
+    "special_bonus": {
+      "reroll": 1
+    },
+    "gem_slots": 2,
+    "tags": [
+      "weapon",
+      "legendary",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484317Z"
+    }
+  },
+  {
+    "card_id": "equip_龙脊寒",
+    "name": "龙脊寒",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "epic",
+    "description": "剑身如覆霜雪，出鞘寒意逼人，锋芒沉稳而不失凌厉。",
+    "lore": "龙脊寒为北地名匠采寒铁与异兽脊骨精炼而成，剑脊纹路如苍龙伏雪，故而得名。此剑不以轻灵见长，却胜在剑势森严，久握可养出一股凛冽杀伐之气。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 3
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484320Z"
+    }
+  },
+  {
+    "card_id": "equip_春雷照夜",
+    "name": "春雷照夜",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "legendary",
+    "description": "剑光如春雷乍起，照破长夜，出鞘时锋芒清越，最宜快剑连斩。",
+    "lore": "春雷照夜为江湖名剑，剑身修长清寒，出鞘似有雷音隐鸣。传闻曾随绝顶剑客夜行千里，于风雪中连破强敌，故得“春雷”与“照夜”之名，兼具迅烈与清明剑意。",
+    "attribute_bonus": {
+      "combat": 11,
+      "physique": 2,
+      "wisdom": 1
+    },
+    "special_bonus": {
+      "reroll": 1
+    },
+    "gem_slots": 2,
+    "tags": [
+      "weapon",
+      "legendary",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484322Z"
+    }
+  },
+  {
+    "card_id": "equip_霜汀_测01",
+    "name": "霜汀·测01",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "common",
+    "description": "剑身如霜汀映月，出鞘寒意逼人，最宜夜行截杀与江湖对决。",
+    "lore": "传闻此剑铸于北地寒潭之畔，取陨铁与雪纹精钢反复淬炼，剑脊泛白如霜线。曾为一名游历离阳边境的冷面剑客所佩，数度于风雪夜中一剑定胜负。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484325Z"
+    }
+  },
+  {
+    "card_id": "equip_照雪_测01",
+    "name": "照雪·测01",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "rare",
+    "description": "剑身映雪如秋水，出鞘寒意先至，最宜于风雪夜中一剑试锋。",
+    "lore": "照雪为北地旧式长剑，传闻曾随边军高手踏雪巡关。其锋不以霸烈称雄，却胜在清寒沉静，愈是霜雪天气，愈能显出剑势绵长与杀机暗藏。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484328Z"
+    }
+  },
+  {
+    "card_id": "equip_龙脊寒_测01",
+    "name": "龙脊寒·测01",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "epic",
+    "description": "剑身如覆霜雪，出鞘寒意逼人，锋芒沉敛却暗藏裂甲断铁之势。",
+    "lore": "相传此剑取北地寒铁与蛟脊残骨同炉锻成，久藏于边关雪窟，剑气阴寒绵长。持之者若心志不坚，易为寒意侵体；若真气雄浑，则可借其霜锋压敌先机。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 3
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "epic",
+      "rare",
+      "ancient"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484331Z"
+    }
+  },
+  {
+    "card_id": "equip_霜汀_测02",
+    "name": "霜汀·测02",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "common",
+    "description": "剑身霜纹如汀，出鞘寒意逼人，最宜快剑连斩，破敌于数步之间。",
+    "lore": "传为北地寒潭精铁所铸，剑成之夜霜落满江，故名霜汀。此剑不走霸道路数，重在轻灵与冷厉，落入善使长剑者手中，往往能后发先至。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484334Z"
+    }
+  },
+  {
+    "card_id": "equip_朽铁",
+    "name": "朽铁",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "common",
+    "description": "剑身锈迹斑驳，锋芒却藏而不露，出鞘时自有一股旧战场的森寒杀意。",
+    "lore": "朽铁本是一柄无名旧剑，外表残破，似久弃于边关风沙之间。后为江湖人所得，方知其铁胎沉稳、剑意内敛，愈是朴拙，愈见杀机，颇有返璞归真的意味。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484337Z"
+    }
+  },
+  {
+    "card_id": "equip_寒霜",
+    "name": "寒霜",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "rare",
+    "description": "剑身如霜雪凝成，出鞘寒意逼人，锋芒清冽，最宜快剑突袭。",
+    "lore": "寒霜乃北地名匠以寒铁百炼所铸，久藏边关雪窟，剑气自带森冷之意。传闻曾为一位游侠所佩，夜行千里，剑出无声，专破轻甲与护体罡气。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 2,
+      "stealth": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare",
+      "magical"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484339Z"
+    }
+  },
+  {
+    "card_id": "equip_破军",
+    "name": "破军",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "epic",
+    "description": "剑锋沉雄如裂阵破军，出鞘时杀意森然，最宜沙场鏖战与宗师对决。",
+    "lore": "破军为北地名匠采寒铁与陨金所铸，剑身修长，煞气极重。传闻曾随边军悍将鏖战西北，饮血无数，后辗转江湖，被视作可镇杀伐气运的凶兵。",
+    "attribute_bonus": {
+      "combat": 12,
+      "physique": 2
+    },
+    "special_bonus": {
+      "support": 1
+    },
+    "gem_slots": 2,
+    "tags": [
+      "weapon",
+      "legendary",
+      "ancient"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484342Z"
+    }
+  },
+  {
+    "card_id": "equip_听潮",
+    "name": "听潮",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "legendary",
+    "description": "吴家剑冢名剑之一，剑意如潮，出鞘时寒光叠浪，最宜破阵争锋。",
+    "lore": "听潮为吴家剑冢所藏名剑，剑身修长清冷，出鞘若江潮拍岸，连绵不绝。此剑重剑势与剑意相合，非心志坚韧、悟性过人者，难以真正驭使其锋芒。",
+    "attribute_bonus": {
+      "combat": 11,
+      "physique": 2,
+      "wisdom": 2
+    },
+    "special_bonus": {
+      "reroll": 1
+    },
+    "gem_slots": 2,
+    "tags": [
+      "weapon",
+      "legendary",
+      "ancient",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484345Z"
+    }
+  },
+  {
+    "card_id": "equip_照雪_测02",
+    "name": "照雪·测02",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "rare",
+    "description": "剑身映雪如秋水，出鞘寒芒先至，最宜破势抢攻。",
+    "lore": "照雪为北地旧式长剑名号之一，传闻铸时取寒铁与霜夜残雪同淬，剑意清冷，不尚繁华。测02为试制之作，锋锐有余，灵性未满，却已足见名剑胚骨。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484347Z"
+    }
+  },
+  {
+    "card_id": "equip_龙脊寒_测02",
+    "name": "龙脊寒·测02",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "epic",
+    "description": "龙脊为骨，寒意侵肤的长剑，出鞘时似有霜气沿锋游走，最宜久战压敌。",
+    "lore": "传闻此剑取北地异铁锻成，剑脊起伏如龙背，故名龙脊寒。曾为边军高手所佩，鏖战风雪关隘，剑锋饮霜愈利，久而久之竟带三分肃杀寒气。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare",
+      "magical"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484350Z"
+    }
+  },
+  {
+    "card_id": "equip_霜汀_测03",
+    "name": "霜汀·测03",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "common",
+    "description": "剑身覆霜纹，出鞘似汀洲寒潮，轻灵迅疾，最宜破势抢先。",
+    "lore": "传为北地铸剑师采寒江霜铁所锻，剑成之夜水岸尽白，故名霜汀。此剑不以雄浑称绝，却胜在锋冷意疾，常为游侠与轻剑客所珍藏。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 2,
+      "survival": 1
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484352Z"
+    }
+  },
+  {
+    "card_id": "equip_照雪_测03",
+    "name": "照雪·测03",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "rare",
+    "description": "剑身映雪如霜，出鞘时寒芒照夜，最宜快剑试锋与雪地鏖战。",
+    "lore": "北凉旧匠以寒铁杂陨砂锻成此剑，剑脊细直，锋锐异常。传闻曾随边军游侠出入风雪关隘，斩马破甲皆有余力，因映雪生辉，故名照雪。",
+    "attribute_bonus": {
+      "combat": 8,
+      "physique": 2,
+      "survival": 1
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484355Z"
+    }
+  },
+  {
+    "card_id": "equip_霜汀_测04",
+    "name": "霜汀·测04",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "common",
+    "description": "剑身霜纹如汀，出鞘寒意逼人，适合江湖游侠贴身快攻。",
+    "lore": "传为北地寒潭旁铸剑师所锻，取冬夜霜气淬锋，剑名“霜汀”。虽非神兵谱上有名之器，却胜在锋锐轻灵，最宜以快制敌。",
+    "attribute_bonus": {
+      "combat": 7,
+      "physique": 4
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484358Z"
+    }
+  },
+  {
+    "card_id": "equip_照雪_测04",
+    "name": "照雪·测04",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "rare",
+    "description": "剑身映雪如霜，出鞘清寒逼人，适合走轻灵迅疾一路的江湖剑客。",
+    "lore": "此剑仿北凉旧式佩剑所铸，取名“照雪”，意在剑光起时可映夜雪。虽非名动天下的神兵，却胜在锋锐匀称，久经打磨，颇受年轻游侠与军中剑士青睐。",
+    "attribute_bonus": {
+      "combat": 6,
+      "physique": 3
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "weapon",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484360Z"
+    }
+  },
+  {
+    "card_id": "equip_龙脊寒_测03",
+    "name": "龙脊寒·测03",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "epic",
+    "description": "剑身如覆霜雪，出鞘寒意侵骨，锋芒沿龙脊暗纹游走，最宜破甲夺势。",
+    "lore": "传闻此剑取北地寒铁与蛟脊残骨同炉锻成，剑成之夜满室结霜。后流入江湖，几经易主，凡持之者多以凌厉快剑闻名，亦常被讥为杀气过盛。",
+    "attribute_bonus": {
+      "combat": 11,
+      "physique": 3
+    },
+    "special_bonus": {
+      "reroll": 1
+    },
+    "gem_slots": 2,
+    "tags": [
+      "weapon",
+      "rare",
+      "magical"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484363Z"
+    }
+  },
+  {
+    "card_id": "equip_春雷照夜_测01",
+    "name": "春雷照夜·测01",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "weapon",
+    "rarity": "legendary",
+    "description": "剑身映夜如秋水，出鞘有春雷暗鸣，锋意清绝，最宜快剑连斩。",
+    "lore": "传闻此剑取北凉寒铁与江南旧雷纹钢同炉锻成，白日不显，入夜则寒光流转。持剑者若心意澄明，挥斩之间似有雷声贴地而行，先声夺人。",
+    "attribute_bonus": {
+      "combat": 11,
+      "physique": 3,
+      "wisdom": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 2,
+    "tags": [
+      "weapon",
+      "rare",
+      "magical"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484365Z"
+    }
+  },
+  {
+    "card_id": "equip_布履",
+    "name": "布履",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "common",
+    "description": "寻常布履，轻便耐穿，行走江湖不惹眼，最宜赶路潜行。",
+    "lore": "北凉军伍与江湖游侠常穿此类布履，虽不入名器之列，却胜在轻巧贴脚。风沙泥泞中赶路，翻山越岭时落步无声，最是朴实耐用。",
+    "attribute_bonus": {
+      "physique": 1,
+      "survival": 1
+    },
+    "special_bonus": {},
+    "gem_slots": 0,
+    "tags": [
+      "armor",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484368Z"
+    }
+  },
+  {
+    "card_id": "equip_粗铁甲",
+    "name": "粗铁甲",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "common",
+    "description": "以粗铁片缀连而成的寻常铠甲，沉重朴拙，虽不显贵，却能在乱战中护住要害。",
+    "lore": "北凉边军与江湖草莽中常见的制式粗甲，多由铁匠以杂铁反复锻打拼接而成。比不上名甲宝铠，却胜在结实耐用，挨得住风沙，也扛得住刀箭。",
+    "attribute_bonus": {
+      "physique": 3,
+      "survival": 2,
+      "combat": 1
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "armor"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484370Z"
+    }
+  },
+  {
+    "card_id": "equip_踏雪靴",
+    "name": "踏雪靴",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "rare",
+    "description": "北凉轻骑常用之靴，踏雪无痕，行于冰原山道亦能稳健如常。",
+    "lore": "相传此靴制法源自北凉边军老匠，靴底以兽筋密缝，外覆耐寒皮革，最宜雪地奔袭与长途跋涉。江湖游侠得之，常可借其轻捷之势脱困于风雪夜色。",
+    "attribute_bonus": {
+      "physique": 6,
+      "survival": 7,
+      "combat": 2,
+      "stealth": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "armor",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484373Z"
+    }
+  },
+  {
+    "card_id": "equip_寒霜甲",
+    "name": "寒霜甲",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "rare",
+    "description": "甲身寒气隐隐，披之如立霜原，可御刀兵，亦能定心守神。",
+    "lore": "相传为北凉旧部以寒铁混冰纹玄钢所铸，曾随边军鏖战风雪关隘。甲叶相扣如霜鳞覆身，冬日愈冷愈坚，最宜久战死守之人。",
+    "attribute_bonus": {
+      "physique": 11,
+      "survival": 9,
+      "combat": 4
+    },
+    "special_bonus": {},
+    "gem_slots": 2,
+    "tags": [
+      "armor",
+      "rare",
+      "ancient"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484376Z"
+    }
+  },
+  {
+    "card_id": "equip_粗铁甲_测01",
+    "name": "粗铁甲·测01",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "common",
+    "description": "以粗铁片层层铆接而成的旧式铠甲，沉重朴实，最宜边军步卒披挂御敌。",
+    "lore": "此甲多见于北凉边军旧营，匠人以寻常粗铁反复锻打，虽无名器锋芒，却最能挡住乱军流矢与草原弯刀。披甲上阵者，往往皆是无名却敢死之卒。",
+    "attribute_bonus": {
+      "physique": 3,
+      "survival": 2,
+      "combat": 1
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "armor",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484379Z"
+    }
+  },
+  {
+    "card_id": "equip_寒霜甲_测01",
+    "name": "寒霜甲·测01",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "rare",
+    "description": "寒气沁骨的玄甲，披挂在身可御风雪，亦能稳住战阵心神。",
+    "lore": "北凉边军旧式寒甲之一，取寒铁与兽皮层层缀成，常见于拒北城外巡哨悍卒。甲叶经霜雪浸养，虽非神兵重器，却最宜苦寒鏖战。",
+    "attribute_bonus": {
+      "physique": 7,
+      "survival": 6,
+      "combat": 3
+    },
+    "special_bonus": {},
+    "gem_slots": 2,
+    "tags": [
+      "armor",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484381Z"
+    }
+  },
+  {
+    "card_id": "equip_追风靴",
+    "name": "追风靴",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "epic",
+    "description": "北凉游骑常备轻靴，踏雪无痕，赶路追敌皆快人一步。",
+    "lore": "相传此靴仿自北凉斥候所穿军靴，靴底缝有细密牛筋与软皮，落地轻稳，最宜长途奔袭与雪夜潜行。虽非名匠神兵，却胜在耐用灵便。",
+    "attribute_bonus": {
+      "physique": 5,
+      "survival": 6,
+      "combat": 2,
+      "stealth": 3
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "armor",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484383Z"
+    }
+  },
+  {
+    "card_id": "equip_玄铁战甲",
+    "name": "玄铁战甲",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "epic",
+    "description": "以玄铁百炼铸成的重甲，甲叶森严，披之可御强弩劲矢，临阵更添悍勇之气。",
+    "lore": "北凉军中曾有重骑披此类玄铁战甲冲阵陷敌，甲身沉雄，非体魄强健者不可久穿。传闻旧制战甲由边军名匠监造，专为沙场死战而生，护主亦磨人。",
+    "attribute_bonus": {
+      "physique": 10,
+      "survival": 9,
+      "combat": 4
+    },
+    "special_bonus": {},
+    "gem_slots": 2,
+    "tags": [
+      "armor",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484386Z"
+    }
+  },
+  {
+    "card_id": "equip_凌云靴",
+    "name": "凌云靴",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "legendary",
+    "description": "靴底藏风，踏雪无痕，行山越岭皆轻快三分，最宜江湖远行。",
+    "lore": "相传为北凉旧匠依边军斥候所用战靴改制，靴帮以韧皮叠缝，靴底嵌细纹铁片，踏地稳健，涉雪渡泥皆不易失足。虽非名甲重器，却极得行走江湖之人青眼。",
+    "attribute_bonus": {
+      "physique": 5,
+      "survival": 6,
+      "combat": 2,
+      "stealth": 1
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "armor",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484389Z"
+    }
+  },
+  {
+    "card_id": "equip_天罡宝甲",
+    "name": "天罡宝甲",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "legendary",
+    "description": "北凉重甲中的上品，甲叶如鳞，护心镇气，披之可挡强弓劲弩与江湖刀锋。",
+    "lore": "传闻此甲曾为边军悍将所披，随军转战关外多年，甲面留痕无数却不曾崩裂。后经名匠重修，以精铁叠锻、内衬软甲，兼具护身与行军之用，最适合沙场鏖战之人。",
+    "attribute_bonus": {
+      "physique": 11,
+      "survival": 10,
+      "combat": 4
+    },
+    "special_bonus": {},
+    "gem_slots": 2,
+    "tags": [
+      "armor",
+      "rare",
+      "ancient"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484392Z"
+    }
+  },
+  {
+    "card_id": "equip_麻布履",
+    "name": "麻布履",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "common",
+    "description": "寻常麻布缝成的旧履，轻便耐穿，行走江湖虽不起眼，却胜在踏实。",
+    "lore": "北凉边地常见的粗麻布履，多为贫寒行脚人所穿。虽无金玉之贵，也无甲胄之坚，却能陪人踏过风雪泥泞，最宜远行赶路。",
+    "attribute_bonus": {
+      "physique": 1,
+      "survival": 1
+    },
+    "special_bonus": {},
+    "gem_slots": 0,
+    "tags": [
+      "armor"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484394Z"
+    }
+  },
+  {
+    "card_id": "equip_踏霜靴",
+    "name": "踏霜靴",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "rare",
+    "description": "靴底覆霜纹软皮，踏雪无痕，行山渡岭更添轻稳，最宜北地远行与夜袭潜踪。",
+    "lore": "相传出自北凉老匠之手，以寒地雪狼皮与细鳞软甲缝制，专为边军斥候打造。靴面暗藏霜纹，入雪地不易留痕，翻山越涧尤显轻捷。",
+    "attribute_bonus": {
+      "physique": 5,
+      "survival": 6,
+      "combat": 2,
+      "stealth": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "armor",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484397Z"
+    }
+  },
+  {
+    "card_id": "equip_疾风靴",
+    "name": "疾风靴",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "epic",
+    "description": "轻若掠燕，踏雪少痕，行走山川城巷皆快人一步的疾行短靴。",
+    "lore": "北凉游骑中曾有斥候惯穿此靴，靴底缝兽筋，靴帮覆软皮，最利长途奔袭与雪地潜行。虽非重甲名器，却胜在轻便耐磨，适合江湖赶路与边关探哨。",
+    "attribute_bonus": {
+      "physique": 5,
+      "survival": 7,
+      "combat": 2,
+      "stealth": 4
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "armor",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484400Z"
+    }
+  },
+  {
+    "card_id": "equip_青云靴",
+    "name": "青云靴",
+    "type": "equipment",
+    "image": "",
+    "equipment_type": "armor",
+    "rarity": "legendary",
+    "description": "靴底缀青纹云篆，踏雪无痕，行山涉水皆轻快三分。",
+    "lore": "北凉旧匠以青犀皮与云纹缎缝制此靴，原为斥候夜行所备。靴身轻韧，久行不乏，最宜边关风雪与山泽险途，江湖中人亦常以其赶路避敌。",
+    "attribute_bonus": {
+      "survival": 7,
+      "physique": 5,
+      "combat": 2,
+      "stealth": 2
+    },
+    "special_bonus": {},
+    "gem_slots": 1,
+    "tags": [
+      "armor",
+      "rare"
+    ],
+    "meta": {
+      "publish_status": "draft",
+      "asset_candidates": [],
+      "workshop_variants": [],
+      "selected_asset": "",
+      "updated_at": "2026-04-08T01:26:51.484417Z"
     }
   }
 ]

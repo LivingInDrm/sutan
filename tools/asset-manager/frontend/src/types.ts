@@ -141,7 +141,7 @@ export interface Item {
 export interface ItemProfile {
   type: string;
   equipment_type: string;
-  rarity: 'gold' | 'silver' | 'copper' | 'stone' | 'divine';
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
   description: string;
   lore: string;
   attribute_bonus: Record<string, number>;
@@ -172,6 +172,15 @@ export interface CreateItemRequest {
   name: string;
   bio: string;
   equipment_type: string;
+  rarity: ItemPromptRarity;
+}
+
+export type ItemPromptRarity = 'common' | 'rare' | 'epic' | 'legendary';
+
+export interface ItemPromptConfig {
+  variant_system_prompt: string;
+  style_template: string;
+  rarity_palettes: Record<ItemPromptRarity, string>;
 }
 
 // ─────────────────────────────────────────────

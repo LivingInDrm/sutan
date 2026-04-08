@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Item } from '../types';
+import type { Item, ItemPromptRarity } from '../types';
 import { api } from '../api';
 import AssetThumbnail from './AssetThumbnail';
 
@@ -17,11 +17,18 @@ const EQUIPMENT_TYPE_LABELS: Record<string, string> = {
   mount: '坐骑',
 };
 
+const RARITY_OPTIONS = [
+  { value: 'common', label: '平凡' },
+  { value: 'rare', label: '稀有' },
+  { value: 'epic', label: '精英' },
+  { value: 'legendary', label: '传奇' },
+];
+
 const RARITY_COLORS: Record<string, string> = {
-  gold: '#f5c842',
-  silver: '#b0b8c8',
-  copper: '#c87040',
-  stone: '#808080',
+  common: '#a0978a',
+  rare: '#5ab4c8',
+  epic: '#c060e0',
+  legendary: '#f0a030',
 };
 
 export default function ItemList({
@@ -34,6 +41,7 @@ export default function ItemList({
   const [newName, setNewName] = useState('');
   const [newBio, setNewBio] = useState('');
   const [newEquipType, setNewEquipType] = useState('weapon');
+  const [newRarity, setNewRarity] = useState<ItemPromptRarity>('common');
   const [isCreating, setIsCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
 
@@ -49,12 +57,14 @@ export default function ItemList({
         name: newName.trim(),
         bio: newBio.trim(),
         equipment_type: newEquipType,
+        rarity: newRarity,
       });
       onItemCreated(item);
       setShowModal(false);
       setNewName('');
       setNewBio('');
       setNewEquipType('weapon');
+      setNewRarity('common');
     } catch (err) {
       setCreateError(err instanceof Error ? err.message : '创建失败');
     } finally {
@@ -67,6 +77,7 @@ export default function ItemList({
     setNewName('');
     setNewBio('');
     setNewEquipType('weapon');
+    setNewRarity('common');
     setCreateError(null);
   };
 
@@ -168,6 +179,24 @@ export default function ItemList({
                   <option value="armor">甲胄</option>
                   <option value="accessory">饰品/法器</option>
                   <option value="mount">坐骑</option>
+                </select>
+              </div>
+
+              <div style={styles.fieldGroup}>
+                <label style={styles.fieldLabel}>
+                  稀有度 <span style={styles.fieldOptional}>必选</span>
+                </label>
+                <select
+                  style={styles.fieldSelect}
+                  value={newRarity}
+                  onChange={(e) => setNewRarity(e.target.value as ItemPromptRarity)}
+                  disabled={isCreating}
+                >
+                  {RARITY_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 

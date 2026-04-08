@@ -10,6 +10,7 @@ import LocationDetail from './components/LocationDetail';
 import TemplateSettings from './components/TemplateSettings';
 import UIAssetList from './components/UIAssetList';
 import UIAssetDetail from './components/UIAssetDetail';
+import ItemPromptConfig from './components/ItemPromptConfig';
 
 type Tab = 'characters' | 'items' | 'scenes' | 'ui-assets' | 'templates';
 
@@ -24,6 +25,7 @@ function App() {
   const [selectedScene, setSelectedScene] = useState<Scene | null>(null);
   const [uiAssets, setUiAssets] = useState<UIAsset[]>([]);
   const [selectedUIAsset, setSelectedUIAsset] = useState<UIAsset | null>(null);
+  const [showItemPromptConfig, setShowItemPromptConfig] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -276,7 +278,17 @@ function App() {
               <div style={styles.charactersLayout}>
                 <aside style={styles.sidebar}>
                   <div style={styles.sidebarHeader}>
-                    <div style={styles.sidebarTitle}>EQUIPMENT DATABASE</div>
+                    <div style={styles.sidebarHeaderTop}>
+                      <div style={styles.sidebarTitle}>EQUIPMENT DATABASE</div>
+                      <button
+                        style={styles.sidebarIconButton}
+                        onClick={() => setShowItemPromptConfig(true)}
+                        title="配置物品 Prompt"
+                        aria-label="配置物品 Prompt"
+                      >
+                        ⚙
+                      </button>
+                    </div>
                     <div style={styles.sidebarCount}>{items.length} ENTRIES</div>
                   </div>
                   <ItemList
@@ -290,6 +302,7 @@ function App() {
                   {selectedItem ? (
                     <ItemDetail
                       item={selectedItem}
+                  templates={templates}
                       onUpdate={handleItemChange}
                     />
                   ) : (
@@ -387,6 +400,10 @@ function App() {
           </>
         )}
       </main>
+      <ItemPromptConfig
+        isOpen={showItemPromptConfig}
+        onClose={() => setShowItemPromptConfig(false)}
+      />
     </div>
   );
 }
@@ -528,12 +545,31 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: '1px solid var(--border-primary)',
     background: 'var(--bg-tertiary)',
   },
+  sidebarHeaderTop: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '12px',
+    marginBottom: '4px',
+  },
   sidebarTitle: {
     fontSize: '11px',
     fontWeight: '600',
     letterSpacing: '0.1em',
     color: 'var(--text-accent)',
-    marginBottom: '4px',
+  },
+  sidebarIconButton: {
+    width: '24px',
+    height: '24px',
+    border: '1px solid var(--border-primary)',
+    background: 'var(--bg-secondary)',
+    color: 'var(--text-accent)',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '13px',
+    lineHeight: 1,
   },
   sidebarCount: {
     fontSize: '10px',

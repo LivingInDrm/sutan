@@ -1,4 +1,4 @@
-import type { Character, Templates, SampleImage, GenerateRequest, GenerationProgress, GenerateDescriptionRequest, CreateCharacterRequest, CharacterProfile, DeployPreview, Item, ItemProfile, ItemDeployPreview, CreateItemRequest, ScenesResponse, Scene, SceneGenerateRequest, SceneImageType, SceneGeneratePromptsResponse, UIAsset, UIAssetProfile, CreateUIAssetRequest } from './types';
+import type { Character, Templates, SampleImage, GenerateRequest, GenerationProgress, GenerateDescriptionRequest, CreateCharacterRequest, CharacterProfile, DeployPreview, Item, ItemProfile, ItemDeployPreview, CreateItemRequest, ItemPromptConfig, ScenesResponse, Scene, SceneGenerateRequest, SceneImageType, SceneGeneratePromptsResponse, UIAsset, UIAssetProfile, CreateUIAssetRequest } from './types';
 
 export const api = {
   async getCharacters(): Promise<Character[]> {
@@ -208,11 +208,15 @@ export const api = {
     return response.json();
   },
 
-  async createItem(request: CreateItemRequest): Promise<Item> {
+  async createItem(request: CreateItemRequest & { rarity?: string }): Promise<Item> {
+    const payload = {
+      ...request,
+      rarity: request.rarity ?? 'common',
+    };
     const response = await fetch('/api/items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request),
+      body: JSON.stringify(payload),
     });
     if (!response.ok) {
       const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
@@ -358,6 +362,38 @@ export const api = {
         }
       }
     }
+  },
+
+  async getItemPromptConfig(): Promise<ItemPromptConfig> {
+    const response = await fetch('/api/item-prompt-config');
+    if (!response.ok) throw new Error('Failed to fetch item prompt config');
+    return response.json();
+  },
+
+  async updateItemPromptConfig(config: ItemPromptConfig): Promise<ItemPromptConfig> {
+    const response = await fetch('/api/item-prompt-config', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to update item prompt config');
+    }
+    const data = await response.json();
+    return data.config as ItemPromptConfig;
+  },
+
+  async resetItemPromptConfig(): Promise<ItemPromptConfig> {
+    const response = await fetch('/api/item-prompt-config/reset', {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to reset item prompt config');
+    }
+    const data = await response.json();
+    return data.config as ItemPromptConfig;
   },
 
   // ─────────────────────────────────────────────

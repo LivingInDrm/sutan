@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import type { Item, ItemProfile, ItemDeployPreview } from '../types';
+import type { Item, ItemProfile, ItemDeployPreview, ItemPromptConfig, Templates } from '../types';
 import { api } from '../api';
 import WorkshopTab from './WorkshopTab';
 import type { WorkshopConfig, WorkshopVariant } from './WorkshopTab';
 import Gallery from './Gallery';
-
 interface ItemDetailProps {
   item: Item;
+  templates: Templates | null;
   onUpdate: () => void | Promise<void>;
 }
 
@@ -21,19 +21,17 @@ const EQUIPMENT_TYPE_LABELS: Record<string, string> = {
 };
 
 const RARITY_LABELS: Record<string, string> = {
-  gold: '金 · GOLD',
-  silver: '银 · SILVER',
-  copper: '铜 · COPPER',
-  stone: '石 · STONE',
-  divine: '神 · DIVINE',
+  common: '平凡 · COMMON',
+  rare: '稀有 · RARE',
+  epic: '精英 · EPIC',
+  legendary: '传奇 · LEGENDARY',
 };
 
 const RARITY_COLORS: Record<string, string> = {
-  gold: '#f5c842',
-  silver: '#b0b8c8',
-  copper: '#c87040',
-  stone: '#808080',
-  divine: '#c8a8ff',
+  common: '#a0978a',
+  rare: '#5ab4c8',
+  epic: '#c060e0',
+  legendary: '#f0a030',
 };
 
 const ATTRIBUTE_KEYS = ['physique', 'charm', 'wisdom', 'combat', 'social', 'survival', 'stealth', 'magic'];
@@ -51,7 +49,7 @@ const ATTRIBUTE_LABELS: Record<string, string> = {
 const DEFAULT_PROFILE: ItemProfile = {
   type: 'equipment',
   equipment_type: 'weapon',
-  rarity: 'copper',
+  rarity: 'common',
   description: '',
   lore: '',
   attribute_bonus: {},
@@ -69,64 +67,56 @@ const WORKSHOP_CONFIG: WorkshopConfig = {
   descriptionPlaceholder: '输入物品的视觉描述...',
 };
 
-/** Rarity-based visual enhancement phrases (must mirror backend RARITY_VISUAL_ENHANCEMENTS) */
-const RARITY_ENHANCEMENTS: Record<string, { descSuffix: string; styleAddition: string }> = {
-  stone: {
-    descSuffix: '',
-    styleAddition:
-      'Muted earthy tones — dark charcoal ink with faint ochre and stone-gray washes, ' +
-      'rough unfinished texture, minimal color, rustic and unadorned appearance. ',
+const DEFAULT_ITEM_TEMPLATE =
+  'Professional game equipment illustration: {description}. Rendered in traditional xieyi (写意) ink wash painting style with rich detail and layered textures. ' +
+  'Style: semi-realistic Chinese ink wash (shui mo), expressive brushwork with feibi dry-brush highlights, ' +
+  'ink washes with natural color accents, polished finish with crisp edges. ' +
+  '{rarity_palette}' +
+  'Pure transparent background, PNG with alpha channel. ' +
+  'Display the complete object in full view — do not crop or truncate any part of the item. ' +
+  'For elongated items such as spears, staves, or long swords, fit the entire object within the frame using a slight diagonal composition. ' +
+  'Centered composition, single object displayed on its own, production-ready quality. {no_text}';
+
+/** Rarity palettes (must mirror backend RARITY_VISUAL_ENHANCEMENTS) */
+const RARITY_ENHANCEMENTS: Record<string, { rarityPalette: string }> = {
+  common: {
+    rarityPalette: 'Color palette: muted taupe, weathered earth, soft chalk white. Simple construction, plain materials, no decorative elements, no glow effects. ',
   },
-  copper: {
-    descSuffix: ', showing warm bronze and copper tones',
-    styleAddition:
-      'Warm copper-brown and bronze color washes, earthy amber hues with reddish-brown tints, ' +
-      'aged patina effect, modest craftsmanship rendered in warm ink tones. ',
+  rare: {
+    rarityPalette: 'Color palette: cool cyan-blue, misted ash gray, cold jade tint. Refined craftsmanship with subtle metallic sheen, light engravings, faint cool-toned aura. ',
   },
-  silver: {
-    descSuffix: ', refined craftsmanship visible in every detail',
-    styleAddition:
-      'Cool silver-blue color palette, pale cyan and steel-gray ink washes, ' +
-      'subtle ornamental patterns, polished metallic sheen rendered with cool-toned highlights, ' +
-      'exquisite workmanship with precise crisp ink strokes. ',
+  epic: {
+    rarityPalette: 'Color palette: deep violet, ember red, dusky aureate glow. Elaborate ornamental details, inlaid gemstones, visible radiant halo, intricate carvings and filigree. ',
   },
-  gold: {
-    descSuffix: ', adorned with ornate engravings and radiant golden accents',
-    styleAddition:
-      'Rich warm golden-yellow and amber color washes, vivid jewel-tone accents (deep red, emerald green, sapphire blue), ' +
-      'ornate engravings with golden ink-wash luminescence, ' +
-      'luxurious masterwork quality with warm glowing highlights and rich color contrast. ',
-  },
-  divine: {
-    descSuffix: ', emanating sacred divine aura with ethereal celestial light',
-    styleAddition:
-      'Vivid multicolor celestial palette — glowing azure, violet, and gold radiating outward, ' +
-      'intense luminous color contrasts with sacred white-gold light beams, ' +
-      'intricate ancient runes shimmering in vibrant hues, ' +
-      'celestial energy wisps in brilliant blues and purples surrounding the object, ' +
-      'transcendent divine presence expressed through dramatic color and light. ',
+  legendary: {
+    rarityPalette: 'Color palette: luminous pearl white, flowing iridescence, celestial rosy haze. Supremely ornate, luminous materials with inner glow, ethereal energy streams, supernatural visual impact, every surface richly detailed with mythical motifs. ',
   },
 };
 
-/** Build the full assembled prompt for an item description, with rarity-layered visual enhancement */
-function buildItemPrompt(description: string, rarity: string = 'silver'): string {
+function buildItemPrompt(
+  description: string,
+  rarity: string = 'rare',
+  templates: Templates | null = null,
+  promptConfig: ItemPromptConfig | null = null,
+): string {
   if (!description) return '（请先选择或编辑一个 variant description）';
-  const enh = RARITY_ENHANCEMENTS[rarity] ?? RARITY_ENHANCEMENTS['silver'];
-  return (
-    `Game equipment illustration icon: ${description}${enh.descSuffix}. Rendered in traditional xieyi (写意) ink wash painting style. ` +
-    `Style: semi-realistic Chinese ink wash (shui mo), expressive brushwork with feibi dry-brush highlights, ` +
-    `ink washes with natural color accents, traditional Chinese painting aesthetics, elegant restraint. ` +
-    `${enh.styleAddition}` +
-    `Pure transparent background, PNG with alpha channel. ` +
-    `Display the complete object in full view — do not crop or truncate any part of the item. ` +
-    `For elongated items such as spears, staves, or long swords, fit the entire object within the frame using a slight diagonal composition. ` +
-    `Centered composition, single object displayed on its own. ` +
-    `CRITICAL REQUIREMENT: The image must be completely free of any text, letters, words, characters, writing systems, ` +
-    `calligraphy, seals, stamps, chop marks, red seal marks, watermarks, signatures, inscriptions, or labels of any kind.`
-  );
+  const rarityKey = rarity as keyof typeof RARITY_ENHANCEMENTS;
+  const palette =
+    promptConfig?.rarity_palettes?.[rarity as keyof ItemPromptConfig['rarity_palettes']]
+    ?? RARITY_ENHANCEMENTS[rarityKey]?.rarityPalette
+    ?? RARITY_ENHANCEMENTS.rare.rarityPalette;
+  const template =
+    promptConfig?.style_template
+    || templates?.item_template
+    || DEFAULT_ITEM_TEMPLATE;
+  const noText = templates?.no_text_constraint || '';
+  return template
+    .replace('{description}', description)
+    .replace('{rarity_palette}', palette)
+    .replace('{no_text}', noText);
 }
 
-export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
+export default function ItemDetail({ item, templates, onUpdate }: ItemDetailProps) {
   const [activeTab, setActiveTab] = useState<DetailTab>('workshop');
 
   // Variants state (loaded from API, passed to WorkshopTab)
@@ -139,6 +129,7 @@ export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
   const [profileSaved, setProfileSaved] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
   const [isGeneratingProfile, setIsGeneratingProfile] = useState(false);
+  const [itemPromptConfig, setItemPromptConfig] = useState<ItemPromptConfig | null>(null);
   const [attrBonusInput, setAttrBonusInput] = useState<Record<string, string>>({});
   const [specialBonusInput, setSpecialBonusInput] = useState<Record<string, string>>({});
   const [tagInput, setTagInput] = useState('');
@@ -150,6 +141,16 @@ export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
   const [deployResult, setDeployResult] = useState<{ success: boolean; message: string } | null>(null);
   const [isArchiving, setIsArchiving] = useState(false);
   const [archiveError, setArchiveError] = useState<string | null>(null);
+
+  const loadItemPromptConfig = useCallback(async () => {
+    try {
+      const config = await api.getItemPromptConfig();
+      setItemPromptConfig(config);
+    } catch (err) {
+      console.error('Failed to load item prompt config', err);
+      setItemPromptConfig(null);
+    }
+  }, []);
 
   // ─── Load variants from API ───────────────────────────────────────────────
   const loadVariants = useCallback(async () => {
@@ -165,8 +166,15 @@ export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
   const loadProfile = useCallback(async () => {
     try {
       setLoadingProfile(true);
-      const data = await api.getItemProfile(item.name);
+      const [data, promptConfig] = await Promise.all([
+        api.getItemProfile(item.name),
+        api.getItemPromptConfig().catch((err) => {
+          console.error('Failed to load item prompt config', err);
+          return null;
+        }),
+      ]);
       setProfile(data);
+      setItemPromptConfig(promptConfig);
       const ab: Record<string, string> = {};
       Object.entries(data.attribute_bonus || {}).forEach(([k, v]) => { ab[k] = String(v); });
       setAttrBonusInput(ab);
@@ -201,12 +209,15 @@ export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
     setProfileError(null);
     setDeployResult(null);
     setDeployPreview(null);
+    setItemPromptConfig(null);
   }, [item.name]);
 
   // ─── Initial data load ────────────────────────────────────────────────────
   useEffect(() => {
     loadVariants();
-  }, [item.name, loadVariants]);
+    loadItemPromptConfig();
+    loadProfile();
+  }, [item.name, loadVariants, loadItemPromptConfig, loadProfile]);
 
   // ─── Tab-specific data load ───────────────────────────────────────────────
   useEffect(() => {
@@ -329,8 +340,8 @@ export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
   // Memoized assemblePrompt that reflects the current profile.rarity —
   // so the ASSEMBLED PROMPT preview in WorkshopTab updates as rarity changes.
   const assembleItemPrompt = useMemo(
-    () => (description: string) => buildItemPrompt(description, profile.rarity),
-    [profile.rarity],
+    () => (description: string) => buildItemPrompt(description, profile.rarity, templates, itemPromptConfig),
+    [profile.rarity, templates, itemPromptConfig],
   );
 
   return (
@@ -488,7 +499,7 @@ export default function ItemDetail({ item, onUpdate }: ItemDetailProps) {
                     </div>
                   </div>
                   <div style={styles.rarityGrid}>
-                    {(['divine', 'gold', 'silver', 'copper', 'stone'] as const).map((r) => (
+                    {(['legendary', 'epic', 'rare', 'common'] as const).map((r) => (
                       <button
                         key={r}
                         style={{
