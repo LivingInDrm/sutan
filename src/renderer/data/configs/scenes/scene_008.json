@@ -4,7 +4,7 @@
   "description": "白马游弩校场风沙低卷，南宫仆射独自在暮色里演练刀势。徐凤年与她一场照面，从言语相激到出手试锋，若能接住那份冷冽锋芒，便有机会赢得这位白狐儿脸的认可。",
   "background_image": "/maps/beiliang/terrain_bg.png",
   "type": "event",
-  "duration": 2,
+  "duration": 1,
   "slots": [
     {
       "type": "character",
@@ -267,7 +267,8 @@
     }
   ],
   "unlock_conditions": {
-    "reputation_min": 20
+    "reputation_min": 20,
+    "day_range": [3, 14]
   },
   "absence_penalty": null
 }

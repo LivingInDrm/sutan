@@ -4,7 +4,7 @@
   "description": "一支商队需要穿越危险的沙漠地带。生存技能是关键。",
   "background_image": "/maps/map_001/scene_002.png",
   "type": "challenge",
-  "duration": 2,
+  "duration": 1,
   "slots": [
     {
       "type": "character",
@@ -65,5 +65,9 @@
       },
       "is_final": true
     }
-  ]
+  ],
+  "unlock_conditions": {
+    "day_range": [1, 10]
+  },
+  "absence_penalty": null
 }

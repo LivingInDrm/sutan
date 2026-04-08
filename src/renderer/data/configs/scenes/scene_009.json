@@ -4,7 +4,7 @@
   "description": "流州边关风雪如刀，一位孤身入关的锦衣女子与徐凤年狭路相逢。两人从剑拔弩张到言语试锋，终在一场短促交手后彼此记住了对方。",
   "background_image": "/maps/beiliang/terrain_bg.png",
   "type": "event",
-  "duration": 2,
+  "duration": 1,
   "slots": [
     {
       "type": "character",
@@ -278,12 +278,8 @@
     }
   ],
   "unlock_conditions": {
-    "reputation_min": 40
+    "reputation_min": 40,
+    "day_range": [7, 18]
   },
-  "absence_penalty": {
-    "effects": {
-      "reputation": -2
-    },
-    "narrative": "那场风雪里的偶遇终究错身而过。后来有人说，流州关前曾有一位北莽贵女驻足良久，只可惜你没能亲眼看见那份锋芒。"
-  }
+  "absence_penalty": null
 }

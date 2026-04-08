@@ -22,5 +22,8 @@
       "is_final": true
     }
   ],
+  "unlock_conditions": {
+    "day_range": [1, 21]
+  },
   "absence_penalty": null
 }

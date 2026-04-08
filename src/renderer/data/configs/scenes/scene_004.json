@@ -4,7 +4,7 @@
   "description": "你面临一个重要的选择，将决定你未来的道路。",
   "background_image": "/maps/map_001/scene_004.png",
   "type": "event",
-  "duration": 2,
+  "duration": 1,
   "slots": [
     {
       "type": "character",
@@ -78,5 +78,9 @@
       ],
       "is_final": true
     }
-  ]
+  ],
+  "unlock_conditions": {
+    "day_range": [5, 18]
+  },
+  "absence_penalty": null
 }

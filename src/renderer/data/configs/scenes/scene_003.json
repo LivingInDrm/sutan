@@ -4,7 +4,7 @@
   "description": "有人向你发起了决斗挑战。只能派一人应战。",
   "background_image": "/maps/map_001/scene_003.png",
   "type": "challenge",
-  "duration": 1,
+  "duration": 0,
   "slots": [
     {
       "type": "character",
@@ -62,10 +62,8 @@
       "is_final": true
     }
   ],
-  "absence_penalty": {
-    "effects": {
-      "reputation": -10
-    },
-    "narrative": "你怯懦地逃避了决斗，名誉扫地。"
-  }
+  "unlock_conditions": {
+    "day_range": [2, 12]
+  },
+  "absence_penalty": null
 }

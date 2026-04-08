@@ -4,7 +4,7 @@
   "description": "宫廷中的政治博弈，各方势力角逐权力。你需要派遣你最善于交际的人前去。",
   "background_image": "/maps/map_001/scene_001.png",
   "type": "event",
-  "duration": 3,
+  "duration": 1,
   "slots": [
     {
       "type": "character",
@@ -68,12 +68,8 @@
     }
   ],
   "unlock_conditions": {
-    "reputation_min": 20
+    "reputation_min": 20,
+    "day_range": [3, 15]
   },
-  "absence_penalty": {
-    "effects": {
-      "reputation": -5
-    },
-    "narrative": "你缺席了重要的宫廷会议，众人议论纷纷。"
-  }
+  "absence_penalty": null
 }

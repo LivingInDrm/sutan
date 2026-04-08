@@ -4,7 +4,7 @@
   "description": "暗驿灯火昏黄，白衣兵仙陈芝豹冷眼而立，言辞如刀。你若应对失措，便只会被他看得更轻。",
   "background_image": "/maps/beiliang/terrain_bg.png",
   "type": "event",
-  "duration": 2,
+  "duration": 1,
   "slots": [
     {
       "type": "character",
@@ -200,6 +200,8 @@
     }
   ],
   "unlock_conditions": {
-    "reputation_min": 50
-  }
+    "reputation_min": 50,
+    "day_range": [10, 20]
+  },
+  "absence_penalty": null
 }

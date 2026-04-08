@@ -4,7 +4,7 @@
   "description": "龙睛郡牧场风雪未消，褚禄山借着闲谈设下试探，待看清世子心气之后，亲手送上一把北凉王府旧刀。",
   "background_image": "/maps/map_001/scene_010.png",
   "type": "event",
-  "duration": 2,
+  "duration": 1,
   "slots": [
     {
       "type": "character",
@@ -230,6 +230,8 @@
     }
   ],
   "unlock_conditions": {
-    "reputation_min": 30
-  }
+    "reputation_min": 30,
+    "day_range": [5, 16]
+  },
+  "absence_penalty": null
 }

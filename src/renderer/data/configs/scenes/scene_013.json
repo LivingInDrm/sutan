@@ -4,7 +4,7 @@
   "description": "徐凤年游历三年归来，重返清凉山王府。青鸟在门前迎候，徐骁、徐渭熊与黄蛮儿都在府中等他回家。风尘落定之后，王府里的灯火与笑骂，才是这一路最暖的归处。",
   "background_image": "/maps/map_001/location_001_backdrop.png",
   "type": "event",
-  "duration": 3,
+  "duration": 2,
   "slots": [
     {
       "type": "character",
@@ -308,12 +308,8 @@
     }
   ],
   "unlock_conditions": {
-    "reputation_min": 60
+    "reputation_min": 60,
+    "day_range": [14, 21]
   },
-  "absence_penalty": {
-    "effects": {
-      "reputation": -5
-    },
-    "narrative": "你错过了这次归家相聚。清凉山灯火依旧，可王府里那顿专为你备下的团圆饭，终究还是凉了半桌。"
-  }
+  "absence_penalty": null
 }

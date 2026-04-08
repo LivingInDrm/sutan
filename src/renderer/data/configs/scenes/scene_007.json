@@ -4,7 +4,7 @@
   "description": "北凉道秋风渐紧，官道旁的芦苇荡里藏着一座破旧渡口。徐凤年在此遇见一个抱着酒葫芦、满身落魄气的老头，谁也想不到，这竟是曾经一剑压江湖的李淳罡。",
   "background_image": "/maps/map_001/scene_007.png",
   "type": "event",
-  "duration": 3,
+  "duration": 1,
   "slots": [
     {
       "type": "character",
@@ -365,12 +365,8 @@
     "reputation_min": 10,
     "required_tags": [
       "北凉游历"
-    ]
+    ],
+    "day_range": [2, 12]
   },
-  "absence_penalty": {
-    "effects": {
-      "reputation": -3
-    },
-    "narrative": "你错过了渡口边那场看似寻常的偶遇。后来再想起，只剩一句江湖传闻：有些人一旦擦肩，便是一生都补不上的遗憾。"
-  }
+  "absence_penalty": null
 }

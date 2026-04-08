@@ -4,7 +4,7 @@
   "description": "陵州城市集人声鼎沸，洪洗象在街口逢人便问徐脂虎的消息，徐凤年越听越不是滋味，一场带着醋意的闹剧就此开场。",
   "background_image": "/maps/map_001/location_003_backdrop.png",
   "type": "event",
-  "duration": 2,
+  "duration": 0,
   "slots": [
     {
       "type": "character",
@@ -228,12 +228,8 @@
     }
   ],
   "unlock_conditions": {
-    "reputation_min": 25
+    "reputation_min": 25,
+    "day_range": [4, 16]
   },
-  "absence_penalty": {
-    "effects": {
-      "reputation": -1
-    },
-    "narrative": "你错过了陵州集市这一场热闹。后来只听说，武当山来了个脸红得像熟虾的小道士，在街口被人追得满市集乱跑。"
-  }
+  "absence_penalty": null
 }

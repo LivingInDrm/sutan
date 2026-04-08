@@ -4,7 +4,7 @@
   "description": "朔风卷着沙砾掠过边境小镇外的破茶摊，一个嚣张少年正在为茶钱争执。",
   "background_image": "scene06.png",
   "type": "event",
-  "duration": 3,
+  "duration": 0,
   "slots": [
     {
       "type": "character",
@@ -470,5 +470,9 @@
       },
       "is_final": true
     }
-  ]
+  ],
+  "unlock_conditions": {
+    "day_range": [1, 7]
+  },
+  "absence_penalty": null
 }
