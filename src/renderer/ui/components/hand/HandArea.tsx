@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CardComponent } from '../card/CardComponent';
 import { CardDetailPanel } from '../card/CardDetailPanel';
@@ -349,8 +350,9 @@ export function HandArea({
         </AnimatePresence>
       </div>
 
-      {detailCard && (
-        <CardDetailPanel card={detailCard} onClose={handleCloseDetail} />
+      {detailCard && typeof document !== 'undefined' && createPortal(
+        <CardDetailPanel card={detailCard} onClose={handleCloseDetail} />,
+        document.body,
       )}
     </div>
   );
