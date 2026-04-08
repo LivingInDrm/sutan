@@ -232,6 +232,9 @@ const StageSchema = z.object({
 const UnlockConditionsSchema = z.object({
   reputation_min: z.number().int().optional(),
   required_tags: z.array(z.string()).optional(),
+  required_cards: z.array(z.string()).optional(),
+  required_items: z.array(z.string()).optional(),
+  day_range: z.tuple([z.number().int(), z.number().int()]).optional(),
 });
 
 const AbsencePenaltySchema = z.object({
@@ -245,7 +248,7 @@ export const SceneSchema = z.object({
   description: z.string(),
   background_image: z.string(),
   type: SceneTypeEnum,
-  duration: z.number().int().min(1),
+  duration: z.number().int().min(0),
   slots: z.array(SlotSchema),
   stages: z.array(StageSchema).min(1),
   entry_stage: z.string().min(1),

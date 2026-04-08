@@ -56,6 +56,7 @@ export class GameManager {
       card_snapshots: {},
       owned_equipment_ids: [],
       equipment_snapshots: {},
+      locked_card_ids: [],
       player: this.playerState.serialize(),
       current_day: this.timeManager.currentDay,
       current_scene: null,
@@ -65,6 +66,7 @@ export class GameManager {
     this.settlementExecutor.setOwnershipListeners({
       onCardAdded: (card) => this.trackOwnedCard(card),
       onCardRemoved: (cardId) => this.untrackOwnedCard(cardId),
+      onLockedCardsChanged: () => this.syncRuntimeState(),
     });
   }
 
@@ -77,6 +79,7 @@ export class GameManager {
       ...this._runtimeState,
       owned_card_ids: [...this._runtimeState.owned_card_ids],
       owned_equipment_ids: [...this._runtimeState.owned_equipment_ids],
+      locked_card_ids: [...this._runtimeState.locked_card_ids],
       unlocked_locations: [...this._runtimeState.unlocked_locations],
       event_history: [...this._runtimeState.event_history],
       card_snapshots: { ...this._runtimeState.card_snapshots },
@@ -239,6 +242,7 @@ export class GameManager {
       card_snapshots: runtimeCards,
       owned_equipment_ids: save.cards.hand.filter(cardId => (this._allCardsMap.get(cardId)?.type ?? runtimeEquipment[cardId]?.type) === 'equipment'),
       equipment_snapshots: runtimeEquipment,
+      locked_card_ids: save.cards.locked_in_scenes ? Object.values(save.cards.locked_in_scenes).flat() : [],
       player: this.playerState.serialize(),
       current_day: save.game_state.current_day,
       current_scene: null,
@@ -311,6 +315,7 @@ export class GameManager {
     }
     this._runtimeState.player = this.playerState.serialize();
     this._runtimeState.current_day = this.timeManager.currentDay;
+    this._runtimeState.locked_card_ids = this.cardManager.getLockedCardIds();
     this._runtimeState.unlocked_locations = this.computeUnlockedLocations();
   }
 

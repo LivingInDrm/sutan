@@ -56,11 +56,23 @@ const STATUS_CONFIG: Record<SceneStatusLabel, { label: string; color: string; bg
   locked: {
     label: '未解锁',
     color: 'text-parchment/30',
-    bgColor: 'bg-leather-950/20',
+    bgColor: 'bg-leather-950/35 grayscale',
     borderColor: 'border-leather-700/20',
     clickable: false,
   },
 };
+
+function getUnlockHint(scene: Scene | undefined): string[] {
+  if (!scene?.unlock_conditions) return [];
+  const hints: string[] = [];
+  const { reputation_min, required_tags, required_cards, required_items, day_range } = scene.unlock_conditions;
+  if (reputation_min !== undefined) hints.push(`需要声望 ≥ ${reputation_min}`);
+  if (required_tags && required_tags.length > 0) hints.push(`需要标签：${required_tags.join('、')}`);
+  if (required_cards && required_cards.length > 0) hints.push(`需要角色卡：${required_cards.join('、')}`);
+  if (required_items && required_items.length > 0) hints.push(`需要装备：${required_items.join('、')}`);
+  if (day_range) hints.push(`出现时间：第 ${day_range[0]}-${day_range[1]} 天`);
+  return hints;
+}
 
 export function LocationScreen() {
   const game = useGameStore(s => s.game);
@@ -221,16 +233,11 @@ function SceneCard({
           )}
 
           {/* Unlock conditions hint */}
-          {status === 'locked' && scene?.unlock_conditions && (
+          {status === 'locked' && (
             <div className="mt-2 text-[10px] text-parchment/30">
-              {scene.unlock_conditions.reputation_min !== undefined && (
-                <span>需要声望 ≥ {scene.unlock_conditions.reputation_min}</span>
-              )}
-              {scene.unlock_conditions.required_tags && (scene.unlock_conditions.required_tags as string[]).length > 0 && (
-                <span className="ml-2">
-                  需要：{(scene.unlock_conditions.required_tags as string[]).join('、')}
-                </span>
-              )}
+              {getUnlockHint(scene).map((hint, index) => (
+                <span key={hint} className={index > 0 ? 'ml-2' : ''}>{hint}</span>
+              ))}
             </div>
           )}
         </div>

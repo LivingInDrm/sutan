@@ -55,6 +55,7 @@ export class SettlementExecutor {
   setOwnershipListeners(listeners: {
     onCardAdded?: (card: Card) => void;
     onCardRemoved?: (cardId: string) => void;
+    onLockedCardsChanged?: (cardIds: string[], action: 'lock' | 'unlock') => void;
   }): void {
     this.effectApplier.setOwnershipListeners(listeners);
   }

@@ -9,7 +9,6 @@ import type { SettlementResult } from '../types';
 import { eventBus } from '../../lib/events';
 
 export interface SettlementPhaseResult {
-  absencePenaltyResults: SettlementResult[];
   pendingSceneIds: string[];
 }
 
@@ -53,10 +52,7 @@ export class DayManager {
   private refreshScenes(): void {
     const allRegistered = this.sceneManager.getAllRegisteredSceneIds();
     for (const sceneId of allRegistered) {
-      const state = this.sceneManager.getSceneState(sceneId);
-      if (!state) {
-        this.sceneManager.activateScene(sceneId);
-      }
+      this.sceneManager.refreshScene(sceneId, this.timeManager.currentDay);
     }
   }
 
@@ -78,18 +74,7 @@ export class DayManager {
     };
 
     const settledSceneIds = this.sceneManager.decrementRemainingTurns();
-    const absencePenaltyResults: SettlementResult[] = [];
-
-    const unparticipated = this.sceneManager.getExpiredUnparticipatedScenes();
-    for (const sceneId of unparticipated) {
-      const result = this.settlementExecutor.applyAbsencePenalty(sceneId);
-      if (result) absencePenaltyResults.push(result);
-      else this.sceneManager.completeScene(sceneId);
-    }
-
-    const pendingSceneIds = settledSceneIds.filter(id => !unparticipated.includes(id));
-
-    return { absencePenaltyResults, pendingSceneIds };
+    return { pendingSceneIds: settledSceneIds };
   }
 
   finishSettlement(): void {
@@ -108,8 +93,8 @@ export class DayManager {
   }
 
   executeSettlement(): SettlementResult[] {
-    const { absencePenaltyResults, pendingSceneIds } = this.beginSettlement();
-    const results: SettlementResult[] = [...absencePenaltyResults];
+    const { pendingSceneIds } = this.beginSettlement();
+    const results: SettlementResult[] = [];
 
     for (const sceneId of pendingSceneIds) {
       const result = this.settlementExecutor.settleScene(sceneId);

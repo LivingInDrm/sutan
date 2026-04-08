@@ -13,6 +13,7 @@ export interface GameState {
   card_snapshots: Record<string, Card>;
   owned_equipment_ids: string[];
   equipment_snapshots: Record<string, Card>;
+  locked_card_ids: string[];
   player: GameStatePlayerResources;
   current_day: number;
   current_scene: string | null;

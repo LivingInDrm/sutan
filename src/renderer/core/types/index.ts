@@ -155,6 +155,9 @@ export interface StagePlayback {
 export interface UnlockConditions {
   reputation_min?: number;
   required_tags?: string[];
+  required_cards?: string[];
+  required_items?: string[];
+  day_range?: [number, number];
 }
 
 export interface AbsencePenalty {

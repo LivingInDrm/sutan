@@ -5,6 +5,7 @@ import { eventBus } from '../../lib/events';
 
 export class CardManager {
   private cards: Map<string, CardInstance> = new Map();
+  private lockedCardIds: Set<string> = new Set();
 
   addCard(data: Card): CardInstance | null {
     if (this.cards.size >= GAME_CONSTANTS.MAX_HAND_SIZE) {
@@ -21,6 +22,7 @@ export class CardManager {
     if (!card) return false;
     if (card.isProtagonist) return false;
     this.cards.delete(cardId);
+    this.lockedCardIds.delete(cardId);
     eventBus.emit('card:remove', { cardId });
     return true;
   }
@@ -45,6 +47,32 @@ export class CardManager {
     return this.cards.has(cardId);
   }
 
+  lockCards(cardIds: string[]): void {
+    for (const cardId of cardIds) {
+      if (this.cards.has(cardId)) {
+        this.lockedCardIds.add(cardId);
+      }
+    }
+  }
+
+  unlockCards(cardIds: string[]): void {
+    for (const cardId of cardIds) {
+      this.lockedCardIds.delete(cardId);
+    }
+  }
+
+  setLockedCards(cardIds: string[]): void {
+    this.lockedCardIds = new Set(cardIds.filter(cardId => this.cards.has(cardId)));
+  }
+
+  isCardLocked(cardId: string): boolean {
+    return this.lockedCardIds.has(cardId);
+  }
+
+  getLockedCardIds(): string[] {
+    return Array.from(this.lockedCardIds);
+  }
+
   get handSize(): number {
     return this.cards.size;
   }
@@ -63,6 +91,7 @@ export class CardManager {
 
   clear(): void {
     this.cards.clear();
+    this.lockedCardIds.clear();
   }
 
   getCardIds(): string[] {

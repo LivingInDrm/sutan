@@ -10,6 +10,7 @@ export class EffectApplier {
   private cardDataResolver?: CardDataResolver;
   private cardAddedListener?: (card: Card) => void;
   private cardRemovedListener?: (cardId: string) => void;
+  private lockedCardListener?: (cardIds: string[], action: 'lock' | 'unlock') => void;
 
   constructor(playerState: PlayerState, cardManager: CardManager) {
     this.playerState = playerState;
@@ -23,9 +24,11 @@ export class EffectApplier {
   setOwnershipListeners(listeners: {
     onCardAdded?: (card: Card) => void;
     onCardRemoved?: (cardId: string) => void;
+    onLockedCardsChanged?: (cardIds: string[], action: 'lock' | 'unlock') => void;
   }): void {
     this.cardAddedListener = listeners.onCardAdded;
     this.cardRemovedListener = listeners.onCardRemoved;
+    this.lockedCardListener = listeners.onLockedCardsChanged;
   }
 
   apply(effects: Effects, investedCardIds: string[] = []): void {
@@ -89,6 +92,7 @@ export class EffectApplier {
     }
 
     if (effects.consume_invested) {
+      this.lockedCardListener?.(investedCardIds, 'unlock');
       for (const cardId of investedCardIds) {
         const removed = this.cardManager.removeCard(cardId);
         if (removed) {

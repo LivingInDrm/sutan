@@ -109,14 +109,14 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const { game } = get();
     if (!game) return;
 
-    const { absencePenaltyResults, pendingSceneIds } = game.dayManager.beginSettlement();
+    const { pendingSceneIds } = game.dayManager.beginSettlement();
 
     if (pendingSceneIds.length === 0) {
       set({
-        lastSettlementResults: absencePenaltyResults,
+        lastSettlementResults: [],
         settlement: {
           ...initialSettlement,
-          completedResults: absencePenaltyResults,
+          completedResults: [],
         },
       });
       game.dayManager.endDay();
@@ -137,7 +137,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
         currentStagePlayback: playback,
         narrativeIndex: 0,
         currentStageSettlementResult: null,
-        completedResults: [...absencePenaltyResults],
+        completedResults: [],
       },
     });
     get().syncState();
