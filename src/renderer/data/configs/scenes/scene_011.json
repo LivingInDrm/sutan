@@ -34,7 +34,7 @@
           "type": "dialogue",
           "speaker": "陈芝豹",
           "text": "世子的人？北凉近来倒是宽裕，连暗驿这种吃风喝雪的地方，也舍得放纨绔来沾脚。",
-          "portrait": "/assets/portraits/figure11.png"
+          "portrait": "/assets/portraits/figure10.png"
         },
         {
           "type": "narration",
@@ -44,7 +44,7 @@
           "type": "dialogue",
           "speaker": "陈芝豹",
           "text": "北凉的姓徐，不是谁披上锦袍便担得起。若只会靠祖荫招摇，连让我多看一眼都不配。",
-          "portrait": "/assets/portraits/figure11.png"
+          "portrait": "/assets/portraits/figure10.png"
         }
       ],
       "settlement": {
@@ -93,7 +93,7 @@
           "type": "dialogue",
           "speaker": "陈芝豹",
           "text": "话说得不差。可惜这世上最不值钱的，恰恰就是嘴上骨头硬。",
-          "portrait": "/assets/portraits/figure11.png"
+          "portrait": "/assets/portraits/figure10.png"
         }
       ],
       "settlement": {
@@ -149,7 +149,7 @@
           "type": "dialogue",
           "speaker": "陈芝豹",
           "text": "哦？想在我面前亮骨头？北凉这些年，敢对我露锋芒的人不少，能站稳的没几个。",
-          "portrait": "/assets/portraits/figure11.png"
+          "portrait": "/assets/portraits/figure10.png"
         },
         {
           "type": "narration",
