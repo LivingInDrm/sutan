@@ -6,7 +6,8 @@
     "backdrop_image": "/maps/map_001/location_001_backdrop.png",
     "scene_ids": [
       "scene_006",
-      "scene_001"
+      "scene_001",
+      "scene_013"
     ],
     "unlock_conditions": {}
   },

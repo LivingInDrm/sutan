@@ -1,0 +1,273 @@
+{
+  "scene_id": "scene_008",
+  "name": "白马校场・冷锋入席",
+  "description": "白马游弩校场风沙低卷，南宫仆射独自在暮色里演练刀势。徐凤年与她一场照面，从言语相激到出手试锋，若能接住那份冷冽锋芒，便有机会赢得这位白狐儿脸的认可。",
+  "background_image": "/maps/beiliang/terrain_bg.png",
+  "type": "event",
+  "duration": 2,
+  "slots": [
+    {
+      "type": "character",
+      "required": true,
+      "locked": false
+    },
+    {
+      "type": "item",
+      "required": false,
+      "locked": false
+    }
+  ],
+  "entry_stage": "opening",
+  "stages": [
+    {
+      "stage_id": "opening",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "白马游弩校场上暮鼓未响，风却先起。黄沙贴地而走，练武木桩被吹得轻轻作响，像一场大战前的细碎鼓点。"
+        },
+        {
+          "type": "narration",
+          "text": "场心立着一袭白衣，身形削瘦，刀光却不瘦。双刀起落之间，不见花俏，只有一股近乎偏执的凌厉，像是要把这满校场的风都切开。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "王府里藏龙卧虎我是知道的，只是没想到，一个女侍卫，也能把刀练出这等杀气。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "南宫仆射",
+          "text": "看够了就滚。校场不是给纨绔子弟赏景的地方。",
+          "portrait": "/assets/portraits/figure14.png"
+        },
+        {
+          "type": "narration",
+          "text": "她收刀未收锋，眼神冷得像北凉道尽头还未化开的霜。徐凤年却没退，反倒生出几分兴致。"
+        }
+      ],
+      "settlement": {
+        "type": "player_choice",
+        "narrative": "面对这位冷若冰霜的白狐儿脸，徐凤年决定如何开口？",
+        "choices": [
+          {
+            "id": "ask_respectfully",
+            "label": "上前请教",
+            "description": "先收起玩笑心思，以世子之外的身份请她指点。",
+            "effects": {},
+            "next_stage": "courteous_test"
+          },
+          {
+            "id": "direct_challenge",
+            "label": "直接挑战",
+            "description": "懒得绕弯子，拔出架势便要与她分个高低。",
+            "effects": {},
+            "next_stage": "martial_test"
+          },
+          {
+            "id": "watch_silently",
+            "label": "默默观看",
+            "description": "先看她刀路根底，再决定该如何应对。",
+            "effects": {},
+            "next_stage": "silent_test"
+          }
+        ]
+      }
+    },
+    {
+      "stage_id": "courteous_test",
+      "narrative": [
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "不滚。既在一个屋檐下，总能说两句话。你刀练得好，我来请教，不算唐突吧？",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "南宫仆射",
+          "text": "请教？你若只会靠一张嘴讨巧，那便是糟践了这两个字。",
+          "portrait": "/assets/portraits/figure14.png"
+        },
+        {
+          "type": "narration",
+          "text": "她抬眸看了徐凤年一眼，刀尖轻轻点地。那一下不重，却像是把整座校场的寒意都钉在了地上。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "南宫仆射",
+          "text": "想请教，可以。先让我看看，你除了世子的名头，还有没有值得人高看一眼的东西。",
+          "portrait": "/assets/portraits/figure14.png"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "礼数周全只是敲门砖，真正能不能让她正眼相看，还得看你能否以气度与心性接住她的锋芒。进行「魅力」鉴定。",
+        "check": {
+          "attribute": "charm",
+          "calc_mode": "max",
+          "target": 5
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年没有逞口舌之快，只拱手再进一步，任由刀锋逼到眉前也不眨眼。南宫仆射眼底终于掠过一丝异色，收刀道：「倒不像传闻里那么废物。」 她顿了顿，语气仍冷，却少了拒人千里的寒意：「我可随你走一程。若你半路露怯，我再斩断这份认可。」",
+            "effects": {
+              "reputation": 3,
+              "cards_add": [
+                "card_南宫仆射"
+              ]
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年把场面圆得不难看，也没被她一句话逼退。南宫仆射却只是冷冷道：「嘴上还算有分寸，骨头却没让我看够。今日到此为止。」 她转身继续练刀，没有再赶人，却也没有再多给半分脸色。",
+            "effects": {
+              "reputation": 1
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年话说得不轻不重，却终究飘了些。南宫仆射听完，只回了两个字：「无趣。」 她再不理会，刀光一起，逼得徐凤年只得退开半步。这一场请教，连门槛都没迈进去。",
+            "effects": {
+              "reputation": -2
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年刚摆出请教姿态，语气里却仍带着惯常的轻佻。南宫仆射眼神更冷，刀背一振，直接把人逼出丈余：「拿我消遣？世子殿下还是去别处风流。」 校场风声骤紧，这回连留下旁观都显得多余。",
+            "effects": {
+              "reputation": -4
+            }
+          }
+        }
+      },
+      "is_final": true
+    },
+    {
+      "stage_id": "martial_test",
+      "narrative": [
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "既然你看不起我，不如干脆打一场。嘴上分不出高低，手上总行。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "南宫仆射",
+          "text": "你也配和我分高低？不过，敢递这句话出来，至少胆子不小。",
+          "portrait": "/assets/portraits/figure14.png"
+        },
+        {
+          "type": "narration",
+          "text": "话音未落，她已挪步近身，刀不曾出鞘，杀意却先一步压下。徐凤年心知这不是切磋，更像是一场不讲情面的审视。"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "想从冲撞里搏出一份认可，就得先在她手底下站得住。进行「武力」鉴定。",
+        "check": {
+          "attribute": "combat",
+          "calc_mode": "max",
+          "target": 6
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年被刀势逼得连退，却退而不乱，硬是借着木桩与风向撑过了这一轮试锋。南宫仆射收势时，袖角被劲风吹起，露出一线罕见的赞许：「原来不止会逞强，还真有几分硬骨头。」 她把双刀负在身后，平静道：「我随你同行。北凉若真要起风，我也想看看你能走到哪一步。」",
+            "effects": {
+              "reputation": 4,
+              "cards_add": [
+                "card_南宫仆射"
+              ]
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年勉强接下几招，肩头仍被刀背震得发麻。南宫仆射没有补上最后一击，只淡淡道：「胆气有了，火候差得远。」 她虽不再轻视，却也远没到愿意同行的地步。",
+            "effects": {
+              "reputation": 1
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年刚起势便被她看破重心，刀背在腕间一点，整个人顿时失了架子。南宫仆射眼神寡淡：「本事没有，脾气倒先长出来了。」 这句评语比刀背更伤人。",
+            "effects": {
+              "reputation": -2
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年贸然上前，连她第一步踏位都没看清，已被一记刀鞘横拍在胸口，狼狈退到校场边缘。南宫仆射转身便走，只丢下一句：「再拿这种能耐来试我，只会让我更看不起你。」",
+            "effects": {
+              "reputation": -5
+            }
+          }
+        }
+      },
+      "is_final": true
+    },
+    {
+      "stage_id": "silent_test",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "徐凤年没有急着开口，只站在木桩阴影里看她出刀。她每一次转腕与错步，都像是把自己逼入更窄的一线，再从那线里硬生生劈出一条路。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "南宫仆射",
+          "text": "躲在旁边看了这么久，看出什么没有？若只会看热闹，我会先砍你。",
+          "portrait": "/assets/portraits/figure14.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "看出你不像是在练招，更像是在跟自己较劲。刀路太直，直得像不肯给自己留后路。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "narration",
+          "text": "南宫仆射指尖微顿，校场风声也像跟着停了一停。可她很快又恢复那副冷脸，只是眼神不再全是轻蔑。"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "想靠眼力与分寸打动她，就得说中她练刀时不肯示人的那点心思。进行「智慧」鉴定。",
+        "check": {
+          "attribute": "wisdom",
+          "calc_mode": "max",
+          "target": 5
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年没有继续卖弄，只把话停在最该停的地方。南宫仆射沉默良久，忽然将刀收入鞘中：「难得有人看得懂，却不自作聪明。」 她望向校场外渐沉的天色，声音清淡如旧：「我可以入你麾下一段时日。不是为了王府，是想看看你究竟值不值得我这双刀替你出一次鞘。」",
+            "effects": {
+              "reputation": 2,
+              "cards_add": [
+                "card_南宫仆射"
+              ]
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年看出了几分门道，却没能真正说到她心里去。南宫仆射只道：「勉强不算瞎子。」 话虽没那么刺耳，却也仅此而已。她不再赶人，却仍把距离留得分明。",
+            "effects": {
+              "reputation": 1
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年想说透她的刀，却偏偏说浅了。南宫仆射冷笑一声：「看不懂就别装懂。」 那点刚刚松开的寒意立刻又收紧，像从未松过。",
+            "effects": {
+              "reputation": -1
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年妄图以几句聪明话去拆她的刀意，结果字字落空。南宫仆射眼里最后一点耐心也散了：「你若只擅长揣摩人心，就别来碰我的刀。」 她拂袖而去，背影比先前更冷。",
+            "effects": {
+              "reputation": -3
+            }
+          }
+        }
+      },
+      "is_final": true
+    }
+  ],
+  "unlock_conditions": {
+    "reputation_min": 20
+  },
+  "absence_penalty": null
+}
