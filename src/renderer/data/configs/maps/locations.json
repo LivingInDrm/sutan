@@ -23,7 +23,9 @@
     "name": "陵州城市集",
     "icon_image": "/maps/beiliang/icon_03_lingzhou.png",
     "backdrop_image": "/maps/map_001/location_003_backdrop.png",
-    "scene_ids": [],
+    "scene_ids": [
+      "scene_012"
+    ],
     "unlock_conditions": {}
   },
   {
@@ -51,7 +53,9 @@
     "name": "龙睛郡牧场",
     "icon_image": "/maps/beiliang/icon_06_longjing.png",
     "backdrop_image": "/maps/beiliang/terrain_bg.png",
-    "scene_ids": [],
+    "scene_ids": [
+      "scene_010"
+    ],
     "unlock_conditions": {}
   },
   {
@@ -67,7 +71,9 @@
     "name": "北凉暗驿",
     "icon_image": "/maps/beiliang/icon_08_anji.png",
     "backdrop_image": "/maps/beiliang/terrain_bg.png",
-    "scene_ids": [],
+    "scene_ids": [
+      "scene_011"
+    ],
     "unlock_conditions": {}
   },
   {

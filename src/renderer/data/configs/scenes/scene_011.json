@@ -1,0 +1,205 @@
+{
+  "scene_id": "scene_011",
+  "name": "北凉暗驿・陈芝豹嘲讽",
+  "description": "暗驿灯火昏黄，白衣兵仙陈芝豹冷眼而立，言辞如刀。你若应对失措，便只会被他看得更轻。",
+  "background_image": "/maps/beiliang/terrain_bg.png",
+  "type": "event",
+  "duration": 2,
+  "slots": [
+    {
+      "type": "character",
+      "required": true,
+      "locked": false
+    },
+    {
+      "type": "item",
+      "required": false,
+      "locked": false
+    }
+  ],
+  "entry_stage": "opening",
+  "stages": [
+    {
+      "stage_id": "opening",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "北凉暗驿向来只认密令不认人。夜雨敲瓦，廊下悬灯被风吹得忽明忽暗，像一口将熄未熄的旧刀。"
+        },
+        {
+          "type": "narration",
+          "text": "你才踏入门槛，堂中亲兵便齐齐收声。白衣男子背手立在舆图前，肩线平直，连余光都透着拒人千里的寒意。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "陈芝豹",
+          "text": "世子的人？北凉近来倒是宽裕，连暗驿这种吃风喝雪的地方，也舍得放纨绔来沾脚。",
+          "portrait": "/assets/portraits/figure11.png"
+        },
+        {
+          "type": "narration",
+          "text": "那几个亲兵低头不敢接话，堂中却像忽然压下一座山。陈芝豹转过身，只看了你一眼，目光便像枪锋贴着喉结滑过。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "陈芝豹",
+          "text": "北凉的姓徐，不是谁披上锦袍便担得起。若只会靠祖荫招摇，连让我多看一眼都不配。",
+          "portrait": "/assets/portraits/figure11.png"
+        }
+      ],
+      "settlement": {
+        "type": "player_choice",
+        "narrative": "面对陈芝豹的冷嘲热讽，你准备如何应对？",
+        "choices": [
+          {
+            "id": "argue_with_reason",
+            "label": "据理力争",
+            "description": "你压住火气，以言辞回敬他的轻慢，想让这位白衣兵仙明白，北凉后继并非草包。",
+            "effects": {},
+            "next_stage": "reasoned_reply"
+          },
+          {
+            "id": "threaten_with_force",
+            "label": "以武相胁",
+            "description": "你不再多言，只以前踏半步的气势回应，打算用胆气逼他收起那份居高临下。",
+            "effects": {},
+            "next_stage": "martial_reply"
+          },
+          {
+            "id": "smile_and_ignore",
+            "label": "一笑置之",
+            "description": "你只是淡淡一笑，不争口舌，也不逞意气。陈芝豹冷哼一声，拂袖而去，只留下一句“至少还懂得不在我面前献丑”。他终究没有留下，却也没再继续折辱你。",
+            "effects": {
+              "reputation": 5
+            }
+          }
+        ]
+      }
+    },
+    {
+      "stage_id": "reasoned_reply",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "你迎着那道逼人的目光站定，暗驿里针落可闻。屋外马嘶一声，倒衬得堂内愈发沉冷。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "你",
+          "text": "北凉是靠刀马守出来的，不是靠嘴皮子撑出来的。你若真看不起我，便该看我做了什么，而不是先看我是谁。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "陈芝豹",
+          "text": "话说得不差。可惜这世上最不值钱的，恰恰就是嘴上骨头硬。",
+          "portrait": "/assets/portraits/figure11.png"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "想在陈芝豹面前以言折锋，需要撑得住他的威压。进行「社交」鉴定。",
+        "check": {
+          "attribute": "social",
+          "calc_mode": "max",
+          "target": 6
+        },
+        "results": {
+          "success": {
+            "narrative": "你不疾不徐，把话一层层递过去，既不逞强，也不退让。陈芝豹听完后沉默片刻，唇角挑起一丝近乎讥讽的弧度：“倒还算有点骨头。” 他说完便转身离开暗驿，没有半点追随之意，却终究没能把你压弯脊梁。",
+            "effects": {
+              "reputation": 15,
+              "tags_add": {
+                "card_invested_0": [
+                  "不卑不亢"
+                ]
+              }
+            }
+          },
+          "partial_success": {
+            "narrative": "你把该说的话说了出来，虽谈不上字字见血，却也没有露怯。陈芝豹只冷冷丢下一句“勉强像个人样”，随后带着亲兵离去，既未高看你，也没再继续羞辱。",
+            "effects": {
+              "reputation": 5
+            }
+          },
+          "failure": {
+            "narrative": "你本想据理力争，却被陈芝豹几句反问逼得气息一乱。那白衣男子嗤笑一声：“原来不过如此。” 暗驿众人齐齐低头，你这一场回敬，反倒成了给他添兴致的笑谈。陈芝豹自然不会加入，只留下满堂压抑。",
+            "effects": {
+              "reputation": -10
+            }
+          },
+          "critical_failure": {
+            "narrative": "你话未说稳，先被陈芝豹的气势压得节节失措。对方连第二句都懒得听，只淡淡道：“徐家若真把希望押在你这种货色身上，北凉离塌不远了。” 满堂亲兵噤若寒蝉，而你的颜面已被踩进泥里。陈芝豹拂袖离去，不留半点余地。",
+            "effects": {
+              "reputation": -10
+            }
+          }
+        }
+      },
+      "is_final": true
+    },
+    {
+      "stage_id": "martial_reply",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "你没有再辩，只将手按在兵刃旁，向前踏出半步。那半步不重，却让暗驿里的灯火都像矮了一截。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "陈芝豹",
+          "text": "哦？想在我面前亮骨头？北凉这些年，敢对我露锋芒的人不少，能站稳的没几个。",
+          "portrait": "/assets/portraits/figure11.png"
+        },
+        {
+          "type": "narration",
+          "text": "陈芝豹衣袖微动，堂中亲兵同时屏住呼吸。你若退，便是示弱；你若撑住，至多也只是让他收回一分轻视。"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "在白衣兵仙面前以势还势，需要足够硬的胆气与武力。进行「武力」鉴定。",
+        "check": {
+          "attribute": "combat",
+          "calc_mode": "max",
+          "target": 7
+        },
+        "results": {
+          "success": {
+            "narrative": "你脚下生根，手未出鞘，气势却半寸不让。陈芝豹看着你，眼神里终于多出一丝极淡的审视：“胆子不小。” 仅此一句，已算难得。他终究转身离去，没有拉拢、没有认可，只把这次对峙当成一眼记住的名字。你守住了尊严，也守住了北凉子弟该有的硬气。",
+            "effects": {
+              "reputation": 15,
+              "tags_add": {
+                "card_invested_0": [
+                  "不卑不亢"
+                ]
+              }
+            }
+          },
+          "partial_success": {
+            "narrative": "你勉强扛住那股压人的锋芒，虽未显得从容，至少没有退后。陈芝豹冷笑着点了点头：“会逞强，总比只会装死好些。” 说罢便带人离去，态度仍旧倨傲，但总算没有把你当成彻头彻尾的废物。",
+            "effects": {
+              "reputation": 3
+            }
+          },
+          "failure": {
+            "narrative": "你本想以势压人，却在陈芝豹面前显得像个学步孩童。那白衣男子只往前一步，你便觉胸口发沉，连手都稳不住。亲兵们不敢笑，气氛却比笑声更伤人。陈芝豹瞥了你一眼：“就这点本事，也配拿北凉说事？” 你的声望随之受损。",
+            "effects": {
+              "reputation": -10
+            }
+          },
+          "critical_failure": {
+            "narrative": "你方才亮出的那点锋芒，在陈芝豹面前连试探都算不上。他甚至没有动手，只凭那股压下来的杀伐气，就逼得你气血翻涌、脚步虚浮。陈芝豹眼中尽是轻蔑：“废铜烂铁，也敢学人出鞘。” 这一回，你输得既难看又彻底，而他自然更不可能与你同路。",
+            "effects": {
+              "reputation": -10
+            }
+          }
+        }
+      },
+      "is_final": true
+    }
+  ],
+  "unlock_conditions": {
+    "reputation_min": 50
+  }
+}
