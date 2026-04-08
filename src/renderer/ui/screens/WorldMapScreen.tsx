@@ -63,7 +63,7 @@ export function WorldMapScreen() {
       {/* Map name watermark */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <span
-          className="text-[180px] font-bold text-white/3 select-none font-[family-name:var(--font-display)]"
+          className="text-[180px] font-bold text-white/3 select-none font-(family-name:--font-display)"
           style={{ letterSpacing: '0.3em' }}
         >
           北凉
@@ -91,11 +91,11 @@ export function WorldMapScreen() {
           boxShadow: '0 10px 24px rgba(0,0,0,0.32)',
         }}
       >
-        <div className="mb-1 text-[10px] leading-[1.4] tracking-[0.24em] text-gold-500/72 font-[family-name:var(--font-ui)]">当前地图</div>
-        <div className="text-[24px] leading-[1.15] tracking-[0.06em] text-gold-300 font-[family-name:var(--font-display)]">
+        <div className="mb-1 text-[10px] leading-[1.4] tracking-[0.24em] text-gold-500/72 font-(family-name:--font-ui)">当前地图</div>
+        <div className="text-[24px] leading-[1.15] tracking-[0.06em] text-gold-300 font-(family-name:--font-display)">
           {mapConfig.name}
         </div>
-        <div className="mt-1 text-[13px] leading-[1.7] tracking-[0.01em] text-parchment-300/78 font-[family-name:var(--font-body)]">
+        <div className="mt-1 text-[13px] leading-[1.7] tracking-[0.01em] text-parchment-300/78 font-(family-name:--font-body)">
           {mapConfig.description}
         </div>
       </div>
@@ -170,7 +170,7 @@ function LocationIcon({
       {/* Name label */}
       <div
         className={`min-h-6 px-3 py-1 rounded-[4px] text-[13px] leading-[1.2] tracking-[0.04em] whitespace-nowrap
-                    transition-all font-[family-name:var(--font-display)]
+                    transition-all font-(family-name:--font-display)
                     ${status === 'available'
                       ? 'text-gold-200 border border-gold-500/40 group-hover:border-gold-300/65'
                       : status === 'all_done'

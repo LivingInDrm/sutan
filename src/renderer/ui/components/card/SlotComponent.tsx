@@ -58,7 +58,7 @@ export function SlotComponent({ slot, card, onDrop, onClick, index }: SlotCompon
       `}
     >
       <div className="text-center px-2">
-        <div className="text-[11px] text-parchment/50 font-[family-name:var(--font-display)] mb-1">
+        <div className="text-[11px] text-parchment/50 font-(family-name:--font-display) mb-1">
           {SLOT_TYPE_LABELS[slot.type] || slot.type}
         </div>
         {isRequired && (

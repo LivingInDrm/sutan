@@ -152,7 +152,7 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <span className="text-3xl opacity-20 font-[family-name:var(--font-display)] text-leather">
+                <span className="text-3xl opacity-20 font-(family-name:--font-display) text-leather">
                   {CARD_TYPE_LABELS[card.type]?.charAt(0) || '?'}
                 </span>
               </div>
@@ -165,7 +165,7 @@ export function CardComponent({ card, onClick, onDoubleClick, selected, locked, 
           <div className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${r.accent}`} />
 
           <div className="absolute top-0 inset-x-0 p-1.5">
-            <span className="text-[12px] font-bold text-white font-[family-name:var(--font-display)] leading-tight line-clamp-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+            <span className="text-[12px] font-bold text-white font-(family-name:--font-display) leading-tight line-clamp-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
               {card.name}
             </span>
           </div>

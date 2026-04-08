@@ -119,7 +119,7 @@ if (!document.querySelector('[data-d20-styles]')) {
 export const Showcase: Story = () => (
   <PageWrap>
     <div className="text-center mb-4">
-      <h2 className="text-gold text-xl font-bold font-[family-name:var(--font-display)] text-glow-gold">
+      <h2 className="text-gold text-xl font-bold font-(family-name:--font-display) text-glow-gold">
         D20 水晶骰子展示
       </h2>
       <p className="text-parchment/50 text-xs mt-1">自动旋转，鼠标悬停缩放</p>
@@ -155,7 +155,7 @@ export const FaceSelector: Story = () => {
   return (
     <PageWrap>
       <div className="text-center mb-4">
-        <h2 className="text-gold text-xl font-bold font-[family-name:var(--font-display)] text-glow-gold">
+        <h2 className="text-gold text-xl font-bold font-(family-name:--font-display) text-glow-gold">
           面选择器
         </h2>
         <p className="text-parchment/50 text-xs mt-1">点击数字查看对应面朝上</p>
@@ -225,7 +225,7 @@ export const ClickToRoll: Story = () => {
   return (
     <PageWrap>
       <div className="text-center mb-4">
-        <h2 className="text-gold text-xl font-bold font-[family-name:var(--font-display)] text-glow-gold">
+        <h2 className="text-gold text-xl font-bold font-(family-name:--font-display) text-glow-gold">
           点击投骰 (BG3 风格)
         </h2>
         <p className="text-parchment/50 text-xs mt-1">点击骰子或按钮投掷</p>
@@ -320,7 +320,7 @@ export const MultiDice: Story = () => {
   return (
     <PageWrap>
       <div className="text-center mb-4">
-        <h2 className="text-gold text-xl font-bold font-[family-name:var(--font-display)] text-glow-gold">
+        <h2 className="text-gold text-xl font-bold font-(family-name:--font-display) text-glow-gold">
           多骰投掷
         </h2>
         <p className="text-parchment/50 text-xs mt-1">同时投掷多颗 D20</p>
@@ -423,7 +423,7 @@ export const ColorVariants: Story = () => {
   return (
     <PageWrap>
       <div className="text-center mb-4">
-        <h2 className="text-gold text-xl font-bold font-[family-name:var(--font-display)] text-glow-gold">
+        <h2 className="text-gold text-xl font-bold font-(family-name:--font-display) text-glow-gold">
           配色方案
         </h2>
         <p className="text-parchment/50 text-xs mt-1">不同材质风格的 D20</p>
@@ -495,7 +495,7 @@ export const SkillCheck: Story = () => {
   return (
     <PageWrap>
       <div className="text-center mb-4">
-        <h2 className="text-gold text-xl font-bold font-[family-name:var(--font-display)] text-glow-gold">
+        <h2 className="text-gold text-xl font-bold font-(family-name:--font-display) text-glow-gold">
           技能鉴定 (BG3 完整 UI)
         </h2>
         <p className="text-parchment/50 text-xs mt-1">模拟博德之门3风格的完整鉴定界面</p>

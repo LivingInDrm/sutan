@@ -92,22 +92,22 @@ export function TitleScreen() {
       <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center justify-center px-6 py-10">
         <div className="grid w-full items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <section className="flex flex-col justify-center text-center lg:text-left">
-            <div className="mb-6 inline-flex self-center lg:self-start items-center gap-3 rounded-full border border-gold-500/35 bg-ink-900/35 px-4 py-2 text-[10px] tracking-[0.28em] text-parchment-400 shadow-[var(--shadow-ink-sm)] backdrop-blur-[2px] font-[family-name:var(--font-ui)]">
+            <div className="mb-6 inline-flex self-center lg:self-start items-center gap-3 rounded-full border border-gold-500/35 bg-ink-900/35 px-4 py-2 text-[10px] tracking-[0.28em] text-parchment-400 shadow-[var(--shadow-ink-sm)] backdrop-blur-[2px] font-(family-name:--font-ui)">
               <span className="h-1.5 w-1.5 rounded-full bg-crimson-500/80" />
               北凉旧卷
             </div>
 
             <div className="mb-8">
-              <p className="mb-3 text-[12px] tracking-[0.32em] text-gold-500/80 font-[family-name:var(--font-ui)]">
+              <p className="mb-3 text-[12px] tracking-[0.32em] text-gold-500/80 font-(family-name:--font-ui)">
                 风沙入卷 · 墨痕未干
               </p>
               <h1
-                className="mb-5 text-[56px] leading-[1.08] tracking-[0.12em] text-gold-300 font-[family-name:var(--font-display)]"
+                className="mb-5 text-[56px] leading-[1.08] tracking-[0.12em] text-gold-300 font-(family-name:--font-display)"
                 style={{ textShadow: 'var(--shadow-gold-lg)' }}
               >
                 雪中悍刀行
               </h1>
-              <p className="mx-auto max-w-[28ch] text-[16px] leading-[1.8] tracking-[0.02em] text-parchment-200/88 font-[family-name:var(--font-body)] lg:mx-0">
+              <p className="mx-auto max-w-[28ch] text-[16px] leading-[1.8] tracking-[0.02em] text-parchment-200/88 font-(family-name:--font-body) lg:mx-0">
                 北凉军报催人，江湖旧事如墨晕铺开。拈一枚棋子，选一条命路，在风雪压城前写下你的卷末批语。
               </p>
             </div>
@@ -115,12 +115,12 @@ export function TitleScreen() {
             <div className="mx-auto lg:mx-0 w-full max-w-xl rounded-xl border border-gold-500/25 bg-[linear-gradient(180deg,rgba(232,220,200,0.10),rgba(42,24,16,0.22))] p-5 shadow-[var(--shadow-ink)] backdrop-blur-[2px]">
               <div className="mb-3 flex items-center gap-3">
                 <div className="h-px flex-1 bg-gradient-to-r from-transparent to-gold-500/35" />
-                <span className="text-[12px] tracking-[0.18em] text-gold-300 font-[family-name:var(--font-display)]">
+                <span className="text-[12px] tracking-[0.18em] text-gold-300 font-(family-name:--font-display)">
                   卷首题记
                 </span>
                 <div className="h-px flex-1 bg-gradient-to-l from-transparent to-gold-500/35" />
               </div>
-              <p className="text-[14px] leading-[1.7] tracking-[0.01em] text-parchment-300/88 font-[family-name:var(--font-body)]">
+              <p className="text-[14px] leading-[1.7] tracking-[0.01em] text-parchment-300/88 font-(family-name:--font-body)">
                 主标题、材质、金线与按钮均遵循水墨北凉规范：深皮革为底，宣纸为雾，旧金为笔锋，朱砂仅作点睛。
               </p>
             </div>
@@ -144,13 +144,13 @@ export function TitleScreen() {
 
               <div className="relative p-6 sm:p-8">
                 <div className="mb-6">
-                  <div className="mb-2 text-[10px] tracking-[0.3em] text-gold-500/80 font-[family-name:var(--font-ui)]">
+                  <div className="mb-2 text-[10px] tracking-[0.3em] text-gold-500/80 font-(family-name:--font-ui)">
                     标题画面
                   </div>
-                  <h2 className="text-[22px] leading-[1.25] tracking-[0.04em] text-leather-900 font-[family-name:var(--font-display)]">
+                  <h2 className="text-[22px] leading-[1.25] tracking-[0.04em] text-leather-900 font-(family-name:--font-display)">
                     选定命数，提笔入局
                   </h2>
-                  <p className="mt-2 text-[14px] leading-[1.7] tracking-[0.01em] text-leather-700/80 font-[family-name:var(--font-body)]">
+                  <p className="mt-2 text-[14px] leading-[1.7] tracking-[0.01em] text-leather-700/80 font-(family-name:--font-body)">
                     先择难度，再启程；若旧卷尚在，可续写前文，亦可导入或导出存档。
                   </p>
                 </div>
@@ -173,15 +173,15 @@ export function TitleScreen() {
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div>
-                            <div className="text-[18px] leading-[1.25] tracking-[0.02em] text-leather-900 font-[family-name:var(--font-display)]">
+                            <div className="text-[18px] leading-[1.25] tracking-[0.02em] text-leather-900 font-(family-name:--font-display)">
                               {label}
                             </div>
-                            <div className="mt-1 text-[14px] leading-[1.7] tracking-[0.01em] text-leather-700/85 font-[family-name:var(--font-body)]">
+                            <div className="mt-1 text-[14px] leading-[1.7] tracking-[0.01em] text-leather-700/85 font-(family-name:--font-body)">
                               {tone}
                             </div>
                           </div>
                           <div className="shrink-0 pt-1 text-right">
-                            <div className="text-[12px] leading-[1.5] tracking-[0.08em] text-gold-500 font-[family-name:var(--font-ui)]">
+                            <div className="text-[12px] leading-[1.5] tracking-[0.08em] text-gold-500 font-(family-name:--font-ui)">
                               {desc}
                             </div>
                             <div className={`mt-2 h-2 w-2 rounded-full ${selected ? 'bg-gold-300 shadow-[var(--shadow-gold-sm)]' : 'bg-gold-500/35'}`} />
@@ -193,19 +193,19 @@ export function TitleScreen() {
                 </div>
 
                 <div className="mb-5 rounded-lg border border-gold-500/20 bg-[linear-gradient(180deg,rgba(61,36,24,0.04),rgba(61,36,24,0.09))] px-4 py-3">
-                  <div className="text-[10px] tracking-[0.24em] text-gold-500/75 font-[family-name:var(--font-ui)]">
+                  <div className="text-[10px] tracking-[0.24em] text-gold-500/75 font-(family-name:--font-ui)">
                     当前卷宗
                   </div>
                   <div className="mt-2 flex items-center justify-between gap-4">
                     <div>
-                      <div className="text-[18px] leading-[1.25] tracking-[0.02em] text-leather-900 font-[family-name:var(--font-display)]">
+                      <div className="text-[18px] leading-[1.25] tracking-[0.02em] text-leather-900 font-(family-name:--font-display)">
                         {selectedDifficultyConfig.label}
                       </div>
-                      <div className="mt-1 text-[12px] leading-[1.5] tracking-[0.08em] text-leather-700/70 font-[family-name:var(--font-ui)]">
+                      <div className="mt-1 text-[12px] leading-[1.5] tracking-[0.08em] text-leather-700/70 font-(family-name:--font-ui)">
                         {selectedDifficultyConfig.desc}
                       </div>
                     </div>
-                    <div className="text-[12px] leading-[1.5] tracking-[0.08em] text-gold-500 font-[family-name:var(--font-ui)]">
+                    <div className="text-[12px] leading-[1.5] tracking-[0.08em] text-gold-500 font-(family-name:--font-ui)">
                       {game ? '已有旧卷可续' : '尚无旧卷'}
                     </div>
                   </div>
@@ -215,7 +215,7 @@ export function TitleScreen() {
                   <button
                     type="button"
                     onClick={() => handleStart(selectedDifficulty)}
-                    className="min-h-12 rounded-lg border border-gold-300 bg-[linear-gradient(180deg,rgba(201,168,76,0.92),rgba(138,109,43,0.96))] px-5 py-3 text-[16px] leading-[1.2] tracking-[0.08em] text-leather-900 shadow-[var(--shadow-gold)] transition-all duration-200 hover:-translate-y-[2px] hover:border-gold-100 hover:shadow-[var(--shadow-gold-lg)] active:scale-[0.97] font-[family-name:var(--font-display)]"
+                    className="min-h-12 rounded-lg border border-gold-300 bg-[linear-gradient(180deg,rgba(201,168,76,0.92),rgba(138,109,43,0.96))] px-5 py-3 text-[16px] leading-[1.2] tracking-[0.08em] text-leather-900 shadow-[var(--shadow-gold)] transition-all duration-200 hover:-translate-y-[2px] hover:border-gold-100 hover:shadow-[var(--shadow-gold-lg)] active:scale-[0.97] font-(family-name:--font-display)"
                   >
                     新开一卷
                   </button>
@@ -224,7 +224,7 @@ export function TitleScreen() {
                     onClick={handleContinue}
                     disabled={!game}
                     className={[
-                      'min-h-12 rounded-lg border px-5 py-3 text-[16px] leading-[1.2] tracking-[0.08em] transition-all duration-200 active:scale-[0.97] font-[family-name:var(--font-display)]',
+                      'min-h-12 rounded-lg border px-5 py-3 text-[16px] leading-[1.2] tracking-[0.08em] transition-all duration-200 active:scale-[0.97] font-(family-name:--font-display)',
                       game
                         ? 'border-gold-500/55 bg-leather-900/92 text-gold-300 hover:-translate-y-[2px] hover:border-gold-300 hover:text-gold-100'
                         : 'cursor-not-allowed border-gold-500/20 bg-leather-900/55 text-parchment-500',
@@ -238,7 +238,7 @@ export function TitleScreen() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="min-h-12 rounded-lg border border-gold-500/40 bg-leather-900/8 px-5 py-3 text-[12px] leading-[1.5] tracking-[0.12em] text-gold-500 transition-all duration-200 hover:-translate-y-[2px] hover:border-gold-300 hover:text-gold-300 active:scale-[0.97] font-[family-name:var(--font-ui)]"
+                    className="min-h-12 rounded-lg border border-gold-500/40 bg-leather-900/8 px-5 py-3 text-[12px] leading-[1.5] tracking-[0.12em] text-gold-500 transition-all duration-200 hover:-translate-y-[2px] hover:border-gold-300 hover:text-gold-300 active:scale-[0.97] font-(family-name:--font-ui)"
                   >
                     导入存档
                   </button>
@@ -247,7 +247,7 @@ export function TitleScreen() {
                     onClick={handleExport}
                     disabled={!game}
                     className={[
-                      'min-h-12 rounded-lg border px-5 py-3 text-[12px] leading-[1.5] tracking-[0.12em] transition-all duration-200 active:scale-[0.97] font-[family-name:var(--font-ui)]',
+                      'min-h-12 rounded-lg border px-5 py-3 text-[12px] leading-[1.5] tracking-[0.12em] transition-all duration-200 active:scale-[0.97] font-(family-name:--font-ui)',
                       game
                         ? 'border-gold-500/40 bg-leather-900/8 text-gold-500 hover:-translate-y-[2px] hover:border-gold-300 hover:text-gold-300'
                         : 'cursor-not-allowed border-gold-500/18 bg-leather-900/4 text-parchment-500',
@@ -265,7 +265,7 @@ export function TitleScreen() {
                   onChange={handleImportFile}
                 />
 
-                <div className="mt-4 min-h-5 text-[12px] leading-[1.5] tracking-[0.01em] font-[family-name:var(--font-body)]">
+                <div className="mt-4 min-h-5 text-[12px] leading-[1.5] tracking-[0.01em] font-(family-name:--font-body)">
                   {importError ? (
                     <span className="text-crimson-500">{importError}</span>
                   ) : (
@@ -280,7 +280,7 @@ export function TitleScreen() {
 
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-10 flex items-center justify-center gap-4 px-6">
         <div className="h-px w-12 bg-gradient-to-r from-transparent to-gold-500/35" />
-        <p className="text-[10px] tracking-[0.24em] text-parchment-400/70 font-[family-name:var(--font-ui)]">
+        <p className="text-[10px] tracking-[0.24em] text-parchment-400/70 font-(family-name:--font-ui)">
           v0.1.0 · 开发版
         </p>
         <div className="h-px w-12 bg-gradient-to-l from-transparent to-gold-500/35" />

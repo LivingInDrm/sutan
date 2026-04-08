@@ -44,7 +44,7 @@ export function NarrativeNodeView({ node, isCurrent }: { node: NarrativeNode; is
           )}
           <div className="flex-1 min-w-0">
             {node.speaker && (
-              <div className={`text-xs font-bold mb-0.5 font-[family-name:var(--font-display)] ${isCurrent ? 'text-crimson-dark' : 'text-stone-400'}`}>
+              <div className={`text-xs font-bold mb-0.5 font-(family-name:--font-display) ${isCurrent ? 'text-crimson-dark' : 'text-stone-400'}`}>
                 {node.speaker}
               </div>
             )}
@@ -147,7 +147,7 @@ export function NarrativePlayer({ nodes, currentIndex, onAdvance, onChoice, hist
                   }}
                 >
                   <span className="text-gold-dim group-hover:text-gold transition-colors">&#9670;</span>
-                  <span className="font-[family-name:var(--font-display)]">{option.label}</span>
+                  <span className="font-(family-name:--font-display)">{option.label}</span>
                 </button>
               ))}
             </div>

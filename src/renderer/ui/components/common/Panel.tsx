@@ -39,7 +39,7 @@ export function Panel({
             className="absolute inset-0 w-full h-full text-gold-dim/60 pointer-events-none"
             preserveAspectRatio="none"
           />
-          <span className="relative z-10 text-sm font-bold text-gold font-[family-name:var(--font-display)] text-glow-gold">
+          <span className="relative z-10 text-sm font-bold text-gold font-(family-name:--font-display) text-glow-gold">
             {title}
           </span>
         </div>

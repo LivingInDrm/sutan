@@ -43,7 +43,7 @@ export function BookLayout({ leftContent, rightContent, rightTitle }: BookLayout
                 className="absolute inset-0 w-full h-full text-gold-dim/50 pointer-events-none"
                 preserveAspectRatio="none"
               />
-              <span className="relative z-10 text-sm font-bold text-leather font-[family-name:var(--font-display)] tracking-widest">
+              <span className="relative z-10 text-sm font-bold text-leather font-(family-name:--font-display) tracking-widest">
                 {rightTitle}
               </span>
             </div>

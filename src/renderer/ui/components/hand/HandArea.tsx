@@ -74,7 +74,7 @@ function CategoryTabs({ groups, counts, activeKey, onSelect }: CategoryTabsProps
 
             <div className="relative flex flex-col items-center gap-0.5">
               <span className={`
-                writing-mode-vertical text-[14px] font-[family-name:var(--font-display)] leading-none tracking-[0.08em]
+                writing-mode-vertical text-[14px] font-(family-name:--font-display) leading-none tracking-[0.08em]
                 transition-all duration-300 select-none
                 ${isActive ? 'text-gold-300' : 'text-parchment-500/65 hover:text-parchment-300/75'}
               `}>
@@ -82,7 +82,7 @@ function CategoryTabs({ groups, counts, activeKey, onSelect }: CategoryTabsProps
               </span>
 
               <span className={`
-                text-[9px] tabular-nums leading-none mt-0.5 font-[family-name:var(--font-mono)]
+                text-[9px] tabular-nums leading-none mt-0.5 font-(family-name:--font-mono)
                 transition-all duration-300
                 ${isActive ? 'text-gold-500/80' : 'text-parchment-500/35'}
               `}>
@@ -180,7 +180,7 @@ function CardStrip({ cards, onCardClick, onCardDoubleClick, selectedCardId, lock
             className="w-6 h-6 text-parchment"
             preserveAspectRatio="xMidYMid meet"
           />
-          <span className="text-[10px] text-parchment font-[family-name:var(--font-display)] tracking-[0.4em]">
+          <span className="text-[10px] text-parchment font-(family-name:--font-display) tracking-[0.4em]">
             空
           </span>
         </div>

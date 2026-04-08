@@ -144,7 +144,7 @@ export function LocationScreen() {
         </button>
 
         <h1
-          className="text-3xl font-bold text-amber-400 tracking-widest mb-1 font-[family-name:var(--font-display)]"
+          className="text-3xl font-bold text-amber-400 tracking-widest mb-1 font-(family-name:--font-display)"
           style={{ textShadow: '0 0 20px rgba(217,119,6,0.5)' }}
         >
           {location.name}
@@ -221,7 +221,7 @@ function SceneCard({
           </div>
 
           <div
-            className={`text-base font-bold mb-1.5 tracking-wide font-[family-name:var(--font-display)] ${config.color}`}
+            className={`text-base font-bold mb-1.5 tracking-wide font-(family-name:--font-display) ${config.color}`}
           >
             {scene?.name ?? sceneId}
           </div>

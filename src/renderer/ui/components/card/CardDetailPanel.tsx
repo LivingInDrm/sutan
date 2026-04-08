@@ -141,7 +141,7 @@ export function CardDetailPanel({ card, onClose }: CardDetailPanelProps) {
                 transition={{ duration: 0.3, delay: 0.08 }}
               >
                 <div className="flex items-center gap-3 mb-1.5">
-                  <h2 className="text-xl font-bold text-leather font-[family-name:var(--font-display)] leading-tight tracking-wide">
+                  <h2 className="text-xl font-bold text-leather font-(family-name:--font-display) leading-tight tracking-wide">
                     {card.name}
                   </h2>
                   <span className={`text-[11px] font-bold px-2 py-0.5 rounded ${accent.badge} leading-none`}>

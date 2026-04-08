@@ -85,14 +85,14 @@ export function ResourceBar() {
         {isWorldMap && currentMap && (
           <>
             <div className="min-w-0 pr-1">
-              <div className="text-[10px] leading-[1.4] tracking-[0.22em] text-gold-500/80 font-[family-name:var(--font-ui)]">
+              <div className="text-[10px] leading-[1.4] tracking-[0.22em] text-gold-500/80 font-(family-name:--font-ui)">
                 当前地图
               </div>
               <div className="flex items-baseline gap-2 min-w-0">
-                <span className="truncate text-[18px] leading-[1.2] tracking-[0.04em] text-gold-300 font-[family-name:var(--font-display)]">
+                <span className="truncate text-[18px] leading-[1.2] tracking-[0.04em] text-gold-300 font-(family-name:--font-display)">
                   {currentMap.name}
                 </span>
-                <span className="hidden md:block truncate text-[11px] leading-[1.5] tracking-[0.06em] text-parchment-400/75 font-[family-name:var(--font-body)]">
+                <span className="hidden md:block truncate text-[11px] leading-[1.5] tracking-[0.06em] text-parchment-400/75 font-(family-name:--font-body)">
                   {currentMap.description}
                 </span>
               </div>
@@ -105,10 +105,10 @@ export function ResourceBar() {
           {items.map((item, index) => (
             <React.Fragment key={item.key}>
               <div className="flex items-baseline gap-2">
-                <span className={`text-[10px] leading-[1.4] tracking-[0.18em] uppercase font-[family-name:var(--font-ui)] ${item.tone}`}>
+                <span className={`text-[10px] leading-[1.4] tracking-[0.18em] uppercase font-(family-name:--font-ui) ${item.tone}`}>
                   {item.label}
                 </span>
-                <span className={`text-[14px] leading-[1.2] font-bold font-[family-name:var(--font-mono)] ${item.valueClass}`}>
+                <span className={`text-[14px] leading-[1.2] font-bold font-(family-name:--font-mono) ${item.valueClass}`}>
                   {item.value}
                 </span>
               </div>
@@ -125,7 +125,7 @@ export function ResourceBar() {
             size="sm"
             glow
             onClick={handleNextDay}
-            className="min-w-[112px] font-[family-name:var(--font-display)] tracking-[0.08em] text-[15px]"
+            className="min-w-[112px] font-(family-name:--font-display) tracking-[0.08em] text-[15px]"
           >
             结束当日
           </Button>

@@ -1,14 +1,6 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/lxgw-wenkai-webfont/1.7.0/lxgwwenkai-regular.min.css');
+@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.7.0/lxgwwenkailite-regular.css');
 @import "tailwindcss";
-
-@font-face {
-  font-family: 'FZQingKeBenYueSongS';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local('FZQingKeBenYueSongS'), local('方正清刻本悦宋简体'),
-    local('方正清刻本悦宋'), local('FZQingKeBenYueSongS-R-GB');
-}
 
 @theme {
   /* ── Existing tokens ── */
@@ -88,8 +80,8 @@
 
   /* ── Fonts ── */
   --font-display: 'LXGW WenKai', 'STKaiti', 'KaiTi', serif;
-  --font-body: 'FZQingKeBenYueSongS', 'Source Han Serif CN', 'Noto Serif SC', serif;
-  --font-ui: 'FZQingKeBenYueSongS', 'Source Han Serif CN', 'Noto Serif SC', serif;
+  --font-body: 'LXGW WenKai Lite', 'LXGW WenKai', 'Source Han Serif CN', serif;
+  --font-ui: 'LXGW WenKai Lite', 'LXGW WenKai', 'Source Han Serif CN', serif;
   --font-mono: 'Source Code Pro', 'Consolas', monospace;
 }
 

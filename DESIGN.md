@@ -62,7 +62,7 @@
 当前项目已有可继承的正向设计决策：
 
 - 颜色基础已建立：`leather / parchment / gold / crimson / ink`
-- 字体基础已建立：`LXGW WenKai` 用于展示，`FZQingKeBenYueSongS`（缺失时回退 `Source Han Serif CN` / `Noto Serif SC`）用于正文与 UI
+- 字体基础已建立：`LXGW WenKai` 用于展示，`LXGW WenKai Lite`（缺失时回退 `LXGW WenKai` / `Source Han Serif CN`）用于正文与 UI
 - 材质基础已存在：`rice-paper`、`ink-wash`、`bronze`、`silk`
 - 结算页 `ui_004` 边框、宣纸底与书卷式布局已具备正确方向
 
@@ -221,8 +221,8 @@
 | 角色 | Token | 字体 |
 |---|---|---|
 | 展示字体 | `--font-display` | `LXGW WenKai`, `STKaiti`, `KaiTi`, serif |
-| 正文字体 | `--font-body` | `FZQingKeBenYueSongS`, `Source Han Serif CN`, `Noto Serif SC`, serif |
-| UI字体 | `--font-ui` | `FZQingKeBenYueSongS`, `Source Han Serif CN`, `Noto Serif SC`, serif |
+| 正文字体 | `--font-body` | `LXGW WenKai Lite`, `LXGW WenKai`, `Source Han Serif CN`, serif |
+| UI字体 | `--font-ui` | `LXGW WenKai Lite`, `LXGW WenKai`, `Source Han Serif CN`, serif |
 | 等宽字体 | `--font-mono` | `Source Code Pro`, `Consolas`, monospace |
 
 ### 3.2 使用规则
@@ -526,7 +526,7 @@
 - 用于玩家抉择场景（三选一等）
 - 宣纸底 `#d4c5a9` + 暗金单层边框
 - 字色：墨色 `#1a0f0a`
-- 字体：`--font-body`（方正清刻本悦宋，缺失时回退思源宋体），叙事感
+  - 字体：`--font-body`（霞鹜文楷轻量版，缺失时回退 `LXGW WenKai` / `Source Han Serif CN`），叙事感
 - 选中态：边框变亮金 + 左侧出现朱砂竖条标记
 - 布局：宽条形，文字左对齐
 
@@ -702,7 +702,7 @@
 
 - 使用宣纸、皮革、墨色、旧金构成主界面
 - 使用 `LXGW WenKai` 作为标题、地名、牌名展示字体
-- 使用 `FZQingKeBenYueSongS` 承载剧情正文与说明文本，缺失时回退 `Source Han Serif CN`
+- 使用 `LXGW WenKai Lite` 承载剧情正文与说明文本，缺失时回退 `LXGW WenKai` / `Source Han Serif CN`
 - 使用 `gold / bamboo / cerulean / crimson` 建立清晰状态语义
 - 让材质成为背景层次的一部分，而不是纯色块堆叠
 - 让地图、卡牌、结算三大场景共享同一套设计语言

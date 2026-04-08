@@ -180,8 +180,8 @@ export function Button({
 
   const tone = visualTone[resolvedVariant];
   const textFontClass = tone.bodyFont === 'body'
-    ? 'font-[family-name:var(--font-body)]'
-    : 'font-[family-name:var(--font-display)]';
+    ? 'font-(family-name:--font-body)'
+    : 'font-(family-name:--font-display)';
   const textShadowStyle: React.CSSProperties = {
     textShadow: isDisabled ? '0 1px 2px rgba(0,0,0,0.28)' : '0 1px 2px rgba(0,0,0,0.5)',
   };

@@ -49,7 +49,7 @@ export function SettlementLeftPanel({
   return (
     <>
       <div className="text-xs text-black mb-1 tracking-wider">当前场景</div>
-      <div className="text-base font-bold text-black mb-4 font-[family-name:var(--font-display)]">
+      <div className="text-base font-bold text-black mb-4 font-(family-name:--font-display)">
         {sceneName}
       </div>
 
@@ -177,7 +177,7 @@ function PlayerChoicePrompt({
             <div className="flex items-start gap-3">
               <span className="mt-0.5 text-gold-dim transition-colors group-hover:text-gold">✦</span>
               <div className="min-w-0 flex-1">
-                <div className="font-[family-name:var(--font-display)] text-[15px] text-black">
+                <div className="font-(family-name:--font-display) text-[15px] text-black">
                   {choice.label}
                 </div>
                 {choice.description && (

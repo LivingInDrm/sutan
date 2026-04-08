@@ -10,7 +10,7 @@ export function SectionTitle({ children, theme = 'dark' }: SectionTitleProps) {
   const isLight = theme === 'light';
   return (
     <div className="flex items-center gap-2 mt-1">
-      <span className={`text-sm font-bold font-[family-name:var(--font-display)] whitespace-nowrap ${isLight ? 'text-gold-dim' : 'text-gold text-glow-gold'}`}>
+      <span className={`text-sm font-bold font-(family-name:--font-display) whitespace-nowrap ${isLight ? 'text-gold-dim' : 'text-gold text-glow-gold'}`}>
         {children}
       </span>
       <DividerLine

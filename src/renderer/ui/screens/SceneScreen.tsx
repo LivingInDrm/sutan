@@ -236,7 +236,7 @@ export function SceneScreen() {
                 <span className="text-[10px] text-gold-dim/50">{scene.duration} 回合</span>
               </div>
 
-              <h2 className="text-2xl font-bold text-gold font-[family-name:var(--font-display)] tracking-wide mb-3">
+              <h2 className="text-2xl font-bold text-gold font-(family-name:--font-display) tracking-wide mb-3">
                 {scene.name}
               </h2>
 

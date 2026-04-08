@@ -132,7 +132,7 @@ export function EventSettlementFrame({
 
                 {rightTitle && (
                   <div className="shrink-0 pt-4 px-5 pb-2">
-                    <h2 className="text-center text-sm font-bold text-amber-950 font-[family-name:var(--font-display)] tracking-widest">
+                    <h2 className="text-center text-sm font-bold text-amber-950 font-(family-name:--font-display) tracking-widest">
                       {rightTitle}
                     </h2>
                     <div className="mt-2 h-px bg-amber-700/40" />

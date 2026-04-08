@@ -14,8 +14,8 @@ export const AllVariants: Story = () => (
   <Wrap>
     <div className="space-y-6">
       <div>
-        <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">Plaque Variants</h2>
-        <p className="mt-2 font-[family-name:var(--font-body)] text-sm text-parchment-400">按新牌匾风规范展示主次操作、危险操作、幽灵操作与抉择按钮。</p>
+        <h2 className="font-(family-name:--font-display) text-[28px] text-gold-300">Plaque Variants</h2>
+        <p className="mt-2 font-(family-name:--font-body) text-sm text-parchment-400">按新牌匾风规范展示主次操作、危险操作、幽灵操作与抉择按钮。</p>
       </div>
       <div className="flex flex-wrap items-center gap-4">
         <Button variant="primary">新开一卷</Button>
@@ -34,7 +34,7 @@ AllVariants.meta = { title: "Button / All Variants" };
 export const AllSizes: Story = () => (
   <Wrap>
     <div className="space-y-5">
-      <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">Plaque Sizes</h2>
+      <h2 className="font-(family-name:--font-display) text-[28px] text-gold-300">Plaque Sizes</h2>
       <div className="flex flex-wrap items-center gap-4">
         <Button size="sm">sm 结束当日</Button>
         <Button size="md">md 确认参与</Button>
@@ -55,7 +55,7 @@ AllSizes.meta = { title: "Button / All Sizes" };
 export const States: Story = () => (
   <Wrap>
     <div className="space-y-5">
-      <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">Plaque States</h2>
+      <h2 className="font-(family-name:--font-display) text-[28px] text-gold-300">Plaque States</h2>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <Button>default 常态</Button>
         <Button previewState="hover">hover 提笔</Button>
@@ -76,12 +76,12 @@ export const GameScenarios: Story = () => (
   <Wrap>
     <div className="space-y-8">
       <div>
-        <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">Game Scenarios</h2>
-        <p className="mt-2 font-[family-name:var(--font-body)] text-sm text-parchment-400">验证标题页、地图页与抉择场景在牌匾风按钮下的视觉一致性。</p>
+        <h2 className="font-(family-name:--font-display) text-[28px] text-gold-300">Game Scenarios</h2>
+        <p className="mt-2 font-(family-name:--font-body) text-sm text-parchment-400">验证标题页、地图页与抉择场景在牌匾风按钮下的视觉一致性。</p>
       </div>
 
       <section className="rounded-[16px] border border-gold-500/20 bg-leather-800/45 p-5">
-        <div className="mb-4 font-[family-name:var(--font-display)] text-[22px] text-gold-300">标题页按钮组</div>
+        <div className="mb-4 font-(family-name:--font-display) text-[22px] text-gold-300">标题页按钮组</div>
         <div className="flex flex-wrap gap-4">
           <Button size="xl" glow>新开一卷</Button>
           <Button variant="secondary" size="lg">继续旧卷</Button>
@@ -91,7 +91,7 @@ export const GameScenarios: Story = () => (
       </section>
 
       <section className="rounded-[16px] border border-gold-500/20 bg-leather-800/45 p-5">
-        <div className="mb-4 font-[family-name:var(--font-display)] text-[22px] text-gold-300">场景操作按钮</div>
+        <div className="mb-4 font-(family-name:--font-display) text-[22px] text-gold-300">场景操作按钮</div>
         <div className="flex flex-wrap gap-4">
           <Button size="lg" glow leftIcon={<span>◇</span>}>确认参与</Button>
           <Button variant="secondary" size="lg">返回地图</Button>
@@ -100,7 +100,7 @@ export const GameScenarios: Story = () => (
       </section>
 
       <section className="rounded-[16px] border border-gold-500/20 bg-parchment-texture p-5">
-        <div className="mb-4 font-[family-name:var(--font-display)] text-[22px] text-leather-900">玩家抉择按钮组</div>
+        <div className="mb-4 font-(family-name:--font-display) text-[22px] text-leather-900">玩家抉择按钮组</div>
         <div className="grid gap-4 md:grid-cols-2">
           <Button variant="choice" size="lg" className="justify-start">先礼后兵，探其虚实</Button>
           <Button variant="choice" size="lg" selected className="justify-start">趁夜入城，快刀斩乱麻</Button>
@@ -110,7 +110,7 @@ export const GameScenarios: Story = () => (
       </section>
 
       <section className="rounded-[16px] border border-gold-500/20 bg-leather-800/45 p-5">
-        <div className="mb-4 font-[family-name:var(--font-display)] text-[22px] text-gold-300">结算按钮</div>
+        <div className="mb-4 font-(family-name:--font-display) text-[22px] text-gold-300">结算按钮</div>
         <div className="flex flex-wrap gap-4">
           <Button size="lg" glow>接受结果</Button>
           <Button variant="danger" size="lg">重试此局</Button>
@@ -118,7 +118,7 @@ export const GameScenarios: Story = () => (
       </section>
 
       <section className="rounded-[16px] border border-gold-500/20 bg-leather-800/45 p-5">
-        <div className="mb-4 font-[family-name:var(--font-display)] text-[22px] text-gold-300">结束当日按钮</div>
+        <div className="mb-4 font-(family-name:--font-display) text-[22px] text-gold-300">结束当日按钮</div>
         <div className="flex flex-wrap gap-4">
           <Button size="sm" glow>结束当日</Button>
           <Button variant="ghost" size="sm">稍后再议</Button>

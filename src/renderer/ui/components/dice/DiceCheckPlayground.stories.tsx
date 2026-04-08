@@ -127,7 +127,7 @@ function StyleB_Cinematic({
 
       <div className="relative z-10">
         <div className="text-center mb-2">
-          <span className="text-gold font-[family-name:var(--font-display)] text-2xl text-glow-gold">
+          <span className="text-gold font-(family-name:--font-display) text-2xl text-glow-gold">
             ⚔️ 战斗鉴定
           </span>
         </div>
@@ -200,7 +200,7 @@ function StyleB_Cinematic({
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: data.allDice.length * 0.1 + 0.6 }}
-          className={`text-center mt-4 text-3xl font-bold font-[family-name:var(--font-display)] ${RESULT_COLORS[data.result]}`}
+          className={`text-center mt-4 text-3xl font-bold font-(family-name:--font-display) ${RESULT_COLORS[data.result]}`}
           style={{
             textShadow:
               data.result === "success"
@@ -392,7 +392,7 @@ function StyleE_Sheet({
     <div className="rounded-lg border border-gold-dim/40 bg-[#1e1520] overflow-hidden">
       <div className="bg-gradient-to-r from-crimson-dark/60 to-ink/80 px-4 py-2 border-b border-gold-dim/30">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-bold text-gold text-glow-gold font-[family-name:var(--font-display)]">
+          <span className="text-sm font-bold text-gold text-glow-gold font-(family-name:--font-display)">
             鉴定记录
           </span>
           <span className="text-[10px] text-gold-dim/50 font-mono">
@@ -730,7 +730,7 @@ export const A_Classic: Story = () => {
   return (
     <Wrap>
       <div className="max-w-md mx-auto space-y-4">
-        <h2 className="text-gold text-lg font-bold text-glow-gold font-[family-name:var(--font-display)] text-center">
+        <h2 className="text-gold text-lg font-bold text-glow-gold font-(family-name:--font-display) text-center">
           Style A: 经典紧凑
         </h2>
         <p className="text-parchment/50 text-xs text-center">
@@ -757,7 +757,7 @@ export const B_Cinematic: Story = () => {
   return (
     <Wrap>
       <div className="max-w-lg mx-auto space-y-4">
-        <h2 className="text-gold text-lg font-bold text-glow-gold font-[family-name:var(--font-display)] text-center">
+        <h2 className="text-gold text-lg font-bold text-glow-gold font-(family-name:--font-display) text-center">
           Style B: 电影式全屏
         </h2>
         <p className="text-parchment/50 text-xs text-center">
@@ -784,7 +784,7 @@ export const C_Gauge: Story = () => {
   return (
     <Wrap>
       <div className="max-w-md mx-auto space-y-4">
-        <h2 className="text-gold text-lg font-bold text-glow-gold font-[family-name:var(--font-display)] text-center">
+        <h2 className="text-gold text-lg font-bold text-glow-gold font-(family-name:--font-display) text-center">
           Style C: 进度条/仪表
         </h2>
         <p className="text-parchment/50 text-xs text-center">
@@ -811,7 +811,7 @@ export const D_Sequential: Story = () => {
   return (
     <Wrap>
       <div className="max-w-md mx-auto space-y-4">
-        <h2 className="text-gold text-lg font-bold text-glow-gold font-[family-name:var(--font-display)] text-center">
+        <h2 className="text-gold text-lg font-bold text-glow-gold font-(family-name:--font-display) text-center">
           Style D: 逐个揭示
         </h2>
         <p className="text-parchment/50 text-xs text-center">
@@ -838,7 +838,7 @@ export const E_Sheet: Story = () => {
   return (
     <Wrap>
       <div className="max-w-md mx-auto space-y-4">
-        <h2 className="text-gold text-lg font-bold text-glow-gold font-[family-name:var(--font-display)] text-center">
+        <h2 className="text-gold text-lg font-bold text-glow-gold font-(family-name:--font-display) text-center">
           Style E: TRPG 记录表
         </h2>
         <p className="text-parchment/50 text-xs text-center">
@@ -863,7 +863,7 @@ E_Sheet.meta = { title: "DiceCheckPlayground / E - TRPG Sheet" };
 export const F_Interactive: Story = () => (
   <Wrap>
     <div className="space-y-4">
-      <h2 className="text-gold text-lg font-bold text-glow-gold font-[family-name:var(--font-display)] text-center">
+      <h2 className="text-gold text-lg font-bold text-glow-gold font-(family-name:--font-display) text-center">
         Style F: 完整交互模拟
       </h2>
       <p className="text-parchment/50 text-xs text-center">
@@ -880,7 +880,7 @@ export const AllStyles: Story = () => {
   return (
     <Wrap>
       <div className="max-w-2xl mx-auto space-y-8">
-        <h1 className="text-gold text-xl font-bold text-glow-gold font-[family-name:var(--font-display)] text-center mb-6">
+        <h1 className="text-gold text-xl font-bold text-glow-gold font-(family-name:--font-display) text-center mb-6">
           鉴定机制 - 前端呈现方案对比
         </h1>
         <div className="text-center mb-4">
