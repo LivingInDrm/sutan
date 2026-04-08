@@ -1,0 +1,319 @@
+{
+  "scene_id": "scene_013",
+  "name": "北凉王府归家",
+  "description": "徐凤年游历三年归来，重返清凉山王府。青鸟在门前迎候，徐骁、徐渭熊与黄蛮儿都在府中等他回家。风尘落定之后，王府里的灯火与笑骂，才是这一路最暖的归处。",
+  "background_image": "/maps/map_001/location_001_backdrop.png",
+  "type": "event",
+  "duration": 3,
+  "slots": [
+    {
+      "type": "character",
+      "required": true,
+      "locked": false
+    },
+    {
+      "type": "item",
+      "required": false,
+      "locked": false
+    }
+  ],
+  "entry_stage": "home_gate",
+  "stages": [
+    {
+      "stage_id": "home_gate",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "清凉山的晚风掠过王府高檐，熟悉的灯火一盏盏亮起，像是替远游之人提早守住了归路。"
+        },
+        {
+          "type": "narration",
+          "text": "徐凤年翻身下马，衣角还带着一路风尘。王府门前石阶干净得过分，像是有人一遍遍扫过，只等他今日回来。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "青鸟",
+          "text": "世子，回来了。",
+          "portrait": "/assets/portraits/figure15.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "我还当你会说一句“王府清净了三年，总算又要吵起来了”。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "青鸟",
+          "text": "若世子喜欢，我也可以现在补上。",
+          "portrait": "/assets/portraits/figure15.png"
+        },
+        {
+          "type": "narration",
+          "text": "一句不咸不淡的话，反倒让徐凤年心里一松。原来这座王府的门一推开，连沉默都还是旧时模样。"
+        }
+      ],
+      "branches": [
+        {
+          "condition": "default",
+          "next_stage": "first_visit"
+        }
+      ]
+    },
+    {
+      "stage_id": "first_visit",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "府里早已知道世子归来。前院有人故意慢着脚步装镇定，后院却早把热汤、热酒、热菜都备妥了。"
+        }
+      ],
+      "settlement": {
+        "type": "player_choice",
+        "narrative": "阔别三年，徐凤年想先去见谁？",
+        "choices": [
+          {
+            "id": "visit_father_first",
+            "label": "先去拜见父王",
+            "description": "徐凤年直奔书房。徐骁背对门口看着北凉舆图，听见脚步声也不回头，只说了句“舍得回来了？”等徐凤年走近，他才把人从头到脚看了一遍，嘴上嫌瘦了，眼底却是藏不住的高兴。父子二人对坐喝了半盏热酒，谁也没提一路凶险，只把那点牵挂都压进一句句家常里。",
+            "effects": {
+              "reputation": 4
+            },
+            "next_stage": "day_in_mansion"
+          },
+          {
+            "id": "visit_sister_first",
+            "label": "先去找二姐",
+            "description": "徐凤年绕去湖畔小楼，徐渭熊正翻着军报，连头也没抬就先道：“三年不见，倒还知道回北凉。”她把徐凤年游历路线、遇过的人和闯过的祸一条条点出来，说得徐凤年都怀疑这一路是不是有人贴身跟着。可等她递来一碗早就温着的羹汤时，嘴角终究还是有一丝不易察觉的笑意。",
+            "effects": {
+              "reputation": 3
+            },
+            "next_stage": "day_in_mansion"
+          },
+          {
+            "id": "visit_brother_first",
+            "label": "先去找黄蛮儿",
+            "description": "徐凤年刚进后院，就被黄蛮儿一把抱住，差点整个人离地。少年憨憨笑着，只反复念叨“哥回来了，哥回来了”。徐凤年拍着他的肩膀让他松手，结果黄蛮儿转头就拎来一截练功木桩，认真问要不要先比比力气。兄弟俩闹得满院鸡飞狗跳，连路过的侍女都忍不住偷笑。",
+            "effects": {
+              "reputation": 2
+            },
+            "next_stage": "day_in_mansion"
+          }
+        ]
+      }
+    },
+    {
+      "stage_id": "day_in_mansion",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "不过半日，徐凤年回府的消息就传遍了清凉山。书房、湖楼、校场、厨房，处处都像忽然活了过来。红薯亲自带人换上了新菜热酒，嘴上说着“世子在外头苦惯了，回家总得先把胃养回来”，笑意却比谁都藏不住。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐骁",
+          "text": "出去三年，倒是把骨头练硬了些。不错，至少没把我北凉王府的脸丢在外头。",
+          "portrait": "/assets/portraits/figure11.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐渭熊",
+          "text": "父王这话说得早了。他在外头惹的麻烦若一桩桩算，只怕你今晚这顿酒都得先罚三杯。",
+          "portrait": "/assets/portraits/figure02.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "红薯",
+          "text": "二郡主先别急着罚，世子风尘仆仆，怎么也得先让他把这碗羹喝完。要训人，等吃饱了再训也不迟。",
+          "portrait": "/assets/portraits/figure05.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "黄蛮儿",
+          "text": "哥不怕罚酒，我帮哥喝！谁欺负哥，我去把他举起来！",
+          "portrait": "/assets/portraits/figure01.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "还是黄蛮儿最讲义气。二姐，你看看，咱们徐家总算还有个向着我的。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "narration",
+          "text": "徐渭熊冷笑一声，徐骁却已经笑得端起了酒盏。王府里的打趣一如往常，三年风雪到了此刻，才真正落了地。"
+        }
+      ],
+      "settlement": {
+        "type": "player_choice",
+        "narrative": "白日闲下来后，徐凤年想把这点团聚时光留给谁？",
+        "choices": [
+          {
+            "id": "spend_time_with_father",
+            "label": "陪父王喝酒下棋",
+            "description": "徐凤年陪徐骁在书房摆开残棋。徐骁表面还在说些“江湖也不过如此”的风凉话，落子却一再替徐凤年留出生路。酒过三巡，这位人人畏惧的人屠只淡淡问了一句“在外头，可曾吃过亏”，像把三年没说出口的话都收进了这一问里。",
+            "effects": {
+              "reputation": 5
+            },
+            "next_stage": "banquet_talk"
+          },
+          {
+            "id": "spend_time_with_sister",
+            "label": "听二姐盘问游历细节",
+            "description": "徐渭熊把徐凤年按在案前，像审一份军报般把他三年游历拆得明明白白。她嘴上句句不留情，连徐凤年吹过的牛都给他找出破绽，可等说到险处时，落笔却不由得重了半分。那份冷静底下，藏着的是谁都看得见、只是她自己不肯承认的牵挂。",
+            "effects": {
+              "reputation": 5
+            },
+            "next_stage": "banquet_talk"
+          },
+          {
+            "id": "spend_time_with_brother",
+            "label": "陪黄蛮儿去校场胡闹",
+            "description": "黄蛮儿兴冲冲拉着徐凤年去了校场，非要比谁先把石锁举过头顶。徐凤年当然比不过，只能靠嘴皮子赖账，惹得黄蛮儿急得直挠头。兄弟二人闹腾到最后，徐凤年坐在兵器架上喘气，黄蛮儿蹲在一旁傻笑，像这三年从没分开过。",
+            "effects": {
+              "reputation": 4
+            },
+            "next_stage": "banquet_talk"
+          }
+        ]
+      }
+    },
+    {
+      "stage_id": "banquet_talk",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "夜色沉下来时，王府家宴已经摆好。灯影落在桌上，热气裹着酒香翻涌，竟比外头任何一处江湖都更叫人放松。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐骁",
+          "text": "行了，酒也热了，人也齐了。小王八蛋，说说你这三年都见了些什么人、闯了些什么祸。",
+          "portrait": "/assets/portraits/figure11.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐渭熊",
+          "text": "你若敢添油加醋，我今晚就替你删去一半。",
+          "portrait": "/assets/portraits/figure02.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "黄蛮儿",
+          "text": "哥说什么我都信。",
+          "portrait": "/assets/portraits/figure01.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "红薯",
+          "text": "世子慢些说，酒还有，菜也还有。若真在外头受了委屈，王府里总有人替你记着账。",
+          "portrait": "/assets/portraits/figure05.png"
+        }
+      ],
+      "settlement": {
+        "type": "player_choice",
+        "narrative": "满桌家人都在等他开口，徐凤年决定怎么说这三年。",
+        "choices": [
+          {
+            "id": "report_truthfully",
+            "label": "汇报游历见闻",
+            "description": "徐凤年难得正经，把三年里见过的人情冷暖、江湖风雨与北凉之外的世道一一道来。徐骁越听越沉默，徐渭熊则时不时补上一句点评，黄蛮儿听不太懂，却一直点头。话说到最后，满桌都明白了——那个曾经只会躲在王府屋檐下的世子，真的已经能担起风雪。",
+            "effects": {
+              "reputation": 20
+            },
+            "next_stage": "qingniao_night"
+          },
+          {
+            "id": "boast_adventures",
+            "label": "吹嘘自己的冒险",
+            "description": "徐凤年把一路见闻说得天花乱坠，三分惊险被他说成十分，连自己都快成了独闯天下的传奇。黄蛮儿听得两眼发亮，徐骁笑得直拍桌子，徐渭熊则毫不留情地当场拆穿三处破绽。满堂笑声里，王府屋檐下久违地热闹得不像话。",
+            "effects": {
+              "reputation": 10,
+              "tags_add": {
+                "card_003": [
+                  "吹牛大王"
+                ]
+              }
+            },
+            "next_stage": "qingniao_night"
+          }
+        ]
+      }
+    },
+    {
+      "stage_id": "qingniao_night",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "夜深后，宴席散去，王府重新安静下来。徐凤年独自站在廊下，看山风吹过灯笼，忽然觉得这三年奔波像是被一点点熨平了。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "青鸟",
+          "text": "世子今日笑得比三年前多。",
+          "portrait": "/assets/portraits/figure15.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "回家了，总该笑一笑。再说了，有人一直替我守着这座王府，我在外头也不至于真成孤家寡人。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "青鸟",
+          "text": "若世子往后还要出门，我仍随行。",
+          "portrait": "/assets/portraits/figure15.png"
+        }
+      ],
+      "settlement": {
+        "type": "player_choice",
+        "narrative": "青鸟安静地站在灯下，等徐凤年给出一句答复。",
+        "choices": [
+          {
+            "id": "invite_qingniao_forward",
+            "label": "点头应下，让青鸟随行",
+            "description": "徐凤年看着青鸟，轻轻点头：“以后不必只替我守王府，也替我看看更远的路。”青鸟应了一声，仍旧站得笔直，可那双向来冷静的眸子里终于有了一点温度。清凉山的灯火在这一刻像是全落进了人间，徐凤年也真正明白，自己不是归来而已，而是把家重新带在了身边。",
+            "effects": {
+              "reputation": 8,
+              "cards_add": [
+                "card_青鸟"
+              ],
+              "tags_add": {
+                "card_003": [
+                  "王府归人"
+                ]
+              }
+            }
+          },
+          {
+            "id": "tease_qingniao_then_invite",
+            "label": "先打趣她一句，再让她随行",
+            "description": "徐凤年故意挑眉道：“你若跟着我，王府岂不是少了个最凶的门神？”青鸟沉默片刻，只回了一句“世子试试便知”。徐凤年被这句噎得失笑，最后还是把话说正：“那就跟着我吧。”夜风吹过长廊，连这点克制的心意都显得格外温柔。",
+            "effects": {
+              "reputation": 6,
+              "cards_add": [
+                "card_青鸟"
+              ],
+              "tags_add": {
+                "card_003": [
+                  "王府归人"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "is_final": true
+    }
+  ],
+  "unlock_conditions": {
+    "reputation_min": 60
+  },
+  "absence_penalty": {
+    "effects": {
+      "reputation": -5
+    },
+    "narrative": "你错过了这次归家相聚。清凉山灯火依旧，可王府里那顿专为你备下的团圆饭，终究还是凉了半桌。"
+  }
+}

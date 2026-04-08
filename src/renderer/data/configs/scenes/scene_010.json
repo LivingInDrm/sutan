@@ -1,0 +1,235 @@
+{
+  "scene_id": "scene_010",
+  "name": "龙睛牧场・褚禄山赠刃",
+  "description": "龙睛郡牧场风雪未消，褚禄山借着闲谈设下试探，待看清世子心气之后，亲手送上一把北凉王府旧刀。",
+  "background_image": "/maps/map_001/scene_010.png",
+  "type": "event",
+  "duration": 2,
+  "slots": [
+    {
+      "type": "character",
+      "required": true,
+      "locked": false
+    },
+    {
+      "type": "item",
+      "required": false,
+      "locked": false
+    }
+  ],
+  "entry_stage": "opening",
+  "stages": [
+    {
+      "stage_id": "opening",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "龙睛郡牧场草色半枯，北风从栏栅缝里钻过，吹得战马鬃毛翻卷。徐凤年循着马嘶声走入场中，只见一个胖得像团棉絮的男人斜靠草垛，手里捏着半截草茎，像是在偷懒晒太阳。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "褚将军这差事倒清闲，别人盯着马，你盯着天。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "褚禄山",
+          "text": "世子这话可冤枉俺了。俺盯天，是怕天塌下来砸着咱北凉的好马。再说了，您来了，俺也去盯别处做什么？",
+          "portrait": "/assets/portraits/figure12.png"
+        },
+        {
+          "type": "narration",
+          "text": "褚禄山笑得满脸横肉都在抖，眼神却像草原上藏在雪窝里的老狼，不紧不慢地把人看了个通透。"
+        }
+      ],
+      "branches": [
+        {
+          "condition": "default",
+          "next_stage": "trial_offer"
+        }
+      ]
+    },
+    {
+      "stage_id": "trial_offer",
+      "narrative": [
+        {
+          "type": "dialogue",
+          "speaker": "褚禄山",
+          "text": "王爷总说，世子出门一趟，骨头得比从前硬些。俺这做叔伯的，总不能只会赔笑脸。今儿个正好闲着，不如替王爷验验货？",
+          "portrait": "/assets/portraits/figure12.png"
+        },
+        {
+          "type": "narration",
+          "text": "他说得轻飘，草垛边那柄旧刀却早被他用脚尖挑了出来。刀鞘黯淡，刀意却不钝，显然不是拿来摆样子的俗物。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "褚将军这句验货，听着像骂人。说吧，怎么个验法？",
+          "portrait": "/assets/portraits/figure03.png"
+        }
+      ],
+      "settlement": {
+        "type": "player_choice",
+        "narrative": "褚禄山笑眯眯地把旧刀推近半寸。徐凤年决定如何接下这场试探。",
+        "choices": [
+          {
+            "id": "accept_trial",
+            "label": "接受考验",
+            "description": "提刀上前，用真本事回敬这位北凉悍将的试探。",
+            "effects": {},
+            "next_stage": "martial_test"
+          },
+          {
+            "id": "decline_politely",
+            "label": "婉拒好意",
+            "description": "不急着拔刀，先听褚禄山这份好意到底藏了几层意思。",
+            "effects": {},
+            "next_stage": "courtesy_test"
+          }
+        ]
+      }
+    },
+    {
+      "stage_id": "martial_test",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "徐凤年伸手按住刀柄，褚禄山这才慢吞吞起身。胖将军脚下草屑轻扬，整个人的气势却陡然沉了下去，像一堵从边关风雪里推过来的城墙。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "褚禄山",
+          "text": "世子尽管出手。俺也去不欺负晚辈，只要您能在俺手底下站稳几息，这刀就归您。",
+          "portrait": "/assets/portraits/figure12.png"
+        },
+        {
+          "type": "narration",
+          "text": "话音刚落，褚禄山已抬手按来，掌风不疾不徐，偏偏把周遭马匹都压得不敢乱叫。"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "褚禄山借着切磋试探世子根骨与胆气。进行「武力」鉴定。",
+        "check": {
+          "attribute": "combat",
+          "calc_mode": "max",
+          "target": 5
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年提刀迎上，刀势不花，却稳得出奇。褚禄山接了两手，忽然大笑，肥脸上尽是满意神色：“好，好得很。王爷总怕您吃不得江湖苦，俺看这口气已经养出来了。” 他反手将那柄旧刀抛来，刀鞘撞在徐凤年掌心，沉甸甸正是王府名刀绣冬。",
+            "effects": {
+              "reputation": 6,
+              "cards_add": [
+                "equip_item_1655"
+              ]
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年被逼退半步，刀锋却始终没有乱。褚禄山眯眼看了片刻，笑容敛去三分，赞许倒添了七分：“还差些火候，不过没丢咱徐家的脸。” 他把旧刀往前一递，语气随意得像丢块肥肉：“拿着，绣冬刀性子冷，正好替世子磨一磨。”",
+            "effects": {
+              "reputation": 3,
+              "cards_add": [
+                "equip_item_1655"
+              ]
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年终究被那股沉雄掌力压得连退数步，脚后跟在泥地里犁出一道长痕。褚禄山摇头叹气，嘴上嫌弃，眼神却不见半点轻慢：“架子还得再打磨。可兵器先带在身边，总比空着手去吃亏强。” 他把绣冬刀塞过去，又低声补了一句：“世子，刀可以慢慢练，胆气别丢。”",
+            "effects": {
+              "gold": 8,
+              "reputation": 1,
+              "cards_add": [
+                "equip_item_1655"
+              ]
+            }
+          },
+          "critical_failure": {
+            "narrative": "褚禄山一掌就把徐凤年的刀势拍散，胖将军却立刻收了力道，没让世子真跌进泥里。他嘿嘿一笑，笑里有几分心疼，也有几分老成：“这一路风浪，总不能回回都让别人替您挡。刀先拿去，往后多砍几回雪，多见几回血，自然就直了。” 绣冬刀被他稳稳放到徐凤年手中，分量比训斥更重。",
+            "effects": {
+              "reputation": 1,
+              "cards_add": [
+                "equip_item_1655"
+              ]
+            }
+          }
+        }
+      },
+      "is_final": true
+    },
+    {
+      "stage_id": "courtesy_test",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "徐凤年没去碰那柄刀，只是蹲下身，从地上捡起一截枯草，在指间慢慢搓碎。褚禄山见状，笑容更盛，像是早料到世子不会轻易照他的路数走。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "刀我可以拿，但总得先知道，褚将军是替我爹试我，还是替你自己看我。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "褚禄山",
+          "text": "都算。王爷看的是世子能不能接北凉，俺看的是您值不值弟兄们替您卖命。",
+          "portrait": "/assets/portraits/figure12.png"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "不拔刀，便只能凭言语与心思接住褚禄山的深意。进行「社交」鉴定。",
+        "check": {
+          "attribute": "social",
+          "calc_mode": "max",
+          "target": 4
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年抬头看着褚禄山，笑意懒散，话却扎进人心口：“北凉若只靠别人卖命，那便不值当。我既姓徐，总要让你们有一天觉得，这条命卖得不亏。” 褚禄山怔了怔，旋即放声大笑，把那柄旧刀双手奉上：“世子这句话，够换一把绣冬刀。往后谁敢说您只会享福，俺也去替您抽他嘴巴子。”",
+            "effects": {
+              "reputation": 5,
+              "cards_add": [
+                "equip_item_1655"
+              ]
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年没有正面应承，只说自己记得北凉人人流的血。褚禄山听后点了点头，笑容和缓不少：“记得就好，记得总比忘了强。” 他把绣冬刀推到徐凤年面前，像是提前替将来压上一份赌注。",
+            "effects": {
+              "reputation": 2,
+              "cards_add": [
+                "equip_item_1655"
+              ]
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年的话说得不算差，却终究没落到褚禄山最在意的地方。胖将军挠了挠头，还是把刀递了过来：“话头软了些，不过世子肯想这些，就不算白搭。这把绣冬先带着，哪天想明白了，再来跟俺喝酒。”",
+            "effects": {
+              "gold": 5,
+              "cards_add": [
+                "equip_item_1655"
+              ]
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年故意把话说得轻佻，想看褚禄山到底急不急。胖将军沉默了片刻，竟也没翻脸，只把刀轻轻放下：“世子爱玩笑，俺懂。可北凉弟兄的命，不是拿来逗乐的。” 他说完仍把绣冬刀留下，像是留下一份不容再推的提醒。",
+            "effects": {
+              "reputation": -1,
+              "cards_add": [
+                "equip_item_1655"
+              ]
+            }
+          }
+        }
+      },
+      "is_final": true
+    }
+  ],
+  "unlock_conditions": {
+    "reputation_min": 30
+  }
+}
