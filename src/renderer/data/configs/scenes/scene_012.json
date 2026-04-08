@@ -1,0 +1,239 @@
+{
+  "scene_id": "scene_012",
+  "name": "陵州集市・道冠乱红尘",
+  "description": "陵州城市集人声鼎沸，洪洗象在街口逢人便问徐脂虎的消息，徐凤年越听越不是滋味，一场带着醋意的闹剧就此开场。",
+  "background_image": "/maps/map_001/location_003_backdrop.png",
+  "type": "event",
+  "duration": 2,
+  "slots": [
+    {
+      "type": "character",
+      "required": true,
+      "locked": false
+    },
+    {
+      "type": "item",
+      "required": false,
+      "locked": false
+    }
+  ],
+  "entry_stage": "market_encounter",
+  "stages": [
+    {
+      "stage_id": "market_encounter",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "陵州城市集正逢赶集日，卖糖人的、吆喝牲口的、挑担卖绸缎的，声音搅成一锅热汤。"
+        },
+        {
+          "type": "narration",
+          "text": "街口偏偏站着个年轻道士，头戴小道冠，怀里抱着拂尘，逢人便问一句：「劳驾，徐家大小姐如今可在陵州？」"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "洪洗象",
+          "text": "我不白问，若谁说得准，我、我可以替他算一卦……虽然算得未必准。",
+          "portrait": "/assets/portraits/figure02.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "这年头骗子都讲究得很，打听姑娘家消息，居然还穿着道袍。",
+          "portrait": "/assets/portraits/figure03.png"
+        }
+      ],
+      "settlement": {
+        "type": "player_choice",
+        "narrative": "听见他张口闭口都是徐脂虎，徐凤年决定怎么应对这个脸皮薄得发红的小道士。",
+        "choices": [
+          {
+            "id": "show_identity",
+            "label": "你找我姐做什么？",
+            "description": "直接摊牌，看看这小道士到底打的什么主意。",
+            "effects": {},
+            "next_stage": "street_scuffle"
+          },
+          {
+            "id": "probe_secretly",
+            "label": "装作路人，套他的话",
+            "description": "先不亮身份，把他的心思挖个明白。",
+            "effects": {},
+            "next_stage": "tease_and_probe"
+          }
+        ]
+      }
+    },
+    {
+      "stage_id": "street_scuffle",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "徐凤年一步挡在洪洗象面前，上下打量了这小道士一圈，越看越觉得这人寒酸得能让清凉山的管家心口疼。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "徐家大小姐也是你能打听的？先说清楚，你是来求签，还是来做梦的？",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "洪洗象",
+          "text": "我、我不是登徒子。我只是想知道她近来可好。若她过得好，我就……我就继续回山上练剑。",
+          "portrait": "/assets/portraits/figure02.png"
+        },
+        {
+          "type": "narration",
+          "text": "这话不说还好，一说徐凤年更觉得牙根发酸，当场挽起袖子。洪洗象连忙把拂尘往后一背，像只被人追急了的白鹤，脚下却半点不慢。"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "集市中间让出一圈空地，这一架打得像争风吃醋，也像少年斗气。进行「武力」鉴定。",
+        "check": {
+          "attribute": "combat",
+          "calc_mode": "max",
+          "target": 5
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年抢先一步，抬脚踢翻菜筐，借着满地青菜逼得洪洗象连退三步。小道士好不容易站稳，非但不恼，反而认真抱拳：「你这脾气，倒很像护着姐姐的好弟弟。」 徐凤年哼了一声，洪洗象却摸着后脑勺笑得憨直，两人打着打着竟聊上了徐脂虎爱不爱吃甜糕。围观百姓看得直乐，最后一人递了碗凉茶，算是给这场闹剧收场。",
+            "effects": {
+              "reputation": 10,
+              "tags_add": {
+                "card_invested_0": [
+                  "洪洗象之友"
+                ]
+              }
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年和洪洗象在摊位间你追我赶，一个拿扁担挡，一个用拂尘缠，乒乒乓乓砸翻了半条鱼摊。结果两人同时踩到泼出的水，齐齐坐倒在地。洪洗象先愣了一下，随即红着脸说：「要不……这事算我唐突？」 徐凤年笑骂一句「你还知道唐突」，火气反倒散了大半。两人拍拍衣摆站起身，竟莫名生出几分投缘。",
+            "effects": {
+              "reputation": 10,
+              "tags_add": {
+                "card_invested_0": [
+                  "洪洗象之友"
+                ]
+              }
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年刚扑上去，洪洗象就像提前算好似的往旁边一让。结果徐凤年一头撞进卖布摊，肩上挂了半匹红绸，活像新郎官。洪洗象憋笑憋得耳根通红，最后还是一揖到底，脚底抹油溜出了市集，只远远喊了一句：「我真没恶意！」 徐凤年站在原地扯红绸，越想越尴尬，围观众人却笑得前仰后合。",
+            "effects": {
+              "reputation": 5,
+              "tags_add": {
+                "card_invested_0": [
+                  "和武当小道士结梁子"
+                ]
+              }
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年怒气冲冲想给这小道士一个下马威，谁知洪洗象被吓得直接翻上路边那头老黄牛。黄牛受惊，驮着小道士满街乱窜，徐凤年追了半条街，最后只吃了一嘴灰。洪洗象抱着牛脖子回头大喊：「徐家公子，真不是你想的那样！」 这下整条街都知道了，徐凤年只能黑着脸站在原地，偏偏自己也觉得这事荒唐得可笑。",
+            "effects": {
+              "reputation": 5,
+              "tags_add": {
+                "card_invested_0": [
+                  "和武当小道士结梁子"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "is_final": true
+    },
+    {
+      "stage_id": "tease_and_probe",
+      "narrative": [
+        {
+          "type": "narration",
+          "text": "徐凤年压下那点酸意，随手从糖人摊上拿了根竹签，装出一副热心路人的模样凑过去。"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "徐凤年",
+          "text": "你打听徐家大小姐，总得先告诉我图什么。若是图钱，我劝你趁早换个主意；若是图人……那你胆子可真不小。",
+          "portrait": "/assets/portraits/figure03.png"
+        },
+        {
+          "type": "dialogue",
+          "speaker": "洪洗象",
+          "text": "我不图钱。我就是那年在山下见了她一面，觉得天上月亮也没她好看。后来总想着，若能远远看一眼，知道她平安就行。",
+          "portrait": "/assets/portraits/figure02.png"
+        },
+        {
+          "type": "narration",
+          "text": "这番话说得坦坦荡荡，偏偏更叫徐凤年心头发堵。他本想继续套话，手里的竹签却已经被他捏得咯吱作响。"
+        }
+      ],
+      "settlement": {
+        "type": "dice_check",
+        "narrative": "要么把话稳稳套到底，要么当场露馅把醋意闹成笑话。进行「隐秘」鉴定。",
+        "check": {
+          "attribute": "stealth",
+          "calc_mode": "max",
+          "target": 5
+        },
+        "results": {
+          "success": {
+            "narrative": "徐凤年硬是忍住没当场翻脸，继续旁敲侧击，终于听明白洪洗象不过是一腔少年心思，并无半点轻薄。等他亮出身份时，洪洗象整个人都僵住了，拂尘差点掉地上。徐凤年没好气地捶了他肩膀一下：「以后少在街口喊我姐的名字。」 洪洗象挨了这一下，反倒松了口气，老老实实点头。两人最后蹲在路边分着一包炒栗子，越聊越觉得彼此都不算坏人。",
+            "effects": {
+              "reputation": 10,
+              "tags_add": {
+                "card_invested_0": [
+                  "洪洗象之友"
+                ]
+              }
+            }
+          },
+          "partial_success": {
+            "narrative": "徐凤年套出一半真话，终于还是没忍住亮了身份。洪洗象先是满脸通红，接着郑重其事地作揖赔礼，结果抬头时脑门正好撞上徐凤年下巴，疼得两人同时倒吸凉气。徐凤年揉着下巴，气也气不起来，只能骂一句「你这呆道士」。洪洗象赔着笑，场面反倒比打架还滑稽。",
+            "effects": {
+              "reputation": 10,
+              "tags_add": {
+                "card_invested_0": [
+                  "洪洗象之友"
+                ]
+              }
+            }
+          },
+          "failure": {
+            "narrative": "徐凤年还没把话套明白，就先把「我姐」两个字说漏了嘴。洪洗象一愣，瞬间明白眼前是谁，脸红得像刚出锅的虾，连拂尘都差点拿反。他结结巴巴道了句歉，转身就跑，跑到街口还险些撞翻豆腐摊。徐凤年站在后头，想追又嫌丢人，只能任由这场尴尬越闹越大。",
+            "effects": {
+              "reputation": 5,
+              "tags_add": {
+                "card_invested_0": [
+                  "和武当小道士结梁子"
+                ]
+              }
+            }
+          },
+          "critical_failure": {
+            "narrative": "徐凤年装路人装得太假，洪洗象刚说完「她像天上月」，他就气得把竹签一折两截。小道士吓得后退一步，还以为自己犯了什么天条。等听明白对面竟是徐凤年本人，洪洗象恨不得找条地缝钻进去，最后只能拽着那头老黄牛仓皇出逃。徐凤年追了两步便停下，觉得自己像在和一个会脸红的呆子争风吃醋，实在荒唐。",
+            "effects": {
+              "reputation": 5,
+              "tags_add": {
+                "card_invested_0": [
+                  "和武当小道士结梁子"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "is_final": true
+    }
+  ],
+  "unlock_conditions": {
+    "reputation_min": 25
+  },
+  "absence_penalty": {
+    "effects": {
+      "reputation": -1
+    },
+    "narrative": "你错过了陵州集市这一场热闹。后来只听说，武当山来了个脸红得像熟虾的小道士，在街口被人追得满市集乱跑。"
+  }
+}
