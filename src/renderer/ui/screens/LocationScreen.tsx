@@ -92,11 +92,16 @@ export function LocationScreen() {
   };
 
   const sceneEntries: Array<{ scene: Scene | undefined; sceneId: string; status: SceneStatusLabel }> =
-    location.scene_ids.map(sceneId => ({
-      scene: game?.sceneManager.getScene(sceneId),
-      sceneId,
-      status: getSceneStatusLabel(sceneId, game),
-    }));
+    location.scene_ids
+      .filter(sceneId => {
+        const state = game?.sceneManager.getSceneState(sceneId);
+        return state !== undefined && state.status !== SceneStatus.Completed;
+      })
+      .map(sceneId => ({
+        scene: game?.sceneManager.getScene(sceneId),
+        sceneId,
+        status: getSceneStatusLabel(sceneId, game),
+      }));
 
   const hasAvailable = sceneEntries.some(e => e.status === 'available');
 
