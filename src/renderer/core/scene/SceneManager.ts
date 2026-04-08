@@ -135,9 +135,9 @@ export class SceneManager {
   }
 
   removeCompletedScenes(): void {
-    for (const [id, state] of this.sceneStates) {
+    for (const [, state] of this.sceneStates) {
       if (state.status === SceneStatus.Completed) {
-        this.sceneStates.delete(id);
+        state.invested_cards = [];
       }
     }
   }

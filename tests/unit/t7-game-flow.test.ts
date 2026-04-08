@@ -158,6 +158,20 @@ describe('T7.5: DayManager', () => {
     const results = dayMgr.nextDay();
     expect(results.length).toBeGreaterThanOrEqual(0);
   });
+
+  it('should not reactivate completed scenes on a new day', () => {
+    const { dayMgr, sceneMgr } = createDayManager();
+    sceneMgr.registerScene(makeDiceScene('s1', 1));
+    sceneMgr.activateScene('s1');
+    sceneMgr.participateScene('s1', ['c1']);
+
+    dayMgr.executeDawn();
+    dayMgr.startAction();
+    dayMgr.nextDay();
+
+    expect(sceneMgr.getSceneState('s1')?.status).toBe('completed');
+    expect(sceneMgr.getAvailableScenes()).not.toContain('s1');
+  });
 });
 
 describe('T7.6: Win/Loss Conditions', () => {
