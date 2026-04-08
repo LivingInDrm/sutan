@@ -14,8 +14,8 @@ export const AllVariants: Story = () => (
   <Wrap>
     <div className="space-y-6">
       <div>
-        <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">All Variants</h2>
-        <p className="mt-2 font-[family-name:var(--font-body)] text-sm text-parchment-400">完整展示水墨北凉按钮体系。</p>
+        <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">Plaque Variants</h2>
+        <p className="mt-2 font-[family-name:var(--font-body)] text-sm text-parchment-400">按新牌匾风规范展示主次操作、危险操作、幽灵操作与抉择按钮。</p>
       </div>
       <div className="flex flex-wrap items-center gap-4">
         <Button variant="primary">新开一卷</Button>
@@ -34,7 +34,7 @@ AllVariants.meta = { title: "Button / All Variants" };
 export const AllSizes: Story = () => (
   <Wrap>
     <div className="space-y-5">
-      <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">All Sizes</h2>
+      <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">Plaque Sizes</h2>
       <div className="flex flex-wrap items-center gap-4">
         <Button size="sm">sm 结束当日</Button>
         <Button size="md">md 确认参与</Button>
@@ -55,7 +55,7 @@ AllSizes.meta = { title: "Button / All Sizes" };
 export const States: Story = () => (
   <Wrap>
     <div className="space-y-5">
-      <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">States</h2>
+      <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">Plaque States</h2>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <Button>default 常态</Button>
         <Button previewState="hover">hover 提笔</Button>
@@ -77,7 +77,7 @@ export const GameScenarios: Story = () => (
     <div className="space-y-8">
       <div>
         <h2 className="font-[family-name:var(--font-display)] text-[28px] text-gold-300">Game Scenarios</h2>
-        <p className="mt-2 font-[family-name:var(--font-body)] text-sm text-parchment-400">标题页、场景页、抉择、结算与推进流程的完整示例。</p>
+        <p className="mt-2 font-[family-name:var(--font-body)] text-sm text-parchment-400">验证标题页、地图页与抉择场景在牌匾风按钮下的视觉一致性。</p>
       </div>
 
       <section className="rounded-[16px] border border-gold-500/20 bg-leather-800/45 p-5">
