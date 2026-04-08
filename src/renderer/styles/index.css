@@ -1,11 +1,13 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/lxgw-wenkai-webfont/1.7.0/lxgwwenkai-regular.min.css');
 @import "tailwindcss";
 
 @font-face {
-  font-family: 'Ma Shan Zheng';
+  font-family: 'FZQingKeBenYueSongS';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('../assets/fonts/MaShanZheng-Regular.woff2') format('woff2');
+  src: local('FZQingKeBenYueSongS'), local('方正清刻本悦宋简体'),
+    local('方正清刻本悦宋'), local('FZQingKeBenYueSongS-R-GB');
 }
 
 @theme {
@@ -85,9 +87,9 @@
   --shadow-danger-bright: 0 0 20px rgba(212,64,64,0.4);
 
   /* ── Fonts ── */
-  --font-display: 'Ma Shan Zheng', serif;
-  --font-body: 'Source Han Serif CN', 'Noto Serif SC', 'SimSun', serif;
-  --font-ui: 'Source Han Sans CN', 'Noto Sans SC', 'PingFang SC', sans-serif;
+  --font-display: 'LXGW WenKai', 'STKaiti', 'KaiTi', serif;
+  --font-body: 'FZQingKeBenYueSongS', 'Source Han Serif CN', 'Noto Serif SC', serif;
+  --font-ui: 'FZQingKeBenYueSongS', 'Source Han Serif CN', 'Noto Serif SC', serif;
   --font-mono: 'Source Code Pro', 'Consolas', monospace;
 }
 
