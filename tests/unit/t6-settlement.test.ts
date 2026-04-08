@@ -58,6 +58,29 @@ const makeChoiceScene = (id: string): Scene => ({
   }],
 } as Scene);
 
+const makePlayerChoiceScene = (id: string): Scene => ({
+  scene_id: id, name: `Player Choice ${id}`, description: 'test',
+  background_image: 'bg.png', type: SceneType.Event, duration: 1,
+  slots: [{ type: SlotType.Character, required: true, locked: false }],
+  entry_stage: 'opening',
+  stages: [{
+    stage_id: 'opening',
+    narrative: [],
+    settlement: {
+      type: 'player_choice',
+      narrative: '要怎么做？',
+      choices: [
+        { id: 'rescue', label: '救场', description: '花钱救场', effects: { gold: -10 }, next_stage: 'rescue' },
+        { id: 'leave', label: '离开', effects: { reputation: -2 } },
+      ],
+    },
+  }, {
+    stage_id: 'rescue',
+    narrative: [],
+    is_final: true,
+  }],
+} as Scene);
+
 const makeTradeScene = (id: string): Scene => ({
   scene_id: id, name: `Shop ${id}`, description: 'test',
   background_image: 'bg.png', type: SceneType.Shop, duration: 1,
@@ -186,6 +209,29 @@ describe('T6.4: Choice Settlement', () => {
   });
 });
 
+describe('T6.4.1: Player Choice Settlement', () => {
+  it('should apply selected effects and carry next stage', () => {
+    const rng = new RandomManager('settle-player-choice');
+    const player = new PlayerState(30, 50);
+    const cardMgr = new CardManager();
+    cardMgr.addCard(makeChar('c1'));
+    const sceneMgr = new SceneManager(player, cardMgr);
+    const equipSys = new EquipmentSystem(cardMgr);
+    const executor = new SettlementExecutor(rng, player, cardMgr, sceneMgr, equipSys);
+
+    sceneMgr.registerScene(makePlayerChoiceScene('pc1'));
+    sceneMgr.activateScene('pc1');
+    sceneMgr.participateScene('pc1', ['c1']);
+
+    const result = executor.executeStageSettlement('pc1', 'opening', { choiceIndex: 0 });
+    expect(result).not.toBeNull();
+    expect(result!.type).toBe('player_choice');
+    expect(result!.effects_applied.gold).toBe(-10);
+    expect(result!.next_stage).toBe('rescue');
+    expect(player.gold).toBe(20);
+  });
+});
+
 describe('T6.5: SettlementExecutor dispatch', () => {
   it('should dispatch to correct settlement type', () => {
     const rng = new RandomManager('dispatch-test');
@@ -198,6 +244,7 @@ describe('T6.5: SettlementExecutor dispatch', () => {
 
     sceneMgr.registerScene(makeDiceScene('d1'));
     sceneMgr.registerScene(makeChoiceScene('c1_scene'));
+    sceneMgr.registerScene(makePlayerChoiceScene('pc1_scene'));
     sceneMgr.registerScene(makeTradeScene('t1'));
 
     sceneMgr.activateScene('d1');
@@ -209,6 +256,11 @@ describe('T6.5: SettlementExecutor dispatch', () => {
     sceneMgr.participateScene('c1_scene', ['c1']);
     const r2 = executor.settleScene('c1_scene', { choiceIndex: 0 });
     expect(r2!.settlement_type).toBe('choice');
+
+    sceneMgr.activateScene('pc1_scene');
+    sceneMgr.participateScene('pc1_scene', ['c1']);
+    const rPlayer = executor.settleScene('pc1_scene', { choiceIndex: 0 });
+    expect(rPlayer!.settlement_type).toBe('player_choice');
 
     sceneMgr.activateScene('t1');
     sceneMgr.participateScene('t1', []);

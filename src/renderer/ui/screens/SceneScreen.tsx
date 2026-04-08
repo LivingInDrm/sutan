@@ -134,6 +134,8 @@ export function SceneScreen() {
           const label = ATTRIBUTE_LABELS[attr] ?? attr;
           return `关键属性：${label}`;
         })()
+      : settlement.type === 'player_choice'
+      ? `玩家抉择：${settlement.choices.map(choice => choice.label).join(' / ')}`
       : settlement.type === 'choice'
       ? '此场景需要做出抉择'
       : null

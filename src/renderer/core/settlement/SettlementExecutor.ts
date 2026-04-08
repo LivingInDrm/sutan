@@ -1,6 +1,6 @@
 import type {
   Card, Scene, Settlement, SettlementResult, DiceCheckState,
-  DiceCheckSettlement, TradeSettlement, ChoiceSettlement,
+  DiceCheckSettlement, TradeSettlement, ChoiceSettlement, PlayerChoiceSettlement,
   Stage, Effects,
 } from '../types';
 import { CheckResult, SpecialAttribute } from '../types/enums';
@@ -22,6 +22,7 @@ export interface StageSettlementResult {
   effects_applied: Effects;
   narrative: string;
   dice_check_state?: DiceCheckState;
+  next_stage?: string;
 }
 
 export class SettlementExecutor {
@@ -80,6 +81,8 @@ export class SettlementExecutor {
         return this.executeTrade(scene, settlement, investedCardIds);
       case 'choice':
         return this.executeChoice(scene, settlement, investedCardIds, options?.choiceIndex ?? 0);
+      case 'player_choice':
+        return this.executePlayerChoice(scene, settlement, investedCardIds, options?.choiceIndex ?? 0);
       default:
         return null;
     }
@@ -109,13 +112,29 @@ export class SettlementExecutor {
           runner.recordStageNarrative(playback.narrative);
           runner.recordStageSettlement(
             lastResult.type, lastResult.result_key,
-            lastResult.effects_applied, lastResult.dice_check_state,
+            lastResult.effects_applied, lastResult.dice_check_state, lastResult.next_stage,
           );
           playback = runner.advanceAfterSettlement(lastResult.result_key);
+        } else if (lastResult?.next_stage) {
+          runner.recordStageNarrative(playback.narrative);
+          runner.recordStageSettlement(
+            lastResult.type,
+            undefined,
+            lastResult.effects_applied,
+            undefined,
+            lastResult.next_stage,
+          );
+          playback = runner.advanceByChoice(lastResult.next_stage);
         } else {
           runner.recordStageNarrative(playback.narrative);
           if (lastResult) {
-            runner.recordStageSettlement(lastResult.type, undefined, lastResult.effects_applied);
+            runner.recordStageSettlement(
+              lastResult.type,
+              undefined,
+              lastResult.effects_applied,
+              undefined,
+              lastResult.next_stage,
+            );
           }
           playback = runner.advanceAfterNarrativeOnly();
         }
@@ -248,6 +267,23 @@ export class SettlementExecutor {
       type: 'choice',
       effects_applied: option.effects,
       narrative: option.label,
+    };
+  }
+
+  private executePlayerChoice(
+    _scene: Scene,
+    settlement: PlayerChoiceSettlement,
+    investedCardIds: string[],
+    choiceIndex: number
+  ): StageSettlementResult {
+    const option = settlement.choices[choiceIndex] || settlement.choices[0];
+    this.effectApplier.apply(option.effects, investedCardIds);
+
+    return {
+      type: 'player_choice',
+      effects_applied: option.effects,
+      narrative: option.description || `你选择了「${option.label}」`,
+      next_stage: option.next_stage,
     };
   }
 }

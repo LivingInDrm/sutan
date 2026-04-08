@@ -130,6 +130,14 @@ const ChoiceOptionSchema = z.object({
   effects: EffectsSchema,
 });
 
+const PlayerChoiceOptionSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  description: z.string().min(1).optional(),
+  effects: EffectsSchema,
+  next_stage: z.string().min(1).optional(),
+});
+
 const DiceCheckSettlementSchema = z.object({
   type: z.literal('dice_check'),
   narrative: z.string().optional(),
@@ -155,10 +163,17 @@ const ChoiceSettlementSchema = z.object({
   options: z.array(ChoiceOptionSchema).min(1),
 });
 
+const PlayerChoiceSettlementSchema = z.object({
+  type: z.literal('player_choice'),
+  narrative: z.string().min(1),
+  choices: z.array(PlayerChoiceOptionSchema).min(1),
+});
+
 const SettlementSchema = z.discriminatedUnion('type', [
   DiceCheckSettlementSchema,
   TradeSettlementSchema,
   ChoiceSettlementSchema,
+  PlayerChoiceSettlementSchema,
 ]);
 
 const DialogueNodeSchema = z.object({

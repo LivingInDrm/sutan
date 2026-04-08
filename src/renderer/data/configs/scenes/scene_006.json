@@ -44,66 +44,41 @@
         }
       ],
       "settlement": {
-        "type": "dice_check",
-        "narrative": "徐凤年打量着这个少年，心中盘算该如何回应……进行「魅力」鉴定。",
-        "check": {
-          "attribute": "charm",
-          "calc_mode": "max",
-          "target": 5
-        },
-        "results": {
-          "success": {
-            "narrative": "徐凤年自带世家气度，温华虽嚣张却也隐约感受到了不凡。",
+        "type": "player_choice",
+        "narrative": "看着温华嘴硬又窘迫的模样，徐凤年决定亲自选一种回应方式。",
+        "choices": [
+          {
+            "id": "pay_for_him",
+            "label": "替他付茶钱",
+            "description": "掏出铜钱替温华解围，顺势走向解围线。",
             "effects": {
               "cards_add": [
                 "temp_generosity"
               ]
-            }
+            },
+            "next_stage": "path_b_rescue"
           },
-          "partial_success": {
-            "narrative": "徐凤年自带世家气度，温华虽嚣张却也隐约感受到了不凡。",
-            "effects": {
-              "cards_add": [
-                "temp_generosity"
-              ]
-            }
-          },
-          "failure": {
-            "narrative": "徐凤年随性不羁，比起正经解围更想调侃几句。",
+          {
+            "id": "tease_him",
+            "label": "调侃他几句",
+            "description": "顺着对方的嚣张劲头回敬两句，直接走向嘲讽线。",
             "effects": {
               "cards_add": [
                 "temp_mockery"
               ]
-            }
+            },
+            "next_stage": "path_a_mockery"
           },
-          "critical_failure": {
-            "narrative": "徐凤年随性不羁，比起正经解围更想调侃几句。",
+          {
+            "id": "walk_away",
+            "label": "默默离开",
+            "description": "不掺和这场闹剧，留下一点路费后转身离去。",
             "effects": {
-              "cards_add": [
-                "temp_mockery"
-              ]
+              "gold": -2
             }
           }
-        }
-      },
-      "branches": [
-        {
-          "condition": "success",
-          "next_stage": "path_b_rescue"
-        },
-        {
-          "condition": "partial_success",
-          "next_stage": "path_b_rescue"
-        },
-        {
-          "condition": "failure",
-          "next_stage": "path_a_mockery"
-        },
-        {
-          "condition": "critical_failure",
-          "next_stage": "path_a_mockery"
-        }
-      ]
+        ]
+      }
     },
     {
       "stage_id": "path_a_mockery",
@@ -226,7 +201,8 @@
             "narrative": "徐凤年顺着话头说：「要喝酒可以，先把你的'绝世剑法'练给我看看。」 温华眼睛一亮，抓起木剑在茶摊外比划起来，招式笨拙却透着韧劲。练完后，徐凤年点头：「还行，跟我走，以后有你练剑的地方，酒管够。」",
             "effects": {
               "cards_add": [
-                "card_wenhua_sword"
+                "card_004",
+                "equip_麻布履"
               ],
               "cards_remove": [
                 "temp_mockery",
@@ -241,10 +217,11 @@
             }
           },
           "partial_success": {
-            "narrative": "徐凤年顺着话头说：「要喝酒可以，先把你的'绝世剑法'练给我看看。」 温华眼睛一亮，抓起木剑在茶摊外比划起来。徐凤年点头：「还行，跟我走吧。」",
+            "narrative": "徐凤年顺着话头说：「要喝酒可以，先把你的'绝世剑法'练给我看看。」 温华眼睛一亮，抓起木剑在茶摊外比划起来。徐凤年见他脚上麻布履都磨得起毛，笑着把人一并招呼上路：「剑练得糙些不要紧，先跟我走吧，路上再给你换口饱饭。」",
             "effects": {
               "cards_add": [
-                "card_wenhua_sword"
+                "card_004",
+                "equip_麻布履"
               ],
               "cards_remove": [
                 "temp_mockery",
@@ -262,7 +239,7 @@
             "narrative": "徐凤年直接把葫芦扔给温华：「少废话，喝两口就走。」 温华猛灌两口，咂咂嘴：「好酒！算你够意思！以后你就是我温华的兄弟！」",
             "effects": {
               "cards_add": [
-                "card_wenhua_sword"
+                "card_004"
               ],
               "cards_remove": [
                 "temp_mockery",
@@ -283,7 +260,7 @@
             "narrative": "徐凤年直接把葫芦扔给温华：「少废话，喝两口就走。」 温华猛灌两口，拍了拍徐凤年的肩膀：「以后你就是我温华的兄弟！」",
             "effects": {
               "cards_add": [
-                "card_wenhua_sword"
+                "card_004"
               ],
               "cards_remove": [
                 "temp_mockery",
@@ -334,7 +311,7 @@
       ],
       "settlement": {
         "type": "dice_check",
-        "narrative": "温华坐下后，气氛逐渐缓和。进行「社交」鉴定。",
+        "narrative": "温华坐下后，气氛逐渐缓和。若你已有足够声望，更容易让他心甘情愿追随。进行「社交」鉴定。",
         "check": {
           "attribute": "social",
           "calc_mode": "max",
@@ -342,9 +319,13 @@
         },
         "results": {
           "success": {
-            "narrative": "温华完全放下戒备，凑近说：「兄弟，我看你气度不凡，肯定不是普通人。我最近悟了一套绝世剑法，就是缺个能喝酒的伴儿。」",
+            "narrative": "温华完全放下戒备，凑近说：「兄弟，我看你气度不凡，肯定不是普通人。我最近悟了一套绝世剑法，就是缺个能喝酒的伴儿。」 徐凤年瞥见他脚上那双磨旧的麻布履，顺手把人和那点寒酸行头一并收下：「那就跟我走，酒和路都管够。」",
             "effects": {
-              "gold": -10
+              "gold": -10,
+              "cards_add": [
+                "card_004",
+                "equip_麻布履"
+              ]
             }
           },
           "partial_success": {

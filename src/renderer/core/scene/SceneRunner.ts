@@ -121,6 +121,7 @@ export class SceneRunner {
     resultKey?: CheckResult,
     effectsApplied?: Effects,
     diceCheckState?: import('../types').DiceCheckState,
+    nextStage?: string,
   ): void {
     if (!this.currentStageId) return;
     const existing = this.stageHistory.find(r => r.stage_id === this.currentStageId);
@@ -130,6 +131,7 @@ export class SceneRunner {
         result_key: resultKey,
         effects_applied: effectsApplied || {},
         dice_check_state: diceCheckState,
+        next_stage: nextStage,
       };
     }
   }

@@ -163,6 +163,45 @@ describe('T1.3: Zod Schema Validation', () => {
       expect(() => SceneSchema.parse(scene)).not.toThrow();
     });
 
+    it('should validate a player choice scene', () => {
+      const scene = {
+        scene_id: 'scene_006',
+        name: '玩家抉择',
+        description: '玩家自行选择分支',
+        background_image: 'scene06.png',
+        type: 'event',
+        duration: 2,
+        slots: [{ type: 'character', required: true, locked: false }],
+        stages: [
+          {
+            stage_id: 'opening',
+            narrative: [],
+            settlement: {
+              type: 'player_choice',
+              narrative: '你要如何回应？',
+              choices: [
+                {
+                  id: 'rescue',
+                  label: '替他付钱',
+                  description: '解围并建立好感',
+                  effects: { gold: -10 },
+                  next_stage: 'rescue_path',
+                },
+                {
+                  id: 'mock',
+                  label: '调侃他',
+                  effects: { reputation: -1 },
+                  next_stage: 'mock_path',
+                },
+              ],
+            },
+          },
+        ],
+        entry_stage: 'opening',
+      };
+      expect(() => SceneSchema.parse(scene)).not.toThrow();
+    });
+
     it('should reject scene with invalid type', () => {
       const scene = {
         scene_id: 'scene_001',

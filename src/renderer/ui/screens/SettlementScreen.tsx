@@ -179,6 +179,7 @@ export function SettlementScreen() {
       hasSettlement={hasSettlement}
       isNarrativeComplete={isNarrativeComplete}
       settlementResult={currentStageSettlementResult}
+      settlementConfig={currentStagePlayback?.settlementConfig}
       onExecute={() => executeCurrentSettlement()}
     />
   );
@@ -189,11 +190,13 @@ export function SettlementScreen() {
       narrativeIndex={narrativeIndex}
       onAdvance={advanceNarrative}
       onChoice={handleNarrativeChoice}
+      onPlayerChoiceSelect={(choiceIndex) => executeCurrentSettlement({ choiceIndex })}
       settlementResult={currentStageSettlementResult}
       onContinue={advanceAfterSettlement}
       isNarrativeComplete={isNarrativeComplete}
       hasSettlement={hasSettlement}
       historyNodes={fullHistory}
+      settlementConfig={currentStagePlayback?.settlementConfig}
     />
   );
 

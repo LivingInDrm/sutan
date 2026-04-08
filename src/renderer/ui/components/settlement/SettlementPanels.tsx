@@ -1,5 +1,5 @@
 import React from 'react';
-import type { NarrativeNode, Effects } from '../../../core/types';
+import type { NarrativeNode, Effects, Settlement, PlayerChoiceSettlement } from '../../../core/types';
 import type { StageSettlementResult } from '../../../core/settlement/SettlementExecutor';
 import type { Card } from '../../../core/types';
 import { NarrativePlayer, NarrativeNodeView } from '../narrative/NarrativePlayer';
@@ -29,6 +29,7 @@ export interface SettlementLeftPanelProps {
   hasSettlement: boolean;
   isNarrativeComplete: boolean;
   settlementResult: StageSettlementResult | null;
+  settlementConfig?: Settlement;
   onExecute: () => void;
 }
 
@@ -38,9 +39,11 @@ export function SettlementLeftPanel({
   hasSettlement,
   isNarrativeComplete,
   settlementResult,
+  settlementConfig,
   onExecute,
 }: SettlementLeftPanelProps) {
-  const showCheckPrompt = isNarrativeComplete && hasSettlement && !settlementResult;
+  const isPlayerChoiceSettlement = settlementConfig?.type === 'player_choice';
+  const showCheckPrompt = isNarrativeComplete && hasSettlement && !settlementResult && !isPlayerChoiceSettlement;
   const checkConfig = settlementResult?.dice_check_state?.config;
 
   return (
@@ -71,6 +74,16 @@ export function SettlementLeftPanel({
             <Button variant="primary" size="lg" glow onClick={onExecute}>
               开始鉴定
             </Button>
+          </div>
+        </div>
+      )}
+
+      {isNarrativeComplete && hasSettlement && !settlementResult && isPlayerChoiceSettlement && (
+        <div className="mt-4">
+          <DividerLine className="w-full h-1 text-gold-dim/30 pointer-events-none mb-3" preserveAspectRatio="none" />
+          <div className="text-center">
+            <div className="text-sm text-black mb-2">静观局势，做出抉择</div>
+            <div className="text-xs text-black/60">右侧可选择接下来的行动路径</div>
           </div>
         </div>
       )}
@@ -132,11 +145,53 @@ export interface SettlementRightPanelProps {
   narrativeIndex: number;
   onAdvance: () => void;
   onChoice: (nextStageId: string, effects?: Effects) => void;
+  onPlayerChoiceSelect: (choiceIndex: number) => void;
   settlementResult: StageSettlementResult | null;
   onContinue: () => void;
   isNarrativeComplete: boolean;
   hasSettlement: boolean;
   historyNodes: NarrativeNode[];
+  settlementConfig?: Settlement;
+}
+
+function PlayerChoicePrompt({
+  settlement,
+  onSelect,
+}: {
+  settlement: PlayerChoiceSettlement;
+  onSelect: (choiceIndex: number) => void;
+}) {
+  return (
+    <div className="mt-6">
+      <div className="mb-5 rounded-xl border border-gold-dim/25 bg-[linear-gradient(180deg,rgba(111,78,55,0.06),rgba(111,78,55,0.02))] px-5 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+        <div className="text-[11px] tracking-[0.25em] text-gold-dim/70 mb-2">玩家抉择</div>
+        <p className="text-[15px] leading-relaxed text-black">{settlement.narrative}</p>
+      </div>
+      <div className="flex flex-col gap-3">
+        {settlement.choices.map((choice, idx) => (
+          <button
+            key={choice.id}
+            onClick={() => onSelect(idx)}
+            className="group w-full rounded-xl border border-gold-dim/30 bg-[linear-gradient(180deg,rgba(245,235,210,0.72),rgba(222,202,160,0.22))] px-5 py-4 text-left shadow-[0_8px_24px_rgba(45,28,12,0.08)] transition-all hover:-translate-y-0.5 hover:border-gold/60 hover:bg-[linear-gradient(180deg,rgba(245,235,210,0.86),rgba(222,202,160,0.34))]"
+          >
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 text-gold-dim transition-colors group-hover:text-gold">✦</span>
+              <div className="min-w-0 flex-1">
+                <div className="font-[family-name:var(--font-display)] text-[15px] text-black">
+                  {choice.label}
+                </div>
+                {choice.description && (
+                  <p className="mt-1 text-sm leading-relaxed text-black/65">
+                    {choice.description}
+                  </p>
+                )}
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export function SettlementRightPanel({
@@ -144,11 +199,13 @@ export function SettlementRightPanel({
   narrativeIndex,
   onAdvance,
   onChoice,
+  onPlayerChoiceSelect,
   settlementResult,
   onContinue,
   isNarrativeComplete,
   hasSettlement,
   historyNodes,
+  settlementConfig,
 }: SettlementRightPanelProps) {
   if (!isNarrativeComplete) {
     return (
@@ -197,6 +254,7 @@ export function SettlementRightPanel({
 
   if (isNarrativeComplete && hasSettlement) {
     const allPastNodes = [...historyNodes, ...narrative];
+    const isPlayerChoiceSettlement = settlementConfig?.type === 'player_choice';
     return (
       <div className="flex flex-col h-full">
         <div className="flex-1 overflow-auto px-8 py-6">
@@ -207,7 +265,14 @@ export function SettlementRightPanel({
               ))}
             </div>
           )}
-          <p className="text-black text-sm italic">等待鉴定……</p>
+          {isPlayerChoiceSettlement && settlementConfig ? (
+            <PlayerChoicePrompt
+              settlement={settlementConfig}
+              onSelect={onPlayerChoiceSelect}
+            />
+          ) : (
+            <p className="text-black text-sm italic">等待鉴定……</p>
+          )}
         </div>
       </div>
     );

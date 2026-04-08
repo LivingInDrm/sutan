@@ -241,7 +241,11 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (result) {
       runner.recordStageNarrative(playback.narrative);
       runner.recordStageSettlement(
-        result.type, result.result_key, result.effects_applied, result.dice_check_state,
+        result.type,
+        result.result_key,
+        result.effects_applied,
+        result.dice_check_state,
+        result.next_stage,
       );
 
       if (result.result_key) {
@@ -265,7 +269,9 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (!runner) return;
 
     let nextPlayback = null;
-    if (stageResult?.result_key) {
+    if (stageResult?.next_stage) {
+      nextPlayback = runner.advanceByChoice(stageResult.next_stage);
+    } else if (stageResult?.result_key) {
       nextPlayback = runner.advanceAfterSettlement(stageResult.result_key);
     } else {
       nextPlayback = runner.advanceAfterNarrativeOnly();

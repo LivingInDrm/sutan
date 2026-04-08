@@ -60,6 +60,14 @@ export interface ChoiceOption {
   effects: Effects;
 }
 
+export interface PlayerChoiceOption {
+  id: string;
+  label: string;
+  description?: string;
+  effects: Effects;
+  next_stage?: string;
+}
+
 export interface DiceCheckSettlement {
   type: 'dice_check';
   narrative?: string;
@@ -80,7 +88,17 @@ export interface ChoiceSettlement {
   options: ChoiceOption[];
 }
 
-export type Settlement = DiceCheckSettlement | TradeSettlement | ChoiceSettlement;
+export interface PlayerChoiceSettlement {
+  type: 'player_choice';
+  narrative: string;
+  choices: PlayerChoiceOption[];
+}
+
+export type Settlement =
+  | DiceCheckSettlement
+  | TradeSettlement
+  | ChoiceSettlement
+  | PlayerChoiceSettlement;
 
 export interface DialogueNode {
   type: 'dialogue';
@@ -257,6 +275,7 @@ export interface StageResult {
     result_key?: CheckResult;
     effects_applied: Effects;
     dice_check_state?: DiceCheckState;
+    next_stage?: string;
   };
 }
 
