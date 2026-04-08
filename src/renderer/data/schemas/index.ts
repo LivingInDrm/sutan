@@ -4,7 +4,17 @@ import {
   SceneStatus, CheckResult, CalcMode, SlotType, NarrativeNodeType,
 } from '../../core/types/enums';
 
-const RarityEnum = z.enum([Rarity.Gold, Rarity.Silver, Rarity.Copper, Rarity.Stone, Rarity.Divine]);
+const RarityEnum = z.enum([
+  Rarity.Common,
+  Rarity.Rare,
+  Rarity.Epic,
+  Rarity.Legendary,
+  Rarity.Gold,
+  Rarity.Silver,
+  Rarity.Copper,
+  Rarity.Stone,
+  Rarity.Divine,
+]);
 const CardTypeEnum = z.enum([
   CardType.Character, CardType.Equipment, CardType.Intel,
   CardType.Consumable, CardType.Book, CardType.Thought,

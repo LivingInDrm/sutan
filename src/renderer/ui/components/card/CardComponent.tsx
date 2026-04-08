@@ -5,6 +5,10 @@ import { ATTR_LABELS, CARD_TYPE_LABELS } from '../../constants/labels';
 import ricePaperTexture from '../../../assets/textures/rice-paper-256.webp';
 
 const RARITY_STYLES: Record<string, string> = {
+  legendary: 'border-gold-300/50 bg-gold-600/10 shadow-rarity-gold',
+  epic: 'border-gold-500/40 bg-gold-600/10 shadow-rarity-copper',
+  rare: 'border-parchment-400/40 bg-parchment-500/10 shadow-rarity-silver',
+  common: 'border-leather-600/30 bg-leather-800/20 shadow-rarity-stone',
   gold: 'border-gold-300/50 bg-gold-600/10 shadow-rarity-gold',
   silver: 'border-parchment-400/40 bg-parchment-500/10 shadow-rarity-silver',
   copper: 'border-gold-500/40 bg-gold-600/10 shadow-rarity-copper',
@@ -12,6 +16,10 @@ const RARITY_STYLES: Record<string, string> = {
 };
 
 const RARITY_BADGE: Record<string, string> = {
+  legendary: 'bg-gradient-to-b from-gold-300 to-gold-400 text-leather-900',
+  epic: 'bg-gradient-to-b from-gold-400 to-gold-500 text-parchment-50',
+  rare: 'bg-gradient-to-b from-parchment-300 to-parchment-400 text-leather-900',
+  common: 'bg-gradient-to-b from-leather-600 to-leather-700 text-parchment-200',
   gold: 'bg-gradient-to-b from-gold-300 to-gold-400 text-leather-900',
   silver: 'bg-gradient-to-b from-parchment-300 to-parchment-400 text-leather-900',
   copper: 'bg-gradient-to-b from-gold-400 to-gold-500 text-parchment-50',
@@ -25,6 +33,34 @@ const COMPACT_RARITY: Record<string, {
   badge: string;
   label: string;
 }> = {
+  legendary: {
+    border: 'border-gold-300/50',
+    glow: 'var(--shadow-rarity-gold)',
+    accent: 'from-gold-300 to-gold-400',
+    badge: 'bg-gradient-to-b from-gold-300 to-gold-400 text-leather-900',
+    label: '传',
+  },
+  epic: {
+    border: 'border-gold-500/40',
+    glow: 'var(--shadow-rarity-copper)',
+    accent: 'from-gold-400 to-gold-500',
+    badge: 'bg-gradient-to-b from-gold-400 to-gold-500 text-parchment-50',
+    label: '史',
+  },
+  rare: {
+    border: 'border-parchment-400/40',
+    glow: 'var(--shadow-rarity-silver)',
+    accent: 'from-parchment-300 to-parchment-400',
+    badge: 'bg-gradient-to-b from-parchment-300 to-parchment-400 text-leather-900',
+    label: '稀',
+  },
+  common: {
+    border: 'border-leather-600/30',
+    glow: 'var(--shadow-rarity-stone)',
+    accent: 'from-leather-600 to-leather-700',
+    badge: 'bg-gradient-to-b from-leather-600 to-leather-700 text-parchment-200',
+    label: '凡',
+  },
   gold: {
     border: 'border-gold-300/50',
     glow: 'var(--shadow-rarity-gold)',

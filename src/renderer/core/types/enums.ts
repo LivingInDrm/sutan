@@ -1,4 +1,8 @@
 export enum Rarity {
+  Common = 'common',
+  Rare = 'rare',
+  Epic = 'epic',
+  Legendary = 'legendary',
   Gold = 'gold',
   Silver = 'silver',
   Copper = 'copper',
@@ -115,9 +119,13 @@ export const REPUTATION_RANGES: Record<ReputationLevel, [number, number]> = {
 };
 
 export const RARITY_ATTRIBUTE_RANGES: Record<Rarity, [number, number]> = {
+  [Rarity.Legendary]: [81, 100],
   [Rarity.Divine]: [61, 100],
+  [Rarity.Epic]: [46, 80],
   [Rarity.Gold]: [36, 60],
+  [Rarity.Rare]: [21, 45],
   [Rarity.Silver]: [21, 35],
+  [Rarity.Common]: [5, 20],
   [Rarity.Copper]: [11, 20],
   [Rarity.Stone]: [5, 10],
 };

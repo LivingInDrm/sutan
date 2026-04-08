@@ -15,6 +15,30 @@ interface CardDetailPanelProps {
 }
 
 const RARITY_ACCENT: Record<string, { border: string; glow: string; badge: string; text: string }> = {
+  [Rarity.Legendary]: {
+    border: 'border-gold-300/50',
+    glow: 'var(--shadow-rarity-gold)',
+    badge: 'bg-gradient-to-r from-gold-300 to-gold-400 text-leather-900',
+    text: 'text-gold-400',
+  },
+  [Rarity.Epic]: {
+    border: 'border-gold-500/40',
+    glow: 'var(--shadow-rarity-copper)',
+    badge: 'bg-gradient-to-r from-gold-400 to-gold-500 text-parchment-50',
+    text: 'text-gold-400',
+  },
+  [Rarity.Rare]: {
+    border: 'border-parchment-400/40',
+    glow: 'var(--shadow-rarity-silver)',
+    badge: 'bg-gradient-to-r from-parchment-300 to-parchment-400 text-leather-900',
+    text: 'text-parchment-400',
+  },
+  [Rarity.Common]: {
+    border: 'border-leather-600/30',
+    glow: 'var(--shadow-rarity-stone)',
+    badge: 'bg-gradient-to-r from-leather-600 to-leather-700 text-parchment-200',
+    text: 'text-parchment-500',
+  },
   [Rarity.Gold]: {
     border: 'border-gold-300/50',
     glow: 'var(--shadow-rarity-gold)',
@@ -42,6 +66,10 @@ const RARITY_ACCENT: Record<string, { border: string; glow: string; badge: strin
 };
 
 const RARITY_LABELS: Record<string, string> = {
+  [Rarity.Legendary]: '传说',
+  [Rarity.Epic]: '史诗',
+  [Rarity.Rare]: '稀有',
+  [Rarity.Common]: '凡品',
   [Rarity.Gold]: '金',
   [Rarity.Silver]: '银',
   [Rarity.Copper]: '铜',
