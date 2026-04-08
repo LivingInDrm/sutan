@@ -3,7 +3,7 @@
     "card_id": "equip_006",
     "name": "木马牛",
     "type": "equipment",
-    "rarity": "divine",
+    "rarity": "legendary",
     "description": "上古名剑木马牛，剑身黝黑粗粝，夜中隐有微光流转，出鞘则锋意惊人。",
     "image": "/assets/items/木马牛_1775306152_1.png",
     "equipment_type": "weapon",
@@ -30,7 +30,7 @@
     "card_id": "equip_item_9247",
     "name": "梅子酒",
     "type": "equipment",
-    "rarity": "divine",
+    "rarity": "legendary",
     "description": "枪势如梅落寒江，锋芒内敛却杀机极盛，最宜马上破阵与近身鏖战。",
     "image": "/assets/items/梅子酒_1775306439_1.png",
     "equipment_type": "weapon",
@@ -51,7 +51,7 @@
     "card_id": "equip_item_9347",
     "name": "寒玉戒指",
     "type": "equipment",
-    "rarity": "silver",
+    "rarity": "rare",
     "description": "寒玉所琢，入手沁凉，能宁神定意，亦可微御邪祟与心火。",
     "image": "/assets/items/寒玉戒指_1775300198_1.png",
     "equipment_type": "accessory",
@@ -73,7 +73,7 @@
     "card_id": "equip_004",
     "name": "大凉龙雀",
     "type": "equipment",
-    "rarity": "divine",
+    "rarity": "legendary",
     "description": "北凉王府传世宝剑，锋芒沉雄如龙雀长鸣，出鞘自有压阵之威。",
     "image": "/assets/items/大凉龙雀_1775307237_1.png",
     "equipment_type": "weapon",
@@ -95,7 +95,7 @@
     "card_id": "equip_item_1655",
     "name": "绣冬刀",
     "type": "equipment",
-    "rarity": "silver",
+    "rarity": "rare",
     "description": "北凉王府名刀之一，刀势清寒如冬雪，出鞘时锋芒内敛却杀机极盛。",
     "image": "/assets/items/绣冬刀_1775445902_1.png",
     "equipment_type": "weapon",
@@ -115,7 +115,7 @@
     "card_id": "equip_005",
     "name": "十二飞剑",
     "type": "equipment",
-    "rarity": "gold",
+    "rarity": "epic",
     "description": "剑匣一开，十二飞剑循念而动，杀机藏于无形，最擅千里取首与阵中破局。",
     "image": "/assets/items/十二飞剑_1775446747_1.png",
     "equipment_type": "weapon",
@@ -137,5 +137,24 @@
       "legendary"
     ],
     "lore": "十二飞剑非寻常兵刃，重在以气御剑、以神驭形。剑出如游龙，收放只在一念之间，既可暗袭宗师，也可结阵困敌，是江湖中极罕见的玄妙杀器。"
+  },
+  {
+    "card_id": "equip_麻布履",
+    "name": "麻布履",
+    "type": "equipment",
+    "image": "/assets/items/麻布履_1775611400_1.png",
+    "equipment_type": "armor",
+    "rarity": "common",
+    "description": "寻常麻布缝成的旧履，轻便耐穿，行走江湖虽不起眼，却胜在踏实。",
+    "lore": "北凉边地常见的粗麻布履，多为贫寒行脚人所穿。虽无金玉之贵，也无甲胄之坚，却能陪人踏过风雪泥泞，最宜远行赶路。",
+    "attribute_bonus": {
+      "physique": 1,
+      "survival": 1
+    },
+    "special_bonus": {},
+    "gem_slots": 0,
+    "tags": [
+      "armor"
+    ]
   }
 ]

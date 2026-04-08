@@ -17,12 +17,9 @@ export function App() {
     return <TitleScreen />;
   }
 
-  if (currentScreen === 'world_map') {
-    return <WorldMapScreen />;
-  }
-
   return (
     <GameLayout>
+      {currentScreen === 'world_map' && <WorldMapScreen />}
       {currentScreen === 'location' && <LocationScreen />}
       {currentScreen === 'map' && <MapScreen />}
       {currentScreen === 'scene' && <SceneScreen />}

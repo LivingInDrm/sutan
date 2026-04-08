@@ -47,7 +47,7 @@ export function WorldMapScreen() {
   const locations: LocationConfig[] = mapConfig.locations;
 
   return (
-    <div className="h-screen w-screen relative overflow-hidden bg-leather-900">
+    <div className="h-full w-full relative overflow-hidden bg-leather-900">
       {/* Map Background */}
       {!bgError ? (
         <img

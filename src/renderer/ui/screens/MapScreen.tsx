@@ -1,21 +1,14 @@
 import React from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { useUIStore } from '../../stores/uiStore';
-import { HandArea } from '../components/hand/HandArea';
-import type { Card } from '../../core/types';
 
 export function MapScreen() {
   const game = useGameStore(s => s.game);
   const currentDay = useGameStore(s => s.currentDay);
   const executionCountdown = useGameStore(s => s.executionCountdown);
   const beginSettlement = useGameStore(s => s.beginSettlement);
-  const handCardIds = useGameStore(s => s.handCardIds);
   const setScreen = useUIStore(s => s.setScreen);
   const selectScene = useUIStore(s => s.selectScene);
-
-  const allCards: Card[] = game
-    ? handCardIds.map(id => game.cardManager.getCard(id)?.data).filter(Boolean) as Card[]
-    : [];
 
   const availableScenes = game ? game.sceneManager.getAvailableScenes() : [];
   const participatedScenes = game ? game.sceneManager.getParticipatedScenes() : [];
@@ -31,8 +24,8 @@ export function MapScreen() {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex-1 p-6 overflow-auto">
+    <div className="h-full flex flex-col min-h-0">
+      <div className="flex-1 p-6 overflow-auto min-h-0">
         <div className="mb-6">
           <h2 className="text-xl font-bold text-amber-400 mb-2">World Map</h2>
 
@@ -101,8 +94,6 @@ export function MapScreen() {
           )}
         </div>
       </div>
-
-      <HandArea cards={allCards} />
     </div>
   );
 }
