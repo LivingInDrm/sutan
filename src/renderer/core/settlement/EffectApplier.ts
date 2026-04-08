@@ -8,6 +8,8 @@ export class EffectApplier {
   private playerState: PlayerState;
   private cardManager: CardManager;
   private cardDataResolver?: CardDataResolver;
+  private cardAddedListener?: (card: Card) => void;
+  private cardRemovedListener?: (cardId: string) => void;
 
   constructor(playerState: PlayerState, cardManager: CardManager) {
     this.playerState = playerState;
@@ -16,6 +18,14 @@ export class EffectApplier {
 
   setCardDataResolver(resolver: CardDataResolver): void {
     this.cardDataResolver = resolver;
+  }
+
+  setOwnershipListeners(listeners: {
+    onCardAdded?: (card: Card) => void;
+    onCardRemoved?: (cardId: string) => void;
+  }): void {
+    this.cardAddedListener = listeners.onCardAdded;
+    this.cardRemovedListener = listeners.onCardRemoved;
   }
 
   apply(effects: Effects, investedCardIds: string[] = []): void {
@@ -33,6 +43,7 @@ export class EffectApplier {
         const cardData = this.cardDataResolver?.(cardId);
         if (cardData) {
           this.cardManager.addCard(cardData);
+          this.cardAddedListener?.(cardData);
         }
       }
     }
@@ -41,7 +52,10 @@ export class EffectApplier {
       for (const cardRef of effects.cards_remove) {
         const actualId = this.resolveCardReference(cardRef, investedCardIds);
         if (actualId) {
-          this.cardManager.removeCard(actualId);
+          const removed = this.cardManager.removeCard(actualId);
+          if (removed) {
+            this.cardRemovedListener?.(actualId);
+          }
         }
       }
     }
@@ -76,7 +90,10 @@ export class EffectApplier {
 
     if (effects.consume_invested) {
       for (const cardId of investedCardIds) {
-        this.cardManager.removeCard(cardId);
+        const removed = this.cardManager.removeCard(cardId);
+        if (removed) {
+          this.cardRemovedListener?.(cardId);
+        }
       }
     }
   }

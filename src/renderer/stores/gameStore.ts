@@ -40,7 +40,9 @@ interface GameStoreActions {
   nextDay: () => SettlementResult[];
   syncState: () => void;
   save: () => SaveData | null;
+  exportSave: () => string | null;
   load: (save: SaveData, allCards: Card[], allScenes: Scene[]) => void;
+  importSave: (saveJson: string, allCards?: Card[], allScenes?: Scene[]) => void;
   reset: () => void;
   beginSettlement: () => void;
   advanceNarrative: () => void;
@@ -368,9 +370,22 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     return game.serialize();
   },
 
+  exportSave: () => {
+    const { game } = get();
+    if (!game) return null;
+    return game.exportSave();
+  },
+
   load: (save, allCards, allScenes) => {
     const game = new GameManager();
     game.loadSave(save, allCards, allScenes);
+    set({ game });
+    get().syncState();
+  },
+
+  importSave: (saveJson, allCards, allScenes) => {
+    const game = new GameManager();
+    game.importSave(saveJson, allCards, allScenes);
     set({ game });
     get().syncState();
   },

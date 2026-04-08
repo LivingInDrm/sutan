@@ -1,5 +1,5 @@
 import type {
-  Scene, Settlement, SettlementResult, DiceCheckState,
+  Card, Scene, Settlement, SettlementResult, DiceCheckState,
   DiceCheckSettlement, TradeSettlement, ChoiceSettlement,
   Stage, Effects,
 } from '../types';
@@ -49,6 +49,13 @@ export class SettlementExecutor {
 
   setCardDataResolver(resolver: CardDataResolver): void {
     this.effectApplier.setCardDataResolver(resolver);
+  }
+
+  setOwnershipListeners(listeners: {
+    onCardAdded?: (card: Card) => void;
+    onCardRemoved?: (cardId: string) => void;
+  }): void {
+    this.effectApplier.setOwnershipListeners(listeners);
   }
 
   executeStageSettlement(

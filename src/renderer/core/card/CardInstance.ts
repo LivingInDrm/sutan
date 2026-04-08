@@ -67,4 +67,11 @@ export class CardInstance {
     if (!this.data.attributes) return 0;
     return Object.values(this.data.attributes).reduce((sum, val) => sum + val, 0);
   }
+
+  toCardData(): Card {
+    return {
+      ...this.data,
+      tags: this.tags,
+    };
+  }
 }

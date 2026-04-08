@@ -12,6 +12,8 @@ import { GameEndReason } from '../types/enums';
 import type { Card, Scene, SaveData, SettlementResult } from '../types';
 import { DIFFICULTIES } from '../types';
 import { eventBus } from '../../lib/events';
+import type { GameState } from './GameState';
+import { dataLoader } from '../../data/loader';
 
 export class GameManager {
   readonly playerState: PlayerState;
@@ -28,6 +30,7 @@ export class GameManager {
   private _endReason: GameEndReason | null = null;
   private _difficulty: string;
   private _allCardsMap: Map<string, Card> = new Map();
+  private _runtimeState: GameState;
 
   constructor(difficulty: string = 'normal', seed?: string) {
     this._difficulty = difficulty;
@@ -47,16 +50,58 @@ export class GameManager {
       this.timeManager, this.sceneManager, this.settlementExecutor,
       this.thinkSystem, this.playerState, this.cardManager
     );
+    this._runtimeState = {
+      owned_card_ids: [],
+      card_snapshots: {},
+      owned_equipment_ids: [],
+      equipment_snapshots: {},
+      player: this.playerState.serialize(),
+      current_day: this.timeManager.currentDay,
+      current_scene: null,
+      unlocked_locations: [],
+      event_history: [],
+    };
+    this.settlementExecutor.setOwnershipListeners({
+      onCardAdded: (card) => this.trackOwnedCard(card),
+      onCardRemoved: (cardId) => this.untrackOwnedCard(cardId),
+    });
   }
 
   get isGameOver(): boolean { return this._isGameOver; }
   get endReason(): GameEndReason | null { return this._endReason; }
   get difficulty(): string { return this._difficulty; }
+  get runtimeState(): GameState {
+    this.syncRuntimeState();
+    return {
+      ...this._runtimeState,
+      owned_card_ids: [...this._runtimeState.owned_card_ids],
+      owned_equipment_ids: [...this._runtimeState.owned_equipment_ids],
+      unlocked_locations: [...this._runtimeState.unlocked_locations],
+      event_history: [...this._runtimeState.event_history],
+      card_snapshots: { ...this._runtimeState.card_snapshots },
+      equipment_snapshots: { ...this._runtimeState.equipment_snapshots },
+      player: { ...this._runtimeState.player },
+    };
+  }
 
   startNewGame(initialCards: Card[] = [], initialScenes: Scene[] = []): void {
-    for (const card of initialCards) {
+    this._allCardsMap.clear();
+    this.cardManager.clear();
+    this._runtimeState.owned_card_ids = [];
+    this._runtimeState.owned_equipment_ids = [];
+    this._runtimeState.card_snapshots = {};
+    this._runtimeState.equipment_snapshots = {};
+    this._runtimeState.event_history = [];
+    this._runtimeState.current_scene = null;
+
+    const allCards = dataLoader.loadCardsFromDirectory();
+    const starterCards = initialCards.filter(card => card.initial);
+    for (const card of allCards) {
       this._allCardsMap.set(card.card_id, card);
+    }
+    for (const card of starterCards) {
       this.cardManager.addCard(card);
+      this.trackOwnedCard(card);
     }
     this.settlementExecutor.setCardDataResolver(
       (cardId: string) => this._allCardsMap.get(cardId)
@@ -65,6 +110,7 @@ export class GameManager {
     for (const scene of initialScenes) {
       this.sceneManager.activateScene(scene.scene_id);
     }
+    this.syncRuntimeState();
     this.dayManager.executeDawn();
     this.dayManager.startAction();
     eventBus.emit('game:start', { difficulty: this._difficulty });
@@ -110,6 +156,7 @@ export class GameManager {
 
     this.dayManager.executeDawn();
     this.dayManager.startAction();
+    this.syncRuntimeState();
     return true;
   }
 
@@ -132,6 +179,7 @@ export class GameManager {
   }
 
   serialize(): SaveData {
+    this.syncRuntimeState();
     return {
       save_id: `save_${Date.now()}`,
       timestamp: new Date().toISOString(),
@@ -158,7 +206,12 @@ export class GameManager {
       },
       achievements_unlocked: [],
       npc_relations: {},
+      runtime_state: this.runtimeState,
     };
+  }
+
+  exportSave(): string {
+    return JSON.stringify(this.serialize(), null, 2);
   }
 
   loadSave(save: SaveData, allCards: Card[], allScenes: Scene[]): void {
@@ -171,8 +224,12 @@ export class GameManager {
     );
 
     this.cardManager.clear();
+    const runtimeState = save.runtime_state;
+    const runtimeCards = runtimeState?.card_snapshots ?? {};
+    const runtimeEquipment = runtimeState?.equipment_snapshots ?? {};
+
     for (const cardId of save.cards.hand) {
-      const cardData = allCards.find(c => c.card_id === cardId);
+      const cardData = runtimeCards[cardId] || runtimeEquipment[cardId] || allCards.find(c => c.card_id === cardId);
       if (cardData) this.cardManager.addCard(cardData);
     }
 
@@ -184,9 +241,37 @@ export class GameManager {
     this.timeManager.loadState(save.game_state.current_day, save.game_state.execution_countdown);
     this.rng.setSeed(save.game_state.seed);
     this.thinkSystem.loadUsedToday(save.cards.think_used_today);
+    this.playerState.restore({
+      gold: runtimeState?.player.gold ?? save.game_state.gold,
+      reputation: runtimeState?.player.reputation ?? save.game_state.reputation,
+      golden_dice: runtimeState?.player.golden_dice ?? save.game_state.golden_dice,
+      rewind_charges: runtimeState?.player.rewind_charges ?? save.game_state.rewind_charges,
+      think_charges: runtimeState?.player.think_charges ?? save.game_state.think_charges,
+    });
 
     this._isGameOver = false;
     this._endReason = null;
+    this._runtimeState = runtimeState ?? {
+      owned_card_ids: save.cards.hand.filter(cardId => (this._allCardsMap.get(cardId)?.type ?? runtimeCards[cardId]?.type) === 'character'),
+      card_snapshots: runtimeCards,
+      owned_equipment_ids: save.cards.hand.filter(cardId => (this._allCardsMap.get(cardId)?.type ?? runtimeEquipment[cardId]?.type) === 'equipment'),
+      equipment_snapshots: runtimeEquipment,
+      player: this.playerState.serialize(),
+      current_day: save.game_state.current_day,
+      current_scene: null,
+      unlocked_locations: this.computeUnlockedLocations(),
+      event_history: [],
+    };
+    this.syncRuntimeState();
+  }
+
+  importSave(saveJson: string, allCards?: Card[], allScenes?: Scene[]): void {
+    const parsed = JSON.parse(saveJson) as SaveData;
+    this.loadSave(
+      parsed,
+      allCards ?? dataLoader.loadCardsFromDirectory(),
+      allScenes ?? dataLoader.loadScenesFromDirectory(),
+    );
   }
 
   private buildLockedInScenes(): Record<string, string[]> {
@@ -198,5 +283,56 @@ export class GameManager {
       }
     }
     return result;
+  }
+
+  private trackOwnedCard(card: Card): void {
+    if (card.type === 'equipment') {
+      if (!this._runtimeState.owned_equipment_ids.includes(card.card_id)) {
+        this._runtimeState.owned_equipment_ids.push(card.card_id);
+      }
+      this._runtimeState.equipment_snapshots[card.card_id] = { ...card };
+      return;
+    }
+    if (!this._runtimeState.owned_card_ids.includes(card.card_id)) {
+      this._runtimeState.owned_card_ids.push(card.card_id);
+    }
+    this._runtimeState.card_snapshots[card.card_id] = { ...card };
+  }
+
+  private untrackOwnedCard(cardId: string): void {
+    if (this._runtimeState.owned_card_ids.includes(cardId)) {
+      this._runtimeState.owned_card_ids = this._runtimeState.owned_card_ids.filter(id => id !== cardId);
+      delete this._runtimeState.card_snapshots[cardId];
+    }
+    if (this._runtimeState.owned_equipment_ids.includes(cardId)) {
+      this._runtimeState.owned_equipment_ids = this._runtimeState.owned_equipment_ids.filter(id => id !== cardId);
+      delete this._runtimeState.equipment_snapshots[cardId];
+    }
+  }
+
+  private syncRuntimeState(): void {
+    for (const card of this.cardManager.getAllCards()) {
+      this.trackOwnedCard(card.toCardData());
+    }
+    this._runtimeState.player = this.playerState.serialize();
+    this._runtimeState.current_day = this.timeManager.currentDay;
+    this._runtimeState.unlocked_locations = this.computeUnlockedLocations();
+  }
+
+  private computeUnlockedLocations(): string[] {
+    const maps = Array.from(dataLoader.loadMapsFromDirectory().values());
+    const unlocked = new Set<string>();
+    for (const map of maps) {
+      for (const location of map.locations) {
+        const hasUnlockedScene = location.scene_ids.some(sceneId => {
+          const state = this.sceneManager.getSceneState(sceneId);
+          return state && state.status !== 'locked';
+        });
+        if (hasUnlockedScene) {
+          unlocked.add(location.location_id);
+        }
+      }
+    }
+    return Array.from(unlocked);
   }
 }

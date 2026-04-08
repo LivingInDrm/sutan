@@ -6,13 +6,14 @@ import { dataLoader } from '../../data/loader';
 
 const baseCards: Card[] = dataLoader.loadCardsFromDirectory();
 const baseScenes: Scene[] = dataLoader.loadScenesFromDirectory();
+const initialCards: Card[] = baseCards.filter(card => card.initial);
 
 export function TitleScreen() {
   const setScreen = useUIStore(s => s.setScreen);
   const startNewGame = useGameStore(s => s.startNewGame);
 
   const handleStart = (difficulty: string) => {
-    startNewGame(difficulty, baseCards, baseScenes);
+    startNewGame(difficulty, initialCards, baseScenes);
     setScreen('world_map');
   };
 

@@ -24,6 +24,7 @@ export interface Card {
   attribute_bonus?: AttributeBonus;
   special_bonus?: SpecialBonus;
   gem_slots?: number;
+  initial?: boolean;
 }
 
 export interface Slot {
@@ -184,7 +185,7 @@ export interface MapConfig {
   locations: LocationConfig[];
 }
 
-export interface GameState {
+export interface SaveGameState {
   current_day: number;
   execution_countdown: number;
   gold: number;
@@ -212,11 +213,12 @@ export interface ScenesState {
 export interface SaveData {
   save_id: string;
   timestamp: string;
-  game_state: GameState;
+  game_state: SaveGameState;
   cards: CardsState;
   scenes: ScenesState;
   achievements_unlocked: string[];
   npc_relations: Record<string, number>;
+  runtime_state?: import('../game/GameState').GameState;
 }
 
 export interface DiceRollResult {

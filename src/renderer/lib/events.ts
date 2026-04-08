@@ -1,5 +1,5 @@
 import mitt from 'mitt';
-import type { SettlementResult, GameState, StageResult } from '@core/types';
+import type { SettlementResult } from '@core/types';
 import type { CheckResult, GameEndReason, GamePhase } from '@core/types/enums';
 
 export type GameEvents = {
