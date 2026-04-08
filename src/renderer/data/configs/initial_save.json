@@ -1,0 +1,112 @@
+{
+  "save_id": "initial_save",
+  "timestamp": "2026-04-08T00:00:00.000Z",
+  "game_state": {
+    "current_day": 1,
+    "execution_countdown": 14,
+    "gold": 30,
+    "reputation": 50,
+    "rewind_charges": 3,
+    "golden_dice": 0,
+    "think_charges": 3,
+    "phase": "dawn",
+    "seed": "initial_seed"
+  },
+  "cards": {
+    "hand": [
+      "card_003",
+      "card_007"
+    ],
+    "equipped": {},
+    "locked_in_scenes": {},
+    "think_used_today": []
+  },
+  "scenes": {
+    "active": [],
+    "completed": [],
+    "scene_states": {}
+  },
+  "achievements_unlocked": [],
+  "npc_relations": {},
+  "runtime_state": {
+    "owned_card_ids": [
+      "card_003",
+      "card_007"
+    ],
+    "card_snapshots": {
+      "card_003": {
+        "card_id": "card_003",
+        "name": "徐凤年",
+        "type": "character",
+        "rarity": "gold",
+        "description": "北凉世子徐凤年，外示纨绔，实则心机深沉，历经三年游历磨砺心性。重情重义，善布局权谋，刀剑并修，后承大势而起，于江湖庙堂之间周旋，终成可担天下之人。",
+        "image": "/assets/portraits/figure03.png",
+        "attributes": {
+          "physique": 8,
+          "charm": 8,
+          "wisdom": 9,
+          "combat": 8,
+          "social": 7,
+          "survival": 7,
+          "stealth": 4,
+          "magic": 3
+        },
+        "special_attributes": {
+          "support": 4,
+          "reroll": 4
+        },
+        "tags": [
+          "male",
+          "warrior",
+          "wanderer",
+          "protagonist",
+          "ally"
+        ],
+        "equipment_slots": 4
+      },
+      "card_007": {
+        "card_id": "card_007",
+        "name": "老黄",
+        "type": "character",
+        "rarity": "gold",
+        "description": "老黄本名剑九黄，表面是缺门牙、爱唠叨的马夫老仆，实则藏锋多年的绝顶剑客。一路陪徐凤年游历江湖，忠厚市井中见深情，最终重返武帝城，只为替少爷再探江湖高低。",
+        "image": "/assets/portraits/figure07.png",
+        "attributes": {
+          "physique": 7,
+          "charm": 5,
+          "wisdom": 8,
+          "combat": 10,
+          "social": 6,
+          "survival": 7,
+          "stealth": 4,
+          "magic": 1
+        },
+        "special_attributes": {
+          "support": 5,
+          "reroll": 3
+        },
+        "tags": [
+          "male",
+          "swordsman",
+          "mentor",
+          "ally",
+          "wanderer"
+        ],
+        "equipment_slots": 4
+      }
+    },
+    "owned_equipment_ids": [],
+    "equipment_snapshots": {},
+    "player": {
+      "gold": 30,
+      "reputation": 50,
+      "golden_dice": 0,
+      "rewind_charges": 3,
+      "think_charges": 3
+    },
+    "current_day": 1,
+    "current_scene": null,
+    "unlocked_locations": [],
+    "event_history": []
+  }
+}

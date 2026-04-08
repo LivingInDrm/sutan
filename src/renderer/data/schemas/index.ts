@@ -81,7 +81,6 @@ export const CardSchema = z.object({
   attribute_bonus: AttributeBonusSchema.optional(),
   special_bonus: SpecialBonusSchema.optional(),
   gem_slots: z.number().int().min(0).optional(),
-  initial: z.boolean().optional(),
   // NOTE (Phase 2): meta is a workspace-only field from scripts/data/cards/*.json.
   // It must NOT be present in the runtime card files (deploy strips it), but we
   // declare it optional here so validation is resilient if it accidentally appears.

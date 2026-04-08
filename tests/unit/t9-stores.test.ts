@@ -18,25 +18,31 @@ describe('T9.1: gameStore', () => {
 
   it('should start new game and sync state', () => {
     const store = useGameStore.getState();
-    store.startNewGame('normal', [makeChar('c1', ['protagonist'])], [], 'store-test');
+    store.startNewGame('normal', [
+      makeChar('c1', ['protagonist']),
+      makeChar('card_003', ['protagonist']),
+      makeChar('card_007'),
+    ], [], 'store-test');
     const state = useGameStore.getState();
     expect(state.game).not.toBeNull();
     expect(state.currentDay).toBe(1);
     expect(state.gold).toBe(30);
-    expect(state.handCardIds).toContain('c1');
+    expect(state.handCardIds).toContain('card_003');
+    expect(state.handCardIds).toContain('card_007');
+    expect(state.handCardIds).not.toContain('c1');
     expect(state.phase).toBe(GamePhase.Action);
   });
 
   it('should advance day and update state', () => {
     const store = useGameStore.getState();
-    store.startNewGame('normal', [makeChar('c1', ['protagonist'])], [], 'advance-test');
+    store.startNewGame('normal', [makeChar('card_003', ['protagonist']), makeChar('card_007')], [], 'advance-test');
     store.nextDay();
     const state = useGameStore.getState();
     expect(state.currentDay).toBe(2);
   });
 
   it('should save and load', () => {
-    const cards = [makeChar('c1', ['protagonist'])];
+    const cards = [makeChar('card_003', ['protagonist']), makeChar('card_007')];
     const store = useGameStore.getState();
     store.startNewGame('normal', cards, [], 'save-load');
     store.nextDay();

@@ -14,6 +14,7 @@ import { DIFFICULTIES } from '../types';
 import { eventBus } from '../../lib/events';
 import type { GameState } from './GameState';
 import { dataLoader } from '../../data/loader';
+import initialSaveJson from '../../data/configs/initial_save.json';
 
 export class GameManager {
   readonly playerState: PlayerState;
@@ -84,33 +85,15 @@ export class GameManager {
     };
   }
 
-  startNewGame(initialCards: Card[] = [], initialScenes: Scene[] = []): void {
+  startNewGame(allCards: Card[] = [], initialScenes: Scene[] = []): void {
     this._allCardsMap.clear();
     this.cardManager.clear();
-    this._runtimeState.owned_card_ids = [];
-    this._runtimeState.owned_equipment_ids = [];
-    this._runtimeState.card_snapshots = {};
-    this._runtimeState.equipment_snapshots = {};
-    this._runtimeState.event_history = [];
-    this._runtimeState.current_scene = null;
-
-    const allCards = dataLoader.loadCardsFromDirectory();
-    const starterCards = initialCards.filter(card => card.initial);
     for (const card of allCards) {
       this._allCardsMap.set(card.card_id, card);
     }
-    for (const card of starterCards) {
-      this.cardManager.addCard(card);
-      this.trackOwnedCard(card);
-    }
-    this.settlementExecutor.setCardDataResolver(
-      (cardId: string) => this._allCardsMap.get(cardId)
-    );
-    this.sceneManager.registerScenes(initialScenes);
-    for (const scene of initialScenes) {
-      this.sceneManager.activateScene(scene.scene_id);
-    }
-    this.syncRuntimeState();
+
+    const initialSave = this.createInitialSaveState();
+    this.loadSave(initialSave, allCards, initialScenes);
     this.dayManager.executeDawn();
     this.dayManager.startAction();
     eventBus.emit('game:start', { difficulty: this._difficulty });
@@ -272,6 +255,18 @@ export class GameManager {
       allCards ?? dataLoader.loadCardsFromDirectory(),
       allScenes ?? dataLoader.loadScenesFromDirectory(),
     );
+  }
+
+  private createInitialSaveState(): SaveData {
+    const diff = DIFFICULTIES[this._difficulty] || DIFFICULTIES.normal;
+    const save = JSON.parse(JSON.stringify(initialSaveJson)) as SaveData;
+    save.game_state.execution_countdown = diff.execution_days;
+    save.game_state.gold = diff.initial_gold;
+    save.game_state.seed = this.rng.seed;
+    if (save.runtime_state) {
+      save.runtime_state.player.gold = diff.initial_gold;
+    }
+    return save;
   }
 
   private buildLockedInScenes(): Record<string, string[]> {

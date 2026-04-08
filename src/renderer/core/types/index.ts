@@ -24,7 +24,6 @@ export interface Card {
   attribute_bonus?: AttributeBonus;
   special_bonus?: SpecialBonus;
   gem_slots?: number;
-  initial?: boolean;
 }
 
 export interface Slot {

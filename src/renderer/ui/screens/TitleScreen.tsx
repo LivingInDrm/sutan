@@ -1,19 +1,18 @@
 import React from 'react';
 import { useUIStore } from '../../stores/uiStore';
 import { useGameStore } from '../../stores/gameStore';
-import type { Card, Scene } from '../../core/types';
+import type { Scene } from '../../core/types';
 import { dataLoader } from '../../data/loader';
 
-const baseCards: Card[] = dataLoader.loadCardsFromDirectory();
+const baseCards = dataLoader.loadCardsFromDirectory();
 const baseScenes: Scene[] = dataLoader.loadScenesFromDirectory();
-const initialCards: Card[] = baseCards.filter(card => card.initial);
 
 export function TitleScreen() {
   const setScreen = useUIStore(s => s.setScreen);
   const startNewGame = useGameStore(s => s.startNewGame);
 
   const handleStart = (difficulty: string) => {
-    startNewGame(difficulty, initialCards, baseScenes);
+    startNewGame(difficulty, baseCards, baseScenes);
     setScreen('world_map');
   };
 

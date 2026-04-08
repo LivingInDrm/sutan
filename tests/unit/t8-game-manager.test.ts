@@ -18,11 +18,17 @@ const makeSultanCard = (id: string): Card => ({
 describe('T8.1: GameManager', () => {
   it('should initialize new game', () => {
     const gm = new GameManager('normal', 'test-seed');
-    gm.startNewGame([makeChar('c1', ['protagonist'])]);
+    gm.startNewGame([
+      makeChar('c1', ['protagonist']),
+      makeChar('card_003', ['protagonist']),
+      makeChar('card_007'),
+    ]);
     
     expect(gm.playerState.gold).toBe(30);
     expect(gm.timeManager.currentDay).toBe(1);
-    expect(gm.cardManager.hasCard('c1')).toBe(true);
+    expect(gm.cardManager.hasCard('card_003')).toBe(true);
+    expect(gm.cardManager.hasCard('card_007')).toBe(true);
+    expect(gm.cardManager.hasCard('c1')).toBe(false);
     expect(gm.isGameOver).toBe(false);
     expect(gm.dayManager.phase).toBe(GamePhase.Action);
   });
@@ -39,14 +45,15 @@ describe('T8.1: GameManager', () => {
 
   it('should advance days', () => {
     const gm = new GameManager('normal', 'day-test');
-    gm.startNewGame([makeChar('c1', ['protagonist'])]);
+    gm.startNewGame([makeChar('card_003', ['protagonist']), makeChar('card_007')]);
     gm.nextDay();
     expect(gm.timeManager.currentDay).toBe(2);
   });
 
   it('should detect execution failure', () => {
     const gm = new GameManager('nightmare', 'exec-test');
-    gm.startNewGame([makeChar('c1', ['protagonist']), makeSultanCard('s1')]);
+    gm.startNewGame([makeChar('card_003', ['protagonist']), makeChar('card_007'), makeSultanCard('s1')]);
+    gm.cardManager.addCard(makeSultanCard('s1'));
     
     for (let i = 0; i < 5; i++) {
       if (gm.isGameOver) break;
@@ -59,18 +66,19 @@ describe('T8.1: GameManager', () => {
 
   it('should serialize and provide save data', () => {
     const gm = new GameManager('normal', 'save-test');
-    gm.startNewGame([makeChar('c1', ['protagonist'])]);
+    gm.startNewGame([makeChar('card_003', ['protagonist']), makeChar('card_007')]);
     const save = gm.serialize();
     
     expect(save.save_id).toBeDefined();
     expect(save.game_state.current_day).toBe(1);
     expect(save.game_state.gold).toBe(30);
-    expect(save.cards.hand).toContain('c1');
+    expect(save.cards.hand).toContain('card_003');
+    expect(save.cards.hand).toContain('card_007');
   });
 
   it('should load save data', () => {
     const gm = new GameManager('normal', 'load-test');
-    const cards = [makeChar('c1', ['protagonist'])];
+    const cards = [makeChar('card_003', ['protagonist']), makeChar('card_007')];
     gm.startNewGame(cards);
     gm.nextDay();
     gm.nextDay();
@@ -79,6 +87,7 @@ describe('T8.1: GameManager', () => {
     const gm2 = new GameManager('normal');
     gm2.loadSave(save, cards, []);
     expect(gm2.timeManager.currentDay).toBe(save.game_state.current_day);
-    expect(gm2.cardManager.hasCard('c1')).toBe(true);
+    expect(gm2.cardManager.hasCard('card_003')).toBe(true);
+    expect(gm2.cardManager.hasCard('card_007')).toBe(true);
   });
 });
