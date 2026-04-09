@@ -1,5 +1,32 @@
 [
   {
+    "timestamp": "2026-04-09T02:41:01.857809Z",
+    "name": "free-gen",
+    "asset_type": "free-gen",
+    "prompt": "A Chinese ancient-style game UI background in “Song dynasty scholar’s writing desk” style, designed specifically as a narrative card-game interface background.\n\nComposition: elegant horizontal interface layout with a large left-side panel area for cards, illustrations, or event tiles, and a large right-side panel area for long-form narrative text. The central functional areas should remain clean, spacious, and readable, while the frame edges and peripheral zones contain refined decorative details. No actual UI text, no buttons, no icons, no readable labels.\n\nOverall visual language: restrained Song-style aesthetics, literati desk atmosphere, scholarly refinement, calm and premium Chinese elegance. Avoid palace extravagance; emphasize subtle craftsmanship, fine material balance, and quiet beauty.\n\nLeft panel background: dark natural hardwood desk surface with slightly worn polish, layered with a muted woven silk mat or understated brocade pad beneath the intended card area. Very subtle low-contrast patterns such as cloud motifs, fine geometric textile weave, or understated ruyi-inspired decorative rhythm. Add a soft warm-white localized highlight beneath the main interaction zone so future cards placed there feel gently supported by the background.\n\nRight panel background: refined xuan paper or mature handmade paper sheet laid over the desk, with delicate paper fibers, soft creases, pale ink smudges, faint watermarks from brush-and-ink use, slightly irregular edges, and a serene writing surface suitable for text overlay. The paper area should feel bright but not plain, scholarly and tactile.\n\nDecorative elements: paperweights, slim bronze or jade corner fittings, silk ties, elegant binding details, understated carved wood borders, small seal-box or stationery-like structural accents integrated into the frame, all minimal and tasteful, never busy. Edge decoration should be richer than the center.\n\nColor palette: ink black, warm walnut brown, parchment white, muted beige, pale tea color, weathered bronze, subtle celadon-green or faint cinnabar accents used very sparingly.\n\nLighting: soft natural indoor light, as if coming through paper windows, gentle warm shadows, calm tonal transitions, slightly brighter around the intended text paper and card zones, darker vignette toward the edges.\n\nTexture layering: premium handcrafted materials, clean wood grain, fine silk weave, restrained paper aging, very subtle ink traces, minimal but elegant ornamentation, high readability in the main zones.\n\nMood: scholarly, quiet, refined, poetic, literati, Song-dynasty elegance, cultured adventure, premium but restrained Chinese game interface background.\n\nRequirements: full background only, no characters, no readable text, no calligraphy, no UI buttons, no modern objects, no fantasy overload, no gaudy gold decoration, no empty flat backdrop, no clutter in the central reading and card placement zones. Highly detailed, polished, premium game UI background suitable for overlaying cards and narrative text.",
+    "size": "1536x1024",
+    "background": "auto",
+    "quality": "high",
+    "images": [
+      {
+        "path": "free-gen/free_gen_1775702262_1.png",
+        "url": "/images/free-gen/free_gen_1775702262_1.png"
+      },
+      {
+        "path": "free-gen/free_gen_1775702262_2.png",
+        "url": "/images/free-gen/free_gen_1775702262_2.png"
+      },
+      {
+        "path": "free-gen/free_gen_1775702262_3.png",
+        "url": "/images/free-gen/free_gen_1775702262_3.png"
+      },
+      {
+        "path": "free-gen/free_gen_1775702262_4.png",
+        "url": "/images/free-gen/free_gen_1775702262_4.png"
+      }
+    ]
+  },
+  {
     "timestamp": "2026-04-09T01:59:07.928076Z",
     "name": "ui_004",
     "asset_type": "ui",
@@ -559,17 +586,6 @@
       {
         "path": "item_霜汀·测02/霜汀·测02_1775582811_1.png",
         "url": "/images/item_霜汀·测02/霜汀·测02_1775582811_1.png"
-      }
-    ]
-  },
-  {
-    "timestamp": "2026-04-07T17:26:51.377779Z",
-    "name": "霜汀·测02",
-    "asset_type": "item",
-    "images": [
-      {
-        "path": "item_霜汀·测02/霜汀·测02_1775582768_1.png",
-        "url": "/images/item_霜汀·测02/霜汀·测02_1775582768_1.png"
       }
     ]
   }

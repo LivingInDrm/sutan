@@ -75,14 +75,15 @@ export function TitleScreen() {
       className="relative h-screen w-screen overflow-hidden bg-leather-900 text-parchment-200"
       style={{
         backgroundImage: [
+          'url(/title-bg.png)',
           'radial-gradient(circle at 50% 35%, rgba(232,220,200,0.08), rgba(26,15,10,0) 38%)',
           'linear-gradient(180deg, rgba(14,8,6,0.92) 0%, rgba(26,15,10,0.88) 36%, rgba(26,26,46,0.82) 100%)',
           `url(${inkWashTexture})`,
           `url(${bronzeTexture})`,
           `url(${ricePaperTexture})`,
         ].join(', '),
-        backgroundSize: 'auto, auto, cover, cover, cover',
-        backgroundPosition: 'center, center, center, center, center',
+        backgroundSize: 'cover, auto, auto, cover, cover, cover',
+        backgroundPosition: 'center, center, center, center, center, center',
       }}
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(245,240,232,0.08),transparent_42%),linear-gradient(90deg,rgba(14,8,6,0.72),rgba(14,8,6,0.22),rgba(14,8,6,0.72))]" />
