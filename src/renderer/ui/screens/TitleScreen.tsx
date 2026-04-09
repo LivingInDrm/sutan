@@ -68,7 +68,7 @@ export function TitleScreen() {
   );
   const titleTextShadow = '0 0 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.9)';
   const primaryButtonClassName =
-    'relative flex min-h-[4.25rem] w-full items-center justify-center overflow-hidden bg-center bg-no-repeat px-6 py-5 text-[18px] leading-[1.2] tracking-[0.12em] text-leather-900 transition-all duration-200 font-(family-name:--font-display)';
+    'relative flex min-h-[3.5rem] w-full items-center justify-center overflow-hidden bg-center bg-no-repeat px-6 py-[1.05rem] text-[18px] leading-[1.2] tracking-[0.12em] text-leather-900 transition-all duration-200 font-(family-name:--font-display)';
   const primaryButtonStyle = {
     backgroundImage: 'url(/btn-bg.png)',
     backgroundSize: '100% 100%',
@@ -242,7 +242,7 @@ export function TitleScreen() {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-3">
+                <div className="flex flex-col items-center gap-2.5">
                   <button
                     type="button"
                     onClick={() => handleStart(selectedDifficulty)}
@@ -257,7 +257,7 @@ export function TitleScreen() {
                     disabled={!game}
                     className={[
                       primaryButtonClassName,
-                      'max-w-[220px] px-2 py-4 text-[15px] tracking-[0.1em]',
+                      'max-w-[220px] px-2 py-[0.9rem] text-[15px] tracking-[0.1em]',
                       game
                         ? 'hover:opacity-90 hover:brightness-105 active:opacity-80 active:brightness-95'
                         : 'cursor-not-allowed opacity-45 saturate-75',
