@@ -178,8 +178,6 @@ export function TitleScreen() {
               <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-gold-500/35 to-transparent" />
               <div className="absolute inset-y-7 left-[-2px] w-5 bg-[linear-gradient(180deg,rgba(96,60,26,0.96),rgba(45,24,10,0.98))] shadow-[0_0_0_1px_rgba(54,30,11,0.75),inset_0_0_8px_rgba(255,218,150,0.16),2px_0_12px_rgba(0,0,0,0.28)]" style={{ borderRadius: '10px 3px 3px 10px' }} />
               <div className="absolute inset-y-7 right-[-2px] w-5 bg-[linear-gradient(180deg,rgba(96,60,26,0.96),rgba(45,24,10,0.98))] shadow-[0_0_0_1px_rgba(54,30,11,0.75),inset_0_0_8px_rgba(255,218,150,0.16),-2px_0_12px_rgba(0,0,0,0.28)]" style={{ borderRadius: '3px 10px 10px 3px' }} />
-              <div className="absolute left-[-8px] top-10 h-6 w-8 rounded-full bg-[linear-gradient(180deg,rgba(63,37,16,0.98),rgba(34,18,8,1))] shadow-[0_3px_8px_rgba(0,0,0,0.3)]" />
-              <div className="absolute right-[-8px] top-10 h-6 w-8 rounded-full bg-[linear-gradient(180deg,rgba(63,37,16,0.98),rgba(34,18,8,1))] shadow-[0_3px_8px_rgba(0,0,0,0.3)]" />
 
               <div className="relative p-6 sm:p-8">
                 <div className="mb-6">
@@ -225,7 +223,6 @@ export function TitleScreen() {
                         {selected ? (
                           <>
                             <div className="absolute right-1 top-5 h-12 w-3 bg-crimson-500/88 shadow-[0_0_12px_rgba(139,26,26,0.34)]" style={{ clipPath: 'polygon(100% 0,100% 100%,0 90%,0 12%)' }} />
-                            <div className="absolute left-2 top-4 h-9 w-9 rounded-full border border-crimson-700/35 bg-[radial-gradient(circle,rgba(180,40,40,0.46),rgba(132,22,22,0.88))] opacity-95 blur-[0.2px]" />
                           </>
                         ) : null}
                         <div className="relative flex h-full flex-col items-center justify-between">
