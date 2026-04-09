@@ -67,6 +67,13 @@ export function TitleScreen() {
     [selectedDifficulty],
   );
   const titleTextShadow = '0 0 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.9)';
+  const primaryButtonClassName =
+    'relative min-h-12 w-full overflow-hidden bg-center bg-no-repeat px-6 py-4 text-[18px] leading-[1.2] tracking-[0.12em] text-leather-900 transition-all duration-200 font-(family-name:--font-display)';
+  const primaryButtonStyle = {
+    backgroundImage: 'url(/btn-bg.png)',
+    backgroundSize: '100% 100%',
+    textShadow: '0 1px 1px rgba(255,248,235,0.55), 0 2px 6px rgba(34,20,8,0.3), 0 0 14px rgba(255,248,235,0.12)',
+  } as const;
 
   return (
     <div
@@ -239,17 +246,9 @@ export function TitleScreen() {
                   <button
                     type="button"
                     onClick={() => handleStart(selectedDifficulty)}
-                    className="relative min-h-12 w-full max-w-[280px] overflow-hidden border border-[#8e6a39]/45 bg-[linear-gradient(180deg,rgba(233,220,192,0.96),rgba(208,188,150,0.98))] px-6 py-4 text-[18px] leading-[1.2] tracking-[0.12em] text-leather-900 shadow-[0_8px_18px_rgba(67,43,16,0.16),inset_0_1px_0_rgba(255,247,230,0.65),inset_0_-10px_18px_rgba(120,83,36,0.10)] transition-all duration-200 hover:border-[#a27a3d]/60 hover:translate-y-[-1px] active:translate-y-[1px] font-(family-name:--font-display)"
-                    style={{
-                      backgroundImage: [
-                        'radial-gradient(circle at 20% 18%, rgba(255,248,235,0.58), transparent 20%)',
-                        'radial-gradient(circle at 78% 70%, rgba(120,83,36,0.08), transparent 26%)',
-                        'linear-gradient(180deg,rgba(233,220,192,0.96),rgba(208,188,150,0.98))',
-                      ].join(', '),
-                    }}
+                    className={`${primaryButtonClassName} max-w-[280px] hover:opacity-90 hover:brightness-105 active:opacity-80 active:brightness-95`}
+                    style={primaryButtonStyle}
                   >
-                    <span className="pointer-events-none absolute inset-0 opacity-[0.18]" style={{ backgroundImage: 'radial-gradient(rgba(96,69,38,0.55) 0.8px, transparent 0.8px)', backgroundSize: '10px 10px' }} />
-                    <span className="pointer-events-none absolute inset-x-4 bottom-[8px] h-px bg-[linear-gradient(90deg,transparent,rgba(73,43,18,0.75),transparent)]" />
                     <span className="relative">启此新卷</span>
                   </button>
                   <button
@@ -257,11 +256,13 @@ export function TitleScreen() {
                     onClick={handleContinue}
                     disabled={!game}
                     className={[
-                      'min-h-12 w-full max-w-[220px] border-b px-2 py-3 text-[15px] leading-[1.2] tracking-[0.1em] transition-all duration-200 font-(family-name:--font-display)',
+                      primaryButtonClassName,
+                      'max-w-[220px] px-2 py-3 text-[15px] tracking-[0.1em]',
                       game
-                        ? 'border-gold-500/45 bg-transparent text-leather-800/82 hover:border-gold-500/70 hover:text-leather-900'
-                        : 'cursor-not-allowed border-gold-500/18 bg-transparent text-leather-700/35',
+                        ? 'hover:opacity-90 hover:brightness-105 active:opacity-80 active:brightness-95'
+                        : 'cursor-not-allowed opacity-45 saturate-75',
                     ].join(' ')}
+                    style={primaryButtonStyle}
                   >
                     续写前卷
                   </button>
