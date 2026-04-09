@@ -7,6 +7,8 @@ import type { MapConfig, LocationConfig } from '../../core/types';
 
 const mapConfig: MapConfig = dataLoader.getMap('map_001_beiliang') ?? dataLoader.getFirstMap()!;
 
+const AGED_GOLD = '#b8860b';
+
 function getLocationStatus(
   location: LocationConfig,
   game: ReturnType<typeof useGameStore.getState>['game'],
@@ -84,20 +86,41 @@ export function WorldMapScreen() {
       })}
       {/* Map title bottom-left */}
       <div
-        className="absolute bottom-6 left-6 z-20 pointer-events-none max-w-[420px] rounded-lg border px-4 py-3"
+        className="absolute bottom-6 left-6 z-20 pointer-events-none max-w-[420px] px-5 py-4"
         style={{
-          background: 'linear-gradient(180deg, rgba(26,15,10,0.78), rgba(26,26,46,0.52))',
-          borderColor: 'rgba(138,109,43,0.32)',
-          boxShadow: '0 10px 24px rgba(0,0,0,0.32)',
+          background: [
+            'radial-gradient(circle at 14% 18%, rgba(255,250,244,0.34) 0, rgba(255,250,244,0.08) 14%, transparent 30%)',
+            'radial-gradient(circle at 86% 72%, rgba(120,86,45,0.12) 0, transparent 32%)',
+            'linear-gradient(180deg, rgba(245,240,232,0.96), rgba(232,222,205,0.92))',
+          ].join(', '),
+          border: '1px solid rgba(184,134,11,0.28)',
+          clipPath: 'polygon(2% 3%, 97% 0%, 100% 14%, 98% 100%, 4% 98%, 0% 84%)',
+          boxShadow: '0 10px 20px rgba(26,15,10,0.18), inset 0 1px 0 rgba(255,252,246,0.65), inset 0 -12px 18px rgba(120,86,45,0.06)',
+          filter: 'drop-shadow(0 3px 6px rgba(60,45,30,0.18))',
         }}
       >
-        <div className="mb-1 text-[10px] leading-[1.4] tracking-[0.24em] text-gold-500/72 font-(family-name:--font-ui)">当前地图</div>
-        <div className="text-[24px] leading-[1.15] tracking-[0.06em] text-gold-300 font-(family-name:--font-display)">
+        <div
+          className="mb-1 text-[10px] leading-[1.4] tracking-[0.24em] font-(family-name:--font-ui)"
+          style={{ color: 'rgba(90,69,38,0.72)' }}
+        >
+          舆图
+        </div>
+        <div
+          className="text-[24px] leading-[1.15] tracking-[0.06em] font-(family-name:--font-display)"
+          style={{ color: AGED_GOLD, textShadow: '0 1px 0 rgba(255,248,235,0.45)' }}
+        >
           {mapConfig.name}
         </div>
-        <div className="mt-1 text-[13px] leading-[1.7] tracking-[0.01em] text-parchment-300/78 font-(family-name:--font-body)">
+        <div
+          className="mt-1 text-[13px] leading-[1.7] tracking-[0.01em] font-(family-name:--font-body)"
+          style={{ color: 'rgba(44,44,44,0.8)' }}
+        >
           {mapConfig.description}
         </div>
+        <div
+          className="absolute inset-x-4 bottom-1 h-px"
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(184,134,11,0.22), transparent)' }}
+        />
       </div>
     </div>
   );
@@ -117,19 +140,17 @@ function LocationIcon({
   const isClickable = true; // always clickable to view scene list
 
   const glowClass = status === 'available'
-    ? 'drop-shadow-[0_0_12px_rgba(201,168,76,0.55)]'
+    ? 'drop-shadow-[0_0_10px_rgba(184,134,11,0.34)]'
     : status === 'all_done'
-    ? 'drop-shadow-[0_0_6px_rgba(90,122,58,0.35)]'
-    : '';
-
-  const pulseClass = status === 'available' ? 'animate-pulse' : '';
+    ? 'drop-shadow-[0_0_6px_rgba(90,112,106,0.28)]'
+    : 'drop-shadow-[0_0_4px_rgba(44,44,44,0.24)]';
 
   return (
     <button
       onClick={onClick}
       disabled={!isClickable}
-      className="absolute z-10 flex flex-col items-center gap-1.5 group transform -translate-x-1/2 -translate-y-1/2
-                 hover:scale-110 transition-transform duration-200"
+      className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 transform flex-col items-center gap-1.5
+                 transition-all duration-200 group hover:-translate-y-[calc(50%+2px)] hover:scale-105 hover:brightness-105"
       style={{
         left: `${location.position.x * 100}%`,
         top: `${location.position.y * 100}%`,
@@ -147,42 +168,95 @@ function LocationIcon({
         ) : (
           /* Fallback icon */
           <div
-            className={`w-28 h-28 rounded-full border-2 flex items-center justify-center
-                        ${status === 'available'
-                          ? 'border-gold-300 bg-gold-600/40'
-                          : status === 'all_done'
-                          ? 'border-bamboo-300/50 bg-bamboo-900/45'
-                          : 'border-parchment-500/30 bg-ink-900/55'
-                        }`}
+            className="flex h-28 w-28 items-center justify-center border"
+            style={{
+              clipPath: 'polygon(50% 0%, 78% 7%, 96% 26%, 100% 55%, 88% 84%, 59% 100%, 28% 95%, 8% 74%, 0% 44%, 12% 16%)',
+              borderColor:
+                status === 'available'
+                  ? 'rgba(184,134,11,0.62)'
+                  : status === 'all_done'
+                  ? 'rgba(101,123,117,0.48)'
+                  : 'rgba(92,79,64,0.42)',
+              background:
+                status === 'available'
+                  ? 'radial-gradient(circle at 35% 30%, rgba(255,245,220,0.15), transparent 38%), linear-gradient(180deg, rgba(73,53,34,0.95), rgba(44,34,24,0.9))'
+                  : status === 'all_done'
+                  ? 'radial-gradient(circle at 35% 30%, rgba(184,205,195,0.12), transparent 38%), linear-gradient(180deg, rgba(57,62,58,0.92), rgba(37,43,42,0.88))'
+                  : 'radial-gradient(circle at 35% 30%, rgba(120,110,98,0.1), transparent 36%), linear-gradient(180deg, rgba(54,43,34,0.9), rgba(33,28,24,0.88))',
+              boxShadow: 'inset 0 1px 0 rgba(255,245,230,0.12), inset 0 -10px 14px rgba(0,0,0,0.16)',
+            }}
           >
-            <span className={`text-lg ${status === 'available' ? 'text-gold-100' : status === 'all_done' ? 'text-bamboo-300' : 'text-parchment-400'}`}>
-              {status === 'available' ? '⬡' : status === 'all_done' ? '✓' : '○'}
+            <span
+              className="text-lg"
+              style={{
+                color:
+                  status === 'available'
+                    ? 'rgba(222,196,138,0.96)'
+                    : status === 'all_done'
+                    ? 'rgba(148,171,162,0.88)'
+                    : 'rgba(188,176,160,0.74)',
+              }}
+            >
+              {status === 'available' ? '印' : status === 'all_done' ? '记' : '迹'}
             </span>
           </div>
         )}
 
         {/* Available indicator ring */}
         {status === 'available' && (
-          <div className={`absolute inset-0 rounded-full border-2 border-gold-300/55 ${pulseClass}`} />
+          <>
+            <div
+              className="absolute inset-[8%] animate-pulse"
+              style={{
+                borderRadius: '46% 54% 52% 48% / 44% 48% 52% 56%',
+                border: '1px solid rgba(184,134,11,0.34)',
+                boxShadow: '0 0 18px rgba(184,134,11,0.18), inset 0 0 10px rgba(255,236,188,0.05)',
+              }}
+            />
+            <div
+              className="absolute inset-[16%] animate-pulse"
+              style={{
+                animationDelay: '0.4s',
+                borderRadius: '53% 47% 45% 55% / 48% 44% 56% 52%',
+                background: 'radial-gradient(circle, rgba(184,134,11,0.12) 0%, rgba(184,134,11,0.04) 28%, transparent 62%)',
+                filter: 'blur(6px)',
+              }}
+            />
+          </>
         )}
       </div>
 
       {/* Name label */}
       <div
-        className={`min-h-6 px-3 py-1 rounded-[4px] text-[13px] leading-[1.2] tracking-[0.04em] whitespace-nowrap
-                    transition-all font-(family-name:--font-display)
-                    ${status === 'available'
-                      ? 'text-gold-200 border border-gold-500/40 group-hover:border-gold-300/65'
-                      : status === 'all_done'
-                      ? 'text-bamboo-300 border border-bamboo-500/30'
-                      : 'text-parchment-400 border border-parchment-500/20'
-                    }`}
+        className="min-h-6 whitespace-nowrap rounded-sm px-3 py-1 text-[13px] leading-[1.2] tracking-[0.08em]
+                    font-(family-name:--font-display) transition-all"
         style={{
-          background: status === 'available'
-            ? 'linear-gradient(180deg, rgba(26,15,10,0.86), rgba(26,26,46,0.74))'
-            : status === 'all_done'
-            ? 'linear-gradient(180deg, rgba(26,15,10,0.72), rgba(45,85,85,0.40))'
-            : 'linear-gradient(180deg, rgba(26,15,10,0.70), rgba(26,26,46,0.52))',
+          color:
+            status === 'available'
+              ? 'rgba(243,228,190,0.96)'
+              : status === 'all_done'
+              ? 'rgba(162,180,172,0.84)'
+              : 'rgba(189,174,155,0.72)',
+          border:
+            status === 'available'
+              ? '1px solid rgba(184,134,11,0.42)'
+              : status === 'all_done'
+              ? '1px solid rgba(95,120,113,0.34)'
+              : '1px solid rgba(107,94,78,0.28)',
+          background:
+            status === 'available'
+              ? 'linear-gradient(180deg, rgba(70,50,32,0.9), rgba(48,35,24,0.88))'
+              : status === 'all_done'
+              ? 'linear-gradient(180deg, rgba(67,66,58,0.86), rgba(47,52,50,0.84))'
+              : 'linear-gradient(180deg, rgba(49,38,30,0.84), rgba(36,30,24,0.82))',
+          boxShadow:
+            status === 'available'
+              ? '0 2px 8px rgba(0,0,0,0.22), 0 0 10px rgba(184,134,11,0.14), inset 0 1px 0 rgba(255,240,204,0.08)'
+              : status === 'all_done'
+              ? '0 2px 6px rgba(0,0,0,0.18), inset 0 1px 0 rgba(188,205,196,0.05)'
+              : '0 2px 5px rgba(0,0,0,0.16)',
+          textShadow: status === 'available' ? '0 0 8px rgba(255,236,188,0.18)' : 'none',
+          filter: status === 'all_done' ? 'saturate(0.72) brightness(0.9)' : status === 'none' ? 'brightness(0.78)' : 'none',
         }}
       >
         {location.name}
