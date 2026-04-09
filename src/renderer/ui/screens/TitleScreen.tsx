@@ -66,6 +66,7 @@ export function TitleScreen() {
     () => DIFFICULTIES.find(item => item.key === selectedDifficulty) ?? DIFFICULTIES[1],
     [selectedDifficulty],
   );
+  const titleTextShadow = '0 0 20px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.9)';
 
   return (
     <div
@@ -88,45 +89,40 @@ export function TitleScreen() {
       <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center justify-center px-6 py-10">
         <div className="grid w-full items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <section className="flex flex-col justify-center text-center lg:text-left">
-            <div className="relative mb-6 inline-flex min-h-[60px] self-center lg:self-start items-center pl-5 pr-6">
+            <div className="mb-8 inline-flex self-center lg:self-start">
               <div
-                className="absolute inset-y-0 left-0 w-[92px] border border-[#6f4b25]/75 bg-[linear-gradient(180deg,rgba(109,74,33,0.92),rgba(62,39,19,0.94))] shadow-[0_10px_18px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,226,167,0.16),inset_0_-1px_0_rgba(39,20,8,0.45)]"
-                style={{ clipPath: 'polygon(10% 0%, 88% 0%, 100% 16%, 94% 100%, 0% 100%, 0% 12%)' }}
-              />
-              <div className="absolute left-[10px] top-[8px] h-10 w-[18px] bg-[linear-gradient(180deg,rgba(132,22,22,0.95),rgba(98,12,12,0.96))] shadow-[0_4px_10px_rgba(107,15,15,0.35)]" style={{ clipPath: 'polygon(32% 0%,100% 0%,88% 100%,0% 100%)' }} />
-              <div className="absolute left-[16px] top-[10px] h-9 w-px bg-parchment-200/35" />
-              <div className="relative ml-10 flex items-center gap-3 text-[11px] tracking-[0.32em] text-parchment-300 font-(family-name:--font-display)">
-                <span className="h-[18px] w-px bg-gold-400/55" />
-                北凉题签
+                className="flex h-7 w-7 items-center justify-center bg-[linear-gradient(180deg,rgba(139,26,26,0.96),rgba(107,15,15,0.98))] text-[11px] leading-[1.05] tracking-[0.08em] text-parchment-100 shadow-[0_8px_18px_rgba(0,0,0,0.28),0_0_0_1px_rgba(62,8,8,0.45)] font-(family-name:--font-display)"
+                style={{ writingMode: 'vertical-rl', textShadow: '0 1px 2px rgba(0,0,0,0.35)' }}
+              >
+                北凉
               </div>
             </div>
 
             <div
-              className="relative mb-8 px-7 py-7"
+              className="relative mb-8 px-3 py-4 lg:px-0"
               style={{
                 backgroundImage: [
-                  'radial-gradient(circle at 18% 28%, rgba(230,216,187,0.08), transparent 26%)',
-                  'radial-gradient(circle at 74% 62%, rgba(255,244,214,0.06), transparent 24%)',
-                  'linear-gradient(180deg, rgba(22,12,8,0.42), rgba(16,9,7,0.18))',
+                  'radial-gradient(circle at 34% 42%, rgba(7,4,3,0.52), rgba(7,4,3,0.20) 28%, rgba(7,4,3,0) 68%)',
+                  'radial-gradient(circle at 72% 58%, rgba(7,4,3,0.24), rgba(7,4,3,0) 48%)',
                 ].join(', '),
-                boxShadow: 'inset 0 1px 0 rgba(227,192,118,0.08), inset 0 -18px 40px rgba(5,3,2,0.18), 0 18px 34px rgba(0,0,0,0.16)',
               }}
             >
-              <div className="pointer-events-none absolute inset-0 opacity-[0.34]" style={{ backgroundImage: 'radial-gradient(rgba(84,58,32,0.58) 0.8px, transparent 0.8px)', backgroundSize: '11px 11px' }} />
-              <div className="pointer-events-none absolute inset-x-2 top-1 h-[1px] bg-gradient-to-r from-transparent via-gold-500/28 to-transparent" />
-              <div className="pointer-events-none absolute inset-y-2 left-0 w-5 bg-[radial-gradient(circle_at_left,rgba(7,4,3,0.46),transparent_72%)]" />
-              <div className="pointer-events-none absolute inset-y-2 right-0 w-5 bg-[radial-gradient(circle_at_right,rgba(7,4,3,0.38),transparent_72%)]" />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-[linear-gradient(180deg,transparent,rgba(7,4,3,0.24))]" />
-              <p className="mb-3 text-[12px] tracking-[0.32em] text-gold-500/80 font-(family-name:--font-ui)">
+              <p
+                className="mb-3 text-[12px] tracking-[0.32em] text-gold-400/88 font-(family-name:--font-ui)"
+                style={{ textShadow: titleTextShadow }}
+              >
                 风沙入卷 · 墨痕未干
               </p>
               <h1
                 className="mb-5 text-[56px] leading-[1.08] tracking-[0.12em] text-gold-300 font-(family-name:--font-display)"
-                style={{ textShadow: 'var(--shadow-gold-lg)' }}
+                style={{ textShadow: titleTextShadow }}
               >
                 雪中悍刀行
               </h1>
-              <p className="mx-auto max-w-[28ch] text-[16px] leading-[1.8] tracking-[0.02em] text-parchment-200/88 font-(family-name:--font-body) lg:mx-0">
+              <p
+                className="mx-auto max-w-[28ch] text-[16px] leading-[1.8] tracking-[0.02em] text-parchment-100/92 font-(family-name:--font-body) lg:mx-0"
+                style={{ textShadow: titleTextShadow }}
+              >
                 北凉军报催人，江湖旧事如墨晕铺开。拈一枚棋子，选一条命路，在风雪压城前写下你的卷末批语。
               </p>
             </div>
@@ -243,22 +239,29 @@ export function TitleScreen() {
                   <button
                     type="button"
                     onClick={() => handleStart(selectedDifficulty)}
-                    className="min-h-12 w-full max-w-[280px] border border-gold-300 bg-[linear-gradient(180deg,rgba(201,168,76,0.95),rgba(138,109,43,0.98))] px-6 py-4 text-[18px] leading-[1.2] tracking-[0.12em] text-leather-900 shadow-[var(--shadow-gold)] transition-all duration-200 hover:border-gold-100 hover:shadow-[var(--shadow-gold-lg)] active:scale-[0.97] font-(family-name:--font-display)"
-                    style={{ clipPath: 'polygon(4% 0, 96% 0, 100% 50%, 96% 100%, 4% 100%, 0 50%)' }}
+                    className="relative min-h-12 w-full max-w-[280px] overflow-hidden border border-[#8e6a39]/45 bg-[linear-gradient(180deg,rgba(233,220,192,0.96),rgba(208,188,150,0.98))] px-6 py-4 text-[18px] leading-[1.2] tracking-[0.12em] text-leather-900 shadow-[0_8px_18px_rgba(67,43,16,0.16),inset_0_1px_0_rgba(255,247,230,0.65),inset_0_-10px_18px_rgba(120,83,36,0.10)] transition-all duration-200 hover:border-[#a27a3d]/60 hover:translate-y-[-1px] active:translate-y-[1px] font-(family-name:--font-display)"
+                    style={{
+                      backgroundImage: [
+                        'radial-gradient(circle at 20% 18%, rgba(255,248,235,0.58), transparent 20%)',
+                        'radial-gradient(circle at 78% 70%, rgba(120,83,36,0.08), transparent 26%)',
+                        'linear-gradient(180deg,rgba(233,220,192,0.96),rgba(208,188,150,0.98))',
+                      ].join(', '),
+                    }}
                   >
-                    启此新卷
+                    <span className="pointer-events-none absolute inset-0 opacity-[0.18]" style={{ backgroundImage: 'radial-gradient(rgba(96,69,38,0.55) 0.8px, transparent 0.8px)', backgroundSize: '10px 10px' }} />
+                    <span className="pointer-events-none absolute inset-x-4 bottom-[8px] h-px bg-[linear-gradient(90deg,transparent,rgba(73,43,18,0.75),transparent)]" />
+                    <span className="relative">启此新卷</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleContinue}
                     disabled={!game}
                     className={[
-                      'min-h-12 w-full max-w-[220px] border px-5 py-3 text-[15px] leading-[1.2] tracking-[0.1em] transition-all duration-200 active:scale-[0.97] font-(family-name:--font-display)',
+                      'min-h-12 w-full max-w-[220px] border-b px-2 py-3 text-[15px] leading-[1.2] tracking-[0.1em] transition-all duration-200 font-(family-name:--font-display)',
                       game
-                        ? 'border-gold-500/55 bg-[linear-gradient(180deg,rgba(68,43,20,0.92),rgba(30,18,11,0.96))] text-gold-300 hover:border-gold-300 hover:text-gold-100'
-                        : 'cursor-not-allowed border-gold-500/20 bg-[linear-gradient(180deg,rgba(62,41,24,0.50),rgba(28,18,13,0.58))] text-parchment-500',
+                        ? 'border-gold-500/45 bg-transparent text-leather-800/82 hover:border-gold-500/70 hover:text-leather-900'
+                        : 'cursor-not-allowed border-gold-500/18 bg-transparent text-leather-700/35',
                     ].join(' ')}
-                    style={{ clipPath: 'polygon(6% 0, 94% 0, 100% 50%, 94% 100%, 6% 100%, 0 50%)' }}
                   >
                     续写前卷
                   </button>
