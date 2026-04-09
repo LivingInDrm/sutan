@@ -131,9 +131,9 @@ export const RARITY_ATTRIBUTE_RANGES: Record<Rarity, [number, number]> = {
 };
 
 export const DICE_CONFIG = {
-  SIDES: 10,
-  SUCCESS_THRESHOLD: 7,
-  EXPLODE_ON: 10,
+  SIDES: 6,
+  SUCCESS_THRESHOLD: 4,
+  EXPLODE_ON: 6,
   MAX_POOL: 20,
   MAX_EXPLODE: 20,
 } as const;

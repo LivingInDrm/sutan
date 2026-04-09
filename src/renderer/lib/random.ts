@@ -25,6 +25,10 @@ export class RandomManager {
     return this.nextInt(1, 10);
   }
 
+  rollD6(): number {
+    return this.nextInt(1, 6);
+  }
+
   setSeed(seed: string): void {
     this._seed = seed;
     this.rng = seedrandom(seed);

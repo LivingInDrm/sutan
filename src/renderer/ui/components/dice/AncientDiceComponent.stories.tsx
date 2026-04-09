@@ -5,29 +5,29 @@ export default {
   title: 'UI/Dice/AncientDiceComponent',
 };
 
-export const SingleStates = () => (
+export const FacesOneToSix = () => (
   <div className="flex min-h-screen items-center justify-center bg-stone-950 px-8 py-12">
     <div className="flex flex-wrap items-center justify-center gap-6">
-      <AncientDice value={8} isSuccess />
-      <AncientDice value={4} isSuccess={false} delay={0.1} />
-      <AncientDice value={10} isSuccess isExploded delay={0.2} />
+      {[1, 2, 3, 4, 5, 6].map((value, index) => (
+        <AncientDice key={value} value={value} isSuccess={value >= 4} delay={index * 0.06} />
+      ))}
     </div>
   </div>
 );
 
-export const DicePool = () => (
+export const MixedDicePool = () => (
   <div className="flex min-h-screen items-center justify-center bg-stone-950 px-8 py-12">
-    <AncientDiceResult dice={[8, 3, 10, 7, 2]} explodedStartIndex={2} successThreshold={7} />
+    <AncientDiceResult dice={[1, 3, 4, 6, 2]} explodedStartIndex={5} successThreshold={4} />
   </div>
 );
 
-export const RerolledDicePool = () => (
+export const RerollAndExplode = () => (
   <div className="flex min-h-screen items-center justify-center bg-stone-950 px-8 py-12">
     <AncientDiceResult
-      dice={[6, 9, 4, 10, 7]}
+      dice={[2, 5, 6, 1, 4, 6]}
       explodedStartIndex={3}
-      successThreshold={7}
-      rerolledIndices={[1, 4]}
+      successThreshold={4}
+      rerolledIndices={[0, 4]}
     />
   </div>
 );

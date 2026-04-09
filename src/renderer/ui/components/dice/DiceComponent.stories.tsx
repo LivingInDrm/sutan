@@ -30,7 +30,7 @@ export const DiceResultMixed: Story = () => (
     <DiceResult
       dice={[8, 3, 10, 5, 7, 2, 9, 4, 10, 6]}
       explodedStartIndex={8}
-      successThreshold={7}
+      successThreshold={4}
       rerolledIndices={[1]}
     />
   </Wrap>

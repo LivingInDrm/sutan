@@ -14,7 +14,7 @@ export class DiceChecker {
     const dice: number[] = [];
 
     for (let i = 0; i < diceCount; i++) {
-      dice.push(this.rng.rollD10());
+      dice.push(this.rng.rollD6());
     }
 
     const explodedDice: number[] = [];
@@ -25,7 +25,7 @@ export class DiceChecker {
       const batch = Math.min(explosionsToProcess, DICE_CONFIG.MAX_EXPLODE - totalExplosions);
       let newExplosions = 0;
       for (let i = 0; i < batch; i++) {
-        const roll = this.rng.rollD10();
+        const roll = this.rng.rollD6();
         explodedDice.push(roll);
         totalExplosions++;
         if (roll === DICE_CONFIG.EXPLODE_ON) {
@@ -55,7 +55,7 @@ export class DiceChecker {
     for (const idx of validIndices) {
       if (idx >= 0 && idx < newAllDice.length) {
         if (newAllDice[idx] < DICE_CONFIG.SUCCESS_THRESHOLD) {
-          newAllDice[idx] = this.rng.rollD10();
+          newAllDice[idx] = this.rng.rollD6();
         }
       }
     }

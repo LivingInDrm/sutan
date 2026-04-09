@@ -36,31 +36,31 @@ const RESULT_BORDER: Record<string, string> = {
   critical_failure: "border-red-800/60",
 };
 
-function rollD10() {
-  return Math.floor(Math.random() * 10) + 1;
+function rollD6() {
+  return Math.floor(Math.random() * 6) + 1;
 }
 
 function simulateDiceCheck(poolSize: number, target: number) {
   const dice: number[] = [];
-  for (let i = 0; i < Math.min(poolSize, 20); i++) dice.push(rollD10());
+  for (let i = 0; i < Math.min(poolSize, 20); i++) dice.push(rollD6());
 
   const exploded: number[] = [];
-  let toExplode = dice.filter((d) => d === 10).length;
+  let toExplode = dice.filter((d) => d === 6).length;
   let total = 0;
   while (toExplode > 0 && total < 20) {
     const batch = Math.min(toExplode, 20 - total);
     let next = 0;
     for (let i = 0; i < batch; i++) {
-      const r = rollD10();
+      const r = rollD6();
       exploded.push(r);
       total++;
-      if (r === 10) next++;
+      if (r === 6) next++;
     }
     toExplode = next;
   }
 
   const allDice = [...dice, ...exploded];
-  const successes = allDice.filter((d) => d >= 7).length;
+  const successes = allDice.filter((d) => d >= 4).length;
 
   let result: string;
   if (successes >= target) result = "success";
@@ -97,7 +97,7 @@ function StyleA_Classic({
       <DiceResult
         dice={data.allDice}
         explodedStartIndex={data.explodedStartIndex}
-        successThreshold={7}
+        successThreshold={4}
       />
       <div className="text-center mt-3">
         <span className="text-sm text-gold-dim">
@@ -154,13 +154,13 @@ function StyleB_Cinematic({
               className={`
                 w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold
                 border-2 shadow-lg relative
-                ${value >= 7 ? "bg-green-900/50 border-green-400/80 text-green-300" : "bg-ink/60 border-gold-dim/20 text-parchment/40"}
-                ${value === 10 ? "ring-2 ring-yellow-400/60" : ""}
+                ${value >= 4 ? "bg-green-900/50 border-green-400/80 text-green-300" : "bg-ink/60 border-gold-dim/20 text-parchment/40"}
+                ${value === 6 ? "ring-2 ring-yellow-400/60" : ""}
                 ${idx >= data.explodedStartIndex ? "border-dashed" : ""}
               `}
             >
               {value}
-              {value === 10 && (
+              {value === 6 && (
                 <span className="absolute -top-1 -right-1 text-[10px] text-yellow-400">
                   💥
                 </span>
@@ -251,7 +251,7 @@ function StyleC_Gauge({
             key={idx}
             className={`
               w-8 h-8 rounded flex items-center justify-center text-xs font-bold
-              ${value >= 7 ? "bg-green-900/50 text-green-300 border border-green-500/40" : "bg-ink-light/60 text-parchment/30 border border-gold-dim/10"}
+              ${value >= 4 ? "bg-green-900/50 text-green-300 border border-green-500/40" : "bg-ink-light/60 text-parchment/30 border border-gold-dim/10"}
               ${idx >= data.explodedStartIndex ? "ring-1 ring-yellow-500/40" : ""}
             `}
           >
@@ -315,7 +315,7 @@ function StyleD_Sequential({
 
   const revealedSuccesses = data.allDice
     .slice(0, Math.max(0, revealIndex))
-    .filter((d) => d >= 7).length;
+    .filter((d) => d >= 4).length;
   const allRevealed = revealIndex >= data.allDice.length;
 
   return (
@@ -339,7 +339,7 @@ function StyleD_Sequential({
                   className={`
                     w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg
                     border-2 shadow-md
-                    ${value >= 7 ? "bg-green-900/50 border-green-400 text-green-300" : "bg-ink-light border-gold-dim/20 text-parchment/40"}
+                    ${value >= 4 ? "bg-green-900/50 border-green-400 text-green-300" : "bg-ink-light border-gold-dim/20 text-parchment/40"}
                     ${idx >= data.explodedStartIndex ? "ring-1 ring-yellow-400/50" : ""}
                   `}
                 >
@@ -419,7 +419,7 @@ function StyleE_Sheet({
             骰池
           </div>
           <span className="text-sm text-parchment font-mono">
-            {data.dice.length}D10
+            {data.dice.length}D6
           </span>
           {data.exploded.length > 0 && (
             <span className="text-xs text-yellow-400/80">
@@ -437,8 +437,8 @@ function StyleE_Sheet({
               <span
                 key={`d${i}`}
                 className={`inline-flex items-center justify-center w-6 h-6 rounded text-xs font-mono font-bold
-                  ${v >= 7 ? "bg-green-900/50 text-green-400" : "bg-ink-light text-parchment/30"}
-                  ${v === 10 ? "ring-1 ring-yellow-400/60" : ""}
+                  ${v >= 4 ? "bg-green-900/50 text-green-400" : "bg-ink-light text-parchment/30"}
+                  ${v === 6 ? "ring-1 ring-yellow-400/60" : ""}
                 `}
               >
                 {v}
@@ -453,7 +453,7 @@ function StyleE_Sheet({
                   <span
                     key={`e${i}`}
                     className={`inline-flex items-center justify-center w-6 h-6 rounded text-xs font-mono font-bold border border-dashed
-                      ${v >= 7 ? "bg-green-900/50 text-green-400 border-yellow-500/40" : "bg-ink-light text-parchment/30 border-yellow-500/20"}
+                      ${v >= 4 ? "bg-green-900/50 text-green-400 border-yellow-500/40" : "bg-ink-light text-parchment/30 border-yellow-500/20"}
                     `}
                   >
                     {v}
@@ -524,7 +524,7 @@ function StyleF_Interactive() {
   }, [poolSize, target]);
 
   const toggleRerollSelect = (idx: number) => {
-    if (!data || data.allDice[idx] >= 7) return;
+    if (!data || data.allDice[idx] >= 4) return;
     const next = new Set(selectedForReroll);
     if (next.has(idx)) next.delete(idx);
     else if (next.size < rerollsLeft) next.add(idx);
@@ -535,9 +535,9 @@ function StyleF_Interactive() {
     if (!data || selectedForReroll.size === 0) return;
     const newAll = [...data.allDice];
     for (const idx of selectedForReroll) {
-      newAll[idx] = rollD10();
+      newAll[idx] = rollD6();
     }
-    const successes = newAll.filter((d) => d >= 7).length;
+    const successes = newAll.filter((d) => d >= 4).length;
     let result: string;
     if (successes >= target) result = "success";
     else if (successes === 0) result = "critical_failure";
@@ -641,13 +641,13 @@ function StyleF_Interactive() {
               </span>
               <span className="text-xs text-gold-dim/40 mx-2">|</span>
               <span className="text-xs text-gold-dim/60">
-                骰池 {poolSize}D10 / 目标 {target}
+                骰池 {poolSize}D6 / 目标 {target}
               </span>
             </div>
 
             <div className="flex flex-wrap gap-2 justify-center">
               {data.allDice.map((value, idx) => {
-                const isSuccess = value >= 7;
+                const isSuccess = value >= 4;
                 const canSelect = !isSuccess && rerollsLeft > 0;
                 const isSelected = selectedForReroll.has(idx);
                 return (
