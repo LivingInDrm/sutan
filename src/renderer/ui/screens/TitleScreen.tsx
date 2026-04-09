@@ -156,17 +156,16 @@ export function TitleScreen() {
             </div>
           </section>
 
-          <section className="relative mx-auto w-full max-w-[560px]">
-            <div
-              className="relative overflow-hidden bg-transparent text-leather-900 shadow-[0_16px_36px_rgba(0,0,0,0.36)]"
-              style={{
-                backgroundImage: 'url(/panel-bg.png)',
-                backgroundSize: '100% 100%',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-              }}
-            >
-              <div className="relative px-10 pb-10 pt-11 sm:px-12 sm:pb-12 sm:pt-[3.25rem]">
+          <section
+            className="relative mx-auto w-full max-w-[560px] overflow-hidden text-leather-900"
+            style={{
+              backgroundImage: 'url(/panel-bg.png)',
+              backgroundSize: '100% 100%',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+            }}
+          >
+            <div className="relative bg-transparent px-10 pb-10 pt-11 sm:px-12 sm:pb-12 sm:pt-[3.25rem]">
                 <div className="mb-6">
                   <div className="mb-2 text-[10px] tracking-[0.3em] text-gold-500/80 font-(family-name:--font-ui)">
                     卷首小引
@@ -303,7 +302,6 @@ export function TitleScreen() {
                     <span className="text-leather-700/65">旧卷尚在，可续前尘；若有异卷，亦可引入案头。</span>
                   )}
                 </div>
-              </div>
             </div>
           </section>
         </div>
