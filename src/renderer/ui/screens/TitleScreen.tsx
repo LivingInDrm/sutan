@@ -88,12 +88,35 @@ export function TitleScreen() {
       <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center justify-center px-6 py-10">
         <div className="grid w-full items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <section className="flex flex-col justify-center text-center lg:text-left">
-            <div className="mb-6 inline-flex self-center lg:self-start items-center gap-3 border border-gold-500/45 bg-[linear-gradient(180deg,rgba(56,32,18,0.88),rgba(28,16,10,0.92))] px-4 py-2 text-[10px] tracking-[0.28em] text-parchment-300 shadow-[0_6px_16px_rgba(0,0,0,0.28)] font-(family-name:--font-ui)">
-              <span className="h-1.5 w-1.5 bg-crimson-500/80" />
-              北凉题签
+            <div className="relative mb-6 inline-flex min-h-[60px] self-center lg:self-start items-center pl-5 pr-6">
+              <div
+                className="absolute inset-y-0 left-0 w-[92px] border border-[#6f4b25]/75 bg-[linear-gradient(180deg,rgba(109,74,33,0.92),rgba(62,39,19,0.94))] shadow-[0_10px_18px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,226,167,0.16),inset_0_-1px_0_rgba(39,20,8,0.45)]"
+                style={{ clipPath: 'polygon(10% 0%, 88% 0%, 100% 16%, 94% 100%, 0% 100%, 0% 12%)' }}
+              />
+              <div className="absolute left-[10px] top-[8px] h-10 w-[18px] bg-[linear-gradient(180deg,rgba(132,22,22,0.95),rgba(98,12,12,0.96))] shadow-[0_4px_10px_rgba(107,15,15,0.35)]" style={{ clipPath: 'polygon(32% 0%,100% 0%,88% 100%,0% 100%)' }} />
+              <div className="absolute left-[16px] top-[10px] h-9 w-px bg-parchment-200/35" />
+              <div className="relative ml-10 flex items-center gap-3 text-[11px] tracking-[0.32em] text-parchment-300 font-(family-name:--font-display)">
+                <span className="h-[18px] w-px bg-gold-400/55" />
+                北凉题签
+              </div>
             </div>
 
-            <div className="mb-8 rounded-[20px] border border-gold-500/20 bg-[linear-gradient(180deg,rgba(18,10,7,0.22),rgba(18,10,7,0.12))] px-6 py-6 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-[1px]">
+            <div
+              className="relative mb-8 px-7 py-7"
+              style={{
+                backgroundImage: [
+                  'radial-gradient(circle at 18% 28%, rgba(230,216,187,0.08), transparent 26%)',
+                  'radial-gradient(circle at 74% 62%, rgba(255,244,214,0.06), transparent 24%)',
+                  'linear-gradient(180deg, rgba(22,12,8,0.42), rgba(16,9,7,0.18))',
+                ].join(', '),
+                boxShadow: 'inset 0 1px 0 rgba(227,192,118,0.08), inset 0 -18px 40px rgba(5,3,2,0.18), 0 18px 34px rgba(0,0,0,0.16)',
+              }}
+            >
+              <div className="pointer-events-none absolute inset-0 opacity-[0.34]" style={{ backgroundImage: 'radial-gradient(rgba(84,58,32,0.58) 0.8px, transparent 0.8px)', backgroundSize: '11px 11px' }} />
+              <div className="pointer-events-none absolute inset-x-2 top-1 h-[1px] bg-gradient-to-r from-transparent via-gold-500/28 to-transparent" />
+              <div className="pointer-events-none absolute inset-y-2 left-0 w-5 bg-[radial-gradient(circle_at_left,rgba(7,4,3,0.46),transparent_72%)]" />
+              <div className="pointer-events-none absolute inset-y-2 right-0 w-5 bg-[radial-gradient(circle_at_right,rgba(7,4,3,0.38),transparent_72%)]" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-[linear-gradient(180deg,transparent,rgba(7,4,3,0.24))]" />
               <p className="mb-3 text-[12px] tracking-[0.32em] text-gold-500/80 font-(family-name:--font-ui)">
                 风沙入卷 · 墨痕未干
               </p>
@@ -108,7 +131,18 @@ export function TitleScreen() {
               </p>
             </div>
 
-            <div className="mx-auto lg:mx-0 w-full max-w-xl rounded-[18px] border border-gold-500/25 bg-[linear-gradient(180deg,rgba(18,10,7,0.28),rgba(18,10,7,0.14))] p-5 shadow-[var(--shadow-ink)] backdrop-blur-[1px]">
+            <div
+              className="relative mx-auto w-full max-w-xl px-6 pb-5 pt-6 lg:mx-0"
+              style={{
+                backgroundImage: [
+                  'radial-gradient(circle at 16% 20%, rgba(240,229,204,0.10), transparent 18%)',
+                  'linear-gradient(180deg, rgba(24,14,10,0.26), rgba(13,8,6,0.08))',
+                ].join(', '),
+                boxShadow: '0 16px 30px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,236,188,0.08)',
+              }}
+            >
+              <div className="absolute left-2 top-2 h-[88%] w-[2px] bg-[linear-gradient(180deg,rgba(125,90,45,0.18),rgba(125,90,45,0.02))]" />
+              <div className="absolute inset-x-5 top-0 h-[1px] bg-gradient-to-r from-transparent via-gold-500/22 to-transparent" />
               <div className="mb-3 flex items-center gap-3">
                 <div className="h-px flex-1 bg-gradient-to-r from-transparent to-gold-500/35" />
                 <span className="text-[12px] tracking-[0.18em] text-gold-300 font-(family-name:--font-display)">
@@ -124,23 +158,28 @@ export function TitleScreen() {
 
           <section className="relative mx-auto w-full max-w-[560px]">
             <div
-              className="relative overflow-hidden rounded-[26px] border border-[#7b5a25] bg-parchment-300/88 text-leather-900 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+              className="relative overflow-hidden border border-[#7b5a25]/65 bg-parchment-300/88 text-leather-900 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
               style={{
                 backgroundImage: [
-                  'radial-gradient(circle at 15% 20%, rgba(255,248,238,0.58), transparent 28%)',
-                  'radial-gradient(circle at 82% 78%, rgba(146,108,50,0.12), transparent 30%)',
-                  'linear-gradient(180deg, rgba(240,230,208,0.96), rgba(205,187,150,0.93))',
+                  'radial-gradient(circle at 15% 20%, rgba(255,248,238,0.48), transparent 24%)',
+                  'radial-gradient(circle at 82% 78%, rgba(146,108,50,0.16), transparent 28%)',
+                  'linear-gradient(180deg, rgba(239,228,202,0.97), rgba(210,189,149,0.94))',
                 ].join(', '),
-                boxShadow: '0 0 0 1px rgba(170,130,56,0.28), 0 18px 38px rgba(0,0,0,0.46), inset 0 0 0 1px rgba(99,69,24,0.28)',
+                clipPath: 'polygon(2% 2%, 9% 0.5%, 22% 1.8%, 34% 0%, 49% 1.2%, 64% 0.2%, 79% 1.7%, 92% 0.7%, 98% 3%, 99.4% 11%, 98.2% 24%, 99.5% 37%, 98.5% 50%, 100% 64%, 98.8% 78%, 99.2% 91%, 96.8% 98%, 88% 99.4%, 74% 98.3%, 61% 100%, 46% 98.5%, 31% 99.5%, 18% 98.1%, 6% 99%, 1.2% 95%, 0% 84%, 1.5% 69%, 0.5% 54%, 1.6% 39%, 0.3% 24%, 1.4% 10%)',
+                boxShadow: '0 0 0 1px rgba(170,130,56,0.18), 0 24px 40px rgba(0,0,0,0.44), inset 0 0 0 1px rgba(99,69,24,0.22), inset 0 -14px 22px rgba(122,84,30,0.08)',
               }}
             >
-              <div className="absolute inset-[10px] rounded-[20px] border border-[#9f7a33]/40" />
-              <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'radial-gradient(rgba(86,58,24,0.85) 0.8px, transparent 0.8px)', backgroundSize: '10px 10px' }} />
+              <div className="absolute inset-[10px] border border-[#9f7a33]/24" style={{ clipPath: 'polygon(2% 3%, 14% 1%, 31% 2.4%, 48% 1.5%, 66% 2.2%, 84% 1%, 97% 4%, 98.5% 16%, 97% 35%, 98.5% 54%, 97.4% 74%, 98% 92%, 92% 98%, 76% 97.4%, 56% 98.6%, 36% 97.3%, 17% 98.3%, 4% 96%, 1.5% 82%, 3% 61%, 1.5% 40%, 3% 18%)' }} />
+              <div className="absolute inset-0 opacity-[0.09]" style={{ backgroundImage: 'radial-gradient(rgba(86,58,24,0.85) 0.8px, transparent 0.8px)', backgroundSize: '10px 10px' }} />
+              <div className="absolute inset-y-0 left-0 w-8 bg-[radial-gradient(circle_at_left,rgba(94,60,23,0.24),transparent_74%)]" />
+              <div className="absolute inset-y-0 right-0 w-8 bg-[radial-gradient(circle_at_right,rgba(94,60,23,0.22),transparent_74%)]" />
               <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-gold-300/80 to-transparent" />
               <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-gold-500/35 to-transparent" />
               <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-gold-500/35 to-transparent" />
-              <div className="absolute inset-y-8 left-2 w-3 bg-[linear-gradient(180deg,rgba(92,58,23,0.88),rgba(48,27,13,0.96))] shadow-[inset_0_0_6px_rgba(255,222,160,0.12)]" />
-              <div className="absolute inset-y-8 right-2 w-3 bg-[linear-gradient(180deg,rgba(92,58,23,0.88),rgba(48,27,13,0.96))] shadow-[inset_0_0_6px_rgba(255,222,160,0.12)]" />
+              <div className="absolute inset-y-7 left-[-2px] w-5 bg-[linear-gradient(180deg,rgba(96,60,26,0.96),rgba(45,24,10,0.98))] shadow-[0_0_0_1px_rgba(54,30,11,0.75),inset_0_0_8px_rgba(255,218,150,0.16),2px_0_12px_rgba(0,0,0,0.28)]" style={{ borderRadius: '10px 3px 3px 10px' }} />
+              <div className="absolute inset-y-7 right-[-2px] w-5 bg-[linear-gradient(180deg,rgba(96,60,26,0.96),rgba(45,24,10,0.98))] shadow-[0_0_0_1px_rgba(54,30,11,0.75),inset_0_0_8px_rgba(255,218,150,0.16),-2px_0_12px_rgba(0,0,0,0.28)]" style={{ borderRadius: '3px 10px 10px 3px' }} />
+              <div className="absolute left-[-8px] top-10 h-6 w-8 rounded-full bg-[linear-gradient(180deg,rgba(63,37,16,0.98),rgba(34,18,8,1))] shadow-[0_3px_8px_rgba(0,0,0,0.3)]" />
+              <div className="absolute right-[-8px] top-10 h-6 w-8 rounded-full bg-[linear-gradient(180deg,rgba(63,37,16,0.98),rgba(34,18,8,1))] shadow-[0_3px_8px_rgba(0,0,0,0.3)]" />
 
               <div className="relative p-6 sm:p-8">
                 <div className="mb-6">
@@ -175,15 +214,20 @@ export function TitleScreen() {
                           'group relative flex min-h-[220px] w-full flex-col items-center justify-between overflow-hidden border px-3 py-5 text-center transition-all duration-200 active:scale-[0.98]',
                           'shadow-[0_8px_14px_rgba(70,42,16,0.18)]',
                           selected
-                            ? 'translate-x-[-2px] border-gold-300 bg-[linear-gradient(180deg,rgba(241,227,192,0.96),rgba(214,193,150,0.92))] shadow-[0_14px_24px_rgba(69,41,16,0.22),0_0_0_1px_rgba(240,208,96,0.35)]'
-                            : 'border-[#9b7a42]/40 bg-[linear-gradient(180deg,rgba(231,214,180,0.92),rgba(205,186,146,0.88))] hover:border-gold-500/60 hover:bg-[linear-gradient(180deg,rgba(237,221,191,0.96),rgba(208,190,151,0.92))]',
+                            ? 'z-10 -translate-y-1 scale-[1.03] border-gold-300 bg-[linear-gradient(180deg,rgba(244,231,194,0.98),rgba(216,192,145,0.94))] shadow-[0_18px_28px_rgba(69,41,16,0.28),0_0_0_1px_rgba(240,208,96,0.42)]'
+                            : 'border-[#9b7a42]/28 bg-[linear-gradient(180deg,rgba(215,198,164,0.82),rgba(184,164,126,0.8))] opacity-[0.76] hover:border-gold-500/60 hover:bg-[linear-gradient(180deg,rgba(228,211,177,0.92),rgba(198,179,141,0.88))] hover:opacity-100',
                         ].join(' ')}
                         style={{
                           clipPath: 'polygon(18% 0%, 82% 0%, 100% 12%, 100% 88%, 82% 100%, 18% 100%, 0% 88%, 0% 12%)',
                         }}
                       >
-                        <div className="absolute inset-[7px] border border-[#8c6728]/30" style={{ clipPath: 'polygon(18% 0%, 82% 0%, 100% 12%, 100% 88%, 82% 100%, 18% 100%, 0% 88%, 0% 12%)' }} />
-                        {selected ? <div className="absolute right-1 top-5 h-10 w-3 rounded-sm bg-crimson-500/75 shadow-[0_0_10px_rgba(139,26,26,0.24)]" /> : null}
+                        <div className="absolute inset-[7px] border border-[#8c6728]/30" style={{ clipPath: 'polygon(18% 0%, 82% 0%, 100% 12%, 100% 88%, 82% 100%, 18% 100%, 0% 88%, 0% 12%)', boxShadow: selected ? 'inset 0 0 0 1px rgba(240,208,96,0.48)' : 'none' }} />
+                        {selected ? (
+                          <>
+                            <div className="absolute right-1 top-5 h-12 w-3 bg-crimson-500/88 shadow-[0_0_12px_rgba(139,26,26,0.34)]" style={{ clipPath: 'polygon(100% 0,100% 100%,0 90%,0 12%)' }} />
+                            <div className="absolute left-2 top-4 h-9 w-9 rounded-full border border-crimson-700/35 bg-[radial-gradient(circle,rgba(180,40,40,0.46),rgba(132,22,22,0.88))] opacity-95 blur-[0.2px]" />
+                          </>
+                        ) : null}
                         <div className="relative flex h-full flex-col items-center justify-between">
                           <div className="text-[12px] tracking-[0.22em] text-gold-600/90 font-(family-name:--font-ui)">命帖</div>
                           <div className="text-[28px] leading-[1.15] tracking-[0.18em] text-leather-900 font-(family-name:--font-display) [writing-mode:vertical-rl]">
