@@ -100,7 +100,7 @@
     "asset_id": "ui_004",
     "name": "事件结算",
     "category": "panel",
-    "description": "symmetrical dual-panel event settlement screen, equal left and right sections, refined ink-wash frame, pale rice paper texture, thin brushstroke borders, restrained negative space, muted black, ash gray, soft beige, elegant ancient Chinese UI panel",
+    "description": "ancient ink-wash settlement panel, split layout with a narrow left strip and a wide right section in a 1:2 width ratio, clean parchment surface, soft brushstroke borders, subtle bamboo paper texture, muted black and sepia tones, elegant negative space, refined wuxia interface\n",
     "output": "ui_ui_004/ui_004_01.png"
   },
   {
@@ -108,7 +108,7 @@
     "asset_id": "ui_004",
     "name": "事件结算",
     "category": "panel",
-    "description": "ornate twin-panel settlement interface, balanced left-right composition, carved dark wood frame, gilded bronze corner ornaments, layered ink clouds, subtle mountain motifs, rich parchment surface, deep umber, antique gold, cinnabar accents, luxurious wuxia panel",
+    "description": "ornate martial-arts result dialog, narrow left sidebar and expansive right panel, carved rosewood frame, gilded cloud motifs, layered ink flourishes, aged silk backing, rich cinnabar and dark gold accents, intricate classical Chinese detailing",
     "output": "ui_ui_004/ui_004_02.png"
   },
   {
@@ -116,7 +116,7 @@
     "asset_id": "ui_004",
     "name": "事件结算",
     "category": "panel",
-    "description": "cool-toned double-column panel, perfectly even left and right areas, misty blue-gray ink gradients, frosted jade embellishments, flowing water-ripple patterns, brushed silver trims, translucent xuan paper texture, serene, distant, scholarly martial arts aesthetic",
+    "description": "cool-toned Jianghu UI panel, asymmetric split with a slim left column and a broad right area in a 1:2 width ratio, misty blue-gray ink gradients, weathered stone and rice paper texture, restrained brush borders, tranquil moonlit atmosphere, crisp scholarly elegance\n",
     "output": "ui_ui_004/ui_004_03.png"
   },
   {
@@ -124,7 +124,7 @@
     "asset_id": "ui_004",
     "name": "事件结算",
     "category": "panel",
-    "description": "warm-toned mirrored settlement panel, equal bilateral sections, 中央有分隔线，sepia ink wash, aged silk and parchment texture, cinnabar seal details, soft amber glow, bamboo-shadow motifs, weathered gold edging, poetic jianghu atmosphere, graceful and immersive",
+    "description": "warm ceremonial completion panel, left side narrow and right side wide, amber parchment glow, vermilion ink trims, flowing calligraphic curves, subtle crane and祥云 motifs, brushed lacquer texture, festive yet graceful traditional Chinese aesthetic",
     "output": "ui_ui_004/ui_004_04.png"
   }
 ]

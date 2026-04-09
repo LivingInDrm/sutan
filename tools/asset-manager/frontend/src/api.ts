@@ -1,4 +1,4 @@
-import type { Character, Templates, SampleImage, GenerateRequest, GenerationProgress, GenerateDescriptionRequest, CreateCharacterRequest, CharacterProfile, DeployPreview, Item, ItemProfile, ItemDeployPreview, CreateItemRequest, ItemPromptConfig, ScenesResponse, Scene, SceneGenerateRequest, SceneImageType, SceneGeneratePromptsResponse, UIAsset, UIAssetProfile, CreateUIAssetRequest } from './types';
+import type { Character, Templates, SampleImage, GenerateRequest, GenerationProgress, GenerateDescriptionRequest, CreateCharacterRequest, CharacterProfile, DeployPreview, Item, ItemProfile, ItemDeployPreview, CreateItemRequest, ItemPromptConfig, ScenesResponse, Scene, SceneGenerateRequest, SceneImageType, SceneGeneratePromptsResponse, UIAsset, UIAssetProfile, CreateUIAssetRequest, FreeGenRequest } from './types';
 
 export const api = {
   async getCharacters(): Promise<Character[]> {
@@ -699,6 +699,52 @@ export const api = {
 
     if (!response.ok) {
       throw new Error('Failed to start UI asset image generation');
+    }
+
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const data = JSON.parse(line.slice(6));
+            onProgress(data);
+          } catch (e) {
+            console.error('Failed to parse SSE data:', e);
+          }
+        }
+      }
+    }
+  },
+
+  async getFreeGenSamples(): Promise<SampleImage[]> {
+    const response = await fetch('/api/free-gen-samples');
+    if (!response.ok) throw new Error('Failed to fetch free gen samples');
+    return response.json();
+  },
+
+  async generateFreeGenImages(
+    request: FreeGenRequest,
+    onProgress: (progress: GenerationProgress) => void
+  ): Promise<void> {
+    const response = await fetch('/api/free-generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({ detail: 'Unknown error' }));
+      throw new Error(err.detail || 'Failed to start free generation');
     }
 
     const reader = response.body!.getReader();

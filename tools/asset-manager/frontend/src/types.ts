@@ -65,6 +65,14 @@ export interface GenerationProgress {
   error?: string;
 }
 
+export interface FreeGenRequest {
+  prompt: string;
+  size: '1024x1024' | '1536x1024' | '1024x1536';
+  background: 'transparent' | 'opaque' | 'auto';
+  quality: 'high' | 'medium' | 'low';
+  count: 1 | 2 | 4;
+}
+
 export interface GenerateDescriptionRequest {
   name: string;
   bio: string;

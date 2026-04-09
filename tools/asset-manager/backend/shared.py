@@ -377,6 +377,14 @@ class GenerateRequest(BaseModel):
     count: int = 1
 
 
+class FreeGenRequest(BaseModel):
+    prompt: str
+    size: str = "1024x1024"
+    background: str = "auto"
+    quality: str = "high"
+    count: int = 1
+
+
 class UpdateVariantRequest(BaseModel):
     variant_index: int
     description: str
@@ -3784,6 +3792,10 @@ def _ui_asset_folder(asset_id: str) -> Path:
     return SAMPLES_DIR / f"ui_{asset_id}"
 
 
+def _free_gen_folder() -> Path:
+    return SAMPLES_DIR / "free-gen"
+
+
 def _build_ui_prompt(description: str, category: str) -> str:
     """Build the full generation prompt for a UI asset based on its category."""
     template = UI_CATEGORY_TEMPLATES.get(category, UI_CATEGORY_TEMPLATES["icon"])
@@ -3809,6 +3821,35 @@ def _generate_ui_asset_image(client, prompt: str, output_path: Path, size: str =
         size=size,
         quality="high",
         background="transparent",
+        output_format="png",
+        n=1,
+    )
+    if not response.data or not response.data[0].b64_json:
+        raise RuntimeError("Image generation response missing data")
+    image_bytes = _base64.b64decode(response.data[0].b64_json)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_bytes(image_bytes)
+    return output_path
+
+
+def _generate_free_gen_image(
+    client,
+    prompt: str,
+    output_path: Path,
+    size: str = "1024x1024",
+    background: str = "auto",
+    quality: str = "high",
+) -> Path:
+    import base64 as _base64
+    valid_sizes = {"1024x1024", "1536x1024", "1024x1536"}
+    valid_backgrounds = {"transparent", "opaque", "auto"}
+    valid_qualities = {"high", "medium", "low"}
+    response = client.images.generate(
+        model="gpt-image-1",
+        prompt=prompt,
+        size=size if size in valid_sizes else "1024x1024",
+        quality=quality if quality in valid_qualities else "high",
+        background=background if background in valid_backgrounds else "auto",
         output_format="png",
         n=1,
     )
@@ -4359,6 +4400,102 @@ async def generate_ui_asset_images(body: GenerateRequest):
             "name": body.name,
             "asset_type": "ui",
             "images": generated_images,
+        }
+        _append_history(history_entry)
+
+        done_event = json.dumps({"type": "done", "images": generated_images})
+        yield f"data: {done_event}\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+@app.get("/api/free-gen-samples")
+def get_free_gen_samples() -> List[Dict]:
+    folder = _free_gen_folder()
+    results = []
+    if folder.exists():
+        for img_file in sorted(folder.glob("*.png"), key=lambda path: path.stat().st_mtime, reverse=True):
+            rel = img_file.relative_to(SAMPLES_DIR)
+            results.append({
+                "filename": img_file.name,
+                "url": f"/images/{rel.as_posix()}",
+                "path": str(rel),
+                "abs_path": str(img_file),
+                "is_current_in_game": False,
+                "is_selected": False,
+            })
+    return results
+
+
+@app.post("/api/free-generate")
+async def generate_free_gen_images(body: FreeGenRequest):
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY environment variable is not set.")
+    prompt = body.prompt
+    if not prompt.strip():
+        raise HTTPException(status_code=400, detail="Prompt must not be empty.")
+
+    async def event_stream():
+        from openai import OpenAI
+        client = OpenAI(api_key=api_key)
+        loop = asyncio.get_running_loop()
+        count = body.count if body.count in {1, 2, 4} else 1
+        timestamp = int(time.time())
+        folder = _free_gen_folder()
+        folder.mkdir(parents=True, exist_ok=True)
+        generated_images = []
+
+        for i in range(1, count + 1):
+            progress_event = json.dumps({
+                "type": "progress",
+                "message": f"Generating free image {i} of {count}…",
+                "current": i,
+                "total": count,
+            })
+            yield f"data: {progress_event}\n\n"
+
+            filename = f"free_gen_{timestamp}_{i}.png"
+            output_path = folder / filename
+
+            try:
+                saved_path = await loop.run_in_executor(
+                    None,
+                    _generate_free_gen_image,
+                    client,
+                    prompt,
+                    output_path,
+                    body.size,
+                    body.background,
+                    body.quality,
+                )
+                rel_path = saved_path.relative_to(SAMPLES_DIR)
+                generated_images.append({
+                    "filename": saved_path.name,
+                    "path": str(rel_path),
+                    "url": f"/images/{rel_path.as_posix()}",
+                    "abs_path": str(saved_path),
+                    "is_current_in_game": False,
+                    "is_selected": False,
+                })
+            except Exception as exc:
+                error_event = json.dumps({
+                    "type": "error",
+                    "message": f"Failed to generate image {i}: {exc}",
+                    "current": i,
+                    "total": count,
+                })
+                yield f"data: {error_event}\n\n"
+
+        history_entry = {
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "name": "free-gen",
+            "asset_type": "free-gen",
+            "prompt": prompt,
+            "size": body.size,
+            "background": body.background,
+            "quality": body.quality,
+            "images": [{"path": image["path"], "url": image["url"]} for image in generated_images],
         }
         _append_history(history_entry)
 

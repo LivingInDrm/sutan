@@ -11,8 +11,9 @@ import TemplateSettings from './components/TemplateSettings';
 import UIAssetList from './components/UIAssetList';
 import UIAssetDetail from './components/UIAssetDetail';
 import ItemPromptConfig from './components/ItemPromptConfig';
+import FreeGenTab from './components/FreeGenTab';
 
-type Tab = 'characters' | 'items' | 'scenes' | 'ui-assets' | 'templates';
+type Tab = 'characters' | 'items' | 'scenes' | 'ui-assets' | 'templates' | 'free-gen';
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('characters');
@@ -216,6 +217,16 @@ function App() {
             <span style={styles.navLabel}>风格模板</span>
             <span style={styles.navSublabel}>TEMPLATES</span>
           </button>
+          <button
+            style={{
+              ...styles.navButton,
+              ...(activeTab === 'free-gen' ? styles.navButtonActive : {}),
+            }}
+            onClick={() => setActiveTab('free-gen')}
+          >
+            <span style={styles.navLabel}>自由生图</span>
+            <span style={styles.navSublabel}>FREE GEN</span>
+          </button>
         </nav>
 
         <div style={styles.headerRight}>
@@ -397,6 +408,8 @@ function App() {
                 </div>
               </div>
             )}
+
+            {activeTab === 'free-gen' && <FreeGenTab />}
           </>
         )}
       </main>
