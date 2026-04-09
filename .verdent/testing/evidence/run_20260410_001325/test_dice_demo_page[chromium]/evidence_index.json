@@ -1,0 +1,11 @@
+{
+  "test_name": "test_dice_demo_page[chromium]",
+  "collected_at": "2026-04-10T00:13:34Z",
+  "files": {
+    "trace": "trace.zip",
+    "service_logs": [
+      "frontend.log"
+    ]
+  },
+  "service_errors": {}
+}

@@ -9,8 +9,13 @@ import { SceneScreen } from './ui/screens/SceneScreen';
 import { SettlementScreen } from './ui/screens/SettlementScreen';
 import { DialogScreen } from './ui/screens/DialogScreen';
 import { ShopScreen } from './ui/screens/ShopScreen';
+import { DiceDemoPage } from './ui/pages/DiceDemoPage';
 
 export function App() {
+  if (typeof window !== 'undefined' && window.location.pathname === '/dice-demo') {
+    return <DiceDemoPage />;
+  }
+
   const currentScreen = useUIStore(s => s.currentScreen);
 
   if (currentScreen === 'title') {

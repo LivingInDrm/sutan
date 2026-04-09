@@ -6,3 +6,8 @@ declare module '*.svg?react' {
   const SVGComponent: React.FC<React.SVGProps<SVGSVGElement>>;
   export default SVGComponent;
 }
+
+declare module '*.png' {
+  const src: string;
+  export default src;
+}

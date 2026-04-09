@@ -1,0 +1,14 @@
+{
+  "test_name": "[100%]",
+  "collected_at": "2026-04-10T00:13:34Z",
+  "files": {
+    "trace": "trace.zip",
+    "screenshots": [
+      "screenshots/step_001.png"
+    ],
+    "service_logs": [
+      "frontend.log"
+    ]
+  },
+  "service_errors": {}
+}

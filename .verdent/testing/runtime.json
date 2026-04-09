@@ -1,17 +1,4 @@
 {
-  "services": {
-    "frontend": {
-      "pid": 29394,
-      "port": 5173,
-      "port_mode": "fixed",
-      "port_file": null,
-      "url": "http://localhost:5173",
-      "command": "npm run dev -- --port 5173 --strictPort",
-      "started_at": "2026-04-08T23:51:51Z",
-      "log_file": ".verdent/testing/logs/frontend.log",
-      "health_check": "tcp",
-      "cwd": null
-    }
-  },
-  "updated_at": "2026-04-08T23:51:51Z"
+  "services": {},
+  "updated_at": "2026-04-10T00:15:50Z"
 }

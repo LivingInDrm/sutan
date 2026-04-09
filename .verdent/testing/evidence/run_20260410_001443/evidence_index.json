@@ -1,0 +1,29 @@
+{
+  "run_id": "run_20260410_001443",
+  "generated_at": "20260410_001452",
+  "tests": {
+    "[100%]": {
+      "status": "failed",
+      "error_message": "",
+      "files": {
+        "service_logs": [
+          "frontend.log"
+        ],
+        "trace": "trace.zip",
+        "screenshots": [
+          "screenshots/step_001.png"
+        ]
+      }
+    },
+    "test_dice_demo_page[chromium]": {
+      "status": "failed",
+      "error_message": "",
+      "files": {
+        "service_logs": [
+          "frontend.log"
+        ],
+        "trace": "trace.zip"
+      }
+    }
+  }
+}
