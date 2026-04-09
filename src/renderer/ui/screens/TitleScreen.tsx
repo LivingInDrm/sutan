@@ -158,28 +158,15 @@ export function TitleScreen() {
 
           <section className="relative mx-auto w-full max-w-[560px]">
             <div
-              className="relative overflow-hidden border border-[#7b5a25]/65 bg-parchment-300/88 text-leather-900 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+              className="relative overflow-hidden bg-transparent text-leather-900 shadow-[0_16px_36px_rgba(0,0,0,0.36)]"
               style={{
-                backgroundImage: [
-                  'radial-gradient(circle at 15% 20%, rgba(255,248,238,0.48), transparent 24%)',
-                  'radial-gradient(circle at 82% 78%, rgba(146,108,50,0.16), transparent 28%)',
-                  'linear-gradient(180deg, rgba(239,228,202,0.97), rgba(210,189,149,0.94))',
-                ].join(', '),
-                clipPath: 'polygon(2% 2%, 9% 0.5%, 22% 1.8%, 34% 0%, 49% 1.2%, 64% 0.2%, 79% 1.7%, 92% 0.7%, 98% 3%, 99.4% 11%, 98.2% 24%, 99.5% 37%, 98.5% 50%, 100% 64%, 98.8% 78%, 99.2% 91%, 96.8% 98%, 88% 99.4%, 74% 98.3%, 61% 100%, 46% 98.5%, 31% 99.5%, 18% 98.1%, 6% 99%, 1.2% 95%, 0% 84%, 1.5% 69%, 0.5% 54%, 1.6% 39%, 0.3% 24%, 1.4% 10%)',
-                boxShadow: '0 0 0 1px rgba(170,130,56,0.18), 0 24px 40px rgba(0,0,0,0.44), inset 0 0 0 1px rgba(99,69,24,0.22), inset 0 -14px 22px rgba(122,84,30,0.08)',
+                backgroundImage: 'url(/panel-bg.png)',
+                backgroundSize: '100% 100%',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
               }}
             >
-              <div className="absolute inset-[10px] border border-[#9f7a33]/24" style={{ clipPath: 'polygon(2% 3%, 14% 1%, 31% 2.4%, 48% 1.5%, 66% 2.2%, 84% 1%, 97% 4%, 98.5% 16%, 97% 35%, 98.5% 54%, 97.4% 74%, 98% 92%, 92% 98%, 76% 97.4%, 56% 98.6%, 36% 97.3%, 17% 98.3%, 4% 96%, 1.5% 82%, 3% 61%, 1.5% 40%, 3% 18%)' }} />
-              <div className="absolute inset-0 opacity-[0.09]" style={{ backgroundImage: 'radial-gradient(rgba(86,58,24,0.85) 0.8px, transparent 0.8px)', backgroundSize: '10px 10px' }} />
-              <div className="absolute inset-y-0 left-0 w-8 bg-[radial-gradient(circle_at_left,rgba(94,60,23,0.24),transparent_74%)]" />
-              <div className="absolute inset-y-0 right-0 w-8 bg-[radial-gradient(circle_at_right,rgba(94,60,23,0.22),transparent_74%)]" />
-              <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-gold-300/80 to-transparent" />
-              <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-gold-500/35 to-transparent" />
-              <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-gold-500/35 to-transparent" />
-              <div className="absolute inset-y-7 left-[-2px] w-5 bg-[linear-gradient(180deg,rgba(96,60,26,0.96),rgba(45,24,10,0.98))] shadow-[0_0_0_1px_rgba(54,30,11,0.75),inset_0_0_8px_rgba(255,218,150,0.16),2px_0_12px_rgba(0,0,0,0.28)]" style={{ borderRadius: '10px 3px 3px 10px' }} />
-              <div className="absolute inset-y-7 right-[-2px] w-5 bg-[linear-gradient(180deg,rgba(96,60,26,0.96),rgba(45,24,10,0.98))] shadow-[0_0_0_1px_rgba(54,30,11,0.75),inset_0_0_8px_rgba(255,218,150,0.16),-2px_0_12px_rgba(0,0,0,0.28)]" style={{ borderRadius: '3px 10px 10px 3px' }} />
-
-              <div className="relative p-6 sm:p-8">
+              <div className="relative px-10 pb-10 pt-11 sm:px-12 sm:pb-12 sm:pt-[3.25rem]">
                 <div className="mb-6">
                   <div className="mb-2 text-[10px] tracking-[0.3em] text-gold-500/80 font-(family-name:--font-ui)">
                     卷首小引
