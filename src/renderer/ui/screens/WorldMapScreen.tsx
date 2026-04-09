@@ -7,7 +7,9 @@ import type { MapConfig, LocationConfig } from '../../core/types';
 
 const mapConfig: MapConfig = dataLoader.getMap('map_001_beiliang') ?? dataLoader.getFirstMap()!;
 
-const AGED_GOLD = '#b8860b';
+const AGED_GOLD = '#cda85c';
+const LIGHT_GOLD = 'rgba(244,225,178,0.96)';
+const PALE_INK = 'rgba(70,48,24,0.9)';
 
 function getLocationStatus(
   location: LocationConfig,
@@ -86,41 +88,39 @@ export function WorldMapScreen() {
       })}
       {/* Map title bottom-left */}
       <div
-        className="absolute bottom-6 left-6 z-20 pointer-events-none max-w-[420px] px-5 py-4"
+        className="absolute bottom-5 left-5 z-20 pointer-events-none max-w-[440px] min-h-[216px] w-[min(440px,calc(100%-40px))] px-8 pt-7 pb-8"
         style={{
-          background: [
-            'radial-gradient(circle at 14% 18%, rgba(255,250,244,0.34) 0, rgba(255,250,244,0.08) 14%, transparent 30%)',
-            'radial-gradient(circle at 86% 72%, rgba(120,86,45,0.12) 0, transparent 32%)',
-            'linear-gradient(180deg, rgba(245,240,232,0.96), rgba(232,222,205,0.92))',
-          ].join(', '),
-          border: '1px solid rgba(184,134,11,0.28)',
-          clipPath: 'polygon(2% 3%, 97% 0%, 100% 14%, 98% 100%, 4% 98%, 0% 84%)',
-          boxShadow: '0 10px 20px rgba(26,15,10,0.18), inset 0 1px 0 rgba(255,252,246,0.65), inset 0 -12px 18px rgba(120,86,45,0.06)',
-          filter: 'drop-shadow(0 3px 6px rgba(60,45,30,0.18))',
+          backgroundImage: 'url(/map-info-sheet.png)',
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
       >
         <div
-          className="mb-1 text-[10px] leading-[1.4] tracking-[0.24em] font-(family-name:--font-ui)"
-          style={{ color: 'rgba(90,69,38,0.72)' }}
+          className="mb-3 flex h-9 w-[112px] items-center justify-center text-[11px] leading-[1.2] tracking-[0.24em] font-(family-name:--font-ui)"
+          style={{
+            backgroundImage: 'url(/map-info-title-tag.png)',
+            backgroundSize: '100% 100%',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            color: LIGHT_GOLD,
+            textShadow: '0 1px 2px rgba(31,17,6,0.35)',
+          }}
         >
           舆图
         </div>
         <div
           className="text-[24px] leading-[1.15] tracking-[0.06em] font-(family-name:--font-display)"
-          style={{ color: AGED_GOLD, textShadow: '0 1px 0 rgba(255,248,235,0.45)' }}
+          style={{ color: AGED_GOLD }}
         >
           {mapConfig.name}
         </div>
         <div
-          className="mt-1 text-[13px] leading-[1.7] tracking-[0.01em] font-(family-name:--font-body)"
-          style={{ color: 'rgba(44,44,44,0.8)' }}
+          className="mt-2 max-w-[320px] text-[13px] leading-[1.7] tracking-[0.01em] font-(family-name:--font-body)"
+          style={{ color: PALE_INK }}
         >
           {mapConfig.description}
         </div>
-        <div
-          className="absolute inset-x-4 bottom-1 h-px"
-          style={{ background: 'linear-gradient(90deg, transparent, rgba(184,134,11,0.22), transparent)' }}
-        />
       </div>
     </div>
   );
@@ -228,34 +228,20 @@ function LocationIcon({
 
       {/* Name label */}
       <div
-        className="min-h-6 whitespace-nowrap rounded-sm px-3 py-1 text-[13px] leading-[1.2] tracking-[0.08em]
+        className="min-h-[34px] min-w-[110px] whitespace-nowrap px-4 py-2 text-center text-[13px] leading-[1.2] tracking-[0.08em]
                     font-(family-name:--font-display) transition-all"
         style={{
+          backgroundImage: 'url(/map-nameplate.png)',
+          backgroundSize: '100% 100%',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
           color:
             status === 'available'
-              ? 'rgba(243,228,190,0.96)'
+              ? 'rgba(247,232,191,0.98)'
               : status === 'all_done'
-              ? 'rgba(162,180,172,0.84)'
-              : 'rgba(189,174,155,0.72)',
-          border:
-            status === 'available'
-              ? '1px solid rgba(184,134,11,0.42)'
-              : status === 'all_done'
-              ? '1px solid rgba(95,120,113,0.34)'
-              : '1px solid rgba(107,94,78,0.28)',
-          background:
-            status === 'available'
-              ? 'linear-gradient(180deg, rgba(70,50,32,0.9), rgba(48,35,24,0.88))'
-              : status === 'all_done'
-              ? 'linear-gradient(180deg, rgba(67,66,58,0.86), rgba(47,52,50,0.84))'
-              : 'linear-gradient(180deg, rgba(49,38,30,0.84), rgba(36,30,24,0.82))',
-          boxShadow:
-            status === 'available'
-              ? '0 2px 8px rgba(0,0,0,0.22), 0 0 10px rgba(184,134,11,0.14), inset 0 1px 0 rgba(255,240,204,0.08)'
-              : status === 'all_done'
-              ? '0 2px 6px rgba(0,0,0,0.18), inset 0 1px 0 rgba(188,205,196,0.05)'
-              : '0 2px 5px rgba(0,0,0,0.16)',
-          textShadow: status === 'available' ? '0 0 8px rgba(255,236,188,0.18)' : 'none',
+              ? 'rgba(198,213,204,0.9)'
+              : 'rgba(224,204,177,0.82)',
+          textShadow: '0 1px 2px rgba(26,13,5,0.42)',
           filter: status === 'all_done' ? 'saturate(0.72) brightness(0.9)' : status === 'none' ? 'brightness(0.78)' : 'none',
         }}
       >

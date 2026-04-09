@@ -31,73 +31,79 @@ export function ResourceBar() {
       key: 'day',
       label: '日数',
       value: `第 ${currentDay} 天`,
-      tone: 'text-gold-300',
-      valueClass: 'text-gold-100',
     },
     {
       key: 'gold',
       label: '金',
       value: gold,
-      tone: 'text-gold-400',
-      valueClass: 'text-gold-300',
     },
     {
       key: 'rep',
       label: '声望',
       value: reputation,
-      tone: 'text-cerulean-300',
-      valueClass: 'text-cerulean-300',
     },
     {
       key: 'exec',
       label: '行刑',
       value: `-${executionCountdown}`,
-      tone: 'text-crimson-300',
-      valueClass: executionCountdown <= 3 ? 'text-crimson-300 animate-pulse' : 'text-crimson-500',
     },
     {
       key: 'dice',
       label: '金骰',
       value: goldenDice,
-      tone: 'text-gold-400',
-      valueClass: 'text-gold-300',
     },
     {
       key: 'think',
       label: '筹谋',
       value: thinkCharges,
-      tone: 'text-cerulean-300',
-      valueClass: 'text-cerulean-300',
     },
   ];
 
   return (
     <header
-      className="relative h-12 shrink-0 border-b flex items-center justify-between gap-4 px-4"
+      className="relative h-14 shrink-0 flex items-center justify-between gap-4 px-5"
       style={{
-        background: 'rgba(26,26,46,0.90)',
-        borderBottomColor: 'rgba(138,109,43,0.40)',
+        backgroundImage: 'url(/resource-strip-bg.png)',
+        backgroundSize: '100% 100%',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }}
     >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent pointer-events-none" />
+      <div
+        className="absolute inset-x-4 top-[10px] h-px pointer-events-none"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(212,181,108,0.72), transparent)' }}
+      />
+      <div
+        className="absolute inset-x-4 bottom-[10px] h-px pointer-events-none"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(120,86,33,0.48), transparent)' }}
+      />
 
       <div className="flex min-w-0 items-center gap-4">
         {isWorldMap && currentMap && (
           <>
             <div className="min-w-0 pr-1">
-              <div className="text-[10px] leading-[1.4] tracking-[0.22em] text-gold-500/80 font-(family-name:--font-ui)">
+              <div
+                className="text-[10px] leading-[1.4] tracking-[0.22em] font-(family-name:--font-ui)"
+                style={{ color: 'rgba(231,205,141,0.86)' }}
+              >
                 当前地图
               </div>
               <div className="flex items-baseline gap-2 min-w-0">
-                <span className="truncate text-[18px] leading-[1.2] tracking-[0.04em] text-gold-300 font-(family-name:--font-display)">
+                <span
+                  className="truncate text-[18px] leading-[1.2] tracking-[0.04em] font-(family-name:--font-display)"
+                  style={{ color: 'rgba(247,230,191,0.96)', textShadow: '0 1px 2px rgba(34,19,7,0.45)' }}
+                >
                   {currentMap.name}
                 </span>
-                <span className="hidden md:block truncate text-[11px] leading-[1.5] tracking-[0.06em] text-parchment-400/75 font-(family-name:--font-body)">
+                <span
+                  className="hidden md:block truncate text-[11px] leading-[1.5] tracking-[0.06em] font-(family-name:--font-body)"
+                  style={{ color: 'rgba(222,202,167,0.82)' }}
+                >
                   {currentMap.description}
                 </span>
               </div>
             </div>
-            <div className="h-7 w-px bg-gold-500/35" />
+            <div className="h-8 w-px" style={{ background: 'rgba(205,168,92,0.7)' }} />
           </>
         )}
 
@@ -105,14 +111,29 @@ export function ResourceBar() {
           {items.map((item, index) => (
             <React.Fragment key={item.key}>
               <div className="flex items-baseline gap-2">
-                <span className={`text-[10px] leading-[1.4] tracking-[0.18em] uppercase font-(family-name:--font-ui) ${item.tone}`}>
+                <span
+                  className="text-[10px] leading-[1.4] tracking-[0.18em] uppercase font-(family-name:--font-ui)"
+                  style={{ color: 'rgba(226,198,133,0.86)' }}
+                >
                   {item.label}
                 </span>
-                <span className={`text-[14px] leading-[1.2] font-bold font-(family-name:--font-mono) ${item.valueClass}`}>
+                <span
+                  className={`text-[14px] leading-[1.2] font-bold font-(family-name:--font-mono) ${item.key === 'exec' && executionCountdown <= 3 ? 'animate-pulse' : ''}`}
+                  style={{
+                    color:
+                      item.key === 'rep'
+                        ? 'rgba(188,214,211,0.92)'
+                        : item.key === 'exec'
+                        ? executionCountdown <= 3
+                          ? 'rgba(244,161,142,0.96)'
+                          : 'rgba(215,136,119,0.88)'
+                        : 'rgba(247,232,191,0.98)',
+                  }}
+                >
                   {item.value}
                 </span>
               </div>
-              {index < items.length - 1 && <div className="h-5 w-px bg-gold-500/25" />}
+              {index < items.length - 1 && <div className="h-5 w-px" style={{ background: 'rgba(205,168,92,0.52)' }} />}
             </React.Fragment>
           ))}
         </div>
