@@ -165,7 +165,7 @@ export function TitleScreen() {
               backgroundPosition: 'center',
             }}
           >
-            <div className="relative m-5 border border-[#8c6728]/15 bg-transparent px-10 pb-10 pt-11 sm:m-6 sm:px-12 sm:pb-12 sm:pt-[3.25rem]">
+            <div className="relative m-2 border border-[#8c6728]/15 bg-transparent px-10 pb-10 pt-11 sm:m-3 sm:px-12 sm:pb-12 sm:pt-[3.25rem]">
                 <div className="mb-6">
                   <div className="mb-2 text-[10px] tracking-[0.3em] text-gold-500/80 font-(family-name:--font-ui)">
                     卷首小引
