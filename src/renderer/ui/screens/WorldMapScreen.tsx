@@ -88,7 +88,7 @@ export function WorldMapScreen() {
       })}
       {/* Map title bottom-left */}
       <div
-        className="absolute bottom-5 left-5 z-20 pointer-events-none max-w-[440px] min-h-[216px] w-[min(440px,calc(100%-40px))] px-8 pt-7 pb-8"
+        className="absolute bottom-5 left-5 z-20 pointer-events-none min-h-[176px] w-[min(296px,calc(100%-40px))] px-6 pt-5 pb-6"
         style={{
           backgroundImage: 'url(/map-info-sheet.png)',
           backgroundSize: '100% 100%',
@@ -97,7 +97,7 @@ export function WorldMapScreen() {
         }}
       >
         <div
-          className="mb-3 flex h-9 w-[112px] items-center justify-center text-[11px] leading-[1.2] tracking-[0.24em] font-(family-name:--font-ui)"
+          className="mb-2 -mt-1 flex h-8 w-[92px] items-center justify-center text-[10px] leading-[1.2] tracking-[0.2em] font-(family-name:--font-ui)"
           style={{
             backgroundImage: 'url(/map-info-title-tag.png)',
             backgroundSize: '100% 100%',
@@ -105,18 +105,19 @@ export function WorldMapScreen() {
             backgroundRepeat: 'no-repeat',
             color: LIGHT_GOLD,
             textShadow: '0 1px 2px rgba(31,17,6,0.35)',
+            transform: 'translateX(8px)',
           }}
         >
           舆图
         </div>
         <div
-          className="text-[24px] leading-[1.15] tracking-[0.06em] font-(family-name:--font-display)"
+          className="text-[21px] leading-[1.12] tracking-[0.05em] font-(family-name:--font-display)"
           style={{ color: AGED_GOLD }}
         >
           {mapConfig.name}
         </div>
         <div
-          className="mt-2 max-w-[320px] text-[13px] leading-[1.7] tracking-[0.01em] font-(family-name:--font-body)"
+          className="mt-1.5 max-w-[228px] text-[12px] leading-[1.55] tracking-[0.01em] font-(family-name:--font-body)"
           style={{ color: PALE_INK }}
         >
           {mapConfig.description}
@@ -228,7 +229,7 @@ function LocationIcon({
 
       {/* Name label */}
       <div
-        className="min-h-[34px] min-w-[110px] whitespace-nowrap px-4 py-2 text-center text-[13px] leading-[1.2] tracking-[0.08em]
+        className="min-h-[40px] min-w-[136px] whitespace-nowrap px-6 py-2.5 text-center text-[15px] leading-[1.15] tracking-[0.08em]
                     font-(family-name:--font-display) transition-all"
         style={{
           backgroundImage: 'url(/map-nameplate.png)',
@@ -242,7 +243,12 @@ function LocationIcon({
               ? 'rgba(198,213,204,0.9)'
               : 'rgba(224,204,177,0.82)',
           textShadow: '0 1px 2px rgba(26,13,5,0.42)',
-          filter: status === 'all_done' ? 'saturate(0.72) brightness(0.9)' : status === 'none' ? 'brightness(0.78)' : 'none',
+          filter:
+            status === 'all_done'
+              ? 'saturate(0.78) brightness(1.02)'
+              : status === 'none'
+              ? 'brightness(0.92)'
+              : 'brightness(1.08)',
         }}
       >
         {location.name}

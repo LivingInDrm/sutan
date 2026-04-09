@@ -82,24 +82,18 @@ export function ResourceBar() {
         {isWorldMap && currentMap && (
           <>
             <div className="min-w-0 pr-1">
-              <div
-                className="text-[10px] leading-[1.4] tracking-[0.22em] font-(family-name:--font-ui)"
-                style={{ color: 'rgba(231,205,141,0.86)' }}
-              >
-                当前地图
-              </div>
               <div className="flex items-baseline gap-2 min-w-0">
+                <span
+                  className="shrink-0 text-[10px] leading-[1.4] tracking-[0.2em] font-(family-name:--font-ui)"
+                  style={{ color: 'rgba(231,205,141,0.86)' }}
+                >
+                  舆图
+                </span>
                 <span
                   className="truncate text-[18px] leading-[1.2] tracking-[0.04em] font-(family-name:--font-display)"
                   style={{ color: 'rgba(247,230,191,0.96)', textShadow: '0 1px 2px rgba(34,19,7,0.45)' }}
                 >
                   {currentMap.name}
-                </span>
-                <span
-                  className="hidden md:block truncate text-[11px] leading-[1.5] tracking-[0.06em] font-(family-name:--font-body)"
-                  style={{ color: 'rgba(222,202,167,0.82)' }}
-                >
-                  {currentMap.description}
                 </span>
               </div>
             </div>
