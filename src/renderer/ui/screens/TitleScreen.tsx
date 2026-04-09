@@ -76,8 +76,8 @@ export function TitleScreen() {
       style={{
         backgroundImage: [
           'url(/title-bg.png)',
-          'radial-gradient(circle at 50% 35%, rgba(232,220,200,0.08), rgba(26,15,10,0) 38%)',
-          'linear-gradient(180deg, rgba(14,8,6,0.92) 0%, rgba(26,15,10,0.88) 36%, rgba(26,26,46,0.82) 100%)',
+          'radial-gradient(circle at 50% 35%, rgba(232,220,200,0.12), rgba(26,15,10,0) 42%)',
+          'linear-gradient(180deg, rgba(14,8,6,0.48) 0%, rgba(26,15,10,0.4) 36%, rgba(26,26,46,0.34) 100%)',
           `url(${inkWashTexture})`,
           `url(${bronzeTexture})`,
           `url(${ricePaperTexture})`,
@@ -86,7 +86,7 @@ export function TitleScreen() {
         backgroundPosition: 'center, center, center, center, center, center',
       }}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(245,240,232,0.08),transparent_42%),linear-gradient(90deg,rgba(14,8,6,0.72),rgba(14,8,6,0.22),rgba(14,8,6,0.72))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(245,240,232,0.12),transparent_44%),linear-gradient(90deg,rgba(14,8,6,0.52),rgba(14,8,6,0.16)_36%,rgba(14,8,6,0.14)_64%,rgba(14,8,6,0.42))]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
 
