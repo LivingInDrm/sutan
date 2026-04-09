@@ -3,9 +3,6 @@ import { useUIStore } from '../../stores/uiStore';
 import { useGameStore } from '../../stores/gameStore';
 import type { Scene } from '../../core/types';
 import { dataLoader } from '../../data/loader';
-import ricePaperTexture from '../../assets/textures/rice-paper-1024.webp';
-import inkWashTexture from '../../assets/textures/ink-wash-1024.webp';
-import bronzeTexture from '../../assets/textures/bronze-1024.webp';
 
 const baseCards = dataLoader.loadCardsFromDirectory();
 const baseScenes: Scene[] = dataLoader.loadScenesFromDirectory();
@@ -76,17 +73,13 @@ export function TitleScreen() {
       style={{
         backgroundImage: [
           'url(/title-bg.png)',
-          'radial-gradient(circle at 50% 35%, rgba(232,220,200,0.12), rgba(26,15,10,0) 42%)',
-          'linear-gradient(180deg, rgba(14,8,6,0.48) 0%, rgba(26,15,10,0.4) 36%, rgba(26,26,46,0.34) 100%)',
-          `url(${inkWashTexture})`,
-          `url(${bronzeTexture})`,
-          `url(${ricePaperTexture})`,
+          'radial-gradient(circle at 50% 42%, rgba(10,8,6,0) 0%, rgba(10,8,6,0.03) 46%, rgba(10,8,6,0.18) 100%)',
         ].join(', '),
-        backgroundSize: 'cover, auto, auto, cover, cover, cover',
-        backgroundPosition: 'center, center, center, center, center, center',
+        backgroundSize: 'cover, cover',
+        backgroundPosition: 'center, center',
       }}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(245,240,232,0.12),transparent_44%),linear-gradient(90deg,rgba(14,8,6,0.52),rgba(14,8,6,0.16)_36%,rgba(14,8,6,0.14)_64%,rgba(14,8,6,0.42))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(14,8,6,0.02),rgba(14,8,6,0.12))]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
 
@@ -98,7 +91,7 @@ export function TitleScreen() {
               北凉旧卷
             </div>
 
-            <div className="mb-8">
+            <div className="mb-8 rounded-2xl bg-black/16 px-6 py-6 shadow-[0_8px_24px_rgba(0,0,0,0.18)] backdrop-blur-sm">
               <p className="mb-3 text-[12px] tracking-[0.32em] text-gold-500/80 font-(family-name:--font-ui)">
                 风沙入卷 · 墨痕未干
               </p>
@@ -113,7 +106,7 @@ export function TitleScreen() {
               </p>
             </div>
 
-            <div className="mx-auto lg:mx-0 w-full max-w-xl rounded-xl border border-gold-500/25 bg-[linear-gradient(180deg,rgba(232,220,200,0.10),rgba(42,24,16,0.22))] p-5 shadow-[var(--shadow-ink)] backdrop-blur-[2px]">
+            <div className="mx-auto lg:mx-0 w-full max-w-xl rounded-xl border border-gold-500/25 bg-[linear-gradient(180deg,rgba(18,10,7,0.28),rgba(18,10,7,0.14))] p-5 shadow-[var(--shadow-ink)] backdrop-blur-sm">
               <div className="mb-3 flex items-center gap-3">
                 <div className="h-px flex-1 bg-gradient-to-r from-transparent to-gold-500/35" />
                 <span className="text-[12px] tracking-[0.18em] text-gold-300 font-(family-name:--font-display)">
@@ -131,12 +124,7 @@ export function TitleScreen() {
             <div
               className="relative overflow-hidden rounded-xl border border-gold-500/35 bg-parchment-300/88 text-leather-900 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
               style={{
-                backgroundImage: [
-                  'linear-gradient(180deg, rgba(245,240,232,0.92), rgba(212,197,169,0.88))',
-                  `url(${ricePaperTexture})`,
-                ].join(', '),
-                backgroundSize: 'cover, cover',
-                backgroundPosition: 'center, center',
+                backgroundImage: 'linear-gradient(180deg, rgba(245,240,232,0.92), rgba(212,197,169,0.88))',
               }}
             >
               <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-gold-300/80 to-transparent" />
