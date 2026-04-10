@@ -7,10 +7,10 @@ import {
 } from '@core/types/enums';
 
 describe('T1.1: Enums', () => {
-  it('should have 4 rarities with unique keys', () => {
+  it('should have 9 rarities with unique keys', () => {
     const vals = Object.values(Rarity);
-    expect(vals).toHaveLength(4);
-    expect(new Set(vals).size).toBe(4);
+    expect(vals).toHaveLength(9);
+    expect(new Set(vals).size).toBe(9);
   });
 
   it('should have 8 base attributes with unique keys', () => {

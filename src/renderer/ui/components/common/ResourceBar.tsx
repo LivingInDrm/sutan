@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../../../stores/gameStore';
 import { useUIStore } from '../../../stores/uiStore';
-import { dataLoader } from '../../../data/loader';
+import { gameContentProvider } from '../../../app/bootstrap';
 import { Button } from './Button';
 
 export function ResourceBar() {
@@ -18,8 +18,8 @@ export function ResourceBar() {
 
   const isWorldMap = currentScreen === 'world_map';
   const currentMap = selectedMapId
-    ? dataLoader.getMap(selectedMapId) ?? dataLoader.getFirstMap()
-    : dataLoader.getFirstMap();
+    ? gameContentProvider.getMap(selectedMapId) ?? gameContentProvider.getFirstMap()
+    : gameContentProvider.getFirstMap();
 
   const handleNextDay = () => {
     beginSettlement();

@@ -13,8 +13,8 @@ import type { Card, Scene, SaveData, SettlementResult } from '../types';
 import { DIFFICULTIES } from '../types';
 import { eventBus } from '../../lib/events';
 import type { GameState } from './GameState';
-import { dataLoader } from '../../data/loader';
 import initialSaveJson from '../../data/configs/initial_save.json';
+import type { GameContentProvider } from '../types/repositories';
 
 export class GameManager {
   readonly playerState: PlayerState;
@@ -26,6 +26,7 @@ export class GameManager {
   readonly dayManager: DayManager;
   readonly thinkSystem: ThinkSystem;
   readonly rng: RandomManager;
+  readonly contentProvider: GameContentProvider;
 
   private _isGameOver: boolean = false;
   private _endReason: GameEndReason | null = null;
@@ -33,7 +34,8 @@ export class GameManager {
   private _allCardsMap: Map<string, Card> = new Map();
   private _runtimeState: GameState;
 
-  constructor(difficulty: string = 'normal', seed?: string) {
+  constructor(contentProvider: GameContentProvider, difficulty: string = 'normal', seed?: string) {
+    this.contentProvider = contentProvider;
     this._difficulty = difficulty;
     const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
 
@@ -256,8 +258,8 @@ export class GameManager {
     const parsed = JSON.parse(saveJson) as SaveData;
     this.loadSave(
       parsed,
-      allCards ?? dataLoader.loadCardsFromDirectory(),
-      allScenes ?? dataLoader.loadScenesFromDirectory(),
+      allCards ?? this.contentProvider.getCards(),
+      allScenes ?? this.contentProvider.getScenes(),
     );
   }
 
@@ -320,7 +322,7 @@ export class GameManager {
   }
 
   private computeUnlockedLocations(): string[] {
-    const maps = Array.from(dataLoader.loadMapsFromDirectory().values());
+    const maps = this.contentProvider.getMaps();
     const unlocked = new Set<string>();
     for (const map of maps) {
       for (const location of map.locations) {

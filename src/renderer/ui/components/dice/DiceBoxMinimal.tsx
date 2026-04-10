@@ -25,7 +25,9 @@ export function DiceBoxMinimal() {
     }) as DiceBoxInstance;
 
     box.init().then(() => {
-      console.log('[Minimal] init done');
+      if (import.meta.env.DEV) {
+        console.log('[Minimal] init done');
+      }
       const canvas = containerRef.current?.querySelector('canvas');
       if (canvas) {
         canvas.style.width = '100%';
@@ -33,7 +35,9 @@ export function DiceBoxMinimal() {
         canvas.style.background = 'transparent';
       }
       box.onRollComplete = (results: unknown) => {
-        console.log('[Minimal] roll complete', results);
+        if (import.meta.env.DEV) {
+          console.log('[Minimal] roll complete', results);
+        }
       };
       box.roll('3d6');
     });

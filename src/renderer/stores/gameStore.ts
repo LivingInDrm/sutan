@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { GameManager } from '../core/game/GameManager';
 import { SceneRunner } from '../core/scene/SceneRunner';
+import { gameContentProvider } from '../app/bootstrap';
 import type {
   Card, Scene, SaveData, SettlementResult, StagePlayback,
   NarrativeNode, Effects,
@@ -100,7 +101,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   ...initialState,
 
   startNewGame: (difficulty, cards, scenes, seed) => {
-    const game = new GameManager(difficulty, seed);
+    const game = new GameManager(gameContentProvider, difficulty, seed);
     game.startNewGame(cards, scenes);
     set({ game });
     get().syncState();
@@ -453,14 +454,14 @@ export const useGameStore = create<GameStore>()((set, get) => ({
   },
 
   load: (save, allCards, allScenes) => {
-    const game = new GameManager();
+    const game = new GameManager(gameContentProvider);
     game.loadSave(save, allCards, allScenes);
     set({ game });
     get().syncState();
   },
 
   importSave: (saveJson, allCards, allScenes) => {
-    const game = new GameManager();
+    const game = new GameManager(gameContentProvider);
     game.importSave(saveJson, allCards, allScenes);
     set({ game });
     get().syncState();

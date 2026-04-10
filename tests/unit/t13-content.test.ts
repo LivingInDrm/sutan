@@ -1,17 +1,24 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, it, expect } from 'vitest';
 import { CardSchema, SceneSchema } from '@data/schemas';
-import charactersData from '@data/configs/cards/characters.json';
-import equipmentData from '@data/configs/cards/equipment.json';
-import specialData from '@data/configs/cards/special.json';
 
-const cardsData = [...charactersData, ...equipmentData, ...specialData];
-import scene001 from '@data/configs/scenes/scene_001.json';
-import scene002 from '@data/configs/scenes/scene_002.json';
-import scene003 from '@data/configs/scenes/scene_003.json';
-import scene004 from '@data/configs/scenes/scene_004.json';
-import sceneShop001 from '@data/configs/scenes/scene_shop_001.json';
+function loadJsonArray<T>(relativeDir: string): T[] {
+  const absoluteDir = path.resolve(process.cwd(), relativeDir);
+  const fileNames = fs
+    .readdirSync(absoluteDir)
+    .filter(fileName => fileName.endsWith('.json'))
+    .sort();
 
-const scenesData = [scene001, scene002, scene003, scene004, sceneShop001];
+  return fileNames.flatMap(fileName => {
+    const filePath = path.join(absoluteDir, fileName);
+    const parsed = JSON.parse(fs.readFileSync(filePath, 'utf-8')) as T | T[];
+    return Array.isArray(parsed) ? parsed : [parsed];
+  });
+}
+
+const cardsData = loadJsonArray<any>('src/renderer/data/configs/cards');
+const scenesData = loadJsonArray<any>('src/renderer/data/configs/scenes');
 
 describe('T13.1: Card Config Validation', () => {
   it('should validate all base cards', () => {

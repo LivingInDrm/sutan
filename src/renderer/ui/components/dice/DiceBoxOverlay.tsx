@@ -121,15 +121,19 @@ export function DiceBoxOverlay({
       dice: [...collectedDiceRef.current],
     } as { dice: [number, number, number] });
     setPhase('finished');
-    console.log('[DiceBoxOverlay] finish', {
-      dice: collectedDiceRef.current,
-    });
+    if (import.meta.env.DEV) {
+      console.log('[DiceBoxOverlay] finish', {
+        dice: collectedDiceRef.current,
+      });
+    }
   }, [clearTimers]);
 
   const playRollSequence = useCallback(async () => {
     collectedDiceRef.current = [1, 1, 1];
     setPhase('rolling');
-    console.log('[DiceBoxOverlay] rolling');
+    if (import.meta.env.DEV) {
+      console.log('[DiceBoxOverlay] rolling');
+    }
 
     const sequenceId = ++rollSequenceRef.current;
 
@@ -143,7 +147,9 @@ export function DiceBoxOverlay({
         return;
       }
       const rolledValues = extractRollValues(results).slice(0, DICE_CONFIG.DICE_COUNT);
-      console.log('[DiceBoxOverlay] roll complete', rolledValues);
+      if (import.meta.env.DEV) {
+        console.log('[DiceBoxOverlay] roll complete', rolledValues);
+      }
       collectedDiceRef.current = [
         rolledValues[0] ?? 1,
         rolledValues[1] ?? 1,
@@ -183,13 +189,17 @@ export function DiceBoxOverlay({
       setDisplayResult(null);
       return;
     }
-    console.log('[DiceBoxOverlay] overlay mounted', { containerId, visible });
+    if (import.meta.env.DEV) {
+      console.log('[DiceBoxOverlay] overlay mounted', { containerId, visible });
+    }
 
     let disposed = false;
 
     const ensureDiceBox = async () => {
       if (!diceBoxRef.current) {
-        console.log('[DiceBoxOverlay] init start', { containerId });
+        if (import.meta.env.DEV) {
+          console.log('[DiceBoxOverlay] init start', { containerId });
+        }
         const DiceBoxClass = DiceBox as unknown as DiceBoxConstructor;
         const instance = new DiceBoxClass({
           container: `#${containerId}`,
@@ -221,7 +231,9 @@ export function DiceBoxOverlay({
                 canvas.style.background = 'transparent';
               }
               window.dispatchEvent(new Event('resize'));
-              console.log('[DiceBoxOverlay] init success', { containerId });
+              if (import.meta.env.DEV) {
+                console.log('[DiceBoxOverlay] init success', { containerId });
+              }
             })
             .finally(() => {
               initPromiseRef.current = null;
@@ -239,7 +251,9 @@ export function DiceBoxOverlay({
       if (disposed) {
         return;
       }
-      console.error('[DiceBoxOverlay] init timeout');
+      if (import.meta.env.DEV) {
+        console.error('[DiceBoxOverlay] init timeout');
+      }
       clearTimers();
     }, INIT_TIMEOUT_MS);
 
@@ -251,8 +265,10 @@ export function DiceBoxOverlay({
         startedVisibleRef.current = true;
       })
       .catch((error) => {
-        console.error('[DiceBoxOverlay] init fail', error);
-        console.error('[DiceBoxOverlay] failed to initialize dice box', error);
+        if (import.meta.env.DEV) {
+          console.error('[DiceBoxOverlay] init fail', error);
+          console.error('[DiceBoxOverlay] failed to initialize dice box', error);
+        }
         if (!disposed) {
           clearTimers();
           setPhase('ready');

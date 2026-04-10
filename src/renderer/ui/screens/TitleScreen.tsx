@@ -1,11 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useUIStore } from '../../stores/uiStore';
 import { useGameStore } from '../../stores/gameStore';
-import type { Scene } from '../../core/types';
-import { dataLoader } from '../../data/loader';
-
-const baseCards = dataLoader.loadCardsFromDirectory();
-const baseScenes: Scene[] = dataLoader.loadScenesFromDirectory();
+import { gameContentProvider } from '../../app/bootstrap';
 const DIFFICULTIES = [
   { key: 'easy', label: '简命', desc: '廿一日 · 备银五十', tone: '风雪未紧，尚容你徐徐试笔' },
   { key: 'normal', label: '常命', desc: '十四日 · 备银三十', tone: '刀背催行，需在进退之间守住章法' },
@@ -28,7 +24,7 @@ export function TitleScreen() {
       return;
     }
 
-    startNewGame('normal', baseCards, baseScenes);
+    startNewGame('normal', gameContentProvider.getCards(), gameContentProvider.getScenes());
     window.setTimeout(() => {
       const uiStore = useUIStore.getState();
       const gameStore = useGameStore.getState();
@@ -55,7 +51,7 @@ export function TitleScreen() {
   }, [startNewGame]);
 
   const handleStart = (difficulty: string) => {
-    startNewGame(difficulty, baseCards, baseScenes);
+    startNewGame(difficulty, gameContentProvider.getCards(), gameContentProvider.getScenes());
     setScreen('world_map');
   };
 
@@ -83,7 +79,7 @@ export function TitleScreen() {
 
     try {
       const saveJson = await file.text();
-      importSave(saveJson, baseCards, baseScenes);
+      importSave(saveJson, gameContentProvider.getCards(), gameContentProvider.getScenes());
       setImportError(null);
       setScreen('world_map');
     } catch {

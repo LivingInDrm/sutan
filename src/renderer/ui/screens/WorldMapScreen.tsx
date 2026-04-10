@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useUIStore } from '../../stores/uiStore';
 import { useGameStore } from '../../stores/gameStore';
 import { SceneStatus } from '../../core/types/enums';
-import { dataLoader } from '../../data/loader';
+import { gameContentProvider } from '../../app/bootstrap';
 import type { MapConfig, LocationConfig } from '../../core/types';
 
-const mapConfig: MapConfig = dataLoader.getMap('map_001_beiliang') ?? dataLoader.getFirstMap()!;
+const mapConfig: MapConfig = gameContentProvider.getMap('map_001_beiliang') ?? gameContentProvider.getFirstMap()!;
 
 const AGED_GOLD = '#cda85c';
 const LIGHT_GOLD = 'rgba(244,225,178,0.96)';
