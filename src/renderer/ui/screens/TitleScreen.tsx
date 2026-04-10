@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useUIStore } from '../../stores/uiStore';
 import { useGameStore } from '../../stores/gameStore';
 import type { Scene } from '../../core/types';
@@ -22,6 +22,37 @@ export function TitleScreen() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('normal');
   const [importError, setImportError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || window.location.search !== '?autotest=dice') {
+      return;
+    }
+
+    startNewGame('normal', baseCards, baseScenes);
+    window.setTimeout(() => {
+      const uiStore = useUIStore.getState();
+      const gameStore = useGameStore.getState();
+      const currentGame = gameStore.game;
+
+      currentGame?.sceneManager.participateScene('scene_006', ['card_003']);
+      const runner = currentGame?.createSceneRunner('scene_006');
+      runner?.start();
+      const playback = runner?.advanceByChoice('path_a_mockery') ?? null;
+      gameStore.syncState();
+      useGameStore.setState({
+        settlement: {
+          isPlaying: true,
+          pendingSceneIds: [],
+          currentRunner: runner ?? null,
+          currentStagePlayback: playback,
+          narrativeIndex: playback?.narrative.length ?? 0,
+          currentStageSettlementResult: null,
+          completedResults: [],
+        },
+      });
+      uiStore.setScreen('settlement');
+    }, 0);
+  }, [startNewGame]);
 
   const handleStart = (difficulty: string) => {
     startNewGame(difficulty, baseCards, baseScenes);

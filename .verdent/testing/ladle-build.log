@@ -1,0 +1,79 @@
+(node:21435) ExperimentalWarning: CommonJS module /Users/xiaochunliu/program/sutan/.ladle/vite.config.ts is loading ES Module /Users/xiaochunliu/program/sutan/node_modules/vite/dist/node/index.js using require().
+Support for loading ES Module in require() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+vite v6.4.1 building for production...
+transforming...
+✓ 1300 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../../../build/assets/manifest-B-VxemCC.webmanifest                 0.14 kB
+../../../../../build/assets/favicon-gjFwcFbF.svg                          0.53 kB │ gzip:   0.31 kB
+../../../../../build/index.html                                           1.20 kB │ gzip:   0.65 kB
+../../../../../build/assets/touch-icon-ByyUZD7t.png                       6.69 kB
+../../../../../build/assets/ink-wash-256-C0oCqpC9.webp                    9.77 kB
+../../../../../build/assets/dice-face-1-VndDx_W0.png                     13.18 kB
+../../../../../build/assets/dice-face-2-DbFXsbu9.png                     22.62 kB
+../../../../../build/assets/dice-face-4-C2mqVHmh.png                     24.32 kB
+../../../../../build/assets/dice-face-3-DroNiaD9.png                     32.18 kB
+../../../../../build/assets/dice-face-5-BHi7HB3T.png                     33.29 kB
+../../../../../build/assets/dice-face-6-BF56C8lR.png                     33.63 kB
+../../../../../build/assets/bronze-512-DJPMPavU.webp                     87.96 kB
+../../../../../build/assets/item_sword_01-DvTi7KKU.png                  169.70 kB
+../../../../../build/assets/item_scimitar_01-B-q5Uvt9.png               200.78 kB
+../../../../../build/assets/rice-paper-1024-CzKvt_Rs.webp               225.48 kB
+../../../../../build/assets/item_sword_02-BWxRASj7.png                  271.15 kB
+../../../../../build/assets/item_daggers_01-DSkpt_5M.png                353.10 kB
+../../../../../build/assets/bronze-1024-DZVtK9OJ.webp                   370.11 kB
+../../../../../build/assets/figure04-aNC5M7oP.png                       702.74 kB
+../../../../../build/assets/figure01-CgMDgzzc.png                       789.35 kB
+../../../../../build/assets/figure07-CTW44xFq.png                       793.51 kB
+../../../../../build/assets/figure02-xCuDdPI4.png                       801.21 kB
+../../../../../build/assets/figure06-CUZQWq4u.png                       817.10 kB
+../../../../../build/assets/figure03-2TWr5XbD.png                       830.22 kB
+../../../../../build/assets/figure05-CWckpq-g.png                       880.48 kB
+../../../../../build/assets/item_swordcase_01-C3JHI6SK.png            1,252.20 kB
+../../../../../build/assets/item_gourd_01-Dmoz7WQE.png                1,868.90 kB
+../../../../../build/assets/index-BlJMikSM.css                          143.76 kB │ gzip:  21.62 kB
+../../../../../build/assets/empty-module-BIHI7g3E.js                      0.03 kB │ gzip:   0.05 kB
+../../../../../build/assets/bronze-512-VagvitW8.js                        0.06 kB │ gzip:   0.08 kB
+../../../../../build/assets/rice-paper-1024-Xi9aqtm-.js                   0.06 kB │ gzip:   0.08 kB
+../../../../../build/assets/figure03-Dmzc9VGn.js                          0.14 kB │ gzip:   0.12 kB
+../../../../../build/assets/item_sword_01-BjiU1gZk.js                     0.23 kB │ gzip:   0.17 kB
+../../../../../build/assets/labels-CmqL7Czq.js                            0.67 kB │ gzip:   0.50 kB
+../../../../../build/assets/DiceComponent-HyZBcULF.js                     0.91 kB │ gzip:   0.54 kB
+../../../../../build/assets/DiceComponent.stories-jYOHbQSl.js             1.08 kB │ gzip:   0.49 kB
+../../../../../build/assets/Divider1-DIm6xZi1.js                          1.44 kB │ gzip:   0.65 kB
+../../../../../build/assets/Panel.stories-DLWF4NnL.js                     1.58 kB │ gzip:   0.58 kB
+../../../../../build/assets/AttrBadge.stories-fZH20lml.js                 1.73 kB │ gzip:   0.56 kB
+../../../../../build/assets/enums-AsnZkYD7.js                             2.02 kB │ gzip:   0.97 kB
+../../../../../build/assets/world.none-ziwBY-Zr.js                        2.64 kB │ gzip:   1.15 kB
+../../../../../build/assets/Panel-CPbmd4my.js                             3.39 kB │ gzip:   1.53 kB
+../../../../../build/assets/CardComponent.stories-CCpJw-fg.js             3.47 kB │ gzip:   1.44 kB
+../../../../../build/assets/index-BBNGtWtx.js                             3.89 kB │ gzip:   1.84 kB
+../../../../../build/assets/AncientDiceComponent.stories-CHE1a1py.js      4.74 kB │ gzip:   1.83 kB
+../../../../../build/assets/AttrBadge-CxGGG7ZI.js                         5.43 kB │ gzip:   1.98 kB
+../../../../../build/assets/Button.stories-N3QzZw2d.js                    6.10 kB │ gzip:   1.65 kB
+../../../../../build/assets/SlotComponent.stories-D9NIUaQv.js             7.89 kB │ gzip:   2.30 kB
+../../../../../build/assets/random-BB9JnhZC.js                            8.09 kB │ gzip:   3.10 kB
+../../../../../build/assets/CardDetailPanel.stories-B5nmI_iC.js           8.75 kB │ gzip:   3.68 kB
+../../../../../build/assets/Button-BvZpoDGB.js                            9.27 kB │ gzip:   2.54 kB
+../../../../../build/assets/HandArea.stories-CdJDxQlO.js                  9.79 kB │ gzip:   4.04 kB
+../../../../../build/assets/CardComponent-CSgXVydh.js                    11.53 kB │ gzip:   6.18 kB
+../../../../../build/assets/item_sword_02-BcsBN-lq.js                    12.61 kB │ gzip:   3.92 kB
+../../../../../build/assets/DecoratedFrame.stories-CIPbB_0G.js           13.01 kB │ gzip:   4.08 kB
+../../../../../build/assets/EventSettlementFrame.stories-DY7w2byh.js     20.48 kB │ gzip:   6.34 kB
+../../../../../build/assets/DiceCheckPlayground.stories-BtAsr6Np.js      21.49 kB │ gzip:   5.42 kB
+../../../../../build/assets/DiceD6.stories-ppDj04p5.js                   25.72 kB │ gzip:   8.65 kB
+../../../../../build/assets/D20Playground.stories-Dmy0WDqJ.js            74.20 kB │ gzip:  25.29 kB
+../../../../../build/assets/proxy-BZ5BKoQf.js                           119.55 kB │ gzip:  39.25 kB
+../../../../../build/assets/DiceBoxOverlay.stories-BM1dgaFN.js          203.94 kB │ gzip:  43.20 kB
+../../../../../build/assets/ResourceBar.stories-Bgcialbq.js             222.55 kB │ gzip:  69.42 kB
+../../../../../build/assets/world.onscreen-CIZ2IJVm.js                  391.21 kB │ gzip:  87.56 kB
+../../../../../build/assets/index-DkonqYDG.js                           627.93 kB │ gzip: 158.12 kB
+../../../../../build/assets/Dice-Bz_5AvzZ.js                            691.36 kB │ gzip: 168.48 kB
+../../../../../build/assets/ContactShadows-DrXJkyxv.js                  833.11 kB │ gzip: 224.12 kB
+../../../../../build/assets/world.offscreen-C5e_o3iU.js               1,447.26 kB │ gzip: 412.36 kB
+✓ built in 3.33s
+✓  Meta.json successfully created.
+⏱️  Ladle finished the production build in 3s producing 46.25 MiB of assets.
+💡 Tip: Run "ladle preview" to check that the build works!

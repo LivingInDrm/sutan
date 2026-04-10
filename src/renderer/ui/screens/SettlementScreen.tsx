@@ -154,16 +154,46 @@ export function SettlementScreen() {
 
   const handleExecuteSettlement = useCallback(() => {
     const preview = getCurrentDiceCheckPreview();
-    if (preview) {
+    console.log('[SettlementScreen] handleExecuteSettlement', {
+      preview,
+      poolSize: preview?.poolSize ?? 0,
+    });
+    if (preview && preview.poolSize > 0) {
       setPendingDicePoolSize(preview.poolSize);
       setShowDiceOverlay(true);
+      return;
     }
-  }, [getCurrentDiceCheckPreview]);
+    executeCurrentSettlement();
+  }, [executeCurrentSettlement, getCurrentDiceCheckPreview]);
 
   const handleDiceOverlayComplete = useCallback((result: { dice: number[]; explodedDice: number[] }) => {
-    executeCurrentSettlementWithDice(result.dice, result.explodedDice);
+    console.log('[SettlementScreen] handleDiceOverlayComplete', result);
+    try {
+      executeCurrentSettlementWithDice(result.dice, result.explodedDice);
+      setShowDiceOverlay(false);
+      setPendingDicePoolSize(0);
+    } catch (error) {
+      console.error('[SettlementScreen] executeCurrentSettlementWithDice failed', error);
+      setShowDiceOverlay(false);
+      setPendingDicePoolSize(0);
+      executeCurrentSettlement({
+        externalRoll: {
+          dice: result.dice,
+          exploded_dice: result.explodedDice,
+          all_dice: [...result.dice, ...result.explodedDice],
+          successes: [...result.dice, ...result.explodedDice].filter(value => value >= 5).length,
+          reroll_available: 0,
+        },
+      });
+    }
+  }, [executeCurrentSettlement, executeCurrentSettlementWithDice]);
+
+  const handleDiceOverlayCancel = useCallback(() => {
+    console.log('[SettlementScreen] handleDiceOverlayCancel');
     setShowDiceOverlay(false);
-  }, [executeCurrentSettlementWithDice]);
+    setPendingDicePoolSize(0);
+    executeCurrentSettlement();
+  }, [executeCurrentSettlement]);
 
   if (!isPlaying) {
     return <SummaryView results={lastResults} />;
@@ -241,8 +271,10 @@ export function SettlementScreen() {
       )}
       {showDiceOverlay && pendingDicePoolSize > 0 && (
         <DiceBoxOverlay
+          fallbackSeed={game?.rng.seed}
           poolSize={pendingDicePoolSize}
           onComplete={handleDiceOverlayComplete}
+          onCancel={handleDiceOverlayCancel}
           visible={showDiceOverlay}
         />
       )}

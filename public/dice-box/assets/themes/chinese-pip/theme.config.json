@@ -1,0 +1,22 @@
+{
+  "name": "Chinese Pip",
+  "systemName": "chinese-pip",
+  "author": "Verdent",
+  "version": 0.1,
+  "meshFile": "default.json",
+  "material": {
+    "type": "color",
+    "diffuseTexture": {
+      "light": "diffuse-light.png",
+      "dark": "diffuse-dark.png"
+    },
+    "diffuseLevel": 1,
+    "bumpTexture": "../default/normal.png",
+    "bumpLevel": 0.5,
+    "specularTexture": "../default/specular.jpg",
+    "specularPower": 1
+  },
+  "diceAvailable": [
+    "d6"
+  ]
+}

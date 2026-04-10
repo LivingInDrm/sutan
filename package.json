@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/main/index.js",
   "scripts": {
+    "sync:dice-box-assets": "node scripts/sync-dice-box-assets.cjs",
     "dev": "vite --config vite.config.ts",
     "build": "tsc && vite build --config vite.config.ts",
     "test": "vitest run",

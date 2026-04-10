@@ -41,3 +41,43 @@ Support for loading ES Module in require() is an experimental feature and might 
 10:23:29 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
 10:23:45 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
 10:24:04 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+10:35:52 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+10:48:33 AM [vite] (client) page reload public/dice-box-test.html
+10:48:33 AM [vite] (client) page reload public/dice-box-test.html
+10:50:14 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+11:17:16 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+11:19:06 AM [vite] (client) hmr update /ui/screens/TitleScreen.tsx, /styles/index.css
+11:19:32 AM [vite] (client) ✨ new dependencies optimized: @3d-dice/dice-box
+11:19:32 AM [vite] (client) ✨ optimized dependencies changed. reloading
+11:20:48 AM [vite] (client) hmr update /ui/screens/TitleScreen.tsx, /styles/index.css
+11:20:55 AM [vite] (client) hmr update /ui/screens/TitleScreen.tsx, /styles/index.css
+11:21:22 AM [vite] (client) hmr update /ui/screens/TitleScreen.tsx, /styles/index.css
+11:23:45 AM [vite] (client) hmr update /ui/screens/TitleScreen.tsx, /styles/index.css
+11:24:29 AM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+11:24:29 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+11:24:29 AM [vite] (client) hmr update /ui/screens/TitleScreen.tsx, /styles/index.css
+11:27:36 AM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+11:29:01 AM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+11:30:03 AM [vite] (client) hmr update /ui/screens/TitleScreen.tsx, /styles/index.css
+11:45:47 AM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+11:46:33 AM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+11:47:25 AM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+12:02:56 PM [vite] (client) hmr update /styles/index.css
+12:05:05 PM [vite] (client) hmr update /styles/index.css
+12:06:25 PM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+12:28:10 PM [vite] (client) hmr update /styles/index.css
+12:28:10 PM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+1:59:43 PM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+2:08:45 PM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+2:08:45 PM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+2:08:45 PM [vite] (client) hmr update /styles/index.css
+2:09:16 PM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+2:09:16 PM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+2:09:16 PM [vite] (client) hmr update /styles/index.css
+2:09:33 PM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+2:10:00 PM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+2:12:16 PM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+2:12:16 PM [vite] (client) hmr update /styles/index.css
+2:13:46 PM [vite] (client) hmr update /styles/index.css
+2:13:55 PM [vite] (client) hmr update /styles/index.css, /ui/components/dice/DiceBoxOverlay.tsx
+2:13:55 PM [vite] (client) hmr update /styles/index.css

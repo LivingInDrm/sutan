@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dice Box Test</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #111;
+        color: #eee;
+        font-family: sans-serif;
+      }
+
+      #dice-box {
+        width: 500px;
+        height: 400px;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div id="status">starting…</div>
+      <div id="dice-box"></div>
+    </div>
+    <script type="module">
+      import DiceBox from '/node_modules/@3d-dice/dice-box/dist/dice-box.es.js';
+
+      const status = document.getElementById('status');
+      const box = new DiceBox({
+        container: '#dice-box',
+        assetPath: '/dice-box/assets/',
+        offscreen: false,
+        theme: 'default',
+      });
+
+      box.onRollComplete = (results) => {
+        console.log('roll complete', results);
+        status.textContent = `roll complete: ${JSON.stringify(results)}`;
+      };
+
+      box
+        .init()
+        .then(() => {
+          console.log('DiceBox init OK');
+          status.textContent = 'init ok';
+          return box.roll('2d6');
+        })
+        .catch((error) => {
+          console.error('DiceBox init FAIL:', error);
+          status.textContent = `init fail: ${error?.message || error}`;
+        });
+    </script>
+  </body>
+</html>

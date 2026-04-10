@@ -1,0 +1,29 @@
+(node:20813) ExperimentalWarning: CommonJS module /Users/xiaochunliu/program/sutan/.ladle/vite.config.ts is loading ES Module /Users/xiaochunliu/program/sutan/node_modules/vite/dist/node/index.js using require().
+Support for loading ES Module in require() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+11:06:35 AM [vite] (client) Re-optimizing dependencies because vite config has changed
+
+   ╭────────────────────────────────────────────────────╮
+   │                                                    │
+   │   🥄 Ladle.dev served at http://127.0.0.1:62005/   │
+   │                                                    │
+   ╰────────────────────────────────────────────────────╯
+
+11:06:51 AM [vite] (client) ✨ new dependencies optimized: axe-core, msw/browser
+11:06:51 AM [vite] (client) ✨ optimized dependencies changed. reloading
+11:17:16 AM [vite] (client) page reload /Users/xiaochunliu/program/sutan/src/renderer/ui/screens/SettlementScreen.tsx
+11:17:16 AM [vite] (client) hmr update /@fs/Users/xiaochunliu/program/sutan/src/renderer/ui/components/dice/DiceBoxOverlay.tsx, /@fs/Users/xiaochunliu/program/sutan/.ladle/theme.css
+11:19:06 AM [vite] (client) page reload /Users/xiaochunliu/program/sutan/src/renderer/ui/screens/TitleScreen.tsx
+11:20:48 AM [vite] (client) page reload /Users/xiaochunliu/program/sutan/src/renderer/ui/screens/TitleScreen.tsx
+11:20:55 AM [vite] (client) page reload /Users/xiaochunliu/program/sutan/src/renderer/ui/screens/TitleScreen.tsx
+11:21:22 AM [vite] (client) page reload /Users/xiaochunliu/program/sutan/src/renderer/ui/screens/TitleScreen.tsx
+11:23:45 AM [vite] (client) page reload /Users/xiaochunliu/program/sutan/src/renderer/ui/screens/TitleScreen.tsx
+11:24:29 AM [vite] (client) hmr update /@fs/Users/xiaochunliu/program/sutan/src/renderer/ui/components/dice/DiceBoxOverlay.tsx, /@fs/Users/xiaochunliu/program/sutan/.ladle/theme.css
+11:24:29 AM [vite] (client) page reload /Users/xiaochunliu/program/sutan/src/renderer/ui/screens/SettlementScreen.tsx
+11:24:29 AM [vite] (client) page reload /Users/xiaochunliu/program/sutan/src/renderer/ui/screens/TitleScreen.tsx
+11:27:36 AM [vite] (client) hmr update /@fs/Users/xiaochunliu/program/sutan/src/renderer/ui/components/dice/DiceBoxOverlay.tsx, /@fs/Users/xiaochunliu/program/sutan/.ladle/theme.css
+11:29:01 AM [vite] (client) hmr update /@fs/Users/xiaochunliu/program/sutan/src/renderer/ui/components/dice/DiceBoxOverlay.tsx, /@fs/Users/xiaochunliu/program/sutan/.ladle/theme.css
+11:30:03 AM [vite] (client) page reload /Users/xiaochunliu/program/sutan/src/renderer/ui/screens/TitleScreen.tsx
+11:45:47 AM [vite] (client) hmr update /@fs/Users/xiaochunliu/program/sutan/src/renderer/ui/components/dice/DiceBoxOverlay.tsx, /@fs/Users/xiaochunliu/program/sutan/.ladle/theme.css
+11:46:33 AM [vite] (client) hmr update /@fs/Users/xiaochunliu/program/sutan/src/renderer/ui/components/dice/DiceBoxOverlay.tsx, /@fs/Users/xiaochunliu/program/sutan/.ladle/theme.css
+11:47:25 AM [vite] (client) hmr update /@fs/Users/xiaochunliu/program/sutan/src/renderer/ui/components/dice/DiceBoxOverlay.tsx, /@fs/Users/xiaochunliu/program/sutan/.ladle/theme.css
