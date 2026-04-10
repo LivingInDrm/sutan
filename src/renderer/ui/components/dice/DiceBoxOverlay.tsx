@@ -322,7 +322,7 @@ export function DiceBoxOverlay({
       <div className="relative flex h-full w-full items-center justify-center px-4 py-6">
         <div className="relative w-full max-w-6xl overflow-hidden rounded-[28px] border border-[#8a6d2b]/32 bg-[linear-gradient(180deg,rgba(20,12,8,0.92),rgba(12,8,6,0.98))] shadow-[0_34px_110px_rgba(0,0,0,0.58)]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,168,76,0.08),transparent_36%),radial-gradient(circle_at_bottom,rgba(139,26,26,0.08),transparent_30%)]" />
-          <div className="relative grid min-h-[78vh] grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)]">
+          <div className="relative grid min-h-[78vh] grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)]">
             <div
               className="relative overflow-hidden border-b border-[#8a6d2b]/20 lg:border-b-0 lg:border-r lg:border-r-[#8a6d2b]/20"
               style={{
@@ -336,9 +336,6 @@ export function DiceBoxOverlay({
                 <div>
                   <div className="text-[10px] tracking-[0.32em] text-[#8a6d2b]/80 font-(family-name:--font-ui)">案上命筹</div>
                   <h2 className="mt-3 text-[28px] tracking-[0.08em] text-[#1a0f0a] font-(family-name:--font-display)">骰子既出，命数自明</h2>
-                  <p className="mt-3 text-[14px] leading-[1.9] text-[#3d2418]/82 font-(family-name:--font-body)">
-                    以木案为场，以卷纸为批。三枚命骰滚落之前，先观判辞，再候其势，待骰面停定后收骰落印。
-                  </p>
                 </div>
                 <div className="py-5">
                   <DividerLine className="h-1 w-full text-[#8a6d2b]/24" preserveAspectRatio="none" />
