@@ -122,6 +122,7 @@ export function SettlementScreen() {
   const [isPendingReroll, setIsPendingReroll] = useState(false);
   const prevStageIdRef = useRef<string | null>(null);
   const prevSettlementNarrativeRef = useRef<string | null>(null);
+  const autoTriggeredStageIdRef = useRef<string | null>(null);
 
   const currentStageId = currentStagePlayback?.stageId ?? null;
 
@@ -165,6 +166,7 @@ export function SettlementScreen() {
       setDiceOverlaySession(0);
       prevStageIdRef.current = null;
       prevSettlementNarrativeRef.current = null;
+      autoTriggeredStageIdRef.current = null;
     }
   }, [isPlaying]);
 
@@ -305,6 +307,31 @@ export function SettlementScreen() {
     && hasSettlement
     && !currentStageSettlementResult
     && currentStagePlayback?.settlementConfig?.type === 'player_choice';
+
+  useEffect(() => {
+    if (!currentStageId || !isNarrativeComplete || currentStageSettlementResult || !hasSettlement) {
+      return;
+    }
+
+    if (currentStagePlayback?.settlementConfig?.type !== 'dice_check') {
+      autoTriggeredStageIdRef.current = null;
+      return;
+    }
+
+    if (autoTriggeredStageIdRef.current === currentStageId) {
+      return;
+    }
+
+    autoTriggeredStageIdRef.current = currentStageId;
+    handleExecuteSettlement();
+  }, [
+    currentStageId,
+    currentStagePlayback?.settlementConfig?.type,
+    currentStageSettlementResult,
+    handleExecuteSettlement,
+    hasSettlement,
+    isNarrativeComplete,
+  ]);
 
   const scene = settlement.currentRunner
     ? game?.sceneManager.getScene(settlement.currentRunner.sceneId)
