@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { CardSchema, SceneSchema, SaveDataSchema, EffectsSchema } from '@data/schemas';
+import {
+  CardSchema,
+  SceneSchema,
+  SaveDataSchema,
+  EffectsSchema,
+  RuntimeLocationSchema,
+  RuntimeMapSchema,
+  MapSchema,
+} from '@data/schemas';
 
 describe('T1.3: Zod Schema Validation', () => {
   describe('CardSchema', () => {
@@ -241,6 +249,75 @@ describe('T1.3: Zod Schema Validation', () => {
 
     it('should validate empty effects', () => {
       expect(() => EffectsSchema.parse({})).not.toThrow();
+    });
+  });
+
+  describe('Map schemas', () => {
+    it('should validate a runtime location with typed unlock conditions', () => {
+      const location = {
+        location_id: 'loc_001',
+        name: '太安城',
+        icon_image: 'loc.png',
+        scene_ids: ['scene_001'],
+        unlock_conditions: {
+          reputation_min: 10,
+          required_tags: ['capital'],
+        },
+      };
+
+      expect(() => RuntimeLocationSchema.parse(location)).not.toThrow();
+    });
+
+    it('should reject unknown unlock condition fields', () => {
+      const location = {
+        location_id: 'loc_001',
+        name: '太安城',
+        icon_image: 'loc.png',
+        scene_ids: ['scene_001'],
+        unlock_conditions: {
+          foo: 'bar',
+        },
+      };
+
+      expect(() => RuntimeLocationSchema.parse(location)).toThrow();
+    });
+
+    it('should validate assembled map config', () => {
+      const map = {
+        map_id: 'map_001',
+        name: '离阳',
+        description: '主地图',
+        background_image: 'map.png',
+        locations: [
+          {
+            location_id: 'loc_001',
+            name: '太安城',
+            icon_image: 'loc.png',
+            position: { x: 0.5, y: 0.5 },
+            scene_ids: ['scene_001'],
+            unlock_conditions: {},
+          },
+        ],
+      };
+
+      expect(() => MapSchema.parse(map)).not.toThrow();
+    });
+
+    it('should validate runtime map refs', () => {
+      const runtimeMap = {
+        map_id: 'map_001',
+        name: '离阳',
+        description: '主地图',
+        background_image: 'map.png',
+        location_refs: [
+          {
+            location_id: 'loc_001',
+            position: { x: 0.5, y: 0.5 },
+          },
+        ],
+      };
+
+      expect(() => RuntimeMapSchema.parse(runtimeMap)).not.toThrow();
     });
   });
 });

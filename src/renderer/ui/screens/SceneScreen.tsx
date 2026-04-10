@@ -26,8 +26,7 @@ const SLOT_TYPE_LABELS: Record<string, string> = {
 
 export function SceneScreen() {
   const game = useGameStore(s => s.game);
-  const syncState = useGameStore(s => s.syncState);
-  const handCardIds = useGameStore(s => s.handCardIds);
+  const handCardIds = useGameStore(s => s.handCardIds());
   const selectedSceneId = useUIStore(s => s.selectedSceneId);
   const selectedLocationId = useUIStore(s => s.selectedLocationId);
   const setScreen = useUIStore(s => s.setScreen);
@@ -79,7 +78,6 @@ export function SceneScreen() {
     const investedIds = Object.values(selectedCards);
     if (investedIds.length === 0) return;
     game.sceneManager.participateScene(selectedSceneId, investedIds);
-    syncState();
     setScreen(selectedLocationId ? 'location' : 'map');
   };
 

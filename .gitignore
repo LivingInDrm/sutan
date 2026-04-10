@@ -4,9 +4,12 @@ build/
 .vite/
 *.tsbuildinfo
 .DS_Store
+**/.DS_Store
 tmp/
 FantasyAsiaUI/
 scripts/samples/
+scripts/samples/**
 __pycache__/
+**/__pycache__/
 *.pyc
 tools/asset-manager/backend/.env

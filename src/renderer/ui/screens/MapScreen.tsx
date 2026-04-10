@@ -4,8 +4,8 @@ import { useUIStore } from '../../stores/uiStore';
 
 export function MapScreen() {
   const game = useGameStore(s => s.game);
-  const currentDay = useGameStore(s => s.currentDay);
-  const executionCountdown = useGameStore(s => s.executionCountdown);
+  const currentDay = useGameStore(s => s.currentDay());
+  const executionCountdown = useGameStore(s => s.executionCountdown());
   const beginSettlement = useGameStore(s => s.beginSettlement);
   const setScreen = useUIStore(s => s.setScreen);
   const selectScene = useUIStore(s => s.selectScene);

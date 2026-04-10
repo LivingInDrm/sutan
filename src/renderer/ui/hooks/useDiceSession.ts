@@ -18,7 +18,7 @@ type RerollStageResult = {
 interface UseDiceSessionOptions {
   isPlaying: boolean;
   checkConfig: DiceCheckState['config'] | null;
-  resultKey?: string | null;
+  resultKey?: CheckResult | null;
   getCurrentDiceCheckPreview: () => DicePreview | null;
   executeCurrentSettlement: (options?: {
     choiceIndex?: number;
@@ -138,14 +138,6 @@ export function useDiceSession({
     setDiceFlowPhase('roll');
   }, [rolledDice]);
 
-  const handleRerollComplete = useCallback(() => {
-    if (!rolledDice) {
-      return;
-    }
-
-    acceptResult(rolledDice, selectedGoldenDice);
-  }, [acceptResult, rolledDice, selectedGoldenDice]);
-
   const handleAcceptResult = useCallback(() => {
     if (!rolledDice) {
       return;
@@ -200,7 +192,6 @@ export function useDiceSession({
       startRoll,
       handleRollComplete,
       handleReroll,
-      handleRerollComplete,
       handleAcceptResult,
       handleDiceOverlayCancel,
       resetDiceSession,

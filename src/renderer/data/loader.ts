@@ -1,12 +1,21 @@
 import { z } from 'zod/v4';
-import { CardSchema, SceneSchema, MapSchema, RuntimeLocationSchema, RuntimeMapSchema } from './schemas';
+import {
+  CardSchema,
+  SceneSchema,
+  parseCard,
+  parseCardCollection,
+  parseMap,
+  parseRuntimeLocation,
+  parseRuntimeMap,
+  parseScene,
+} from './schemas';
 import type { Card, Scene, MapConfig, LocationConfig } from '../core/types';
 
 // Static imports for the split runtime map files (Phase-5)
 import locationsJson from './configs/maps/locations.json';
 import mapsJson from './configs/maps/maps.json';
 
-type SchemaType = typeof CardSchema | typeof SceneSchema | typeof MapSchema;
+type SchemaType = typeof CardSchema | typeof SceneSchema;
 
 const sceneModules = import.meta.glob<{ default: unknown }>(
   './configs/scenes/*.json',
@@ -42,7 +51,7 @@ class DataLoader {
     for (const [path, mod] of Object.entries(sceneModules)) {
       try {
         const data = (mod as { default: unknown }).default ?? mod;
-        const validated = SceneSchema.parse(data);
+        const validated = parseScene(data);
         scenes.push(validated as Scene);
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -73,16 +82,11 @@ class DataLoader {
     for (const [path, mod] of Object.entries(cardModules)) {
       try {
         const raw = (mod as { default: unknown }).default ?? mod;
-        // Support top-level array [ {...}, ... ] and wrapped { cards: [...] }
-        const items: unknown[] = Array.isArray(raw)
-          ? raw
-          : Array.isArray((raw as Record<string, unknown>)?.cards)
-          ? ((raw as Record<string, unknown>).cards as unknown[])
-          : [];
+        const items = parseCardCollection(raw);
 
         for (let i = 0; i < items.length; i++) {
           try {
-            const validated = CardSchema.parse(items[i]);
+            const validated = parseCard(items[i]);
             cards.push(validated as Card);
           } catch (error) {
             if (error instanceof z.ZodError) {
@@ -116,10 +120,10 @@ class DataLoader {
 
     // Validate and index locations by location_id
     const rawLocations = Array.isArray(locationsJson) ? locationsJson : [];
-    const locById = new Map<string, z.infer<typeof RuntimeLocationSchema>>();
+    const locById = new Map<string, ReturnType<typeof parseRuntimeLocation>>();
     for (let i = 0; i < rawLocations.length; i++) {
       try {
-        const loc = RuntimeLocationSchema.parse(rawLocations[i]);
+        const loc = parseRuntimeLocation(rawLocations[i]);
         locById.set(loc.location_id, loc);
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -136,7 +140,7 @@ class DataLoader {
     const mapsById = new Map<string, MapConfig>();
     for (let i = 0; i < rawMaps.length; i++) {
       try {
-        const runtimeMap = RuntimeMapSchema.parse(rawMaps[i]);
+        const runtimeMap = parseRuntimeMap(rawMaps[i]);
 
         // Join: for each location_ref, find location data and merge with position
         const locations: LocationConfig[] = runtimeMap.location_refs.map(ref => {
@@ -157,13 +161,13 @@ class DataLoader {
           };
         });
 
-        const mapConfig: MapConfig = {
+        const mapConfig = parseMap({
           map_id: runtimeMap.map_id,
           name: runtimeMap.name,
           description: runtimeMap.description,
           background_image: runtimeMap.background_image,
           locations,
-        };
+        });
 
         mapsById.set(mapConfig.map_id, mapConfig);
       } catch (error) {
@@ -206,7 +210,7 @@ class DataLoader {
     const results: unknown[] = [];
     for (let i = 0; i < data.length; i++) {
       try {
-          const validated = schema.parse(data[i]);
+          const validated = schema === CardSchema ? parseCard(data[i]) : parseScene(data[i]);
         results.push(validated);
       } catch (error) {
         if (error instanceof z.ZodError) {

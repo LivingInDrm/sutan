@@ -91,6 +91,15 @@ export class GameManager {
   get isGameOver(): boolean { return this._isGameOver; }
   get endReason(): GameEndReason | null { return this._endReason; }
   get difficulty(): string { return this._difficulty; }
+  get currentDay(): number { return this.timeManager.currentDay; }
+  get gold(): number { return this.playerState.gold; }
+  get reputation(): number { return this.playerState.reputation; }
+  get goldenDice(): number { return this.playerState.goldenDice; }
+  get rewindCharges(): number { return this.playerState.rewindCharges; }
+  get thinkCharges(): number { return this.playerState.thinkCharges; }
+  get executionCountdown(): number { return this.timeManager.executionCountdown; }
+  get phase() { return this.dayManager.phase; }
+  get handCardIds(): string[] { return this.cardManager.getCardIds(); }
   get runtimeState(): GameState {
     this.syncRuntimeState();
     return {

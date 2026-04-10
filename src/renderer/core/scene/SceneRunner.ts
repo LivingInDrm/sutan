@@ -4,6 +4,7 @@ import type {
 } from '../types';
 import { CheckResult } from '../types/enums';
 import { eventBus } from '../../lib/events';
+import { SceneManager } from './SceneManager';
 
 export class SceneRunner {
   private scene: Scene;
@@ -12,11 +13,13 @@ export class SceneRunner {
   private currentStageId: string | null = null;
   private _isComplete: boolean = false;
   private stageHistory: StageResult[] = [];
+  private sceneManager?: SceneManager;
 
-  constructor(scene: Scene, sceneState: SceneState) {
+  constructor(scene: Scene, sceneState: SceneState, sceneManager?: SceneManager) {
     this.scene = scene;
     this.sceneState = sceneState;
     this.stagesMap = new Map(scene.stages.map(s => [s.stage_id, s]));
+    this.sceneManager = sceneManager;
   }
 
   get sceneId(): string {
@@ -144,7 +147,11 @@ export class SceneRunner {
     }
 
     this.currentStageId = stageId;
-    this.sceneState.current_stage = stageId;
+    if (this.sceneManager) {
+      this.sceneManager.updateCurrentStage(this.scene.scene_id, stageId);
+    } else {
+      this.sceneState.current_stage = stageId;
+    }
 
     eventBus.emit('stage:start', { sceneId: this.scene.scene_id, stageId });
 

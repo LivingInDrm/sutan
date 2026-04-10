@@ -10,6 +10,10 @@ import { GamePhase, GameEndReason, CheckResult } from '../core/types/enums';
 import type { StageSettlementResult } from '../core/settlement/SettlementExecutor';
 import type { DiceRollResult } from '../core/types';
 
+const getGameSelectorValue = <T>(game: GameManager | null, selector: (game: GameManager) => T, fallback: T): T => (
+  game ? selector(game) : fallback
+);
+
 interface SettlementPlaybackState {
   isPlaying: boolean;
   pendingSceneIds: string[];
@@ -22,25 +26,24 @@ interface SettlementPlaybackState {
 
 interface GameStoreState {
   game: GameManager | null;
-  currentDay: number;
-  gold: number;
-  reputation: number;
-  goldenDice: number;
-  rewindCharges: number;
-  thinkCharges: number;
-  executionCountdown: number;
-  phase: GamePhase;
-  isGameOver: boolean;
-  endReason: GameEndReason | null;
-  handCardIds: string[];
   lastSettlementResults: SettlementResult[];
   settlement: SettlementPlaybackState;
+  currentDay: () => number;
+  gold: () => number;
+  reputation: () => number;
+  goldenDice: () => number;
+  rewindCharges: () => number;
+  thinkCharges: () => number;
+  executionCountdown: () => number;
+  phase: () => GamePhase;
+  isGameOver: () => boolean;
+  endReason: () => GameEndReason | null;
+  handCardIds: () => string[];
 }
 
 interface GameStoreActions {
   startNewGame: (difficulty: string, cards: Card[], scenes: Scene[], seed?: string) => void;
   nextDay: () => SettlementResult[];
-  syncState: () => void;
   save: () => SaveData | null;
   exportSave: () => string | null;
   load: (save: SaveData, allCards: Card[], allScenes: Scene[]) => void;
@@ -82,19 +85,19 @@ const initialSettlement: SettlementPlaybackState = {
 
 const initialState: GameStoreState = {
   game: null,
-  currentDay: 1,
-  gold: 0,
-  reputation: 50,
-  goldenDice: 0,
-  rewindCharges: 3,
-  thinkCharges: 3,
-  executionCountdown: 14,
-  phase: GamePhase.Dawn,
-  isGameOver: false,
-  endReason: null,
-  handCardIds: [],
   lastSettlementResults: [],
   settlement: { ...initialSettlement },
+  currentDay: () => getGameSelectorValue(useGameStore.getState().game, game => game.currentDay, 1),
+  gold: () => getGameSelectorValue(useGameStore.getState().game, game => game.gold, 0),
+  reputation: () => getGameSelectorValue(useGameStore.getState().game, game => game.reputation, 50),
+  goldenDice: () => getGameSelectorValue(useGameStore.getState().game, game => game.goldenDice, 0),
+  rewindCharges: () => getGameSelectorValue(useGameStore.getState().game, game => game.rewindCharges, 3),
+  thinkCharges: () => getGameSelectorValue(useGameStore.getState().game, game => game.thinkCharges, 3),
+  executionCountdown: () => getGameSelectorValue(useGameStore.getState().game, game => game.executionCountdown, 14),
+  phase: () => getGameSelectorValue(useGameStore.getState().game, game => game.phase, GamePhase.Dawn),
+  isGameOver: () => getGameSelectorValue(useGameStore.getState().game, game => game.isGameOver, false),
+  endReason: () => getGameSelectorValue(useGameStore.getState().game, game => game.endReason, null),
+  handCardIds: () => getGameSelectorValue(useGameStore.getState().game, game => game.handCardIds, []),
 };
 
 export const useGameStore = create<GameStore>()((set, get) => ({
@@ -104,7 +107,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const game = new GameManager(gameContentProvider, difficulty, seed);
     game.startNewGame(cards, scenes);
     set({ game });
-    get().syncState();
   },
 
   nextDay: () => {
@@ -112,7 +114,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (!game) return [];
     const results = game.nextDay();
     set({ lastSettlementResults: results });
-    get().syncState();
     return results;
   },
 
@@ -132,7 +133,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       });
       game.dayManager.endDay();
       game.checkGameEnd();
-      get().syncState();
       return;
     }
 
@@ -151,7 +151,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
         completedResults: [],
       },
     });
-    get().syncState();
   },
 
   advanceNarrative: () => {
@@ -170,7 +169,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
           const sceneState = runner ? game.sceneManager.getSceneState(runner.sceneId) : null;
           const investedCards = sceneState?.invested_cards || [];
           game.settlementExecutor.applyEffects(node.effects, investedCards);
-          get().syncState();
         }
       }
       set({
@@ -215,7 +213,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       const sceneState = game.sceneManager.getSceneState(runner.sceneId);
       const investedCards = sceneState?.invested_cards || [];
       game.settlementExecutor.applyEffects(effects, investedCards);
-      get().syncState();
     }
 
     if (settlement.currentStagePlayback) {
@@ -270,7 +267,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
         currentStageSettlementResult: result,
       },
     });
-    get().syncState();
   },
 
   executeCurrentSettlementWithDice: (dice, options) => {
@@ -307,7 +303,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
         currentStageSettlementResult: result,
       },
     });
-    get().syncState();
   },
 
   getCurrentDiceCheckPreview: () => {
@@ -420,25 +415,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       lastSettlementResults: settlement.completedResults,
       settlement: { ...initialSettlement },
     });
-    get().syncState();
-  },
-
-  syncState: () => {
-    const { game } = get();
-    if (!game) return;
-    set({
-      currentDay: game.timeManager.currentDay,
-      gold: game.playerState.gold,
-      reputation: game.playerState.reputation,
-      goldenDice: game.playerState.goldenDice,
-      rewindCharges: game.playerState.rewindCharges,
-      thinkCharges: game.playerState.thinkCharges,
-      executionCountdown: game.timeManager.executionCountdown,
-      phase: game.dayManager.phase,
-      isGameOver: game.isGameOver,
-      endReason: game.endReason,
-      handCardIds: game.cardManager.getCardIds(),
-    });
   },
 
   save: () => {
@@ -457,14 +433,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const game = new GameManager(gameContentProvider);
     game.loadSave(save, allCards, allScenes);
     set({ game });
-    get().syncState();
   },
 
   importSave: (saveJson, allCards, allScenes) => {
     const game = new GameManager(gameContentProvider);
     game.importSave(saveJson, allCards, allScenes);
     set({ game });
-    get().syncState();
   },
 
   reset: () => {

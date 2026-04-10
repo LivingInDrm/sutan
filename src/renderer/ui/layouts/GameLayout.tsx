@@ -7,7 +7,7 @@ import type { Card } from '../../core/types';
 
 export function GameLayout({ children }: { children: React.ReactNode }) {
   const game = useGameStore(s => s.game);
-  const handCardIds = useGameStore(s => s.handCardIds);
+  const handCardIds = useGameStore(s => s.handCardIds());
   const currentScreen = useUIStore(s => s.currentScreen);
 
   const allCards: Card[] = game

@@ -161,6 +161,8 @@ export interface UnlockConditions {
   day_range?: [number, number];
 }
 
+export type UnlockCondition = UnlockConditions;
+
 export interface AbsencePenalty {
   effects: Effects;
   narrative: string;
@@ -195,7 +197,7 @@ export interface LocationConfig {
   backdrop_image?: string;
   position: { x: number; y: number };
   scene_ids: string[];
-  unlock_conditions: Record<string, unknown>;
+  unlock_conditions: UnlockCondition;
 }
 
 export interface MapConfig {

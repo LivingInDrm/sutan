@@ -34,14 +34,14 @@ describe('useDiceSession', () => {
     expect(hook.result.current.dicePreview?.dc).toBe(10);
   });
 
-  it('moves to post-roll then accepts result', () => {
+  it('accepts immediately when reroll is unavailable', () => {
     const executeCurrentSettlementWithDice = vi.fn();
     const hook = renderHook(() =>
       useDiceSession({
         isPlaying: true,
         checkConfig,
         resultKey: CheckResult.Success,
-        getCurrentDiceCheckPreview: () => ({ modifier: 1, dc: 9, goldenDice: 0, rerollAvailable: 1 }),
+        getCurrentDiceCheckPreview: () => ({ modifier: 1, dc: 9, goldenDice: 0, rerollAvailable: 0 }),
         executeCurrentSettlement: vi.fn(),
         executeCurrentSettlementWithDice,
         rerollCurrentSettlementDice: vi.fn(),
@@ -53,13 +53,31 @@ describe('useDiceSession', () => {
       hook.result.current.actions.handleRollComplete({ dice: [3, 3, 3] });
     });
 
-    expect(hook.result.current.diceFlowPhase).toBe('post-roll');
-
-    act(() => {
-      hook.result.current.actions.handleAcceptResult();
-    });
-
     expect(executeCurrentSettlementWithDice).toHaveBeenCalledWith([3, 3, 3], { goldenDiceUsed: 0 });
     expect(hook.result.current.showDiceOverlay).toBe(false);
+  });
+
+  it('moves to post-roll when reroll is available after preview is loaded', () => {
+    const hook = renderHook(() =>
+      useDiceSession({
+        isPlaying: true,
+        checkConfig,
+        resultKey: CheckResult.Success,
+        getCurrentDiceCheckPreview: () => ({ modifier: 1, dc: 9, goldenDice: 0, rerollAvailable: 1 }),
+        executeCurrentSettlement: vi.fn(),
+        executeCurrentSettlementWithDice: vi.fn(),
+        rerollCurrentSettlementDice: vi.fn(),
+      }),
+    );
+
+    act(() => {
+      hook.result.current.actions.startRoll();
+    });
+
+    act(() => {
+      hook.result.current.actions.handleRollComplete({ dice: [3, 3, 3] });
+    });
+
+    expect(hook.result.current.diceFlowPhase).toBe('post-roll');
   });
 });

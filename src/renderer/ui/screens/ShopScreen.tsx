@@ -4,7 +4,7 @@ import { useGameStore } from '../../stores/gameStore';
 
 export function ShopScreen() {
   const setScreen = useUIStore(s => s.setScreen);
-  const gold = useGameStore(s => s.gold);
+  const gold = useGameStore(s => s.gold());
 
   return (
     <div className="h-full flex">
