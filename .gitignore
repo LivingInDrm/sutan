@@ -13,3 +13,6 @@ __pycache__/
 **/__pycache__/
 *.pyc
 tools/asset-manager/backend/.env
+
+# 小说原文参考（版权文件不提交）
+scripts/reference/
