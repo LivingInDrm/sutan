@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { GameManager } from '../core/game/GameManager';
 import { SceneRunner } from '../core/scene/SceneRunner';
-import { gameContentProvider } from '../app/bootstrap';
+import { createGameFacade } from '../app/gameFacade';
 import type {
   Card, Scene, SaveData, SettlementResult, StagePlayback,
-  NarrativeNode, Effects,
+  Effects,
 } from '../core/types';
-import { GamePhase, GameEndReason, CheckResult } from '../core/types/enums';
+import { GamePhase, GameEndReason } from '../core/types/enums';
 import type { StageSettlementResult } from '../core/settlement/SettlementExecutor';
 import type { DiceRollResult } from '../core/types';
 
@@ -14,7 +14,7 @@ const getGameSelectorValue = <T>(game: GameManager | null, selector: (game: Game
   game ? selector(game) : fallback
 );
 
-interface SettlementPlaybackState {
+export interface SettlementPlaybackState {
   isPlaying: boolean;
   pendingSceneIds: string[];
   currentRunner: SceneRunner | null;
@@ -24,7 +24,7 @@ interface SettlementPlaybackState {
   completedResults: SettlementResult[];
 }
 
-interface GameStoreState {
+export interface GameStoreState {
   game: GameManager | null;
   lastSettlementResults: SettlementResult[];
   settlement: SettlementPlaybackState;
@@ -72,9 +72,9 @@ interface GameStoreActions {
   finishAllSettlement: () => void;
 }
 
-type GameStore = GameStoreState & GameStoreActions;
+export type GameStore = GameStoreState & GameStoreActions;
 
-const initialSettlement: SettlementPlaybackState = {
+export const initialSettlement: SettlementPlaybackState = {
   isPlaying: false,
   pendingSceneIds: [],
   currentRunner: null,
@@ -101,15 +101,16 @@ const initialState: GameStoreState = {
   handCardIds: [],
 };
 
-export const useGameStore = create<GameStore>()((set, get) => ({
+export const useGameStore = create<GameStore>()((set, get) => {
+  const facade = createGameFacade(
+    (partial) => set(partial as Partial<GameStore>),
+    get,
+  );
+
+  return ({
   ...initialState,
 
-  startNewGame: (difficulty, cards, scenes, seed) => {
-    const game = new GameManager(gameContentProvider, difficulty, seed);
-    game.startNewGame(cards, scenes);
-    set({ game });
-    get().refreshDerivedState();
-  },
+  startNewGame: facade.startNewGame,
 
   nextDay: () => {
     const { game } = get();
@@ -120,199 +121,15 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     return results;
   },
 
-  beginSettlement: () => {
-    const { game } = get();
-    if (!game) return;
+  beginSettlement: facade.beginSettlement,
 
-    const { pendingSceneIds } = game.dayManager.beginSettlement();
+  advanceNarrative: facade.advanceNarrative,
 
-    if (pendingSceneIds.length === 0) {
-      set({
-        lastSettlementResults: [],
-        settlement: {
-          ...initialSettlement,
-          completedResults: [],
-        },
-      });
-      game.dayManager.endDay();
-      game.checkGameEnd();
-      get().refreshDerivedState();
-      return;
-    }
+  handleNarrativeChoice: facade.handleNarrativeChoice,
 
-    const firstSceneId = pendingSceneIds[0];
-    const runner = game.createSceneRunner(firstSceneId);
-    const playback = runner?.start() ?? null;
+  executeCurrentSettlement: facade.executeCurrentSettlement,
 
-    set({
-      settlement: {
-        isPlaying: true,
-        pendingSceneIds: pendingSceneIds.slice(1),
-        currentRunner: runner,
-        currentStagePlayback: playback,
-        narrativeIndex: 0,
-        currentStageSettlementResult: null,
-        completedResults: [],
-      },
-    });
-    get().refreshDerivedState();
-  },
-
-  advanceNarrative: () => {
-    const { settlement } = get();
-    if (!settlement.currentStagePlayback) return;
-
-    const nextIndex = settlement.narrativeIndex + 1;
-    const narrative = settlement.currentStagePlayback.narrative;
-
-    if (nextIndex < narrative.length) {
-      const node = narrative[nextIndex];
-      if (node.type === 'effect') {
-        const { game } = get();
-        if (game) {
-          const runner = settlement.currentRunner;
-          const sceneState = runner ? game.sceneManager.getSceneState(runner.sceneId) : null;
-          const investedCards = sceneState?.invested_cards || [];
-          game.settlementExecutor.applyEffects(node.effects, investedCards);
-          get().refreshDerivedState();
-        }
-      }
-      set({
-        settlement: { ...settlement, narrativeIndex: nextIndex },
-      });
-    } else {
-      if (settlement.currentStagePlayback.hasSettlement) {
-        set({
-          settlement: {
-            ...settlement,
-            narrativeIndex: nextIndex,
-          },
-        });
-      } else {
-        const runner = settlement.currentRunner;
-        if (runner) {
-          runner.recordStageNarrative(narrative);
-          const nextPlayback = runner.advanceAfterNarrativeOnly();
-          if (nextPlayback) {
-            set({
-              settlement: {
-                ...settlement,
-                currentStagePlayback: nextPlayback,
-                narrativeIndex: 0,
-                currentStageSettlementResult: null,
-              },
-            });
-          } else {
-            get().finishCurrentScene();
-          }
-        }
-      }
-    }
-  },
-
-  handleNarrativeChoice: (nextStageId, effects) => {
-    const { settlement, game } = get();
-    const runner = settlement.currentRunner;
-    if (!runner || !game) return;
-
-    if (effects) {
-      const sceneState = game.sceneManager.getSceneState(runner.sceneId);
-      const investedCards = sceneState?.invested_cards || [];
-      game.settlementExecutor.applyEffects(effects, investedCards);
-      get().refreshDerivedState();
-    }
-
-    if (settlement.currentStagePlayback) {
-      runner.recordStageNarrative(settlement.currentStagePlayback.narrative);
-    }
-
-    const nextPlayback = runner.advanceByChoice(nextStageId);
-    if (nextPlayback) {
-      set({
-        settlement: {
-          ...settlement,
-          currentStagePlayback: nextPlayback,
-          narrativeIndex: 0,
-          currentStageSettlementResult: null,
-        },
-      });
-    } else {
-      get().finishCurrentScene();
-    }
-  },
-
-  executeCurrentSettlement: (options) => {
-    const { settlement, game } = get();
-    const runner = settlement.currentRunner;
-    const playback = settlement.currentStagePlayback;
-    if (!runner || !playback || !game) return;
-
-    const result = game.settlementExecutor.executeStageSettlement(
-      runner.sceneId,
-      playback.stageId,
-      options,
-    );
-
-    if (result) {
-      runner.recordStageNarrative(playback.narrative);
-      runner.recordStageSettlement(
-        result.type,
-        result.result_key,
-        result.effects_applied,
-        result.dice_check_state,
-        result.next_stage,
-      );
-
-      if (result.result_key) {
-        game.sceneManager.recordStageResult(runner.sceneId, playback.stageId, result.result_key);
-      }
-    }
-
-    set({
-      settlement: {
-        ...settlement,
-        currentStageSettlementResult: result,
-      },
-    });
-    get().refreshDerivedState();
-  },
-
-  executeCurrentSettlementWithDice: (dice, options) => {
-    const { settlement, game } = get();
-    const runner = settlement.currentRunner;
-    const playback = settlement.currentStagePlayback;
-    if (!runner || !playback || !game) return;
-
-    const result = game.settlementExecutor.executeDiceCheckWithValues(
-      runner.sceneId,
-      playback.stageId,
-      dice,
-      options,
-    );
-
-    if (result) {
-      runner.recordStageNarrative(playback.narrative);
-      runner.recordStageSettlement(
-        result.type,
-        result.result_key,
-        result.effects_applied,
-        result.dice_check_state,
-        result.next_stage,
-      );
-
-      if (result.result_key) {
-        game.sceneManager.recordStageResult(runner.sceneId, playback.stageId, result.result_key);
-      }
-    }
-
-    set({
-      settlement: {
-        ...settlement,
-        currentStageSettlementResult: result,
-      },
-    });
-    get().refreshDerivedState();
-  },
+  executeCurrentSettlementWithDice: facade.executeCurrentSettlementWithDice,
 
   getCurrentDiceCheckPreview: () => {
     const { settlement, game } = get();
@@ -323,109 +140,11 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     return game.settlementExecutor.getDiceInteractionPreview(runner.sceneId, playback.stageId);
   },
 
-  rerollCurrentSettlementDice: (baseDice, options) => {
-    const { settlement, game } = get();
-    const runner = settlement.currentRunner;
-    const playback = settlement.currentStagePlayback;
-    if (!runner || !playback || !game) return null;
+  rerollCurrentSettlementDice: facade.rerollCurrentSettlementDice,
 
-    return game.settlementExecutor.rerollDiceCheck(
-      runner.sceneId,
-      playback.stageId,
-      baseDice,
-      options,
-    );
-  },
-
-  advanceAfterSettlement: () => {
-    const { settlement } = get();
-    const runner = settlement.currentRunner;
-    const stageResult = settlement.currentStageSettlementResult;
-    if (!runner) return;
-
-    let nextPlayback = null;
-    if (stageResult?.next_stage) {
-      nextPlayback = runner.advanceByChoice(stageResult.next_stage);
-    } else if (stageResult?.result_key) {
-      nextPlayback = runner.advanceAfterSettlement(stageResult.result_key);
-    } else {
-      nextPlayback = runner.advanceAfterNarrativeOnly();
-    }
-
-    if (nextPlayback) {
-      set({
-        settlement: {
-          ...settlement,
-          currentStagePlayback: nextPlayback,
-          narrativeIndex: 0,
-          currentStageSettlementResult: null,
-        },
-      });
-    } else {
-      get().finishCurrentScene();
-    }
-  },
-
-  finishCurrentScene: () => {
-    const { settlement, game } = get();
-    const runner = settlement.currentRunner;
-    if (!runner || !game) return;
-
-    game.sceneManager.completeScene(runner.sceneId);
-
-    const sceneResult: SettlementResult = {
-      scene_id: runner.sceneId,
-      settlement_type: settlement.currentStageSettlementResult?.type || 'dice_check',
-      result_key: settlement.currentStageSettlementResult?.result_key,
-      effects_applied: settlement.currentStageSettlementResult?.effects_applied || {},
-      narrative: settlement.currentStageSettlementResult?.narrative || '',
-      dice_check_state: settlement.currentStageSettlementResult?.dice_check_state,
-      all_stage_results: runner.allStageResults,
-    };
-
-    const newCompleted = [...settlement.completedResults, sceneResult];
-
-    if (settlement.pendingSceneIds.length > 0) {
-      const nextSceneId = settlement.pendingSceneIds[0];
-      const nextRunner = game.createSceneRunner(nextSceneId);
-      const nextPlayback = nextRunner?.start() ?? null;
-
-      set({
-        settlement: {
-          isPlaying: true,
-          pendingSceneIds: settlement.pendingSceneIds.slice(1),
-          currentRunner: nextRunner,
-          currentStagePlayback: nextPlayback,
-          narrativeIndex: 0,
-          currentStageSettlementResult: null,
-          completedResults: newCompleted,
-        },
-      });
-    } else {
-      set({
-        settlement: {
-          ...initialSettlement,
-          completedResults: newCompleted,
-        },
-        lastSettlementResults: newCompleted,
-      });
-      get().finishAllSettlement();
-    }
-  },
-
-  finishAllSettlement: () => {
-    const { game, settlement } = get();
-    if (!game) return;
-
-    game.dayManager.endDay();
-    game.checkGameEnd();
-
-    set({
-      lastSettlementResults: settlement.completedResults,
-      settlement: { ...initialSettlement },
-    });
-    get().refreshDerivedState();
-  },
+  advanceAfterSettlement: facade.advanceAfterSettlement,
+  finishCurrentScene: facade.finishCurrentScene,
+  finishAllSettlement: facade.finishAllSettlement,
 
   refreshDerivedState: () => {
     const { game } = get();
@@ -456,22 +175,12 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     return game.exportSave();
   },
 
-  load: (save, allCards, allScenes) => {
-    const game = new GameManager(gameContentProvider);
-    game.loadSave(save, allCards, allScenes);
-    set({ game });
-    get().refreshDerivedState();
-  },
-
-  importSave: (saveJson, allCards, allScenes) => {
-    const game = new GameManager(gameContentProvider);
-    game.importSave(saveJson, allCards, allScenes);
-    set({ game });
-    get().refreshDerivedState();
-  },
+  load: facade.load,
+  importSave: facade.importSave,
 
   reset: () => {
     set({ ...initialState, settlement: { ...initialSettlement } });
   },
-}));
+  });
+});
 
