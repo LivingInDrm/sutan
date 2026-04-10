@@ -140,7 +140,7 @@ export class GameManager {
     const scene = this.sceneManager.getScene(sceneId);
     const sceneState = this.sceneManager.getSceneState(sceneId);
     if (!scene || !sceneState) return null;
-    return new SceneRunner(scene, sceneState);
+    return new SceneRunner(scene, sceneState, this.sceneManager);
   }
 
   rewindDay(): boolean {

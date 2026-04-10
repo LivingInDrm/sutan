@@ -28,17 +28,17 @@ interface GameStoreState {
   game: GameManager | null;
   lastSettlementResults: SettlementResult[];
   settlement: SettlementPlaybackState;
-  currentDay: () => number;
-  gold: () => number;
-  reputation: () => number;
-  goldenDice: () => number;
-  rewindCharges: () => number;
-  thinkCharges: () => number;
-  executionCountdown: () => number;
-  phase: () => GamePhase;
-  isGameOver: () => boolean;
-  endReason: () => GameEndReason | null;
-  handCardIds: () => string[];
+  readonly currentDay: number;
+  readonly gold: number;
+  readonly reputation: number;
+  readonly goldenDice: number;
+  readonly rewindCharges: number;
+  readonly thinkCharges: number;
+  readonly executionCountdown: number;
+  readonly phase: GamePhase;
+  readonly isGameOver: boolean;
+  readonly endReason: GameEndReason | null;
+  readonly handCardIds: string[];
 }
 
 interface GameStoreActions {
@@ -87,17 +87,17 @@ const initialState: GameStoreState = {
   game: null,
   lastSettlementResults: [],
   settlement: { ...initialSettlement },
-  currentDay: () => getGameSelectorValue(useGameStore.getState().game, game => game.currentDay, 1),
-  gold: () => getGameSelectorValue(useGameStore.getState().game, game => game.gold, 0),
-  reputation: () => getGameSelectorValue(useGameStore.getState().game, game => game.reputation, 50),
-  goldenDice: () => getGameSelectorValue(useGameStore.getState().game, game => game.goldenDice, 0),
-  rewindCharges: () => getGameSelectorValue(useGameStore.getState().game, game => game.rewindCharges, 3),
-  thinkCharges: () => getGameSelectorValue(useGameStore.getState().game, game => game.thinkCharges, 3),
-  executionCountdown: () => getGameSelectorValue(useGameStore.getState().game, game => game.executionCountdown, 14),
-  phase: () => getGameSelectorValue(useGameStore.getState().game, game => game.phase, GamePhase.Dawn),
-  isGameOver: () => getGameSelectorValue(useGameStore.getState().game, game => game.isGameOver, false),
-  endReason: () => getGameSelectorValue(useGameStore.getState().game, game => game.endReason, null),
-  handCardIds: () => getGameSelectorValue(useGameStore.getState().game, game => game.handCardIds, []),
+  get currentDay() { return getGameSelectorValue(useGameStore.getState().game, game => game.currentDay, 1); },
+  get gold() { return getGameSelectorValue(useGameStore.getState().game, game => game.gold, 0); },
+  get reputation() { return getGameSelectorValue(useGameStore.getState().game, game => game.reputation, 50); },
+  get goldenDice() { return getGameSelectorValue(useGameStore.getState().game, game => game.goldenDice, 0); },
+  get rewindCharges() { return getGameSelectorValue(useGameStore.getState().game, game => game.rewindCharges, 3); },
+  get thinkCharges() { return getGameSelectorValue(useGameStore.getState().game, game => game.thinkCharges, 3); },
+  get executionCountdown() { return getGameSelectorValue(useGameStore.getState().game, game => game.executionCountdown, 14); },
+  get phase() { return getGameSelectorValue(useGameStore.getState().game, game => game.phase, GamePhase.Dawn); },
+  get isGameOver() { return getGameSelectorValue(useGameStore.getState().game, game => game.isGameOver, false); },
+  get endReason() { return getGameSelectorValue(useGameStore.getState().game, game => game.endReason, null); },
+  get handCardIds() { return getGameSelectorValue(useGameStore.getState().game, game => game.handCardIds, []); },
 };
 
 export const useGameStore = create<GameStore>()((set, get) => ({

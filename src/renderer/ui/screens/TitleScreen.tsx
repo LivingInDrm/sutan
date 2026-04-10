@@ -34,7 +34,6 @@ export function TitleScreen() {
       const runner = currentGame?.createSceneRunner('scene_006');
       runner?.start();
       const playback = runner?.advanceByChoice('path_a_mockery') ?? null;
-      gameStore.syncState();
       useGameStore.setState({
         settlement: {
           isPlaying: true,

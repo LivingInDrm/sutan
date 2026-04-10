@@ -182,7 +182,7 @@ export const UnlockConditionSchema = z.object({
   required_cards: z.array(z.string()).optional(),
   required_items: z.array(z.string()).optional(),
   day_range: z.tuple([z.number().int(), z.number().int()]).optional(),
-});
+}).strict();
 
 const AbsencePenaltySchema = z.object({
   effects: EffectsSchema,

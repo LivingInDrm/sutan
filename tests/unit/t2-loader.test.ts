@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { DataLoader } from '@data/loader';
+import type { MapConfig } from '@core/types';
 
 describe('T2.1: DataLoader', () => {
   it('should load valid cards', async () => {
@@ -73,5 +74,18 @@ describe('T2.1: DataLoader', () => {
       },
     ]);
     expect(scenes).toHaveLength(1);
+  });
+
+  it('should assemble maps from split runtime files', () => {
+    const loader = new DataLoader();
+    const firstMap = loader.getFirstMap() as MapConfig;
+
+    expect(firstMap).toBeDefined();
+    expect(firstMap.map_id).toBeTruthy();
+    expect(firstMap.locations.length).toBeGreaterThan(0);
+    expect(firstMap.locations[0].position).toHaveProperty('x');
+    expect(firstMap.locations[0].unlock_conditions).toEqual(
+      expect.any(Object),
+    );
   });
 });

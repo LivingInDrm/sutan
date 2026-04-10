@@ -26,7 +26,7 @@ const SLOT_TYPE_LABELS: Record<string, string> = {
 
 export function SceneScreen() {
   const game = useGameStore(s => s.game);
-  const handCardIds = useGameStore(s => s.handCardIds());
+  const handCardIds = useGameStore(s => s.handCardIds);
   const selectedSceneId = useUIStore(s => s.selectedSceneId);
   const selectedLocationId = useUIStore(s => s.selectedLocationId);
   const setScreen = useUIStore(s => s.setScreen);

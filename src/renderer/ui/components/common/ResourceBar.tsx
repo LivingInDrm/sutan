@@ -5,12 +5,12 @@ import { gameContentProvider } from '../../../app/bootstrap';
 import { Button } from './Button';
 
 export function ResourceBar() {
-  const gold = useGameStore(s => s.gold());
-  const reputation = useGameStore(s => s.reputation());
-  const executionCountdown = useGameStore(s => s.executionCountdown());
-  const goldenDice = useGameStore(s => s.goldenDice());
-  const thinkCharges = useGameStore(s => s.thinkCharges());
-  const currentDay = useGameStore(s => s.currentDay());
+  const gold = useGameStore(s => s.gold);
+  const reputation = useGameStore(s => s.reputation);
+  const executionCountdown = useGameStore(s => s.executionCountdown);
+  const goldenDice = useGameStore(s => s.goldenDice);
+  const thinkCharges = useGameStore(s => s.thinkCharges);
+  const currentDay = useGameStore(s => s.currentDay);
   const beginSettlement = useGameStore(s => s.beginSettlement);
   const currentScreen = useUIStore(s => s.currentScreen);
   const setScreen = useUIStore(s => s.setScreen);
