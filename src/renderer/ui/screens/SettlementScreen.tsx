@@ -114,7 +114,7 @@ export function SettlementScreen() {
   const [historyNodes, setHistoryNodes] = useState<NarrativeNode[]>([]);
   const [showDiceOverlay, setShowDiceOverlay] = useState(false);
   const [dicePreview, setDicePreview] = useState<{ modifier: number; dc: number; goldenDice: number; rerollAvailable: number } | null>(null);
-  const [diceFlowPhase, setDiceFlowPhase] = useState<'pre-roll' | 'roll' | 'post-roll' | 'result'>('pre-roll');
+  const [diceFlowPhase, setDiceFlowPhase] = useState<'roll' | 'post-roll' | 'result'>('roll');
   const [selectedGoldenDice, setSelectedGoldenDice] = useState(0);
   const [rolledDice, setRolledDice] = useState<[number, number, number] | null>(null);
   const [rerollResult, setRerollResult] = useState<ReturnType<typeof rerollCurrentSettlementDice>>(null);
@@ -157,7 +157,7 @@ export function SettlementScreen() {
       setHistoryNodes([]);
       setShowDiceOverlay(false);
       setDicePreview(null);
-      setDiceFlowPhase('pre-roll');
+      setDiceFlowPhase('roll');
       setSelectedGoldenDice(0);
       setRolledDice(null);
       setRerollResult(null);
@@ -180,7 +180,7 @@ export function SettlementScreen() {
       setRolledDice(null);
       setRerollResult(null);
       setIsPendingReroll(false);
-      setDiceFlowPhase(preview.goldenDice > 0 ? 'pre-roll' : 'roll');
+      setDiceFlowPhase('roll');
       setDiceOverlaySession(1);
       setShowDiceOverlay(true);
       return;
@@ -244,7 +244,7 @@ export function SettlementScreen() {
     console.log('[SettlementScreen] handleDiceOverlayCancel');
     setShowDiceOverlay(false);
     setDicePreview(null);
-    setDiceFlowPhase('pre-roll');
+    setDiceFlowPhase('roll');
     setSelectedGoldenDice(0);
     setRolledDice(null);
     setRerollResult(null);
@@ -284,12 +284,6 @@ export function SettlementScreen() {
 
     return `${ATTR_LABELS[checkConfig.attribute] || checkConfig.attribute}鉴定`;
   }, [currentStagePlayback?.settlementConfig]);
-
-  const handleConfirmGoldenDice = useCallback(() => {
-    setIsPendingReroll(false);
-    setDiceOverlaySession(value => value + 1);
-    setDiceFlowPhase('roll');
-  }, []);
 
   const handleConfirmReroll = useCallback(() => {
     if (!rolledDice) {
@@ -376,56 +370,6 @@ export function SettlementScreen() {
       )}
       {showDiceOverlay && (
         <>
-          {diceFlowPhase === 'pre-roll' && dicePreview ? (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/82 backdrop-blur-sm px-4 py-4 sm:px-6">
-              <Panel variant="dark" title="命骰判定" className="flex max-h-[min(92vh,760px)] w-full max-w-xl flex-col overflow-hidden rounded-[24px] border-[#8a6d2b]/35 bg-[linear-gradient(180deg,rgba(20,12,8,0.94),rgba(12,8,6,0.98))]">
-                <div className="flex flex-1 flex-col gap-4 p-1">
-                  <div className="rounded-[16px] border border-gold-300/18 bg-[linear-gradient(180deg,rgba(201,168,76,0.08),rgba(26,15,10,0.3))] p-4 text-parchment-100">
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <div className="text-[18px] tracking-[0.04em] text-parchment-100 font-(family-name:--font-display)">
-                        {diceCheckAttributeLabel}
-                      </div>
-                      <div className="text-[15px] text-gold font-(family-name:--font-display)">
-                        修正 {dicePreview.modifier >= 0 ? '+' : '-'}{Math.abs(dicePreview.modifier)}
-                        {selectedGoldenDice > 0 ? ` +${selectedGoldenDice}` : ''}
-                      </div>
-                    </div>
-                    <div className="mt-3 flex items-center justify-between rounded-[12px] bg-black/18 px-3 py-2 text-sm font-(family-name:--font-body)">
-                      <span className="text-gold-dim">难度 DC</span>
-                      <span className="text-lg text-gold">{dicePreview.dc}</span>
-                    </div>
-                  </div>
-
-                  {dicePreview.goldenDice > 0 ? (
-                    <div className="rounded-[16px] border border-gold-300/14 bg-ink-light/20 p-4">
-                      <div className="mb-2 flex items-center justify-between gap-3">
-                        <div className="text-[10px] tracking-[0.24em] text-gold-300/72 font-(family-name:--font-ui)">金骰选择</div>
-                        <div className="text-sm text-gold-dim font-(family-name:--font-body)">可用 {dicePreview.goldenDice}</div>
-                      </div>
-                      <div className="mb-3 text-[15px] text-parchment-100 font-(family-name:--font-display)">使用金骰：{selectedGoldenDice}</div>
-                      <div className="flex items-center gap-3">
-                        <Button variant="secondary" size="sm" onClick={() => setSelectedGoldenDice(value => Math.max(0, value - 1))}>减一枚</Button>
-                        <input
-                          type="range"
-                          min={0}
-                          max={dicePreview.goldenDice}
-                          value={selectedGoldenDice}
-                          onChange={(event) => setSelectedGoldenDice(Number(event.target.value))}
-                          className="flex-1 accent-gold"
-                        />
-                        <Button variant="secondary" size="sm" onClick={() => setSelectedGoldenDice(value => Math.min(dicePreview.goldenDice, value + 1))}>添一枚</Button>
-                      </div>
-                    </div>
-                  ) : null}
-
-                  <div className="mt-auto flex justify-end gap-3 pt-2">
-                    <Button variant="ghost" size="sm" onClick={handleDiceOverlayCancel}>退卷</Button>
-                    <Button variant="primary" size="sm" glow onClick={handleConfirmGoldenDice}>掷骰子</Button>
-                  </div>
-                </div>
-              </Panel>
-            </div>
-          ) : null}
           {(diceFlowPhase === 'roll' || diceFlowPhase === 'post-roll') && (
             <DiceBoxOverlay
               key={diceOverlaySession}
@@ -433,6 +377,12 @@ export function SettlementScreen() {
               onComplete={handleDiceOverlayComplete}
               onCancel={handleDiceOverlayCancel}
               visible={showDiceOverlay && diceFlowPhase === 'roll'}
+              checkTitle={diceCheckAttributeLabel}
+              checkModifier={dicePreview?.modifier ?? 0}
+              checkDc={dicePreview?.dc}
+              availableGoldenDice={dicePreview?.goldenDice ?? 0}
+              selectedGoldenDice={selectedGoldenDice}
+              onGoldenDiceChange={setSelectedGoldenDice}
               resultSummaryText={dicePreview ? `3d6 ${(dicePreview.modifier + selectedGoldenDice) >= 0 ? '+' : '-'} ${Math.abs(dicePreview.modifier + selectedGoldenDice)} vs DC ${dicePreview.dc}` : null}
             />
           )}

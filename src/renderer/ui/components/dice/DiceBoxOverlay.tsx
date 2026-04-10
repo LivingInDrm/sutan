@@ -11,6 +11,12 @@ interface DiceBoxOverlayProps {
   onCancel?: () => void;
   fallbackSeed?: string;
   visible: boolean;
+  checkTitle?: string | null;
+  checkModifier?: number;
+  checkDc?: number;
+  availableGoldenDice?: number;
+  selectedGoldenDice?: number;
+  onGoldenDiceChange?: (value: number) => void;
   resultSummaryText?: string | null;
   resultLabelText?: string | null;
   onPhaseChange?: (phase: DicePhase) => void;
@@ -30,13 +36,6 @@ type DiceBoxInstance = {
 };
 
 const INIT_TIMEOUT_MS = 5000;
-
-function createFallbackRoll(seed?: string): { dice: [number, number, number] } {
-  const rng = new RandomManager(seed);
-  return {
-    dice: [rng.rollD6(), rng.rollD6(), rng.rollD6()],
-  };
-}
 
 function extractRollValues(results: unknown): number[] {
   if (!Array.isArray(results)) {
@@ -67,8 +66,13 @@ function extractRollValues(results: unknown): number[] {
 export function DiceBoxOverlay({
   onComplete,
   onCancel,
-  fallbackSeed,
   visible,
+  checkTitle,
+  checkModifier = 0,
+  checkDc,
+  availableGoldenDice = 0,
+  selectedGoldenDice = 0,
+  onGoldenDiceChange,
   resultSummaryText,
   resultLabelText,
   onPhaseChange,
@@ -273,6 +277,9 @@ export function DiceBoxOverlay({
 
   const handleTableClick = useCallback(() => {
     if (phase === 'ready') {
+      if (availableGoldenDice > 0 && selectedGoldenDice > availableGoldenDice) {
+        return;
+      }
       clearTimers();
       void playRollSequence();
       return;
@@ -281,7 +288,7 @@ export function DiceBoxOverlay({
     if (phase === 'finished') {
       confirmOverlay();
     }
-  }, [clearTimers, confirmOverlay, phase, playRollSequence]);
+  }, [availableGoldenDice, clearTimers, confirmOverlay, phase, playRollSequence, selectedGoldenDice]);
 
   const headerText = useMemo(() => {
     if (phase === 'rolling') {
@@ -302,6 +309,11 @@ export function DiceBoxOverlay({
     }
     return `结果：${displayResult.dice.join(' + ')} = ${displayResult.dice.reduce((sum, value) => sum + value, 0)}`;
   }, [displayResult, resultSummaryText]);
+
+  const modifierText = useMemo(() => {
+    const totalModifier = checkModifier + selectedGoldenDice;
+    return `${totalModifier >= 0 ? '+' : '-'}${Math.abs(totalModifier)}`;
+  }, [checkModifier, selectedGoldenDice]);
 
   const footerText = useMemo(() => {
     if (phase === 'rolling') {
@@ -342,11 +354,60 @@ export function DiceBoxOverlay({
                 </div>
                 <div className="space-y-4">
                   <div className="rounded-[16px] border border-[#8a6d2b]/24 bg-[rgba(255,248,235,0.38)] px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <div className="text-[10px] tracking-[0.24em] text-[#8a6d2b]/75 font-(family-name:--font-ui)">判定</div>
+                        <div className="mt-2 text-[18px] leading-[1.5] text-[#1a0f0a] font-(family-name:--font-display)">
+                          {checkTitle ?? '命骰判定'}
+                        </div>
+                      </div>
+                      {typeof checkDc === 'number' ? (
+                        <div className="rounded-[12px] border border-[#8a6d2b]/16 bg-[rgba(118,89,42,0.08)] px-3 py-2 text-right">
+                          <div className="text-[10px] tracking-[0.2em] text-[#8a6d2b]/72 font-(family-name:--font-ui)">DC</div>
+                          <div className="mt-1 text-[22px] text-[#1a0f0a] font-(family-name:--font-display)">{checkDc}</div>
+                        </div>
+                      ) : null}
+                    </div>
+                    <div className="mt-3 flex items-center justify-between rounded-[12px] bg-[rgba(118,89,42,0.08)] px-3 py-2 text-[13px] text-[#3d2418]/82 font-(family-name:--font-body)">
+                      <span>修正值</span>
+                      <span className="text-[16px] text-[#1a0f0a] font-(family-name:--font-display)">{modifierText}</span>
+                    </div>
+                  </div>
+                  <div className="rounded-[16px] border border-[#8a6d2b]/24 bg-[rgba(255,248,235,0.38)] px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
                     <div className="text-[10px] tracking-[0.24em] text-[#8a6d2b]/75 font-(family-name:--font-ui)">判辞</div>
                     <div className="mt-2 text-[14px] leading-[1.8] text-[#1a0f0a] font-(family-name:--font-body)">
                       {resolvedSummaryText ?? '三枚六面命骰落案，以总数对应卷中定下的门槛。'}
                     </div>
                   </div>
+                  {availableGoldenDice > 0 ? (
+                    <div className="rounded-[16px] border border-[#8a6d2b]/20 bg-[rgba(118,89,42,0.08)] px-4 py-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <div className="text-[10px] tracking-[0.24em] text-[#8a6d2b]/75 font-(family-name:--font-ui)">金骰加注</div>
+                          <div className="mt-2 text-[16px] text-[#1a0f0a] font-(family-name:--font-display)">已用 {selectedGoldenDice} / {availableGoldenDice}</div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => onGoldenDiceChange?.(Math.max(0, selectedGoldenDice - 1))}
+                          >
+                            -
+                          </Button>
+                          <div className="min-w-[2rem] text-center text-[18px] text-[#1a0f0a] font-(family-name:--font-display)">
+                            {selectedGoldenDice}
+                          </div>
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={() => onGoldenDiceChange?.(Math.min(availableGoldenDice, selectedGoldenDice + 1))}
+                          >
+                            +
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
                   <div className="rounded-[16px] border border-[#8a6d2b]/20 bg-[rgba(118,89,42,0.08)] px-4 py-4">
                     <div className="text-[10px] tracking-[0.24em] text-[#8a6d2b]/75 font-(family-name:--font-ui)">此刻状态</div>
                     <div className="mt-3 text-[18px] tracking-[0.06em] text-[#1a0f0a] font-(family-name:--font-display)">
