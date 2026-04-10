@@ -1,153 +1,91 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
-import { getUiAssetUrl } from '../../../lib/assetPaths';
+import React from 'react';
+import bronzeTexture from '../../../assets/textures/bronze-512.webp';
+import ricePaperTexture from '../../../assets/textures/rice-paper-1024.webp';
 import { BookLayout } from '../../layouts/BookLayout';
 
 interface EventSettlementFrameProps {
   leftContent: React.ReactNode;
   rightContent: React.ReactNode;
   rightTitle?: string;
-  backgroundAssetId?: string;
-}
-
-interface ImageBounds {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
+  backgroundImageUrl?: string;
+  leftFooterContent?: React.ReactNode;
 }
 
 export function EventSettlementFrame({
   leftContent,
   rightContent,
   rightTitle,
-  backgroundAssetId = 'ui_004',
+  backgroundImageUrl,
+  leftFooterContent,
 }: EventSettlementFrameProps) {
-  const bgUrl = getUiAssetUrl(backgroundAssetId);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-  const [imageBounds, setImageBounds] = useState<ImageBounds | null>(null);
-
-  /**
-   * Recalculate the actual pixel area that the background image occupies
-   * inside the container when rendered with `object-contain`.
-   *
-   * object-contain letterboxes/pillarboxes the image to preserve aspect ratio.
-   * The content overlay must match this exact area — not the full container —
-   * so that all content stays inside the decorative ink border.
-   */
-  const computeImageBounds = useCallback(() => {
-    const container = containerRef.current;
-    const img = imgRef.current;
-    if (!container || !img || !img.naturalWidth || !img.naturalHeight) return;
-
-    const cw = container.clientWidth;
-    const ch = container.clientHeight;
-    const imgAspect = img.naturalWidth / img.naturalHeight;
-    const containerAspect = cw / ch;
-
-    let w: number, h: number, left: number, top: number;
-    if (imgAspect > containerAspect) {
-      // Image wider than container: letterboxed (blank bars top & bottom)
-      w = cw;
-      h = cw / imgAspect;
-      left = 0;
-      top = (ch - h) / 2;
-    } else {
-      // Image taller than container: pillarboxed (blank bars left & right)
-      h = ch;
-      w = ch * imgAspect;
-      left = (cw - w) / 2;
-      top = 0;
-    }
-
-    setImageBounds({ left, top, width: w, height: h });
-  }, []);
-
-  // Re-measure whenever the container is resized (e.g. window resize)
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    const ro = new ResizeObserver(computeImageBounds);
-    ro.observe(container);
-    return () => ro.disconnect();
-  }, [computeImageBounds]);
-
-  if (!bgUrl) {
-    return (
-      <BookLayout
-        leftContent={leftContent}
-        rightContent={rightContent}
-        rightTitle={rightTitle}
-      />
-    );
-  }
-
   return (
-    /* Outer centering shell — lets the dark game background show around the panel */
-    <div className="h-full w-full flex items-center justify-center p-4">
+    <div className="h-full flex flex-col overflow-hidden">
+      <div className="flex-1 flex overflow-hidden min-h-0">
+        <div className="w-1/2 relative overflow-hidden shrink-0 flex flex-col">
+          {backgroundImageUrl ? (
+            <img
+              src={backgroundImageUrl}
+              alt=""
+              aria-hidden
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          ) : (
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url(${bronzeTexture})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            />
+          )}
 
-      {/* Settlement panel — slightly larger than before to use more screen real estate */}
-      <div ref={containerRef} className="relative w-[95%] h-[92%]">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60 pointer-events-none" />
+          <div className="absolute inset-0 bg-black/25 pointer-events-none" />
 
-        {/* Background image — object-contain keeps the decorative border fully visible */}
-        <img
-          ref={imgRef}
-          src={bgUrl}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none"
-          onLoad={computeImageBounds}
-        />
-
-        {/*
-          Content overlay — absolutely positioned to match the EXACT pixel bounds
-          of the rendered image (not the full container). This ensures no content
-          ever escapes the decorative ink border, even after window resize.
-        */}
-        {imageBounds && (
-          <div
-            className="absolute z-10 overflow-hidden"
-            style={{
-              left: imageBounds.left,
-              top: imageBounds.top,
-              width: imageBounds.width,
-              height: imageBounds.height,
-            }}
-          >
-            {/* Inner padding keeps text/cards away from the ink border */}
-            <div className="flex w-full h-full px-[8%] py-[10%]">
-
-              {/* Left panel — transparent, background image shows through */}
-              <div className="w-1/2 h-full overflow-auto relative rounded-sm">
-                <div className="relative h-full flex flex-col p-3">
-                  {leftContent}
-                </div>
+          <div className="relative z-10 flex h-full min-h-0 flex-col">
+            <div className={`min-h-0 flex-1 overflow-y-auto px-6 ${leftFooterContent ? 'pt-6 pb-3' : 'py-6'}`}>
+              {leftContent}
+            </div>
+            {leftFooterContent && (
+              <div className="shrink-0 px-6 pb-6 pt-3">
+                {leftFooterContent}
               </div>
+            )}
+          </div>
+        </div>
 
-              {/* Vertical divider */}
-              <div className="w-px bg-amber-700/30 shrink-0 mx-1" />
+        <div
+          className="w-1/2 flex flex-col overflow-hidden relative"
+          style={{
+            backgroundImage: `url(${ricePaperTexture})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(232,220,200,0.88),rgba(199,182,148,0.78))] pointer-events-none" />
+          <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-gold-500/34 to-transparent pointer-events-none" />
 
-              {/* Right panel — transparent, background image shows through */}
-              <div className="w-1/2 h-full overflow-hidden relative flex flex-col rounded-sm">
-
-                {rightTitle && (
-                  <div className="shrink-0 pt-4 px-5 pb-2">
-                    <h2 className="text-center text-sm font-bold text-amber-950 font-(family-name:--font-display) tracking-widest">
-                      {rightTitle}
-                    </h2>
-                    <div className="mt-2 h-px bg-amber-700/40" />
-                  </div>
-                )}
-
-                <div className={`flex-1 overflow-auto px-5 ${rightTitle ? 'pb-4' : 'py-4'}`}>
-                  {rightContent}
+          <div className="relative z-10 flex flex-col h-full overflow-hidden">
+            {rightTitle && (
+              <div className="px-7 pt-7 pb-4 shrink-0">
+                <div className="mb-2 flex items-center justify-center gap-3">
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold-500/35 to-gold-500/10" />
+                  <span className="text-[10px] tracking-[0.26em] text-gold-500/72 font-(family-name:--font-ui)">卷中题签</span>
+                  <div className="h-px flex-1 bg-gradient-to-l from-transparent via-gold-500/35 to-gold-500/10" />
                 </div>
+                <h2 className="text-center text-[18px] font-bold text-[#1a0f0a] font-(family-name:--font-display) tracking-[0.1em]">
+                  {rightTitle}
+                </h2>
+                <div className="mt-3 h-px bg-gradient-to-r from-transparent via-amber-700/40 to-transparent" />
               </div>
+            )}
 
+            <div className={`relative z-10 flex-1 overflow-hidden ${rightTitle ? 'px-7 pb-5' : 'px-7 py-5'}`}>
+              {rightContent}
             </div>
           </div>
-        )}
-
+        </div>
       </div>
     </div>
   );

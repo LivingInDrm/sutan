@@ -47,6 +47,46 @@ export class DiceChecker {
     };
   }
 
+  rollDiceWithValues(
+    dice: number[],
+    explodedDice: number[] = [],
+    rerollAvailable: number = 0
+  ): DiceRollResult {
+    const normalizedDice = dice.slice(0, DICE_CONFIG.MAX_POOL);
+    const normalizedExplodedDice = explodedDice.slice(0, DICE_CONFIG.MAX_EXPLODE);
+    const allDice = [...normalizedDice, ...normalizedExplodedDice];
+    const successes = allDice.filter(d => d >= DICE_CONFIG.SUCCESS_THRESHOLD).length;
+
+    return {
+      dice: normalizedDice,
+      exploded_dice: normalizedExplodedDice,
+      all_dice: allDice,
+      successes,
+      reroll_available: rerollAvailable,
+    };
+  }
+
+  performFullCheckWithValues(
+    dice: number[],
+    explodedDice: number[],
+    config: DiceCheckConfig,
+    rerollAvailable: number = 0,
+    goldenDiceUsed: number = 0
+  ): DiceCheckState {
+    const initialRoll = this.rollDiceWithValues(dice, explodedDice, rerollAvailable);
+    const finalSuccesses = this.applyGoldenDice(initialRoll.successes, goldenDiceUsed);
+    const result = this.determineResult(finalSuccesses, config.target);
+
+    return {
+      config,
+      pool_size: initialRoll.dice.length,
+      initial_roll: initialRoll,
+      golden_dice_used: goldenDiceUsed,
+      final_successes: finalSuccesses,
+      result,
+    };
+  }
+
   reroll(rollResult: DiceRollResult, indicesToReroll: number[]): DiceRollResult {
     const maxRerolls = rollResult.reroll_available;
     const validIndices = indicesToReroll.slice(0, maxRerolls);
@@ -97,6 +137,33 @@ export class DiceChecker {
   ): DiceCheckState {
     const initialRoll = this.rollDice(poolSize, rerollAvailable);
 
+    let afterReroll: DiceRollResult | undefined;
+    if (rerollIndices && rerollIndices.length > 0) {
+      afterReroll = this.reroll(initialRoll, rerollIndices);
+    }
+
+    const currentRoll = afterReroll || initialRoll;
+    const finalSuccesses = this.applyGoldenDice(currentRoll.successes, goldenDiceUsed);
+    const result = this.determineResult(finalSuccesses, config.target);
+
+    return {
+      config,
+      pool_size: poolSize,
+      initial_roll: initialRoll,
+      after_reroll: afterReroll,
+      golden_dice_used: goldenDiceUsed,
+      final_successes: finalSuccesses,
+      result,
+    };
+  }
+
+  performFullCheckFromRoll(
+    poolSize: number,
+    config: DiceCheckConfig,
+    initialRoll: DiceRollResult,
+    rerollIndices?: number[],
+    goldenDiceUsed: number = 0
+  ): DiceCheckState {
     let afterReroll: DiceRollResult | undefined;
     if (rerollIndices && rerollIndices.length > 0) {
       afterReroll = this.reroll(initialRoll, rerollIndices);

@@ -1,7 +1,7 @@
 import type {
   Card, Scene, Settlement, SettlementResult, DiceCheckState,
   DiceCheckSettlement, TradeSettlement, ChoiceSettlement, PlayerChoiceSettlement,
-  Stage, Effects,
+  Stage, Effects, DiceRollResult,
 } from '../types';
 import { CheckResult, SpecialAttribute } from '../types/enums';
 import { DiceChecker } from './DiceChecker';
@@ -63,7 +63,7 @@ export class SettlementExecutor {
   executeStageSettlement(
     sceneId: string,
     stageId: string,
-    options?: { rerollIndices?: number[]; goldenDiceUsed?: number; choiceIndex?: number }
+    options?: { rerollIndices?: number[]; goldenDiceUsed?: number; choiceIndex?: number; externalRoll?: DiceRollResult }
   ): StageSettlementResult | null {
     const scene = this.sceneManager.getScene(sceneId);
     const sceneState = this.sceneManager.getSceneState(sceneId);
@@ -182,7 +182,7 @@ export class SettlementExecutor {
     scene: Scene,
     settlement: DiceCheckSettlement,
     investedCardIds: string[],
-    options?: { rerollIndices?: number[]; goldenDiceUsed?: number }
+    options?: { rerollIndices?: number[]; goldenDiceUsed?: number; externalRoll?: DiceRollResult }
   ): StageSettlementResult {
     const cards = investedCardIds
       .map(id => this.cardManager.getCard(id))
@@ -213,10 +213,18 @@ export class SettlementExecutor {
     }
     poolSize = Math.min(poolSize, 20);
 
-    const diceState = this.diceChecker.performFullCheck(
+    const initialRoll = options?.externalRoll
+      ? this.diceChecker.rollDiceWithValues(
+          options.externalRoll.dice,
+          options.externalRoll.exploded_dice,
+          totalReroll
+        )
+      : this.diceChecker.rollDice(poolSize, totalReroll);
+
+    const diceState = this.diceChecker.performFullCheckFromRoll(
       poolSize,
       settlement.check,
-      totalReroll,
+      initialRoll,
       options?.rerollIndices,
       options?.goldenDiceUsed ?? 0
     );
@@ -241,6 +249,106 @@ export class SettlementExecutor {
       narrative: resultBranch.narrative,
       dice_check_state: diceState,
     };
+  }
+
+  executeDiceCheckWithValues(
+    sceneId: string,
+    stageId: string,
+    dice: number[],
+    explodedDice: number[],
+    options?: { goldenDiceUsed?: number }
+  ): StageSettlementResult | null {
+    const scene = this.sceneManager.getScene(sceneId);
+    const sceneState = this.sceneManager.getSceneState(sceneId);
+    if (!scene || !sceneState) return null;
+
+    const stage = scene.stages.find(s => s.stage_id === stageId);
+    if (!stage || !stage.settlement || stage.settlement.type !== 'dice_check') return null;
+
+    const settlement = stage.settlement;
+    const investedCardIds = sceneState.invested_cards;
+    const cards = investedCardIds
+      .map(id => this.cardManager.getCard(id))
+      .filter((c): c is CardInstance => c !== undefined && c.isCharacter);
+
+    let totalReroll = 0;
+    for (const card of cards) {
+      totalReroll += card.getSpecialAttributeValue(SpecialAttribute.Reroll);
+      totalReroll += this.equipmentSystem.getSpecialBonus(card.id, SpecialAttribute.Reroll);
+    }
+
+    const diceState = this.diceChecker.performFullCheckWithValues(
+      dice,
+      explodedDice,
+      settlement.check,
+      totalReroll,
+      options?.goldenDiceUsed ?? 0
+    );
+
+    if (options?.goldenDiceUsed) {
+      this.playerState.useGoldenDice(options.goldenDiceUsed);
+    }
+
+    const resultBranch = settlement.results[diceState.result];
+    this.effectApplier.apply(resultBranch.effects, investedCardIds);
+
+    eventBus.emit('stage:settle', {
+      sceneId,
+      stageId,
+      result: diceState.result,
+    });
+
+    return {
+      type: 'dice_check',
+      result_key: diceState.result,
+      effects_applied: resultBranch.effects,
+      narrative: resultBranch.narrative,
+      dice_check_state: diceState,
+    };
+  }
+
+  getDiceCheckPreview(
+    sceneId: string,
+    stageId: string
+  ): { poolSize: number; rerollAvailable: number } | null {
+    const scene = this.sceneManager.getScene(sceneId);
+    const sceneState = this.sceneManager.getSceneState(sceneId);
+    if (!scene || !sceneState) return null;
+
+    const stage = scene.stages.find(s => s.stage_id === stageId);
+    if (!stage || !stage.settlement || stage.settlement.type !== 'dice_check') return null;
+
+    const settlement = stage.settlement;
+    const investedCardIds = sceneState.invested_cards;
+    const cards = investedCardIds
+      .map(id => this.cardManager.getCard(id))
+      .filter((c): c is CardInstance => c !== undefined && c.isCharacter);
+
+    let poolSize = calcCheckPool(cards, settlement.check.attribute, settlement.check.calc_mode);
+
+    for (const card of cards) {
+      poolSize += this.equipmentSystem.getAttributeBonus(card.id, settlement.check.attribute);
+    }
+
+    const itemCards = investedCardIds
+      .map(id => this.cardManager.getCard(id))
+      .filter((c): c is CardInstance => c !== undefined && !c.isCharacter);
+    for (const item of itemCards) {
+      const bonus = item.data.attribute_bonus;
+      if (bonus) {
+        poolSize += bonus[settlement.check.attribute as keyof typeof bonus] || 0;
+      }
+    }
+
+    poolSize = Math.min(poolSize, 20);
+
+    let rerollAvailable = 0;
+    for (const card of cards) {
+      rerollAvailable += card.getSpecialAttributeValue(SpecialAttribute.Reroll);
+      rerollAvailable += this.equipmentSystem.getSpecialBonus(card.id, SpecialAttribute.Reroll);
+    }
+
+    return { poolSize, rerollAvailable };
   }
 
   private executeTrade(

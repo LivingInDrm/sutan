@@ -31,34 +31,66 @@ function getSceneStatusLabel(
   }
 }
 
-const STATUS_CONFIG: Record<SceneStatusLabel, { label: string; color: string; bgColor: string; borderColor: string; clickable: boolean }> = {
+const STATUS_CONFIG: Record<SceneStatusLabel, {
+  label: string;
+  titleColor: string;
+  accentLine: string;
+  badgeClassName: string;
+  clickable: boolean;
+  cardTone: string;
+  cardStyle: React.CSSProperties;
+}> = {
   available: {
     label: '可参与',
-    color: 'text-amber-300',
-    bgColor: 'bg-amber-900/20 hover:bg-amber-900/35',
-    borderColor: 'border-amber-600/40 hover:border-amber-400/60',
+    titleColor: 'text-leather-900',
+    accentLine: 'rgba(139,26,26,0.52)',
+    badgeClassName: 'border-crimson-700/35 bg-[linear-gradient(180deg,rgba(150,126,90,0.24),rgba(108,72,42,0.18))] text-crimson-700',
     clickable: true,
+    cardTone: 'available',
+    cardStyle: {
+      borderColor: 'rgba(106,80,32,0.58)',
+      background: 'linear-gradient(180deg, rgba(239,230,209,0.98), rgba(223,209,181,0.96))',
+      boxShadow: '0 12px 26px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(245,240,232,0.26)',
+    },
   },
   participated: {
     label: '进行中',
-    color: 'text-cerulean-300',
-    bgColor: 'bg-cerulean-900/10',
-    borderColor: 'border-cerulean-500/30',
+    titleColor: 'text-leather-900',
+    accentLine: 'rgba(45,85,85,0.44)',
+    badgeClassName: 'border-cerulean-500/30 bg-[linear-gradient(180deg,rgba(78,106,104,0.12),rgba(52,78,76,0.16))] text-cerulean-500',
     clickable: false,
+    cardTone: 'participated',
+    cardStyle: {
+      borderColor: 'rgba(110,96,67,0.48)',
+      background: 'linear-gradient(180deg, rgba(227,220,203,0.95), rgba(204,194,171,0.93))',
+      boxShadow: '0 10px 22px rgba(0,0,0,0.16), inset 0 0 0 1px rgba(245,240,232,0.16)',
+    },
   },
   completed: {
     label: '已完成',
-    color: 'text-bamboo-300',
-    bgColor: 'bg-bamboo-900/20',
-    borderColor: 'border-bamboo-700/30',
+    titleColor: 'text-leather-900',
+    accentLine: 'rgba(90,122,58,0.42)',
+    badgeClassName: 'border-bamboo-700/30 bg-[linear-gradient(180deg,rgba(109,129,80,0.12),rgba(76,98,56,0.18))] text-bamboo-500',
     clickable: false,
+    cardTone: 'completed',
+    cardStyle: {
+      borderColor: 'rgba(106,96,67,0.46)',
+      background: 'linear-gradient(180deg, rgba(226,219,199,0.94), rgba(202,194,171,0.92))',
+      boxShadow: '0 10px 22px rgba(0,0,0,0.16), inset 0 0 0 1px rgba(245,240,232,0.14)',
+    },
   },
   locked: {
     label: '未解锁',
-    color: 'text-parchment/30',
-    bgColor: 'bg-leather-950/35 grayscale',
-    borderColor: 'border-leather-700/20',
+    titleColor: 'text-parchment-400/70',
+    accentLine: 'rgba(80,54,40,0.32)',
+    badgeClassName: 'border-leather-500/28 bg-[linear-gradient(180deg,rgba(58,37,28,0.48),rgba(35,21,16,0.68))] text-parchment-500/72',
     clickable: false,
+    cardTone: 'locked',
+    cardStyle: {
+      borderColor: 'rgba(80,54,40,0.54)',
+      background: 'linear-gradient(180deg, rgba(66,42,32,0.92), rgba(36,22,17,0.97))',
+      boxShadow: '0 8px 18px rgba(0,0,0,0.26), inset 0 0 0 1px rgba(196,181,148,0.06)',
+    },
   },
 };
 
@@ -121,6 +153,8 @@ export function LocationScreen() {
     <div
       className="h-full flex flex-col relative overflow-hidden"
     >
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top,rgba(14,8,6,0.08),rgba(14,8,6,0.34)_52%,rgba(14,8,6,0.58)_100%)]" />
+      <div className="absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(12,7,5,0.28)_0%,rgba(12,7,5,0.18)_24%,rgba(12,7,5,0.52)_100%)]" />
       {/* Backdrop background image */}
       {location.backdrop_image && (
         <div
@@ -133,37 +167,48 @@ export function LocationScreen() {
         />
       )}
       {/* Header */}
-      <div className="relative z-10 shrink-0 px-6 pt-6 pb-4 border-b border-amber-900/30 bg-black/30 backdrop-blur-sm">
+      <div className="relative z-10 shrink-0 px-6 pt-5 pb-4">
+        <div className="mx-auto max-w-4xl overflow-hidden rounded-xl border border-gold-500/20 bg-[linear-gradient(180deg,rgba(21,12,8,0.62),rgba(13,8,6,0.34))] shadow-[0_8px_32px_rgba(0,0,0,0.24)] backdrop-blur-[2px]">
+          <div className="h-px bg-gradient-to-r from-transparent via-gold-300/55 to-transparent" />
+          <div className="px-6 pt-5 pb-4">
         <button
           onClick={navigateToWorldMap}
-          className="flex items-center gap-1.5 text-xs text-amber-400/60 hover:text-amber-400/90
-                     transition-colors mb-4"
+          className="mb-4 inline-flex items-center gap-2 text-[11px] tracking-[0.16em] text-parchment-300/70 transition-colors hover:text-gold-100 font-(family-name:--font-ui)"
         >
           <span>←</span>
-          <span>返回北凉道大地图</span>
+          <span>归返北凉舆图</span>
         </button>
 
         <h1
-          className="text-3xl font-bold text-amber-400 tracking-widest mb-1 font-(family-name:--font-display)"
-          style={{ textShadow: '0 0 20px rgba(217,119,6,0.5)' }}
+          className="mb-2 text-[36px] font-bold text-gold-300 tracking-[0.08em] font-(family-name:--font-display)"
+          style={{ textShadow: '0 0 20px rgba(201,168,76,0.22)' }}
         >
           {location.name}
         </h1>
 
-        {hasAvailable ? (
-          <p className="text-xs text-amber-300/60 mt-1">选择一个剧情参与</p>
-        ) : (
-          <p className="text-xs text-parchment/40 mt-1">此地暂无可参与的剧情</p>
-        )}
+            <div className="mb-3 flex items-center gap-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-gold-500/0 via-gold-500/35 to-gold-500/10" />
+              <span className="text-[10px] tracking-[0.28em] text-gold-400/75 font-(family-name:--font-ui)">地卷目录</span>
+              <div className="h-px flex-1 bg-gradient-to-l from-gold-500/0 via-gold-500/35 to-gold-500/10" />
+            </div>
+
+            {hasAvailable ? (
+              <p className="text-[14px] leading-[1.7] text-parchment-200/76 font-(family-name:--font-body)">此地风波未歇，可拣一卷先看。</p>
+            ) : (
+              <p className="text-[14px] leading-[1.7] text-parchment-400/70 font-(family-name:--font-body)">此地卷册暂静，暂无可即刻落笔之事。</p>
+            )}
+          </div>
+          <div className="h-px bg-gradient-to-r from-transparent via-gold-500/25 to-transparent" />
+        </div>
       </div>
 
       {/* Scene List */}
-      <div className="relative z-10 flex-1 overflow-y-auto px-6 py-5">
+      <div className="relative z-10 flex-1 overflow-y-auto px-6 pb-6 pt-3">
         {sceneEntries.length === 0 && (
-          <div className="text-center text-parchment/40 py-12">此地暂无剧情</div>
+          <div className="mx-auto mt-8 max-w-3xl rounded-xl border border-gold-500/20 bg-[linear-gradient(180deg,rgba(234,224,205,0.9),rgba(206,188,154,0.88))] px-8 py-10 text-center text-leather-700/78 shadow-[0_8px_24px_rgba(0,0,0,0.18)] font-(family-name:--font-body)">此地暂无卷宗待阅。</div>
         )}
 
-        <div className="flex flex-col gap-3 max-w-2xl mx-auto">
+        <div className="mx-auto flex max-w-4xl flex-col gap-4">
           {sceneEntries.map(({ scene, sceneId, status }) => {
             const cfg = STATUS_CONFIG[status];
             return (
@@ -196,73 +241,90 @@ function SceneCard({
   config: typeof STATUS_CONFIG[SceneStatusLabel];
   onSelect: () => void;
 }) {
+  const isLocked = status === 'locked';
+  const isAvailable = status === 'available';
+  const unlockHints = getUnlockHint(scene);
+
   const content = (
     <div
-      className={`w-full text-left p-4 rounded-lg border transition-all duration-200
-                  ${config.bgColor} ${config.borderColor}
-                  ${config.clickable ? 'cursor-pointer' : 'cursor-default'}`}
+      className={`group relative w-full overflow-hidden border transition-all duration-200 ${
+        config.clickable
+          ? 'cursor-pointer hover:-translate-y-1'
+          : 'cursor-default'
+      }`}
+      style={{
+        borderRadius: isLocked ? '14px 10px 12px 8px' : '10px 14px 12px 9px',
+        filter: isLocked ? 'grayscale(0.18) saturate(0.72) brightness(0.84)' : 'none',
+        ...config.cardStyle,
+      }}
       onClick={config.clickable ? onSelect : undefined}
       role={config.clickable ? 'button' : undefined}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="absolute inset-0 pointer-events-none opacity-[0.24]" style={{ backgroundImage: 'radial-gradient(rgba(122,88,48,0.18) 0.8px, transparent 0.8px)', backgroundSize: '12px 12px' }} />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.16]" style={{ backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.24) 0%, transparent 32%, rgba(80,54,40,0.12) 100%)' }} />
+      <div className="absolute left-4 right-4 top-[14px] h-px pointer-events-none" style={{ background: `linear-gradient(90deg, transparent, ${config.accentLine}, transparent)` }} />
+      <div className="absolute bottom-[10px] left-6 right-6 h-px pointer-events-none bg-[linear-gradient(90deg,rgba(106,80,32,0.04),rgba(106,80,32,0.34),rgba(106,80,32,0.04))]" />
+      <div className="absolute inset-y-5 left-4 w-px pointer-events-none bg-[linear-gradient(180deg,rgba(106,80,32,0.04),rgba(106,80,32,0.42),rgba(106,80,32,0.04))]" />
+      <div className="absolute right-4 top-4 h-8 w-8 pointer-events-none rounded-full border border-crimson-700/15 bg-[radial-gradient(circle,rgba(139,26,26,0.16)_0%,rgba(139,26,26,0.05)_48%,transparent_72%)]" />
+      <div className="absolute left-[22px] top-[18px] h-3 w-12 pointer-events-none bg-[linear-gradient(90deg,rgba(139,26,26,0.22),rgba(139,26,26,0.02))]" />
+      <div className="relative flex items-start justify-between gap-4 px-7 py-6">
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1.5">
+          <div className="mb-3 flex items-center gap-2">
             {scene ? (
               <>
-                <span className="text-[10px] text-amber-600/60 tracking-widest uppercase">
+                <span className={`text-[10px] tracking-[0.22em] uppercase font-(family-name:--font-ui) ${isLocked ? 'text-parchment-500/58' : 'text-leather-700/68'}`}>
                   {SCENE_TYPE_LABELS[scene.type] || scene.type}
                 </span>
-                <span className="text-amber-800/40">·</span>
-                <span className="text-[10px] text-amber-700/50">{scene.duration} 回合</span>
+                <span className={isLocked ? 'text-parchment-500/30' : 'text-gold-600/35'}>·</span>
+                <span className={`text-[10px] tracking-[0.12em] font-(family-name:--font-ui) ${isLocked ? 'text-parchment-500/50' : 'text-leather-700/56'}`}>历时 {scene.duration} 回合</span>
               </>
             ) : (
-              <span className="text-[10px] text-gray-700 tracking-widest">未知剧情</span>
+              <span className="text-[10px] tracking-[0.16em] text-parchment-500/60 font-(family-name:--font-ui)">卷宗未明</span>
             )}
           </div>
 
           <div
-            className={`text-base font-bold mb-1.5 tracking-wide font-(family-name:--font-display) ${config.color}`}
+            className={`mb-3 text-[22px] leading-[1.2] tracking-[0.05em] font-bold font-(family-name:--font-display) ${config.titleColor}`}
+            style={{ textShadow: isLocked ? 'none' : '0 1px 0 rgba(245,240,232,0.24)' }}
           >
             {scene?.name ?? sceneId}
           </div>
 
           {scene && (
-            <p className="text-xs text-parchment/50 leading-relaxed line-clamp-2">
+            <p className={`max-w-[42rem] text-[14px] leading-[1.76] line-clamp-2 font-(family-name:--font-body) ${isLocked ? 'text-parchment-400/60' : 'text-leather-800/80'}`}>
               {scene.description}
             </p>
           )}
 
-          {/* Unlock conditions hint */}
-          {status === 'locked' && (
-            <div className="mt-2 text-[10px] text-parchment/30">
-              {getUnlockHint(scene).map((hint, index) => (
-                <span key={hint} className={index > 0 ? 'ml-2' : ''}>{hint}</span>
+          {isLocked && unlockHints.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {unlockHints.map((hint) => (
+                <span
+                  key={hint}
+                  className="border border-leather-500/55 bg-leather-950/26 px-2.5 py-1 text-[10px] leading-[1.45] tracking-[0.08em] text-parchment-400/72 font-(family-name:--font-ui)"
+                  style={{ borderRadius: '8px 4px 7px 3px' }}
+                >
+                  {hint}
+                </span>
               ))}
             </div>
           )}
         </div>
 
-        <div className="shrink-0 flex flex-col items-end gap-1.5">
+        <div className="shrink-0 flex min-w-[144px] flex-col items-end gap-3 pt-1">
           <span
-            className={`text-[10px] px-2 py-0.5 rounded-full border
-                        ${status === 'available'
-                          ? 'border-amber-500/40 text-amber-400 bg-amber-900/20'
-                          : status === 'participated'
-                          ? 'border-cerulean-500/30 text-cerulean-300 bg-cerulean-900/10'
-                          : status === 'completed'
-                          ? 'border-bamboo-700/30 text-bamboo-300 bg-bamboo-900/10'
-                          : 'border-leather-700/30 text-parchment/30 bg-leather-950/10'
-                        }`}
+            className={`border px-3 py-1 text-[10px] tracking-[0.18em] font-(family-name:--font-ui) ${config.badgeClassName}`}
+            style={{ borderRadius: '10px 4px 10px 4px' }}
           >
             {config.label}
           </span>
 
           {status === 'available' && (
-            <span className="text-[10px] text-amber-500/50 tracking-wider">点击参与 →</span>
+            <span className="text-[12px] tracking-[0.14em] text-crimson-700/78 font-(family-name:--font-display)">提卷入局 →</span>
           )}
 
           {status === 'locked' && (
-            <span className="text-base text-gray-700">🔒</span>
+            <span className="text-[12px] tracking-[0.18em] text-parchment-500/58 font-(family-name:--font-ui)">封卷待启</span>
           )}
         </div>
       </div>

@@ -168,6 +168,39 @@ const MOCK_SETTLEMENT_FAILURE: StageSettlementResult = {
   },
 };
 
+const MOCK_PLAYER_CHOICE_SETTLEMENT = {
+  type: 'player_choice' as const,
+  narrative: '看着温华嘴硬又窘迫的模样，徐凤年决定亲自选一种回应方式。',
+  choices: [
+    {
+      id: 'pay_for_him',
+      label: '替他付茶钱',
+      description: '掏出铜钱替温华解围，顺势走向解围线。',
+      effects: {
+        cards_add: ['temp_generosity'],
+      },
+      next_stage: 'path_b_rescue',
+    },
+    {
+      id: 'tease_him',
+      label: '调侃他几句',
+      description: '顺着对方的嚣张劲头回敬两句，直接走向嘲讽线。',
+      effects: {
+        cards_add: ['temp_mockery'],
+      },
+      next_stage: 'path_a_mockery',
+    },
+    {
+      id: 'walk_away',
+      label: '默默离开',
+      description: '不掺和这场闹剧，留下一点路费后转身离去。',
+      effects: {
+        gold: -2,
+      },
+    },
+  ],
+};
+
 /* ═══════════════════════════════════════════════════════
    Story 1：叙事进行中
    右栏有对话文字，左栏有投入卡牌，还未开始鉴定
@@ -385,3 +418,45 @@ export const FullScreenInteractive: Story = () => {
   );
 };
 FullScreenInteractive.meta = { title: 'EventSettlementFrame / 全屏可交互' };
+
+export const PlayerChoiceBranchSelection: Story = () => {
+  const leftContent = (
+    <SettlementLeftPanel
+      sceneName="边境破茶摊・剑影初逢"
+      investedCards={MOCK_CARDS.slice(0, 1)}
+      hasSettlement={true}
+      isNarrativeComplete={true}
+      settlementResult={null}
+      settlementConfig={MOCK_PLAYER_CHOICE_SETTLEMENT}
+      onExecute={() => {}}
+    />
+  );
+
+  const rightContent = (
+    <SettlementRightPanel
+      narrative={NARRATIVE_NODES}
+      narrativeIndex={NARRATIVE_NODES.length}
+      onAdvance={() => {}}
+      onChoice={() => {}}
+      onPlayerChoiceSelect={() => {}}
+      settlementResult={null}
+      onContinue={() => {}}
+      isNarrativeComplete={true}
+      hasSettlement={true}
+      historyNodes={HISTORY_NODES}
+      settlementConfig={MOCK_PLAYER_CHOICE_SETTLEMENT}
+    />
+  );
+
+  return (
+    <div className="w-[1280px] h-[800px] bg-[#120b07]">
+      <EventSettlementFrame
+        backgroundAssetId="ui_004"
+        rightTitle="边境破茶摊・剑影初逢"
+        leftContent={leftContent}
+        rightContent={rightContent}
+      />
+    </div>
+  );
+};
+PlayerChoiceBranchSelection.meta = { title: 'EventSettlementFrame / 分支选择' };

@@ -7,6 +7,7 @@ import type {
 } from '../core/types';
 import { GamePhase, GameEndReason, CheckResult } from '../core/types/enums';
 import type { StageSettlementResult } from '../core/settlement/SettlementExecutor';
+import type { DiceRollResult } from '../core/types';
 
 interface SettlementPlaybackState {
   isPlaying: boolean;
@@ -51,7 +52,14 @@ interface GameStoreActions {
     rerollIndices?: number[];
     goldenDiceUsed?: number;
     choiceIndex?: number;
+    externalRoll?: DiceRollResult;
   }) => void;
+  executeCurrentSettlementWithDice: (
+    dice: number[],
+    explodedDice: number[],
+    options?: { goldenDiceUsed?: number }
+  ) => void;
+  getCurrentDiceCheckPreview: () => { poolSize: number; rerollAvailable: number } | null;
   advanceAfterSettlement: () => void;
   finishCurrentScene: () => void;
   finishAllSettlement: () => void;
@@ -260,6 +268,53 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       },
     });
     get().syncState();
+  },
+
+  executeCurrentSettlementWithDice: (dice, explodedDice, options) => {
+    const { settlement, game } = get();
+    const runner = settlement.currentRunner;
+    const playback = settlement.currentStagePlayback;
+    if (!runner || !playback || !game) return;
+
+    const result = game.settlementExecutor.executeDiceCheckWithValues(
+      runner.sceneId,
+      playback.stageId,
+      dice,
+      explodedDice,
+      options,
+    );
+
+    if (result) {
+      runner.recordStageNarrative(playback.narrative);
+      runner.recordStageSettlement(
+        result.type,
+        result.result_key,
+        result.effects_applied,
+        result.dice_check_state,
+        result.next_stage,
+      );
+
+      if (result.result_key) {
+        game.sceneManager.recordStageResult(runner.sceneId, playback.stageId, result.result_key);
+      }
+    }
+
+    set({
+      settlement: {
+        ...settlement,
+        currentStageSettlementResult: result,
+      },
+    });
+    get().syncState();
+  },
+
+  getCurrentDiceCheckPreview: () => {
+    const { settlement, game } = get();
+    const runner = settlement.currentRunner;
+    const playback = settlement.currentStagePlayback;
+    if (!runner || !playback || !game) return null;
+
+    return game.settlementExecutor.getDiceCheckPreview(runner.sceneId, playback.stageId);
   },
 
   advanceAfterSettlement: () => {

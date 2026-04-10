@@ -1,11 +1,43 @@
 
 > sutan@1.0.0 dev
-> vite --config vite.config.ts --host 127.0.0.1 --port 5190 --strictPort
+> vite --config vite.config.ts --host 127.0.0.1 --port 5198
 
-(node:57407) ExperimentalWarning: CommonJS module /Users/xiaochunliu/program/sutan/vite.config.ts is loading ES Module /Users/xiaochunliu/program/sutan/node_modules/vite/dist/node/index.js using require().
+(node:31299) ExperimentalWarning: CommonJS module /Users/xiaochunliu/program/sutan/vite.config.ts is loading ES Module /Users/xiaochunliu/program/sutan/node_modules/vite/dist/node/index.js using require().
 Support for loading ES Module in require() is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 
-  VITE v7.3.1  ready in 163 ms
+  VITE v7.3.1  ready in 162 ms
 
-  ➜  Local:   http://127.0.0.1:5190/
+  ➜  Local:   http://127.0.0.1:5198/
+2:34:44 AM [vite] (client) hmr update /styles/index.css, /ui/components/card/SlotComponent.tsx
+2:34:44 AM [vite] (client) hmr update /ui/screens/SceneScreen.tsx, /styles/index.css
+2:35:58 AM [vite] (client) hmr update /ui/screens/LocationScreen.tsx, /styles/index.css
+2:43:01 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/SettlementPanels.tsx
+2:43:17 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/EventSettlementFrame.tsx
+2:43:41 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/SettlementPanels.tsx
+2:46:22 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/SettlementPanels.tsx
+3:00:29 AM [vite] (client) hmr update /styles/index.css
+3:12:03 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/EventSettlementFrame.tsx
+9:41:07 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/EventSettlementFrame.tsx
+9:41:07 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+9:41:07 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/SettlementPanels.tsx
+9:42:09 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/EventSettlementFrame.tsx
+9:42:09 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/SettlementPanels.tsx
+9:42:45 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+9:58:32 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/EventSettlementFrame.tsx
+9:58:32 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+9:59:21 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/SettlementPanels.tsx
+10:06:44 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/SettlementPanels.tsx
+10:06:44 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+10:17:48 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+10:17:48 AM [vite] (client) hmr update /styles/index.css, /ui/components/settlement/SettlementPanels.tsx
+10:22:26 AM [vite] (client) hmr update /styles/index.css, /ui/screens/ShopScreen.tsx, /ui/layouts/GameLayout.tsx, /ui/screens/SceneScreen.tsx, /ui/screens/WorldMapScreen.tsx, /ui/screens/MapScreen.tsx, /ui/screens/TitleScreen.tsx, /ui/screens/LocationScreen.tsx, /ui/screens/SettlementScreen.tsx, /ui/components/common/ResourceBar.tsx
+10:22:26 AM [vite] (client) hmr update /ui/screens/ShopScreen.tsx, /ui/layouts/GameLayout.tsx, /ui/screens/SceneScreen.tsx, /ui/screens/WorldMapScreen.tsx, /ui/screens/MapScreen.tsx, /ui/screens/TitleScreen.tsx, /ui/screens/LocationScreen.tsx, /ui/screens/SettlementScreen.tsx, /ui/components/common/ResourceBar.tsx, /styles/index.css
+10:23:01 AM [vite] (client) hmr update /styles/index.css, /ui/screens/ShopScreen.tsx, /ui/layouts/GameLayout.tsx, /ui/screens/SceneScreen.tsx, /ui/screens/WorldMapScreen.tsx, /ui/screens/MapScreen.tsx, /ui/screens/TitleScreen.tsx, /ui/screens/LocationScreen.tsx, /ui/screens/SettlementScreen.tsx, /ui/components/common/ResourceBar.tsx
+10:23:01 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+10:23:29 AM [vite] (client) hmr update /styles/index.css, /ui/screens/ShopScreen.tsx, /ui/layouts/GameLayout.tsx, /ui/screens/SceneScreen.tsx, /ui/screens/WorldMapScreen.tsx, /ui/screens/MapScreen.tsx, /ui/screens/TitleScreen.tsx, /ui/screens/LocationScreen.tsx, /ui/screens/SettlementScreen.tsx, /ui/components/common/ResourceBar.tsx
+10:23:29 AM [vite] (client) hmr update /styles/index.css, /ui/screens/ShopScreen.tsx, /ui/layouts/GameLayout.tsx, /ui/screens/SceneScreen.tsx, /ui/screens/WorldMapScreen.tsx, /ui/screens/MapScreen.tsx, /ui/screens/TitleScreen.tsx, /ui/screens/LocationScreen.tsx, /ui/screens/SettlementScreen.tsx, /ui/components/common/ResourceBar.tsx
+10:23:29 AM [vite] (client) hmr update /ui/screens/ShopScreen.tsx, /ui/layouts/GameLayout.tsx, /ui/screens/SceneScreen.tsx, /ui/screens/WorldMapScreen.tsx, /ui/screens/MapScreen.tsx, /ui/screens/TitleScreen.tsx, /ui/screens/LocationScreen.tsx, /ui/screens/SettlementScreen.tsx, /ui/components/common/ResourceBar.tsx, /styles/index.css
+10:23:29 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+10:23:45 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css
+10:24:04 AM [vite] (client) hmr update /ui/screens/SettlementScreen.tsx, /styles/index.css

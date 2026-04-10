@@ -174,41 +174,50 @@ export function SceneScreen() {
           <button
             onClick={() => setScreen(selectedLocationId ? 'location' : 'map')}
             className="absolute top-4 left-4 z-10 flex items-center gap-1.5
-                       text-xs text-parchment/60 hover:text-parchment/90 transition-colors
-                       bg-black/30 hover:bg-black/50 backdrop-blur-sm rounded px-3 py-1.5"
+                       text-[11px] text-parchment-200/76 hover:text-parchment-50 transition-all
+                       border-2 border-gold-500/58 outline outline-1 outline-offset-[-4px] outline-gold-300/34
+                       bg-[linear-gradient(180deg,rgba(66,47,22,0.92),rgba(44,28,14,0.94))]
+                       hover:border-gold-100 hover:shadow-[0_8px_20px_rgba(0,0,0,0.3),0_0_16px_rgba(201,168,76,0.14)]
+                       rounded-[3px] px-3.5 py-1.5 shadow-[0_6px_14px_rgba(0,0,0,0.28)] font-(family-name:--font-display)"
           >
             <span>&#8592;</span>
-            <span>返回地图</span>
+            <span>退回舆图</span>
           </button>
 
           {/* Instruction hint */}
-          <div className="absolute top-4 right-4 z-10 text-[10px] text-parchment/40 text-right leading-relaxed">
-            <div>双击手牌投入槽位</div>
-            <div>点击槽位取消投入</div>
+          <div className="absolute top-4 right-4 z-10 max-w-[180px] rounded-[4px] border border-gold-500/14 bg-leather-950/42 px-3 py-2 text-right shadow-[0_8px_18px_rgba(0,0,0,0.24)]">
+            <div className="text-[9px] tracking-[0.26em] text-gold-300/56 font-(family-name:--font-ui)">案头提要</div>
+            <div className="mt-1 text-[10px] text-parchment-300/54 leading-[1.6] font-(family-name:--font-body)">
+              双击手牌可奉入印位，轻点已呈之牌，便可起印收回。
+            </div>
           </div>
 
           {/* Slots area - at bottom of background */}
           <div className="absolute bottom-0 inset-x-0 z-10 px-6 pb-5">
-            {/* Slot label */}
-            <div className="text-[10px] text-parchment/40 tracking-widest mb-3 text-center uppercase">
-              卡牌槽位
-            </div>
-            <div className="flex items-end justify-center gap-4 flex-wrap">
-              {scene.slots.map((slot, idx) => {
-                const assignedCardId = selectedCards[idx];
-                const assignedCard = assignedCardId
-                  ? game?.cardManager.getCard(assignedCardId)
-                  : null;
-                return (
-                  <SlotComponent
-                    key={idx}
-                    slot={slot}
-                    card={assignedCard?.data}
-                    index={idx}
-                    onClick={() => handleSlotClick(idx)}
-                  />
-                );
-              })}
+            <div className="mx-auto max-w-[540px] rounded-t-[18px] border border-gold-500/18 bg-[linear-gradient(180deg,rgba(13,8,6,0.32),rgba(11,7,5,0.72))] px-5 pt-4 pb-5 shadow-[0_-18px_32px_rgba(0,0,0,0.36)] backdrop-blur-[2px]">
+              <div className="text-[10px] text-gold-300/58 tracking-[0.28em] mb-1 text-center font-(family-name:--font-ui)">
+                案上印位
+              </div>
+              <div className="text-[12px] text-parchment-200/68 text-center mb-4 font-(family-name:--font-body)">
+                依此局所需，将可用人物与物件奉入印位，以候开局。
+              </div>
+              <div className="flex items-end justify-center gap-4 flex-wrap">
+                {scene.slots.map((slot, idx) => {
+                  const assignedCardId = selectedCards[idx];
+                  const assignedCard = assignedCardId
+                    ? game?.cardManager.getCard(assignedCardId)
+                    : null;
+                  return (
+                    <SlotComponent
+                      key={idx}
+                      slot={slot}
+                      card={assignedCard?.data}
+                      index={idx}
+                      onClick={() => handleSlotClick(idx)}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -223,20 +232,21 @@ export function SceneScreen() {
           }}
         >
           {/* Paper overlay */}
-          <div className="absolute inset-0 bg-leather/80 pointer-events-none" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(232,220,200,0.88),rgba(199,182,148,0.78))] pointer-events-none" />
+          <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-gold-500/34 to-transparent pointer-events-none" />
 
           <div className="relative z-10 flex flex-col h-full overflow-y-auto">
             {/* Header */}
             <div className="px-7 pt-7 pb-4 shrink-0">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-[10px] text-gold-dim/60 tracking-widest uppercase">
+                <span className="text-[10px] text-gold-500/72 tracking-[0.22em] font-(family-name:--font-ui)">
                   {SCENE_TYPE_LABELS[scene.type] || scene.type}
                 </span>
-                <span className="text-gold-dim/30">·</span>
-                <span className="text-[10px] text-gold-dim/50">{scene.duration} 回合</span>
+                <span className="text-gold-500/30">·</span>
+                <span className="text-[10px] text-leather-700/62 font-(family-name:--font-ui)">{scene.duration} 回合</span>
               </div>
 
-              <h2 className="text-2xl font-bold text-gold font-(family-name:--font-display) tracking-wide mb-3">
+              <h2 className="text-[30px] font-bold text-gold-500 font-(family-name:--font-display) tracking-[0.06em] mb-3">
                 {scene.name}
               </h2>
 
@@ -248,7 +258,7 @@ export function SceneScreen() {
 
             {/* Description */}
             <div className="px-7 shrink-0">
-              <p className="text-sm text-parchment/70 leading-relaxed">
+              <p className="text-[15px] text-leather-800/82 leading-[1.85] font-(family-name:--font-body)">
                 {scene.description}
               </p>
             </div>
@@ -256,10 +266,10 @@ export function SceneScreen() {
             {/* Settlement preview */}
             {settlementPreview && (
               <div className="px-7 mt-5 shrink-0">
-                <div className="text-[10px] text-gold-dim/50 tracking-wider mb-2">结算方式</div>
+                <div className="text-[10px] text-gold-500/62 tracking-[0.22em] mb-2 font-(family-name:--font-ui)">结算方式</div>
                 <div className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-gold-dim/60" />
-                  <span className="text-sm text-parchment/60">{settlementPreview}</span>
+                  <span className="text-sm text-leather-700/74 font-(family-name:--font-body)">{settlementPreview}</span>
                 </div>
               </div>
             )}
@@ -274,7 +284,7 @@ export function SceneScreen() {
                   className="w-full h-1 text-gold-dim/20 pointer-events-none mb-4"
                   preserveAspectRatio="none"
                 />
-                <div className="text-[10px] text-gold-dim/50 tracking-wider mb-2">已投入</div>
+                <div className="text-[10px] text-gold-500/62 tracking-[0.22em] mb-2 font-(family-name:--font-ui)">已落之牌</div>
                 <div className="flex flex-col gap-1">
                   {scene.slots.map((slot, idx) => {
                     const cid = selectedCards[idx];
@@ -282,8 +292,8 @@ export function SceneScreen() {
                     const c = game?.cardManager.getCard(cid);
                     return (
                       <div key={idx} className="flex items-center justify-between text-xs">
-                        <span className="text-parchment/40">{SLOT_TYPE_LABELS[slot.type] || slot.type}</span>
-                        <span className="text-parchment/70">{c?.name ?? cid}</span>
+                        <span className="text-leather-700/58 font-(family-name:--font-ui)">{SLOT_TYPE_LABELS[slot.type] || slot.type}</span>
+                        <span className="text-leather-900/82 font-(family-name:--font-body)">{c?.name ?? cid}</span>
                       </div>
                     );
                   })}
@@ -293,19 +303,27 @@ export function SceneScreen() {
 
             {/* Confirm button */}
             <div className="px-7 pb-7 shrink-0">
-              <Button
-                variant="primary"
-                size="lg"
-                glow
-                onClick={handleConfirm}
-                disabled={!requiredSlotsFilled}
-                className="w-full"
-              >
-                确认参与
-              </Button>
+              <div className="rounded-[10px] border border-gold-500/18 bg-[linear-gradient(180deg,rgba(106,80,32,0.06),rgba(26,15,10,0.04))] px-4 pt-4 pb-3 shadow-[inset_0_1px_0_rgba(240,208,96,0.10)]">
+                <div className="mb-3 text-center">
+                  <div className="text-[10px] tracking-[0.26em] text-gold-500/68 font-(family-name:--font-ui)">押印启局</div>
+                  <div className="mt-1 text-[12px] leading-[1.6] text-leather-700/70 font-(family-name:--font-body)">
+                    印位齐备之后，便可落印启此场局。
+                  </div>
+                </div>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  glow
+                  onClick={handleConfirm}
+                  disabled={!requiredSlotsFilled}
+                  className="w-full"
+                >
+                  落印启局
+                </Button>
+              </div>
               {!requiredSlotsFilled && (
-                <p className="text-center text-[10px] text-crimson/60 mt-2">
-                  请先填满所有必填槽位
+                <p className="text-center text-[10px] text-crimson-500/72 mt-2 tracking-[0.08em] font-(family-name:--font-body)">
+                  尚有朱批印位未奉所需之牌
                 </p>
               )}
             </div>

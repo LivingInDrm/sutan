@@ -1,4 +1,17 @@
 {
-  "services": {},
-  "updated_at": "2026-04-10T00:15:50Z"
+  "services": {
+    "frontend": {
+      "pid": 31279,
+      "port": 5198,
+      "port_mode": "fixed",
+      "port_file": null,
+      "url": "http://localhost:5198",
+      "command": "npm run dev -- --host 127.0.0.1 --port 5198",
+      "started_at": "2026-04-10T02:33:04Z",
+      "log_file": ".verdent/testing/logs/frontend.log",
+      "health_check": "tcp",
+      "cwd": "/Users/xiaochunliu/program/sutan"
+    }
+  },
+  "updated_at": "2026-04-10T02:46:30Z"
 }

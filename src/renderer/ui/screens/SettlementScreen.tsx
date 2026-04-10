@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useGameStore } from '../../stores/gameStore';
 import { useUIStore } from '../../stores/uiStore';
 import { Panel } from '../components/common/Panel';
 import { Button } from '../components/common/Button';
 import { EventSettlementFrame } from '../components/settlement/EventSettlementFrame';
-import { SettlementLeftPanel, SettlementRightPanel } from '../components/settlement/SettlementPanels';
+import { PlayerChoicePrompt, SettlementLeftPanel, SettlementRightPanel } from '../components/settlement/SettlementPanels';
 import { DiceResult } from '../components/dice/DiceComponent';
 import type { Card, NarrativeNode, SettlementResult } from '../../core/types';
-import type { StageSettlementResult } from '../../core/settlement/SettlementExecutor';
+import { getSceneBackdropUrl } from '../../lib/assetPaths';
+import { DiceBoxOverlay } from '../components/dice/DiceBoxOverlay';
 
 const RESULT_COLORS: Record<string, string> = {
   success: 'text-bamboo-300',
@@ -99,12 +100,16 @@ export function SettlementScreen() {
   const advanceNarrative = useGameStore(s => s.advanceNarrative);
   const handleNarrativeChoice = useGameStore(s => s.handleNarrativeChoice);
   const executeCurrentSettlement = useGameStore(s => s.executeCurrentSettlement);
+  const executeCurrentSettlementWithDice = useGameStore(s => s.executeCurrentSettlementWithDice);
+  const getCurrentDiceCheckPreview = useGameStore(s => s.getCurrentDiceCheckPreview);
   const advanceAfterSettlement = useGameStore(s => s.advanceAfterSettlement);
   const game = useGameStore(s => s.game);
 
   const { isPlaying, currentStagePlayback, narrativeIndex, currentStageSettlementResult } = settlement;
 
   const [historyNodes, setHistoryNodes] = useState<NarrativeNode[]>([]);
+  const [showDiceOverlay, setShowDiceOverlay] = useState(false);
+  const [pendingDicePoolSize, setPendingDicePoolSize] = useState(0);
   const prevStageIdRef = useRef<string | null>(null);
   const prevSettlementNarrativeRef = useRef<string | null>(null);
 
@@ -140,10 +145,25 @@ export function SettlementScreen() {
   useEffect(() => {
     if (!isPlaying) {
       setHistoryNodes([]);
+      setShowDiceOverlay(false);
+      setPendingDicePoolSize(0);
       prevStageIdRef.current = null;
       prevSettlementNarrativeRef.current = null;
     }
   }, [isPlaying]);
+
+  const handleExecuteSettlement = useCallback(() => {
+    const preview = getCurrentDiceCheckPreview();
+    if (preview) {
+      setPendingDicePoolSize(preview.poolSize);
+      setShowDiceOverlay(true);
+    }
+  }, [getCurrentDiceCheckPreview]);
+
+  const handleDiceOverlayComplete = useCallback((result: { dice: number[]; explodedDice: number[] }) => {
+    executeCurrentSettlementWithDice(result.dice, result.explodedDice);
+    setShowDiceOverlay(false);
+  }, [executeCurrentSettlementWithDice]);
 
   if (!isPlaying) {
     return <SummaryView results={lastResults} />;
@@ -152,11 +172,16 @@ export function SettlementScreen() {
   const narrative = currentStagePlayback?.narrative || [];
   const isNarrativeComplete = narrativeIndex >= narrative.length;
   const hasSettlement = currentStagePlayback?.hasSettlement || false;
+  const shouldShowPlayerChoicePrompt = isNarrativeComplete
+    && hasSettlement
+    && !currentStageSettlementResult
+    && currentStagePlayback?.settlementConfig?.type === 'player_choice';
 
   const scene = settlement.currentRunner
     ? game?.sceneManager.getScene(settlement.currentRunner.sceneId)
     : null;
   const sceneName = scene?.name || '';
+  const backgroundImageUrl = getSceneBackdropUrl(scene?.background_image) ?? undefined;
 
   const sceneState = settlement.currentRunner
     ? game?.sceneManager.getSceneState(settlement.currentRunner.sceneId)
@@ -180,7 +205,8 @@ export function SettlementScreen() {
       isNarrativeComplete={isNarrativeComplete}
       settlementResult={currentStageSettlementResult}
       settlementConfig={currentStagePlayback?.settlementConfig}
-      onExecute={() => executeCurrentSettlement()}
+      suppressResult={showDiceOverlay}
+      onExecute={handleExecuteSettlement}
     />
   );
 
@@ -190,7 +216,6 @@ export function SettlementScreen() {
       narrativeIndex={narrativeIndex}
       onAdvance={advanceNarrative}
       onChoice={handleNarrativeChoice}
-      onPlayerChoiceSelect={(choiceIndex) => executeCurrentSettlement({ choiceIndex })}
       settlementResult={currentStageSettlementResult}
       onContinue={advanceAfterSettlement}
       isNarrativeComplete={isNarrativeComplete}
@@ -201,11 +226,26 @@ export function SettlementScreen() {
   );
 
   return (
-    <EventSettlementFrame
-      leftContent={leftContent}
-      rightContent={rightContent}
-      rightTitle={sceneName}
-      backgroundAssetId="ui_004"
-    />
+    <>
+      <EventSettlementFrame
+        leftContent={leftContent}
+        rightContent={rightContent}
+        rightTitle={sceneName}
+        backgroundImageUrl={backgroundImageUrl}
+      />
+      {shouldShowPlayerChoicePrompt && currentStagePlayback?.settlementConfig?.type === 'player_choice' && (
+        <PlayerChoicePrompt
+          settlement={currentStagePlayback.settlementConfig}
+          onSelect={(choiceIndex) => executeCurrentSettlement({ choiceIndex })}
+        />
+      )}
+      {showDiceOverlay && pendingDicePoolSize > 0 && (
+        <DiceBoxOverlay
+          poolSize={pendingDicePoolSize}
+          onComplete={handleDiceOverlayComplete}
+          visible={showDiceOverlay}
+        />
+      )}
+    </>
   );
 }
