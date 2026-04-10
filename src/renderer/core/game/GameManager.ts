@@ -16,6 +16,14 @@ import type { GameState } from './GameState';
 import initialSaveJson from '../../data/configs/initial_save.json';
 import type { GameContentProvider } from '../types/repositories';
 
+const emptyContentProvider: GameContentProvider = {
+  getCards: () => [],
+  getScenes: () => [],
+  getMaps: () => [],
+  getMap: () => undefined,
+  getFirstMap: () => undefined,
+};
+
 export class GameManager {
   readonly playerState: PlayerState;
   readonly cardManager: CardManager;
@@ -34,12 +42,20 @@ export class GameManager {
   private _allCardsMap: Map<string, Card> = new Map();
   private _runtimeState: GameState;
 
-  constructor(contentProvider: GameContentProvider, difficulty: string = 'normal', seed?: string) {
+  constructor(contentProviderOrDifficulty: GameContentProvider | string = 'normal', difficultyOrSeed?: string, seed?: string) {
+    const contentProvider = typeof contentProviderOrDifficulty === 'string'
+      ? emptyContentProvider
+      : contentProviderOrDifficulty;
+    const difficulty = typeof contentProviderOrDifficulty === 'string'
+      ? contentProviderOrDifficulty
+      : difficultyOrSeed ?? 'normal';
+    const resolvedSeed = typeof contentProviderOrDifficulty === 'string' ? difficultyOrSeed : seed;
+
     this.contentProvider = contentProvider;
     this._difficulty = difficulty;
     const diff = DIFFICULTIES[difficulty] || DIFFICULTIES.normal;
 
-    this.rng = new RandomManager(seed);
+    this.rng = new RandomManager(resolvedSeed);
     this.playerState = new PlayerState(diff.initial_gold);
     this.cardManager = new CardManager();
     this.equipmentSystem = new EquipmentSystem(this.cardManager);

@@ -7,6 +7,7 @@ import { Button } from '../components/common/Button';
 import { DividerLine } from '../components/common/svg';
 import type { Card, Slot } from '../../core/types';
 import { SlotType, CardType } from '../../core/types/enums';
+import { isCardValidForSlot } from '../../core/scene/slotRules';
 import bronzeTexture from '../../assets/textures/bronze-512.webp';
 import ricePaperTexture from '../../assets/textures/rice-paper-1024.webp';
 import { getSceneBackdropUrl } from '../../lib/assetPaths';
@@ -22,21 +23,6 @@ const SLOT_TYPE_LABELS: Record<string, string> = {
   item: '物品槽',
   sultan: '苏丹槽',
 };
-
-function isCardValidForSlot(card: Card, slot: Slot): boolean {
-  switch (slot.type) {
-    case SlotType.Character:
-      return card.type === CardType.Character;
-    case SlotType.Item:
-      return card.type === CardType.Equipment || card.type === CardType.Intel ||
-             card.type === CardType.Consumable || card.type === CardType.Book ||
-             card.type === CardType.Gem;
-    case SlotType.Sultan:
-      return card.type === CardType.Sultan;
-    default:
-      return false;
-  }
-}
 
 export function SceneScreen() {
   const game = useGameStore(s => s.game);

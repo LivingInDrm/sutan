@@ -2,6 +2,7 @@ import type { Slot, Card } from '../types';
 import { SlotType, CardType } from '../types/enums';
 import { CardInstance } from '../card/CardInstance';
 import { CardManager } from '../card/CardManager';
+import { isCardValidForSlot } from './slotRules';
 
 export interface SlotState {
   config: Slot;
@@ -84,20 +85,7 @@ export class SlotSystem {
   }
 
   private isCardTypeValid(card: CardInstance, slotType: SlotType): boolean {
-    switch (slotType) {
-      case SlotType.Character:
-        return card.isCharacter;
-      case SlotType.Item:
-        return card.type === CardType.Equipment || card.type === CardType.Intel ||
-               card.type === CardType.Consumable || card.type === CardType.Book ||
-               card.type === CardType.Gem;
-      case SlotType.Sultan:
-        return card.isSultan;
-      case SlotType.Gold:
-        return false;
-      default:
-        return false;
-    }
+    return isCardValidForSlot(card.data, { type: slotType } as Slot);
   }
 
   clear(): void {
