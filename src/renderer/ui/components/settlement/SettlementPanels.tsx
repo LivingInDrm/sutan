@@ -52,7 +52,13 @@ export function SettlementLeftPanel({
 
   return (
     <div className="h-full flex flex-col justify-end">
-      <div className="mx-auto w-full max-w-[560px] rounded-t-[20px] border border-gold-500/18 bg-[linear-gradient(180deg,rgba(13,8,6,0.34),rgba(11,7,5,0.78))] px-5 pt-5 pb-5 shadow-[0_-18px_32px_rgba(0,0,0,0.36)] backdrop-blur-[2px]">
+      <div className="mx-auto w-full max-w-[560px] overflow-hidden rounded-t-[24px] border border-gold-500/18 bg-[linear-gradient(180deg,rgba(13,8,6,0.3),rgba(11,7,5,0.82))] px-5 pt-5 pb-5 shadow-[0_-18px_32px_rgba(0,0,0,0.36)] backdrop-blur-[2px]">
+        <div className="mb-4 rounded-[14px] border border-gold-300/14 bg-[linear-gradient(180deg,rgba(201,168,76,0.06),rgba(106,80,32,0.12))] px-4 py-3">
+          <div className="text-[10px] tracking-[0.28em] text-gold-300/78 font-(family-name:--font-ui)">案台已备</div>
+          <div className="mt-2 text-[13px] leading-[1.8] text-parchment-200/76 font-(family-name:--font-body)">
+            掷骰阶段分三折：先审判辞，再观木案翻滚，最后收骰定夺。各处器物语汇与卷面风格保持一致。
+          </div>
+        </div>
         <div className="mb-5 border-b border-gold-300/18 pb-4">
           <div className="text-[10px] text-gold-300/72 mb-1 tracking-[0.24em] font-(family-name:--font-ui)">当前场景</div>
           <div className="text-[20px] font-bold text-parchment-100 mb-2 tracking-[0.06em] font-(family-name:--font-display)">
@@ -81,7 +87,10 @@ export function SettlementLeftPanel({
             <DividerLine className="w-full h-1 text-gold-300/24 pointer-events-none mb-3" preserveAspectRatio="none" />
             <div className="text-center rounded-[8px] border border-gold-300/16 bg-[linear-gradient(180deg,rgba(219,188,120,0.08),rgba(118,89,42,0.16))] px-4 py-4">
               <div className="text-[10px] tracking-[0.24em] text-gold-300/76 mb-2 font-(family-name:--font-ui)">落印前问</div>
-              <div className="text-sm text-parchment-100 mb-3 font-(family-name:--font-body)">准备进行鉴定……</div>
+              <div className="text-sm text-parchment-100 mb-1 font-(family-name:--font-body)">准备进行鉴定……</div>
+              <div className="text-[12px] leading-[1.7] text-parchment-200/66 mb-3 font-(family-name:--font-body)">
+                掷出 3 枚命骰，以总和并入修正后，与卷中难度相较。
+              </div>
               <Button variant="primary" size="lg" glow onClick={onExecute}>
                 开始鉴定
               </Button>
@@ -94,8 +103,9 @@ export function SettlementLeftPanel({
             <DividerLine className="w-full h-1 text-gold-300/24 pointer-events-none mb-3" preserveAspectRatio="none" />
 
             {checkConfig && (
-              <div className="text-center mb-3">
-                <span className="text-[11px] tracking-[0.16em] text-parchment-100 font-(family-name:--font-ui)">
+              <div className="mb-3 rounded-[12px] border border-gold-300/14 bg-[linear-gradient(180deg,rgba(201,168,76,0.06),rgba(26,15,10,0.24))] px-4 py-3 text-center">
+                <div className="text-[10px] tracking-[0.24em] text-gold-300/72 font-(family-name:--font-ui)">卷中判辞</div>
+                <span className="mt-2 inline-block text-[14px] tracking-[0.16em] text-parchment-100 font-(family-name:--font-display)">
                   {ATTR_LABELS[checkConfig.attribute] || checkConfig.attribute} 鉴定
                 </span>
               </div>
@@ -193,16 +203,12 @@ function PlayerChoicePrompt({
 
           <div className="flex flex-col gap-3">
             {settlement.choices.map((choice, idx) => (
-              <button
+              <Button
                 key={choice.id}
-                type="button"
                 onClick={() => onSelect(idx)}
-                className={[
-                  'group relative flex w-full items-start overflow-hidden border bg-[#d4c5a9]/96 pl-0 pr-5 py-4 text-left transition-all duration-200 active:scale-[0.99]',
-                  'border-[#8a6d2b]/45 shadow-[0_8px_18px_rgba(70,42,16,0.14)]',
-                  'hover:border-[#c9a84c] hover:bg-[#e8dcc8] hover:shadow-[0_14px_26px_rgba(86,56,22,0.18)]',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#d9cab0]',
-                ].join(' ')}
+                variant="choice"
+                size="lg"
+                className="!flex !w-full !items-start !justify-start !pl-0 !pr-5 !py-4 text-left"
               >
                 <div className="absolute left-0 top-0 h-full w-[4px] bg-transparent transition-colors duration-200 group-hover:bg-[#8b1a1a] group-focus-visible:bg-[#8b1a1a]" />
                 <div className="flex w-full items-start gap-4 pl-5">
@@ -223,7 +229,7 @@ function PlayerChoicePrompt({
                     </div>
                   </div>
                 </div>
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -274,15 +280,17 @@ export function SettlementRightPanel({
         </div>
         <div className="shrink-0 px-7 pb-4 pt-2">
           <DividerLine className="w-full h-1 text-gold-dim/20 pointer-events-none mb-3" preserveAspectRatio="none" />
-          <button
+          <Button
             onClick={onContinue}
-            className="w-full flex items-center justify-center gap-2 py-3 text-[13px] tracking-[0.12em] text-[#1a0f0a] hover:text-[#3d2418] transition-colors font-(family-name:--font-ui)"
+            variant="ghost"
+            size="md"
+            className="!flex !w-full !items-center !justify-center !gap-2 !py-3 text-[13px] tracking-[0.12em] text-[#1a0f0a] hover:text-[#3d2418] transition-colors font-(family-name:--font-ui)"
           >
             <span>点击继续</span>
             <svg viewBox="0 0 16 16" className="w-3 h-3" fill="currentColor">
               <path d="M6 3l5 5-5 5V3z" />
             </svg>
-          </button>
+          </Button>
         </div>
       </div>
     );

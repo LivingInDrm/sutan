@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 
 import DiceBox from '@3d-dice/dice-box';
 import { DICE_CONFIG } from '../../../core/types/enums';
 import { RandomManager } from '../../../lib/random';
+import { Button } from '../common/Button';
+import { DividerLine } from '../common/svg';
+import ricePaperTexture from '../../../assets/textures/rice-paper-1024.webp';
 
 interface DiceBoxOverlayProps {
   onComplete: (result: { dice: [number, number, number] }) => void;
@@ -315,66 +318,120 @@ export function DiceBoxOverlay({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/82 backdrop-blur-sm">
-      <div className="relative h-full w-full">
-        <div className="absolute inset-0 flex items-center justify-center px-8 py-20">
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={handleTableClick}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                handleTableClick();
-              }
-            }}
-            className="relative z-10 h-full w-full max-w-6xl overflow-hidden rounded-[28px] border border-gold-300/18 shadow-[0_30px_80px_rgba(0,0,0,0.45)]"
-            style={{
-              backgroundImage: 'url(/dice-box/table-bg-4.png)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
-          >
-            <div className="pointer-events-none absolute inset-x-0 top-10 z-10 text-center">
-              <div className="mx-auto inline-flex flex-col items-center rounded-full border border-gold-300/25 bg-black/35 px-6 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
-                <span className="text-[11px] tracking-[0.3em] text-gold-300/70 font-(family-name:--font-ui)">三维掷骰</span>
-                <span className="mt-1 text-lg text-parchment-100 font-(family-name:--font-display)">{headerText}</span>
-                {phase === 'finished' && resolvedSummaryText ? (
-                  <span className="mt-1 text-sm text-gold-200/90 font-(family-name:--font-body)">{resolvedSummaryText}</span>
-                ) : null}
+    <div className="fixed inset-0 z-50 bg-[rgba(7,5,4,0.84)] backdrop-blur-[3px]">
+      <div className="relative flex h-full w-full items-center justify-center px-4 py-6">
+        <div className="relative w-full max-w-6xl overflow-hidden rounded-[28px] border border-[#8a6d2b]/32 bg-[linear-gradient(180deg,rgba(20,12,8,0.92),rgba(12,8,6,0.98))] shadow-[0_34px_110px_rgba(0,0,0,0.58)]">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(201,168,76,0.08),transparent_36%),radial-gradient(circle_at_bottom,rgba(139,26,26,0.08),transparent_30%)]" />
+          <div className="relative grid min-h-[78vh] grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)]">
+            <div
+              className="relative overflow-hidden border-b border-[#8a6d2b]/20 lg:border-b-0 lg:border-r lg:border-r-[#8a6d2b]/20"
+              style={{
+                backgroundImage: `linear-gradient(180deg,rgba(236,226,208,0.96),rgba(208,191,160,0.95)), url(${ricePaperTexture})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,247,230,0.24),rgba(118,89,42,0.12))]" />
+              <div className="relative flex h-full flex-col px-6 py-7">
+                <div>
+                  <div className="text-[10px] tracking-[0.32em] text-[#8a6d2b]/80 font-(family-name:--font-ui)">案上命筹</div>
+                  <h2 className="mt-3 text-[28px] tracking-[0.08em] text-[#1a0f0a] font-(family-name:--font-display)">骰子既出，命数自明</h2>
+                  <p className="mt-3 text-[14px] leading-[1.9] text-[#3d2418]/82 font-(family-name:--font-body)">
+                    以木案为场，以卷纸为批。三枚命骰滚落之前，先观判辞，再候其势，待骰面停定后收骰落印。
+                  </p>
+                </div>
+                <div className="py-5">
+                  <DividerLine className="h-1 w-full text-[#8a6d2b]/24" preserveAspectRatio="none" />
+                </div>
+                <div className="space-y-4">
+                  <div className="rounded-[16px] border border-[#8a6d2b]/24 bg-[rgba(255,248,235,0.38)] px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]">
+                    <div className="text-[10px] tracking-[0.24em] text-[#8a6d2b]/75 font-(family-name:--font-ui)">判辞</div>
+                    <div className="mt-2 text-[14px] leading-[1.8] text-[#1a0f0a] font-(family-name:--font-body)">
+                      {resolvedSummaryText ?? '三枚六面命骰落案，以总数对应卷中定下的门槛。'}
+                    </div>
+                  </div>
+                  <div className="rounded-[16px] border border-[#8a6d2b]/20 bg-[rgba(118,89,42,0.08)] px-4 py-4">
+                    <div className="text-[10px] tracking-[0.24em] text-[#8a6d2b]/75 font-(family-name:--font-ui)">此刻状态</div>
+                    <div className="mt-3 text-[18px] tracking-[0.06em] text-[#1a0f0a] font-(family-name:--font-display)">
+                      {phase === 'ready' ? '掷前蓄势' : phase === 'rolling' ? '木案翻滚' : '收骰待断'}
+                    </div>
+                    <div className="mt-2 text-[13px] leading-[1.8] text-[#3d2418]/78 font-(family-name:--font-body)">
+                      {footerText ?? '请静候命骰停定。'}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-auto pt-6">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={cancelOverlay}
+                    className="!justify-start !px-0 text-[#3d2418]"
+                  >
+                    退卷
+                  </Button>
+                </div>
               </div>
             </div>
 
-            {footerText ? (
-              <div className="pointer-events-none absolute inset-x-0 bottom-10 z-10 text-center">
-                <div className="mx-auto inline-flex items-center rounded-full border border-gold-300/22 bg-black/30 px-5 py-2 text-sm text-parchment-100">
-                  {footerText}
-                </div>
-              </div>
-            ) : null}
-
-            <div id={containerId} className={`relative h-full w-full ${phase === 'ready' ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`} />
-
-            {phase === 'finished' ? (
-              <button
-                type="button"
-                onClick={confirmOverlay}
-                className="absolute bottom-8 right-8 z-20 rounded-full border border-gold-300/40 bg-black/55 px-5 py-2 text-sm text-parchment-100 transition hover:border-gold-300/65 hover:bg-black/70"
-              >
-                确认
-              </button>
-            ) : null}
-
-            <button
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                cancelOverlay();
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={handleTableClick}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  handleTableClick();
+                }
               }}
-              className="absolute right-6 top-6 z-20 rounded-full border border-gold-300/30 bg-black/45 px-4 py-2 text-sm text-parchment-100 transition hover:border-gold-300/50 hover:bg-black/60"
+              className="relative z-10 min-h-[52vh] overflow-hidden bg-[radial-gradient(circle_at_top,rgba(58,36,24,0.42),rgba(12,8,6,0.92))]"
+              style={{
+                backgroundImage: 'url(/dice-box/table-bg-4.png)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
             >
-              关闭
-            </button>
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(8,5,4,0.7),rgba(8,5,4,0.2)_24%,rgba(8,5,4,0.78))]" />
+              <div className="pointer-events-none absolute inset-x-6 top-5 flex items-center justify-between rounded-[18px] border border-[#c9a84c]/20 bg-[rgba(12,8,6,0.58)] px-4 py-3 backdrop-blur-[2px]">
+                <div>
+                  <div className="text-[10px] tracking-[0.28em] text-[#c9a84c]/78 font-(family-name:--font-ui)">三维掷骰</div>
+                  <div className="mt-1 text-[18px] text-[#f5f0e8] font-(family-name:--font-display)">{headerText}</div>
+                </div>
+                {displayResult && phase === 'finished' ? (
+                  <div className="text-right">
+                    <div className="text-[10px] tracking-[0.24em] text-[#c9a84c]/70 font-(family-name:--font-ui)">命数</div>
+                    <div className="mt-1 text-[24px] text-[#f5f0e8] font-(family-name:--font-display)">
+                      {displayResult.dice.join(' · ')}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              <div id={containerId} className={`relative h-full w-full ${phase === 'ready' ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`} />
+
+              {phase === 'finished' && displayResult ? (
+                <div className="absolute inset-x-0 bottom-0 flex justify-center px-6 pb-6">
+                  <div className="w-full max-w-2xl rounded-[24px] border border-[#c9a84c]/34 bg-[linear-gradient(180deg,rgba(18,10,7,0.9),rgba(30,18,12,0.96))] px-5 py-5 shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-md">
+                    <div className="text-center">
+                      <div className="text-[10px] tracking-[0.3em] text-[#c9a84c]/78 font-(family-name:--font-ui)">
+                        {resultLabelText ?? '掷骰已定'}
+                      </div>
+                      <div className="mt-2 text-[24px] text-[#f5f0e8] font-(family-name:--font-display)">
+                        {displayResult.dice.join(' · ')}
+                      </div>
+                      {resolvedSummaryText ? (
+                        <div className="mt-2 text-[13px] leading-[1.8] text-[#d4c5a9]/84 font-(family-name:--font-body)">
+                          {resolvedSummaryText}
+                        </div>
+                      ) : null}
+                    </div>
+                    <div className="mt-5 flex justify-center gap-3">
+                      <Button variant="ghost" size="sm" onClick={cancelOverlay}>退卷</Button>
+                      <Button variant="primary" size="sm" glow onClick={confirmOverlay}>收骰定夺</Button>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>

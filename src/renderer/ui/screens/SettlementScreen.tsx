@@ -365,33 +365,51 @@ export function SettlementScreen() {
         <>
           {diceFlowPhase === 'pre-roll' && dicePreview ? (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/82 backdrop-blur-sm px-6">
-              <Panel variant="dark" title="命骰判定" className="w-full max-w-xl">
-                <div className="space-y-5">
-                  <div className="rounded-xl border border-gold-300/20 bg-ink-light/40 p-4 text-sm text-parchment-100">
-                    <div>判定修正：<span className="text-gold">{dicePreview.modifier >= 0 ? '+' : '-'}{Math.abs(dicePreview.modifier)}</span></div>
-                    <div>难度 DC：<span className="text-gold">{dicePreview.dc}</span></div>
-                    <div>现有金骰：<span className="text-gold">{dicePreview.goldenDice}</span></div>
-                    <div className="text-gold-dim mt-1">每消耗 1 个金骰 = modifier +1</div>
-                  </div>
-                  <div>
-                    <div className="mb-2 text-sm text-gold-dim">使用金骰：{selectedGoldenDice}</div>
-                    <div className="flex items-center gap-3">
-                      <Button variant="secondary" size="sm" onClick={() => setSelectedGoldenDice(value => Math.max(0, value - 1))}>-</Button>
-                      <input
-                        type="range"
-                        min={0}
-                        max={dicePreview.goldenDice}
-                        value={selectedGoldenDice}
-                        onChange={(event) => setSelectedGoldenDice(Number(event.target.value))}
-                        className="flex-1 accent-gold"
-                      />
-                      <Button variant="secondary" size="sm" onClick={() => setSelectedGoldenDice(value => Math.min(dicePreview.goldenDice, value + 1))}>+</Button>
+              <Panel variant="dark" title="命骰判定" className="w-full max-w-2xl rounded-[24px] border-[#8a6d2b]/35 bg-[linear-gradient(180deg,rgba(20,12,8,0.94),rgba(12,8,6,0.98))]">
+                <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
+                  <div className="space-y-4">
+                    <div className="rounded-[16px] border border-gold-300/18 bg-[linear-gradient(180deg,rgba(201,168,76,0.08),rgba(26,15,10,0.3))] p-4 text-parchment-100">
+                      <div className="text-[10px] tracking-[0.28em] text-gold-300/76 mb-3 font-(family-name:--font-ui)">落印前问</div>
+                      <div className="grid gap-2 text-sm font-(family-name:--font-body)">
+                        <div>判定修正：<span className="text-gold">{dicePreview.modifier >= 0 ? '+' : '-'}{Math.abs(dicePreview.modifier)}</span></div>
+                        <div>难度 DC：<span className="text-gold">{dicePreview.dc}</span></div>
+                        <div>现有金骰：<span className="text-gold">{dicePreview.goldenDice}</span></div>
+                      </div>
+                      <div className="text-gold-dim mt-3 text-[12px] leading-[1.7] font-(family-name:--font-body)">
+                        金骰如旧金筹码，每消耗 1 枚，判定修正额外 +1。
+                      </div>
                     </div>
-                    <div className="mt-2 text-xs text-gold-dim">当前总 modifier：{dicePreview.modifier >= 0 ? '+' : '-'}{Math.abs(dicePreview.modifier)} {selectedGoldenDice > 0 ? `+ ${selectedGoldenDice}` : ''}</div>
+                    <div className="rounded-[16px] border border-gold-300/14 bg-ink-light/20 p-4">
+                      <div className="mb-2 text-[10px] tracking-[0.24em] text-gold-300/72 font-(family-name:--font-ui)">金骰取舍</div>
+                      <div className="mb-3 text-[15px] text-parchment-100 font-(family-name:--font-display)">使用金骰：{selectedGoldenDice}</div>
+                      <div className="flex items-center gap-3">
+                        <Button variant="secondary" size="sm" onClick={() => setSelectedGoldenDice(value => Math.max(0, value - 1))}>减一枚</Button>
+                        <input
+                          type="range"
+                          min={0}
+                          max={dicePreview.goldenDice}
+                          value={selectedGoldenDice}
+                          onChange={(event) => setSelectedGoldenDice(Number(event.target.value))}
+                          className="flex-1 accent-gold"
+                        />
+                        <Button variant="secondary" size="sm" onClick={() => setSelectedGoldenDice(value => Math.min(dicePreview.goldenDice, value + 1))}>添一枚</Button>
+                      </div>
+                      <div className="mt-3 text-xs text-gold-dim font-(family-name:--font-body)">
+                        当前总 modifier：{dicePreview.modifier >= 0 ? '+' : '-'}{Math.abs(dicePreview.modifier)} {selectedGoldenDice > 0 ? `+ ${selectedGoldenDice}` : ''}
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-end gap-3">
-                    <Button variant="ghost" size="sm" onClick={handleDiceOverlayCancel}>取消</Button>
-                    <Button variant="primary" size="sm" glow onClick={handleConfirmGoldenDice}>进入掷骰</Button>
+                  <div className="rounded-[18px] border border-gold-300/14 bg-[linear-gradient(180deg,rgba(13,8,6,0.42),rgba(11,7,5,0.78))] p-5">
+                    <div className="text-[10px] tracking-[0.28em] text-gold-300/72 font-(family-name:--font-ui)">掷骰流程</div>
+                    <div className="mt-3 space-y-3 text-[13px] leading-[1.8] text-parchment-200/80 font-(family-name:--font-body)">
+                      <p>一、先定金骰与修正。</p>
+                      <p>二、三枚命骰落于木案，不改 3D 掷骰表现。</p>
+                      <p>三、若有重投机会，待骰面停定后再作取舍。</p>
+                    </div>
+                    <div className="mt-5 flex justify-end gap-3">
+                      <Button variant="ghost" size="sm" onClick={handleDiceOverlayCancel}>退卷</Button>
+                      <Button variant="primary" size="sm" glow onClick={handleConfirmGoldenDice}>进入掷骰</Button>
+                    </div>
                   </div>
                 </div>
               </Panel>
@@ -409,42 +427,50 @@ export function SettlementScreen() {
           )}
           {diceFlowPhase === 'post-roll' && displayedDiceState && dicePreview ? (
             <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/72 backdrop-blur-sm px-6">
-              <Panel variant="dark" title="命骰判定" className="w-full max-w-xl">
-                <div className="space-y-5">
-                  <div className="text-sm text-gold-dim">可用重投次数：{dicePreview.rerollAvailable}</div>
-                  <div className="rounded-xl border border-gold-300/20 bg-ink-light/30 p-4 text-center">
-                    <DiceResult
-                      dice={displayedDiceState.dice}
-                      rerolledIndices={displayedDiceState.rerolled_indices ?? []}
-                      explodedStartIndex={3}
-                      successThreshold={7}
-                    />
-                    <div className="mt-3 text-sm text-parchment-100">
-                      {displayedDiceState.dice.join(' + ')} {displayedDiceState.modifier >= 0 ? '+' : '-'} {Math.abs(displayedDiceState.modifier)} = {displayedDiceState.total} / DC {displayedDiceState.dc_with_offset}
+              <Panel variant="dark" title="收骰再断" className="w-full max-w-2xl rounded-[24px] border-[#8a6d2b]/35 bg-[linear-gradient(180deg,rgba(20,12,8,0.94),rgba(12,8,6,0.98))]">
+                <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+                  <div className="space-y-4">
+                    <div className="text-sm text-gold-dim font-(family-name:--font-body)">可用重投次数：{dicePreview.rerollAvailable}</div>
+                    <div className="rounded-[16px] border border-gold-300/20 bg-ink-light/30 p-4 text-center">
+                      <DiceResult
+                        dice={displayedDiceState.dice}
+                        rerolledIndices={displayedDiceState.rerolled_indices ?? []}
+                        explodedStartIndex={3}
+                        successThreshold={7}
+                      />
+                      <div className="mt-3 text-sm text-parchment-100 font-(family-name:--font-body)">
+                        {displayedDiceState.dice.join(' + ')} {displayedDiceState.modifier >= 0 ? '+' : '-'} {Math.abs(displayedDiceState.modifier)} = {displayedDiceState.total} / DC {displayedDiceState.dc_with_offset}
+                      </div>
                     </div>
                   </div>
-                  <div className="flex justify-end gap-3">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        executeCurrentSettlementWithDice(displayedDiceState.dice, { goldenDiceUsed: selectedGoldenDice });
-                        setShowDiceOverlay(false);
-                        setDicePreview(null);
-                        setDiceFlowPhase('result');
-                        setIsPendingReroll(false);
-                      }}
-                    >
-                      跳过重投
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      glow
-                      onClick={handleConfirmReroll}
-                    >
-                      重投（剩余{dicePreview.rerollAvailable}次）
-                    </Button>
+                  <div className="rounded-[18px] border border-gold-300/14 bg-[linear-gradient(180deg,rgba(201,168,76,0.07),rgba(26,15,10,0.24))] p-5">
+                    <div className="text-[10px] tracking-[0.28em] text-gold-300/74 font-(family-name:--font-ui)">重投批注</div>
+                    <div className="mt-3 text-[14px] leading-[1.9] text-parchment-100 font-(family-name:--font-body)">
+                      若要再搏一次，需将三枚命骰尽数重掷。若就此收骰，便按当前结果落印。
+                    </div>
+                    <div className="mt-5 flex justify-end gap-3">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          executeCurrentSettlementWithDice(displayedDiceState.dice, { goldenDiceUsed: selectedGoldenDice });
+                          setShowDiceOverlay(false);
+                          setDicePreview(null);
+                          setDiceFlowPhase('result');
+                          setIsPendingReroll(false);
+                        }}
+                      >
+                        就此落印
+                      </Button>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        glow
+                        onClick={handleConfirmReroll}
+                      >
+                        全部重投（剩余{dicePreview.rerollAvailable}次）
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </Panel>
