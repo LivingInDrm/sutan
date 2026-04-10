@@ -44,6 +44,7 @@ interface GameStoreState {
 interface GameStoreActions {
   startNewGame: (difficulty: string, cards: Card[], scenes: Scene[], seed?: string) => void;
   nextDay: () => SettlementResult[];
+  refreshDerivedState: () => void;
   save: () => SaveData | null;
   exportSave: () => string | null;
   load: (save: SaveData, allCards: Card[], allScenes: Scene[]) => void;
@@ -87,17 +88,17 @@ const initialState: GameStoreState = {
   game: null,
   lastSettlementResults: [],
   settlement: { ...initialSettlement },
-  get currentDay() { return getGameSelectorValue(useGameStore.getState().game, game => game.currentDay, 1); },
-  get gold() { return getGameSelectorValue(useGameStore.getState().game, game => game.gold, 0); },
-  get reputation() { return getGameSelectorValue(useGameStore.getState().game, game => game.reputation, 50); },
-  get goldenDice() { return getGameSelectorValue(useGameStore.getState().game, game => game.goldenDice, 0); },
-  get rewindCharges() { return getGameSelectorValue(useGameStore.getState().game, game => game.rewindCharges, 3); },
-  get thinkCharges() { return getGameSelectorValue(useGameStore.getState().game, game => game.thinkCharges, 3); },
-  get executionCountdown() { return getGameSelectorValue(useGameStore.getState().game, game => game.executionCountdown, 14); },
-  get phase() { return getGameSelectorValue(useGameStore.getState().game, game => game.phase, GamePhase.Dawn); },
-  get isGameOver() { return getGameSelectorValue(useGameStore.getState().game, game => game.isGameOver, false); },
-  get endReason() { return getGameSelectorValue(useGameStore.getState().game, game => game.endReason, null); },
-  get handCardIds() { return getGameSelectorValue(useGameStore.getState().game, game => game.handCardIds, []); },
+  currentDay: 1,
+  gold: 0,
+  reputation: 50,
+  goldenDice: 0,
+  rewindCharges: 3,
+  thinkCharges: 3,
+  executionCountdown: 14,
+  phase: GamePhase.Dawn,
+  isGameOver: false,
+  endReason: null,
+  handCardIds: [],
 };
 
 export const useGameStore = create<GameStore>()((set, get) => ({
@@ -107,6 +108,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const game = new GameManager(gameContentProvider, difficulty, seed);
     game.startNewGame(cards, scenes);
     set({ game });
+    get().refreshDerivedState();
   },
 
   nextDay: () => {
@@ -114,6 +116,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (!game) return [];
     const results = game.nextDay();
     set({ lastSettlementResults: results });
+    get().refreshDerivedState();
     return results;
   },
 
@@ -133,6 +136,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       });
       game.dayManager.endDay();
       game.checkGameEnd();
+      get().refreshDerivedState();
       return;
     }
 
@@ -151,6 +155,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
         completedResults: [],
       },
     });
+    get().refreshDerivedState();
   },
 
   advanceNarrative: () => {
@@ -169,6 +174,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
           const sceneState = runner ? game.sceneManager.getSceneState(runner.sceneId) : null;
           const investedCards = sceneState?.invested_cards || [];
           game.settlementExecutor.applyEffects(node.effects, investedCards);
+          get().refreshDerivedState();
         }
       }
       set({
@@ -213,6 +219,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       const sceneState = game.sceneManager.getSceneState(runner.sceneId);
       const investedCards = sceneState?.invested_cards || [];
       game.settlementExecutor.applyEffects(effects, investedCards);
+      get().refreshDerivedState();
     }
 
     if (settlement.currentStagePlayback) {
@@ -267,6 +274,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
         currentStageSettlementResult: result,
       },
     });
+    get().refreshDerivedState();
   },
 
   executeCurrentSettlementWithDice: (dice, options) => {
@@ -303,6 +311,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
         currentStageSettlementResult: result,
       },
     });
+    get().refreshDerivedState();
   },
 
   getCurrentDiceCheckPreview: () => {
@@ -415,6 +424,24 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       lastSettlementResults: settlement.completedResults,
       settlement: { ...initialSettlement },
     });
+    get().refreshDerivedState();
+  },
+
+  refreshDerivedState: () => {
+    const { game } = get();
+    set({
+      currentDay: getGameSelectorValue(game, currentGame => currentGame.currentDay, 1),
+      gold: getGameSelectorValue(game, currentGame => currentGame.gold, 0),
+      reputation: getGameSelectorValue(game, currentGame => currentGame.reputation, 50),
+      goldenDice: getGameSelectorValue(game, currentGame => currentGame.goldenDice, 0),
+      rewindCharges: getGameSelectorValue(game, currentGame => currentGame.rewindCharges, 3),
+      thinkCharges: getGameSelectorValue(game, currentGame => currentGame.thinkCharges, 3),
+      executionCountdown: getGameSelectorValue(game, currentGame => currentGame.executionCountdown, 14),
+      phase: getGameSelectorValue(game, currentGame => currentGame.phase, GamePhase.Dawn),
+      isGameOver: getGameSelectorValue(game, currentGame => currentGame.isGameOver, false),
+      endReason: getGameSelectorValue(game, currentGame => currentGame.endReason, null),
+      handCardIds: getGameSelectorValue(game, currentGame => currentGame.handCardIds, []),
+    });
   },
 
   save: () => {
@@ -433,15 +460,18 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const game = new GameManager(gameContentProvider);
     game.loadSave(save, allCards, allScenes);
     set({ game });
+    get().refreshDerivedState();
   },
 
   importSave: (saveJson, allCards, allScenes) => {
     const game = new GameManager(gameContentProvider);
     game.importSave(saveJson, allCards, allScenes);
     set({ game });
+    get().refreshDerivedState();
   },
 
   reset: () => {
     set({ ...initialState, settlement: { ...initialSettlement } });
   },
 }));
+
