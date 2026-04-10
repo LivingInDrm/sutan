@@ -77,9 +77,7 @@ export function DiceBoxOverlay({
   const initPromiseRef = useRef<Promise<void> | null>(null);
   const startedVisibleRef = useRef(false);
   const rollSequenceRef = useRef(0);
-  const timeoutRef = useRef<number | null>(null);
   const initTimeoutRef = useRef<number | null>(null);
-  const hardTimeoutRef = useRef<number | null>(null);
   const [phase, setPhase] = useState<DicePhase>('ready');
   const [displayResult, setDisplayResult] = useState<{ dice: [number, number, number] } | null>(null);
   const collectedDiceRef = useRef<[number, number, number]>([1, 1, 1]);
@@ -96,17 +94,9 @@ export function DiceBoxOverlay({
   }, [phase]);
 
   const clearTimers = useCallback(() => {
-    if (timeoutRef.current !== null) {
-      window.clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
     if (initTimeoutRef.current !== null) {
       window.clearTimeout(initTimeoutRef.current);
       initTimeoutRef.current = null;
-    }
-    if (hardTimeoutRef.current !== null) {
-      window.clearTimeout(hardTimeoutRef.current);
-      hardTimeoutRef.current = null;
     }
   }, []);
 
@@ -172,13 +162,6 @@ export function DiceBoxOverlay({
     clearTimers();
     onCancelRef.current?.();
   }, [clearTimers]);
-
-  const fallbackComplete = useCallback(() => {
-    clearTimers();
-    const fallbackRoll = createFallbackRoll(fallbackSeed);
-    console.log('[DiceBoxOverlay] fallback triggered', fallbackRoll);
-    onCompleteRef.current(fallbackRoll);
-  }, [clearTimers, fallbackSeed]);
 
   useEffect(() => {
     startedVisibleRef.current = false;
@@ -250,7 +233,7 @@ export function DiceBoxOverlay({
         return;
       }
       console.error('[DiceBoxOverlay] init timeout');
-      fallbackComplete();
+      clearTimers();
     }, INIT_TIMEOUT_MS);
 
     void ensureDiceBox()
@@ -264,7 +247,8 @@ export function DiceBoxOverlay({
         console.error('[DiceBoxOverlay] init fail', error);
         console.error('[DiceBoxOverlay] failed to initialize dice box', error);
         if (!disposed) {
-          fallbackComplete();
+          clearTimers();
+          setPhase('ready');
         }
       });
 
@@ -282,7 +266,7 @@ export function DiceBoxOverlay({
         initPromiseRef.current = null;
       }
     };
-  }, [clearTimers, containerId, fallbackComplete, safeHide, safeShow, visible]);
+  }, [clearTimers, containerId, safeHide, safeShow, visible]);
 
   const handleTableClick = useCallback(() => {
     if (phase === 'ready') {

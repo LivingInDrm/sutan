@@ -7,6 +7,7 @@ import { EventSettlementFrame } from '../components/settlement/EventSettlementFr
 import { PlayerChoicePrompt, SettlementLeftPanel, SettlementRightPanel } from '../components/settlement/SettlementPanels';
 import { DiceResult } from '../components/dice/DiceComponent';
 import type { Card, NarrativeNode, SettlementResult, DiceCheckState } from '../../core/types';
+import { CheckResult } from '../../core/types/enums';
 import { getSceneBackdropUrl } from '../../lib/assetPaths';
 import { DiceBoxOverlay } from '../components/dice/DiceBoxOverlay';
 
@@ -117,6 +118,8 @@ export function SettlementScreen() {
   const [rolledDice, setRolledDice] = useState<[number, number, number] | null>(null);
   const [selectedRerollIndices, setSelectedRerollIndices] = useState<number[]>([]);
   const [rerollResult, setRerollResult] = useState<ReturnType<typeof rerollCurrentSettlementDice>>(null);
+  const [diceOverlaySession, setDiceOverlaySession] = useState(0);
+  const [pendingRerollIndices, setPendingRerollIndices] = useState<number[] | null>(null);
   const prevStageIdRef = useRef<string | null>(null);
   const prevSettlementNarrativeRef = useRef<string | null>(null);
 
@@ -159,6 +162,8 @@ export function SettlementScreen() {
       setRolledDice(null);
       setSelectedRerollIndices([]);
       setRerollResult(null);
+      setPendingRerollIndices(null);
+      setDiceOverlaySession(0);
       prevStageIdRef.current = null;
       prevSettlementNarrativeRef.current = null;
     }
@@ -176,7 +181,9 @@ export function SettlementScreen() {
       setRolledDice(null);
       setSelectedRerollIndices([]);
       setRerollResult(null);
+      setPendingRerollIndices(null);
       setDiceFlowPhase(preview.goldenDice > 0 ? 'pre-roll' : 'roll');
+      setDiceOverlaySession(1);
       setShowDiceOverlay(true);
       return;
     }
@@ -185,10 +192,36 @@ export function SettlementScreen() {
 
   const handleDiceOverlayComplete = useCallback((result: { dice: [number, number, number] }) => {
     console.log('[SettlementScreen] handleDiceOverlayComplete', result);
+    if (pendingRerollIndices && rolledDice) {
+      const rerollStageResult = rerollCurrentSettlementDice(rolledDice, pendingRerollIndices, {
+        goldenDiceUsed: selectedGoldenDice,
+      });
+
+      if (!rerollStageResult?.dice_check_state) {
+        return;
+      }
+
+      setRolledDice(rerollStageResult.dice_check_state.dice);
+      setRerollResult(rerollStageResult);
+      setSelectedRerollIndices([]);
+      setPendingRerollIndices(null);
+
+      try {
+        executeCurrentSettlementWithDice(rerollStageResult.dice_check_state.dice, { goldenDiceUsed: selectedGoldenDice });
+        setDiceFlowPhase('result');
+        setShowDiceOverlay(false);
+        setDicePreview(null);
+      } catch (error) {
+        console.error('[SettlementScreen] reroll settlement failed', error);
+      }
+      return;
+    }
+
     setRolledDice(result.dice);
     setSelectedRerollIndices([]);
     setRerollResult(null);
     if ((dicePreview?.rerollAvailable ?? 0) > 0) {
+      setPendingRerollIndices(null);
       setDiceFlowPhase('post-roll');
       return;
     }
@@ -209,7 +242,7 @@ export function SettlementScreen() {
         },
       });
     }
-  }, [dicePreview?.rerollAvailable, executeCurrentSettlement, executeCurrentSettlementWithDice, selectedGoldenDice]);
+  }, [dicePreview?.rerollAvailable, executeCurrentSettlement, executeCurrentSettlementWithDice, pendingRerollIndices, rerollCurrentSettlementDice, rolledDice, selectedGoldenDice]);
 
   const handleDiceOverlayCancel = useCallback(() => {
     console.log('[SettlementScreen] handleDiceOverlayCancel');
@@ -220,6 +253,7 @@ export function SettlementScreen() {
     setRolledDice(null);
     setSelectedRerollIndices([]);
     setRerollResult(null);
+    setPendingRerollIndices(null);
     executeCurrentSettlement();
   }, [executeCurrentSettlement]);
 
@@ -239,7 +273,7 @@ export function SettlementScreen() {
       modifier: (dicePreview?.modifier ?? 0) + selectedGoldenDice,
       total: rolledDice.reduce((sum, value) => sum + value, 0) + (dicePreview?.modifier ?? 0) + selectedGoldenDice,
       dc_with_offset: dicePreview?.dc ?? 0,
-      result: currentStageSettlementResult?.result_key ?? 'failure',
+      result: currentStageSettlementResult?.result_key ?? CheckResult.Failure,
       rerolled_indices: selectedRerollIndices,
     } : null);
   }, [currentStagePlayback?.settlementConfig, currentStageSettlementResult?.result_key, dicePreview?.dc, dicePreview?.modifier, rerollResult, rolledDice, selectedGoldenDice, selectedRerollIndices]);
@@ -258,6 +292,8 @@ export function SettlementScreen() {
   }, [dicePreview?.rerollAvailable]);
 
   const handleConfirmGoldenDice = useCallback(() => {
+    setPendingRerollIndices(null);
+    setDiceOverlaySession(value => value + 1);
     setDiceFlowPhase('roll');
   }, []);
 
@@ -265,22 +301,10 @@ export function SettlementScreen() {
     if (!rolledDice || selectedRerollIndices.length === 0) {
       return;
     }
-    const result = rerollCurrentSettlementDice(rolledDice, selectedRerollIndices, {
-      goldenDiceUsed: selectedGoldenDice,
-    });
-    if (!result?.dice_check_state) {
-      return;
-    }
-    setRerollResult(result);
-    try {
-      executeCurrentSettlementWithDice(result.dice_check_state.dice, { goldenDiceUsed: selectedGoldenDice });
-      setDiceFlowPhase('result');
-      setShowDiceOverlay(false);
-      setDicePreview(null);
-    } catch (error) {
-      console.error('[SettlementScreen] reroll settlement failed', error);
-    }
-  }, [executeCurrentSettlementWithDice, rerollCurrentSettlementDice, rolledDice, selectedGoldenDice, selectedRerollIndices]);
+    setPendingRerollIndices(selectedRerollIndices);
+    setDiceOverlaySession(value => value + 1);
+    setDiceFlowPhase('roll');
+  }, [rolledDice, selectedRerollIndices]);
 
   if (!isPlaying) {
     return <SummaryView results={lastResults} />;
@@ -394,6 +418,7 @@ export function SettlementScreen() {
           ) : null}
           {(diceFlowPhase === 'roll' || diceFlowPhase === 'post-roll') && (
             <DiceBoxOverlay
+              key={diceOverlaySession}
               fallbackSeed={game?.rng.seed}
               onComplete={handleDiceOverlayComplete}
               onCancel={handleDiceOverlayCancel}
@@ -441,6 +466,7 @@ export function SettlementScreen() {
                         setShowDiceOverlay(false);
                         setDicePreview(null);
                         setDiceFlowPhase('result');
+                        setPendingRerollIndices(null);
                       }}
                     >
                       跳过重投
