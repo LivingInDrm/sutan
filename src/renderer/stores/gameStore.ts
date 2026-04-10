@@ -49,17 +49,15 @@ interface GameStoreActions {
   advanceNarrative: () => void;
   handleNarrativeChoice: (nextStageId: string, effects?: Effects) => void;
   executeCurrentSettlement: (options?: {
-    rerollIndices?: number[];
     goldenDiceUsed?: number;
     choiceIndex?: number;
     externalRoll?: DiceRollResult;
   }) => void;
   executeCurrentSettlementWithDice: (
     dice: number[],
-    explodedDice: number[],
     options?: { goldenDiceUsed?: number }
   ) => void;
-  getCurrentDiceCheckPreview: () => { poolSize: number; rerollAvailable: number } | null;
+  getCurrentDiceCheckPreview: () => { modifier: number; dc: number } | null;
   advanceAfterSettlement: () => void;
   finishCurrentScene: () => void;
   finishAllSettlement: () => void;
@@ -270,7 +268,7 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     get().syncState();
   },
 
-  executeCurrentSettlementWithDice: (dice, explodedDice, options) => {
+  executeCurrentSettlementWithDice: (dice, options) => {
     const { settlement, game } = get();
     const runner = settlement.currentRunner;
     const playback = settlement.currentStagePlayback;
@@ -280,7 +278,6 @@ export const useGameStore = create<GameStore>()((set, get) => ({
       runner.sceneId,
       playback.stageId,
       dice,
-      explodedDice,
       options,
     );
 

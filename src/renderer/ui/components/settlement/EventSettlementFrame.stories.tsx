@@ -4,7 +4,7 @@ import { EventSettlementFrame } from './EventSettlementFrame';
 import { SettlementLeftPanel, SettlementRightPanel } from './SettlementPanels';
 import type { Card, NarrativeNode } from '../../../core/types';
 import type { StageSettlementResult } from '../../../core/settlement/SettlementExecutor';
-import { Rarity, CardType, Attribute, CalcMode, CheckResult } from '../../../core/types/enums';
+import { Rarity, CardType, Attribute, CheckResult } from '../../../core/types/enums';
 
 /* ─── 图片资源 ─── */
 import figure01 from '../../../assets/portraits/figure01.png';

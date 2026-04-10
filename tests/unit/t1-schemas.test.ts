@@ -91,7 +91,7 @@ describe('T1.3: Zod Schema Validation', () => {
             narrative: [],
             settlement: {
               type: 'dice_check',
-              check: { attribute: 'social', calc_mode: 'max', target: 8 },
+              check: { attribute: 'social', slots: [0], opponent_value: 9, dc: 8 },
               results: {
                 success: { narrative: '成功', effects: { gold: 20, reputation: 5 } },
                 partial_success: { narrative: '险胜', effects: { gold: 10 } },

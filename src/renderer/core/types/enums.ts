@@ -65,15 +65,6 @@ export enum CheckResult {
   CriticalFailure = 'critical_failure',
 }
 
-export enum CalcMode {
-  Max = 'max',
-  Sum = 'sum',
-  Min = 'min',
-  Avg = 'avg',
-  First = 'first',
-  Specific = 'specific',
-}
-
 export enum SlotType {
   Character = 'character',
   Item = 'item',
@@ -132,10 +123,8 @@ export const RARITY_ATTRIBUTE_RANGES: Record<Rarity, [number, number]> = {
 
 export const DICE_CONFIG = {
   SIDES: 6,
-  SUCCESS_THRESHOLD: 4,
-  EXPLODE_ON: 6,
-  MAX_POOL: 20,
-  MAX_EXPLODE: 20,
+  DICE_COUNT: 3,
+  MODIFIER_K: 3,
 } as const;
 
 export const GAME_CONSTANTS = {

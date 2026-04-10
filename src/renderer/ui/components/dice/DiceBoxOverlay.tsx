@@ -4,8 +4,7 @@ import { DICE_CONFIG } from '../../../core/types/enums';
 import { RandomManager } from '../../../lib/random';
 
 interface DiceBoxOverlayProps {
-  poolSize: number;
-  onComplete: (result: { dice: number[]; explodedDice: number[] }) => void;
+  onComplete: (result: { dice: [number, number, number] }) => void;
   onCancel?: () => void;
   fallbackSeed?: string;
   visible: boolean;
@@ -27,40 +26,14 @@ type DiceBoxInstance = {
   onRollComplete?: (results?: unknown) => void;
 };
 
-const EXPLODED_DELAY_MS = 450;
 const INIT_TIMEOUT_MS = 5000;
 const MAX_OVERLAY_LIFETIME_MS = 20000;
 
-function createFallbackRoll(poolSize: number, seed?: string): { dice: number[]; explodedDice: number[] } {
+function createFallbackRoll(seed?: string): { dice: [number, number, number] } {
   const rng = new RandomManager(seed);
-  const diceCount = Math.min(poolSize, DICE_CONFIG.MAX_POOL);
-  const dice: number[] = [];
-
-  for (let index = 0; index < diceCount; index += 1) {
-    dice.push(rng.rollD6());
-  }
-
-  const explodedDice: number[] = [];
-  let explosionsToProcess = dice.filter((value) => value === DICE_CONFIG.EXPLODE_ON).length;
-  let totalExplosions = 0;
-
-  while (explosionsToProcess > 0 && totalExplosions < DICE_CONFIG.MAX_EXPLODE) {
-    const batch = Math.min(explosionsToProcess, DICE_CONFIG.MAX_EXPLODE - totalExplosions);
-    let newExplosions = 0;
-
-    for (let index = 0; index < batch; index += 1) {
-      const roll = rng.rollD6();
-      explodedDice.push(roll);
-      totalExplosions += 1;
-      if (roll === DICE_CONFIG.EXPLODE_ON) {
-        newExplosions += 1;
-      }
-    }
-
-    explosionsToProcess = newExplosions;
-  }
-
-  return { dice, explodedDice };
+  return {
+    dice: [rng.rollD6(), rng.rollD6(), rng.rollD6()],
+  };
 }
 
 function extractRollValues(results: unknown): number[] {
@@ -90,7 +63,6 @@ function extractRollValues(results: unknown): number[] {
 }
 
 export function DiceBoxOverlay({
-  poolSize,
   onComplete,
   onCancel,
   fallbackSeed,
@@ -110,10 +82,8 @@ export function DiceBoxOverlay({
   const initTimeoutRef = useRef<number | null>(null);
   const hardTimeoutRef = useRef<number | null>(null);
   const [phase, setPhase] = useState<DicePhase>('ready');
-  const [displayResult, setDisplayResult] = useState<{ dice: number[]; explodedDice: number[] } | null>(null);
-  const collectedDiceRef = useRef<number[]>([]);
-  const collectedExplodedDiceRef = useRef<number[]>([]);
-  const explodedCountRef = useRef(0);
+  const [displayResult, setDisplayResult] = useState<{ dice: [number, number, number] } | null>(null);
+  const collectedDiceRef = useRef<[number, number, number]>([1, 1, 1]);
   const onCompleteRef = useRef(onComplete);
   const onCancelRef = useRef(onCancel);
   const onPhaseChangeRef = useRef(onPhaseChange);
@@ -153,58 +123,19 @@ export function DiceBoxOverlay({
     clearTimers();
     setDisplayResult({
       dice: [...collectedDiceRef.current],
-      explodedDice: [...collectedExplodedDiceRef.current],
-    });
+    } as { dice: [number, number, number] });
     setPhase('finished');
     console.log('[DiceBoxOverlay] finish', {
       dice: collectedDiceRef.current,
-      explodedDice: collectedExplodedDiceRef.current,
     });
   }, [clearTimers]);
 
   const playRollSequence = useCallback(async () => {
-    collectedDiceRef.current = [];
-    collectedExplodedDiceRef.current = [];
-    explodedCountRef.current = 0;
+    collectedDiceRef.current = [1, 1, 1];
     setPhase('rolling');
-    console.log('[DiceBoxOverlay] rolling', { poolSize });
-
-    if (!poolSize) {
-      finishOverlay();
-      return;
-    }
+    console.log('[DiceBoxOverlay] rolling');
 
     const sequenceId = ++rollSequenceRef.current;
-
-    const runExplodedPhase = async (nextPoolSize: number) => {
-      if (!nextPoolSize || explodedCountRef.current >= DICE_CONFIG.MAX_EXPLODE) {
-        if (rollSequenceRef.current === sequenceId) {
-          finishOverlay();
-        }
-        return;
-      }
-
-      timeoutRef.current = window.setTimeout(() => {
-        const activeDiceBox = diceBoxRef.current;
-        if (rollSequenceRef.current !== sequenceId || !activeDiceBox) {
-          return;
-        }
-
-        activeDiceBox.onRollComplete = (results) => {
-          if (rollSequenceRef.current !== sequenceId) {
-            return;
-          }
-          const rolledValues = extractRollValues(results);
-          console.log('[DiceBoxOverlay] roll complete', rolledValues);
-          const allowedValues = rolledValues.slice(0, Math.max(0, DICE_CONFIG.MAX_EXPLODE - explodedCountRef.current));
-          collectedExplodedDiceRef.current.push(...allowedValues);
-          explodedCountRef.current += allowedValues.length;
-          const chainedExplosions = allowedValues.filter(value => value === DICE_CONFIG.EXPLODE_ON).length;
-          void runExplodedPhase(chainedExplosions);
-        };
-        void activeDiceBox.roll(`${nextPoolSize}d6`, { theme: 'jade-pip' });
-      }, EXPLODED_DELAY_MS);
-    };
 
     const activeDiceBox = diceBoxRef.current;
     if (!activeDiceBox) {
@@ -215,15 +146,18 @@ export function DiceBoxOverlay({
       if (rollSequenceRef.current !== sequenceId) {
         return;
       }
-      const rolledValues = extractRollValues(results).slice(0, poolSize);
+      const rolledValues = extractRollValues(results).slice(0, DICE_CONFIG.DICE_COUNT);
       console.log('[DiceBoxOverlay] roll complete', rolledValues);
-      collectedDiceRef.current = rolledValues;
-      const initialExplosions = rolledValues.filter(value => value === DICE_CONFIG.EXPLODE_ON).length;
-      void runExplodedPhase(initialExplosions);
+      collectedDiceRef.current = [
+        rolledValues[0] ?? 1,
+        rolledValues[1] ?? 1,
+        rolledValues[2] ?? 1,
+      ];
+      finishOverlay();
     };
 
-    await activeDiceBox.roll(`${poolSize}d6`, { theme: 'jade-pip' });
-  }, [finishOverlay, poolSize]);
+    await activeDiceBox.roll(`${DICE_CONFIG.DICE_COUNT}d6`, { theme: 'jade-pip' });
+  }, [finishOverlay]);
 
   const confirmOverlay = useCallback(() => {
     if (phase !== 'finished') {
@@ -232,7 +166,6 @@ export function DiceBoxOverlay({
     clearTimers();
     onCompleteRef.current({
       dice: collectedDiceRef.current,
-      explodedDice: collectedExplodedDiceRef.current,
     });
   }, [clearTimers, phase]);
 
@@ -243,16 +176,16 @@ export function DiceBoxOverlay({
 
   const fallbackComplete = useCallback(() => {
     clearTimers();
-    const fallbackRoll = createFallbackRoll(poolSize, fallbackSeed);
+    const fallbackRoll = createFallbackRoll(fallbackSeed);
     console.log('[DiceBoxOverlay] fallback triggered', fallbackRoll);
     onCompleteRef.current(fallbackRoll);
-  }, [clearTimers, fallbackSeed, poolSize]);
+  }, [clearTimers, fallbackSeed]);
 
   useEffect(() => {
     startedVisibleRef.current = false;
     setPhase('ready');
     setDisplayResult(null);
-  }, [poolSize]);
+  }, []);
 
   useEffect(() => {
     if (!visible) {
@@ -261,7 +194,7 @@ export function DiceBoxOverlay({
       setDisplayResult(null);
       return;
     }
-    console.log('[DiceBoxOverlay] overlay mounted', { containerId, poolSize, visible });
+    console.log('[DiceBoxOverlay] overlay mounted', { containerId, visible });
 
     let disposed = false;
 
@@ -393,8 +326,7 @@ export function DiceBoxOverlay({
     if (!displayResult) {
       return null;
     }
-    const successes = [...displayResult.dice, ...displayResult.explodedDice].filter((value) => value >= 5).length;
-    return `成功: ${successes}`;
+    return `结果：${displayResult.dice.join(' + ')} = ${displayResult.dice.reduce((sum, value) => sum + value, 0)}`;
   }, [displayResult, resultSummaryText]);
 
   const footerText = useMemo(() => {

@@ -1,7 +1,7 @@
 import { z } from 'zod/v4';
 import {
   Rarity, Attribute, CardType, EquipmentType, SceneType,
-  SceneStatus, CheckResult, CalcMode, SlotType, NarrativeNodeType,
+  SceneStatus, CheckResult, SlotType, NarrativeNodeType,
 } from '../../core/types/enums';
 
 const RarityEnum = z.enum([
@@ -36,10 +36,6 @@ const SceneStatusEnum = z.enum([
 const CheckResultEnum = z.enum([
   CheckResult.Success, CheckResult.PartialSuccess,
   CheckResult.Failure, CheckResult.CriticalFailure,
-]);
-const CalcModeEnum = z.enum([
-  CalcMode.Max, CalcMode.Sum, CalcMode.Min,
-  CalcMode.Avg, CalcMode.First, CalcMode.Specific,
 ]);
 const SlotTypeEnum = z.enum([
   SlotType.Character, SlotType.Item, SlotType.Sultan, SlotType.Gold,
@@ -121,8 +117,9 @@ const SlotSchema = z.object({
 
 const DiceCheckConfigSchema = z.object({
   attribute: AttributeEnum,
-  calc_mode: CalcModeEnum,
-  target: z.number().int().min(1),
+  slots: z.array(z.number().int().min(0)),
+  opponent_value: z.number().int().min(1).max(10),
+  dc: z.number().int().min(1),
 });
 
 const ChoiceOptionSchema = z.object({

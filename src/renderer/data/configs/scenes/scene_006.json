@@ -105,8 +105,11 @@
         "narrative": "温华扔来茶碗！进行「体魄」鉴定。",
         "check": {
           "attribute": "physique",
-          "calc_mode": "max",
-          "target": 4
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 4
         },
         "results": {
           "success": {
@@ -193,8 +196,11 @@
         "narrative": "酒葫芦引出了新话题。进行「社交」鉴定。",
         "check": {
           "attribute": "social",
-          "calc_mode": "max",
-          "target": 4
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 4
         },
         "results": {
           "success": {
@@ -314,8 +320,11 @@
         "narrative": "温华坐下后，气氛逐渐缓和。若你已有足够声望，更容易让他心甘情愿追随。进行「社交」鉴定。",
         "check": {
           "attribute": "social",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -388,8 +397,11 @@
         "narrative": "温华对酒葫芦虎视眈眈。进行「魅力」鉴定。",
         "check": {
           "attribute": "charm",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -472,7 +484,10 @@
     }
   ],
   "unlock_conditions": {
-    "day_range": [1, 7]
+    "day_range": [
+      1,
+      7
+    ]
   },
   "absence_penalty": null
 }

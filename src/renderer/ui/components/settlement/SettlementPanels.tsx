@@ -104,12 +104,13 @@ export function SettlementLeftPanel({
             {displaySettlementResult.dice_check_state && (
               <div className="mb-3">
                 <DiceResult
-                  dice={displaySettlementResult.dice_check_state.initial_roll.all_dice}
-                  explodedStartIndex={displaySettlementResult.dice_check_state.initial_roll.dice.length}
+                  dice={displaySettlementResult.dice_check_state.dice}
+                  explodedStartIndex={3}
+                  successThreshold={7}
                 />
                 <div className="text-center mt-2">
                   <span className="text-xs text-parchment-200/82 font-(family-name:--font-body)">
-                    成功: {displaySettlementResult.dice_check_state.final_successes} / 目标: {displaySettlementResult.dice_check_state.config.target}
+                    {displaySettlementResult.dice_check_state.dice.join(' + ')} {displaySettlementResult.dice_check_state.modifier >= 0 ? '+' : '-'} {Math.abs(displaySettlementResult.dice_check_state.modifier)} = {displaySettlementResult.dice_check_state.total} / DC {displaySettlementResult.dice_check_state.dc_with_offset}
                   </span>
                 </div>
               </div>

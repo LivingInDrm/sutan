@@ -101,8 +101,11 @@
         "narrative": "想在陈芝豹面前以言折锋，需要撑得住他的威压。进行「社交」鉴定。",
         "check": {
           "attribute": "social",
-          "calc_mode": "max",
-          "target": 6
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 6
         },
         "results": {
           "success": {
@@ -161,8 +164,11 @@
         "narrative": "在白衣兵仙面前以势还势，需要足够硬的胆气与武力。进行「武力」鉴定。",
         "check": {
           "attribute": "combat",
-          "calc_mode": "max",
-          "target": 7
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 7
         },
         "results": {
           "success": {
@@ -201,7 +207,10 @@
   ],
   "unlock_conditions": {
     "reputation_min": 50,
-    "day_range": [10, 20]
+    "day_range": [
+      10,
+      20
+    ]
   },
   "absence_penalty": null
 }

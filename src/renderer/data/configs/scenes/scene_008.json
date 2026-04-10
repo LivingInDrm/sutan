@@ -106,8 +106,11 @@
         "narrative": "礼数周全只是敲门砖，真正能不能让她正眼相看，还得看你能否以气度与心性接住她的锋芒。进行「魅力」鉴定。",
         "check": {
           "attribute": "charm",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -166,8 +169,11 @@
         "narrative": "想从冲撞里搏出一份认可，就得先在她手底下站得住。进行「武力」鉴定。",
         "check": {
           "attribute": "combat",
-          "calc_mode": "max",
-          "target": 6
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 6
         },
         "results": {
           "success": {
@@ -230,8 +236,11 @@
         "narrative": "想靠眼力与分寸打动她，就得说中她练刀时不肯示人的那点心思。进行「智慧」鉴定。",
         "check": {
           "attribute": "wisdom",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -268,7 +277,10 @@
   ],
   "unlock_conditions": {
     "reputation_min": 20,
-    "day_range": [3, 14]
+    "day_range": [
+      3,
+      14
+    ]
   },
   "absence_penalty": null
 }

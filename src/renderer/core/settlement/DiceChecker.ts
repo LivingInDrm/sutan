@@ -1,6 +1,7 @@
 import { RandomManager } from '../../lib/random';
 import { DICE_CONFIG, CheckResult } from '../types/enums';
 import type { DiceRollResult, DiceCheckState, DiceCheckConfig } from '../types';
+import type { CardInstance } from '../card/CardInstance';
 
 export class DiceChecker {
   private rng: RandomManager;
@@ -9,178 +10,81 @@ export class DiceChecker {
     this.rng = rng;
   }
 
-  rollDice(poolSize: number, rerollAvailable: number = 0): DiceRollResult {
-    const diceCount = Math.min(poolSize, DICE_CONFIG.MAX_POOL);
-    const dice: number[] = [];
-
-    for (let i = 0; i < diceCount; i++) {
-      dice.push(this.rng.rollD6());
-    }
-
-    const explodedDice: number[] = [];
-    let explosionsToProcess = dice.filter(d => d === DICE_CONFIG.EXPLODE_ON).length;
-    let totalExplosions = 0;
-
-    while (explosionsToProcess > 0 && totalExplosions < DICE_CONFIG.MAX_EXPLODE) {
-      const batch = Math.min(explosionsToProcess, DICE_CONFIG.MAX_EXPLODE - totalExplosions);
-      let newExplosions = 0;
-      for (let i = 0; i < batch; i++) {
-        const roll = this.rng.rollD6();
-        explodedDice.push(roll);
-        totalExplosions++;
-        if (roll === DICE_CONFIG.EXPLODE_ON) {
-          newExplosions++;
-        }
-      }
-      explosionsToProcess = newExplosions;
-    }
-
-    const allDice = [...dice, ...explodedDice];
-    const successes = allDice.filter(d => d >= DICE_CONFIG.SUCCESS_THRESHOLD).length;
+  rollDice(): DiceRollResult {
+    const dice: [number, number, number] = [
+      this.rng.rollD6(),
+      this.rng.rollD6(),
+      this.rng.rollD6(),
+    ];
 
     return {
       dice,
-      exploded_dice: explodedDice,
-      all_dice: allDice,
-      successes,
-      reroll_available: rerollAvailable,
+      sum: dice[0] + dice[1] + dice[2],
     };
   }
 
-  rollDiceWithValues(
-    dice: number[],
-    explodedDice: number[] = [],
-    rerollAvailable: number = 0
-  ): DiceRollResult {
-    const normalizedDice = dice.slice(0, DICE_CONFIG.MAX_POOL);
-    const normalizedExplodedDice = explodedDice.slice(0, DICE_CONFIG.MAX_EXPLODE);
-    const allDice = [...normalizedDice, ...normalizedExplodedDice];
-    const successes = allDice.filter(d => d >= DICE_CONFIG.SUCCESS_THRESHOLD).length;
+  rollDiceWithValues(dice: number[]): DiceRollResult {
+    const normalizedDice = [dice[0] ?? 1, dice[1] ?? 1, dice[2] ?? 1] as [number, number, number];
 
     return {
       dice: normalizedDice,
-      exploded_dice: normalizedExplodedDice,
-      all_dice: allDice,
-      successes,
-      reroll_available: rerollAvailable,
+      sum: normalizedDice[0] + normalizedDice[1] + normalizedDice[2],
     };
   }
 
-  performFullCheckWithValues(
-    dice: number[],
-    explodedDice: number[],
-    config: DiceCheckConfig,
-    rerollAvailable: number = 0,
-    goldenDiceUsed: number = 0
-  ): DiceCheckState {
-    const initialRoll = this.rollDiceWithValues(dice, explodedDice, rerollAvailable);
-    const finalSuccesses = this.applyGoldenDice(initialRoll.successes, goldenDiceUsed);
-    const result = this.determineResult(finalSuccesses, config.target);
+  calculateModifier(playerPower: number, opponentPower: number, goldenDice: number): number {
+    if (playerPower <= 0 || opponentPower <= 0) {
+      return goldenDice;
+    }
 
-    return {
-      config,
-      pool_size: initialRoll.dice.length,
-      initial_roll: initialRoll,
-      golden_dice_used: goldenDiceUsed,
-      final_successes: finalSuccesses,
-      result,
-    };
+    const base = Math.round(
+      DICE_CONFIG.MODIFIER_K * (Math.log(playerPower / opponentPower) / Math.log(3))
+    );
+
+    return base + goldenDice;
   }
 
-  reroll(rollResult: DiceRollResult, indicesToReroll: number[]): DiceRollResult {
-    const maxRerolls = rollResult.reroll_available;
-    const validIndices = indicesToReroll.slice(0, maxRerolls);
-    const newAllDice = [...rollResult.all_dice];
-
-    for (const idx of validIndices) {
-      if (idx >= 0 && idx < newAllDice.length) {
-        if (newAllDice[idx] < DICE_CONFIG.SUCCESS_THRESHOLD) {
-          newAllDice[idx] = this.rng.rollD6();
-        }
+  calculatePlayerPower(cards: CardInstance[], attribute: DiceCheckConfig['attribute'], slots: number[]): number {
+    return slots.reduce((total, slotIndex) => {
+      const card = cards[slotIndex];
+      if (!card) {
+        return total;
       }
-    }
-
-    const successes = newAllDice.filter(d => d >= DICE_CONFIG.SUCCESS_THRESHOLD).length;
-
-    return {
-      dice: rollResult.dice,
-      exploded_dice: rollResult.exploded_dice,
-      all_dice: newAllDice,
-      successes,
-      reroll_available: 0,
-    };
+      return total + Math.pow(3, card.getAttributeValue(attribute));
+    }, 0);
   }
 
-  applyGoldenDice(successes: number, goldenDiceCount: number): number {
-    return successes + goldenDiceCount;
-  }
-
-  determineResult(successCount: number, target: number): CheckResult {
-    if (successCount >= target) {
-      return CheckResult.Success;
-    }
-    if (successCount === 0) {
+  determineResult(total: number, dc: number, dice?: [number, number, number]): CheckResult {
+    if (dice && dice.every((value) => value === 1)) {
       return CheckResult.CriticalFailure;
     }
-    if (target > 2 && successCount >= target - 2) {
+    if (total <= dc - 5) {
+      return CheckResult.CriticalFailure;
+    }
+    if (total < dc) {
+      return CheckResult.Failure;
+    }
+    if (total < dc + 3) {
       return CheckResult.PartialSuccess;
     }
-    return CheckResult.Failure;
+    return CheckResult.Success;
   }
 
-  performFullCheck(
-    poolSize: number,
+  buildCheckState(
     config: DiceCheckConfig,
-    rerollAvailable: number = 0,
-    rerollIndices?: number[],
-    goldenDiceUsed: number = 0
+    roll: DiceRollResult,
+    modifier: number,
+    dcWithOffset: number
   ): DiceCheckState {
-    const initialRoll = this.rollDice(poolSize, rerollAvailable);
-
-    let afterReroll: DiceRollResult | undefined;
-    if (rerollIndices && rerollIndices.length > 0) {
-      afterReroll = this.reroll(initialRoll, rerollIndices);
-    }
-
-    const currentRoll = afterReroll || initialRoll;
-    const finalSuccesses = this.applyGoldenDice(currentRoll.successes, goldenDiceUsed);
-    const result = this.determineResult(finalSuccesses, config.target);
+    const total = roll.sum + modifier;
 
     return {
       config,
-      pool_size: poolSize,
-      initial_roll: initialRoll,
-      after_reroll: afterReroll,
-      golden_dice_used: goldenDiceUsed,
-      final_successes: finalSuccesses,
-      result,
-    };
-  }
-
-  performFullCheckFromRoll(
-    poolSize: number,
-    config: DiceCheckConfig,
-    initialRoll: DiceRollResult,
-    rerollIndices?: number[],
-    goldenDiceUsed: number = 0
-  ): DiceCheckState {
-    let afterReroll: DiceRollResult | undefined;
-    if (rerollIndices && rerollIndices.length > 0) {
-      afterReroll = this.reroll(initialRoll, rerollIndices);
-    }
-
-    const currentRoll = afterReroll || initialRoll;
-    const finalSuccesses = this.applyGoldenDice(currentRoll.successes, goldenDiceUsed);
-    const result = this.determineResult(finalSuccesses, config.target);
-
-    return {
-      config,
-      pool_size: poolSize,
-      initial_roll: initialRoll,
-      after_reroll: afterReroll,
-      golden_dice_used: goldenDiceUsed,
-      final_successes: finalSuccesses,
-      result,
+      dice: roll.dice,
+      modifier,
+      total,
+      dc_with_offset: dcWithOffset,
+      result: this.determineResult(total, dcWithOffset, roll.dice),
     };
   }
 }

@@ -89,8 +89,11 @@
         "narrative": "她话锋如刀，既在试北凉气度，也在试徐凤年的城府。进行「社交」鉴定。",
         "check": {
           "attribute": "social",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -163,8 +166,11 @@
         "narrative": "话已说尽，剩下便看谁能在这一线杀机前站得更稳。进行「武力」鉴定。",
         "check": {
           "attribute": "combat",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -279,7 +285,10 @@
   ],
   "unlock_conditions": {
     "reputation_min": 40,
-    "day_range": [7, 18]
+    "day_range": [
+      7,
+      18
+    ]
   },
   "absence_penalty": null
 }

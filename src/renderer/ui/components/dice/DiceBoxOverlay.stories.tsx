@@ -4,13 +4,12 @@ import { DiceBoxOverlay } from './DiceBoxOverlay';
 
 export const DiceRollTest: Story = () => {
   const [visible, setVisible] = useState(false);
-  const [result, setResult] = useState<{ dice: number[]; explodedDice: number[] } | null>(null);
-  const [overlayResult, setOverlayResult] = useState<{ dice: number[]; explodedDice: number[] } | null>(null);
+  const [result, setResult] = useState<{ dice: [number, number, number] } | null>(null);
+  const [overlayResult, setOverlayResult] = useState<{ dice: [number, number, number] } | null>(null);
   const [phase, setPhase] = useState<'idle' | 'ready' | 'rolling' | 'finished'>('idle');
-  const totalDice = result ? [...result.dice, ...result.explodedDice] : [];
-  const successes = totalDice.filter((value) => value >= 5).length;
-  const target = 4;
-  const resultLabel = successes >= target ? '大成功' : successes === 0 ? '大失败' : successes >= target - 2 ? '部分成功' : '失败';
+  const total = result ? result.dice.reduce((sum, value) => sum + value, 0) : 0;
+  const target = 10;
+  const resultLabel = total >= target + 3 ? '大成功' : total >= target ? '部分成功' : total <= target - 5 ? '大失败' : '失败';
   const phaseText = useMemo(() => {
     if (phase === 'ready') {
       return '阶段1：桌面已弹出，等待点击掷骰';
@@ -51,13 +50,11 @@ export const DiceRollTest: Story = () => {
       {result && (
         <div style={{ marginTop: 20, lineHeight: 1.8 }}>
           <p>初始骰: {JSON.stringify(result.dice)}</p>
-          <p>爆骰: {JSON.stringify(result.explodedDice)}</p>
-        </div>
+                  </div>
       )}
 
       <DiceBoxOverlay
-        poolSize={3}
-        visible={visible}
+                visible={visible}
         onPhaseChange={(nextPhase) => {
           if (nextPhase === 'rolling') {
             setPhase('rolling');
@@ -73,7 +70,7 @@ export const DiceRollTest: Story = () => {
           setVisible(false);
           setPhase('idle');
         }}
-        resultSummaryText={overlayResult ? `成功: ${successes} / 目标: ${target}` : null}
+        resultSummaryText={overlayResult ? `总和: ${total} / DC ${target}` : null}
         resultLabelText={overlayResult ? resultLabel : null}
       />
     </div>

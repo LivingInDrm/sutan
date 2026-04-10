@@ -50,12 +50,13 @@ function SummaryView({ results }: { results: SettlementResult[] }) {
             {result.dice_check_state && (
               <div className="mb-4">
                 <DiceResult
-                  dice={result.dice_check_state.initial_roll.all_dice}
-                  explodedStartIndex={result.dice_check_state.initial_roll.dice.length}
+                  dice={result.dice_check_state.dice}
+                  explodedStartIndex={3}
+                  successThreshold={7}
                 />
                 <div className="text-center mt-3">
                   <span className="text-sm text-gold-dim">
-                    成功: {result.dice_check_state.final_successes} / 目标: {result.dice_check_state.config.target}
+                    {result.dice_check_state.dice.join(' + ')} {result.dice_check_state.modifier >= 0 ? '+' : '-'} {Math.abs(result.dice_check_state.modifier)} = {result.dice_check_state.total} / DC {result.dice_check_state.dc_with_offset}
                   </span>
                 </div>
               </div>
@@ -109,7 +110,7 @@ export function SettlementScreen() {
 
   const [historyNodes, setHistoryNodes] = useState<NarrativeNode[]>([]);
   const [showDiceOverlay, setShowDiceOverlay] = useState(false);
-  const [pendingDicePoolSize, setPendingDicePoolSize] = useState(0);
+  const [dicePreview, setDicePreview] = useState<{ modifier: number; dc: number } | null>(null);
   const prevStageIdRef = useRef<string | null>(null);
   const prevSettlementNarrativeRef = useRef<string | null>(null);
 
@@ -146,7 +147,7 @@ export function SettlementScreen() {
     if (!isPlaying) {
       setHistoryNodes([]);
       setShowDiceOverlay(false);
-      setPendingDicePoolSize(0);
+      setDicePreview(null);
       prevStageIdRef.current = null;
       prevSettlementNarrativeRef.current = null;
     }
@@ -156,33 +157,30 @@ export function SettlementScreen() {
     const preview = getCurrentDiceCheckPreview();
     console.log('[SettlementScreen] handleExecuteSettlement', {
       preview,
-      poolSize: preview?.poolSize ?? 0,
+      modifier: preview?.modifier ?? 0,
     });
-    if (preview && preview.poolSize > 0) {
-      setPendingDicePoolSize(preview.poolSize);
+    if (preview) {
+      setDicePreview(preview);
       setShowDiceOverlay(true);
       return;
     }
     executeCurrentSettlement();
   }, [executeCurrentSettlement, getCurrentDiceCheckPreview]);
 
-  const handleDiceOverlayComplete = useCallback((result: { dice: number[]; explodedDice: number[] }) => {
+  const handleDiceOverlayComplete = useCallback((result: { dice: [number, number, number] }) => {
     console.log('[SettlementScreen] handleDiceOverlayComplete', result);
     try {
-      executeCurrentSettlementWithDice(result.dice, result.explodedDice);
+      executeCurrentSettlementWithDice(result.dice);
       setShowDiceOverlay(false);
-      setPendingDicePoolSize(0);
+      setDicePreview(null);
     } catch (error) {
       console.error('[SettlementScreen] executeCurrentSettlementWithDice failed', error);
       setShowDiceOverlay(false);
-      setPendingDicePoolSize(0);
+      setDicePreview(null);
       executeCurrentSettlement({
         externalRoll: {
           dice: result.dice,
-          exploded_dice: result.explodedDice,
-          all_dice: [...result.dice, ...result.explodedDice],
-          successes: [...result.dice, ...result.explodedDice].filter(value => value >= 5).length,
-          reroll_available: 0,
+          sum: result.dice.reduce((sum, value) => sum + value, 0),
         },
       });
     }
@@ -191,7 +189,7 @@ export function SettlementScreen() {
   const handleDiceOverlayCancel = useCallback(() => {
     console.log('[SettlementScreen] handleDiceOverlayCancel');
     setShowDiceOverlay(false);
-    setPendingDicePoolSize(0);
+    setDicePreview(null);
     executeCurrentSettlement();
   }, [executeCurrentSettlement]);
 
@@ -269,13 +267,13 @@ export function SettlementScreen() {
           onSelect={(choiceIndex) => executeCurrentSettlement({ choiceIndex })}
         />
       )}
-      {showDiceOverlay && pendingDicePoolSize > 0 && (
+      {showDiceOverlay && (
         <DiceBoxOverlay
           fallbackSeed={game?.rng.seed}
-          poolSize={pendingDicePoolSize}
           onComplete={handleDiceOverlayComplete}
           onCancel={handleDiceOverlayCancel}
           visible={showDiceOverlay}
+          resultSummaryText={dicePreview ? `3d6 ${dicePreview.modifier >= 0 ? '+' : '-'} ${Math.abs(dicePreview.modifier)} vs DC ${dicePreview.dc}` : null}
         />
       )}
     </>

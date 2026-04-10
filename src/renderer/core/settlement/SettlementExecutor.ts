@@ -3,10 +3,10 @@ import type {
   DiceCheckSettlement, TradeSettlement, ChoiceSettlement, PlayerChoiceSettlement,
   Stage, Effects, DiceRollResult,
 } from '../types';
-import { CheckResult, SpecialAttribute } from '../types/enums';
+import { CheckResult } from '../types/enums';
 import { DiceChecker } from './DiceChecker';
 import { EffectApplier, type CardDataResolver } from './EffectApplier';
-import { calcCheckPool } from './calcCheckPool';
+import { calcPowerModifier } from './calcPowerModifier';
 import { CardManager } from '../card/CardManager';
 import { PlayerState } from '../player/PlayerState';
 import { SceneManager } from '../scene/SceneManager';
@@ -15,6 +15,7 @@ import { RandomManager } from '../../lib/random';
 import { CardInstance } from '../card/CardInstance';
 import { SceneRunner } from '../scene/SceneRunner';
 import { eventBus } from '../../lib/events';
+import { DIFFICULTIES } from '../types';
 
 export interface StageSettlementResult {
   type: Settlement['type'];
@@ -32,13 +33,15 @@ export class SettlementExecutor {
   private playerState: PlayerState;
   private sceneManager: SceneManager;
   private equipmentSystem: EquipmentSystem;
+  private difficultyKey: string = 'normal';
 
   constructor(
     rng: RandomManager,
     playerState: PlayerState,
     cardManager: CardManager,
     sceneManager: SceneManager,
-    equipmentSystem: EquipmentSystem
+    equipmentSystem: EquipmentSystem,
+    difficultyKey: string = 'normal'
   ) {
     this.diceChecker = new DiceChecker(rng);
     this.effectApplier = new EffectApplier(playerState, cardManager);
@@ -46,6 +49,7 @@ export class SettlementExecutor {
     this.playerState = playerState;
     this.sceneManager = sceneManager;
     this.equipmentSystem = equipmentSystem;
+    this.difficultyKey = difficultyKey;
   }
 
   setCardDataResolver(resolver: CardDataResolver): void {
@@ -63,7 +67,7 @@ export class SettlementExecutor {
   executeStageSettlement(
     sceneId: string,
     stageId: string,
-    options?: { rerollIndices?: number[]; goldenDiceUsed?: number; choiceIndex?: number; externalRoll?: DiceRollResult }
+    options?: { goldenDiceUsed?: number; choiceIndex?: number; externalRoll?: DiceRollResult }
   ): StageSettlementResult | null {
     const scene = this.sceneManager.getScene(sceneId);
     const sceneState = this.sceneManager.getSceneState(sceneId);
@@ -182,55 +186,33 @@ export class SettlementExecutor {
     scene: Scene,
     settlement: DiceCheckSettlement,
     investedCardIds: string[],
-    options?: { rerollIndices?: number[]; goldenDiceUsed?: number; externalRoll?: DiceRollResult }
+    options?: { goldenDiceUsed?: number; externalRoll?: DiceRollResult }
   ): StageSettlementResult {
     const cards = investedCardIds
       .map(id => this.cardManager.getCard(id))
       .filter((c): c is CardInstance => c !== undefined && c.isCharacter);
-
-    let poolSize = calcCheckPool(cards, settlement.check.attribute, settlement.check.calc_mode);
-
-    for (const card of cards) {
-      poolSize += this.equipmentSystem.getAttributeBonus(card.id, settlement.check.attribute);
-    }
-
-    poolSize = Math.min(poolSize, 20);
-
-    let totalReroll = 0;
-    for (const card of cards) {
-      totalReroll += card.getSpecialAttributeValue(SpecialAttribute.Reroll);
-      totalReroll += this.equipmentSystem.getSpecialBonus(card.id, SpecialAttribute.Reroll);
-    }
-
-    const itemCards = investedCardIds
-      .map(id => this.cardManager.getCard(id))
-      .filter((c): c is CardInstance => c !== undefined && !c.isCharacter);
-    for (const item of itemCards) {
-      const bonus = item.data.attribute_bonus;
-      if (bonus) {
-        poolSize += bonus[settlement.check.attribute as keyof typeof bonus] || 0;
-      }
-    }
-    poolSize = Math.min(poolSize, 20);
-
+    const goldenDiceUsed = options?.goldenDiceUsed ?? 0;
+    const modifier = calcPowerModifier(
+      cards,
+      settlement.check.attribute,
+      settlement.check.slots,
+      settlement.check.opponent_value,
+      goldenDiceUsed
+    );
+    const difficultyOffset = (DIFFICULTIES[this.difficultyKey] ?? DIFFICULTIES.normal).dc_offset;
+    const dcWithOffset = settlement.check.dc + difficultyOffset;
     const initialRoll = options?.externalRoll
-      ? this.diceChecker.rollDiceWithValues(
-          options.externalRoll.dice,
-          options.externalRoll.exploded_dice,
-          totalReroll
-        )
-      : this.diceChecker.rollDice(poolSize, totalReroll);
-
-    const diceState = this.diceChecker.performFullCheckFromRoll(
-      poolSize,
+      ? this.diceChecker.rollDiceWithValues(options.externalRoll.dice)
+      : this.diceChecker.rollDice();
+    const diceState = this.diceChecker.buildCheckState(
       settlement.check,
       initialRoll,
-      options?.rerollIndices,
-      options?.goldenDiceUsed ?? 0
+      modifier,
+      dcWithOffset
     );
 
-    if (options?.goldenDiceUsed) {
-      this.playerState.useGoldenDice(options.goldenDiceUsed);
+    if (goldenDiceUsed) {
+      this.playerState.useGoldenDice(goldenDiceUsed);
     }
 
     const resultBranch = settlement.results[diceState.result];
@@ -255,7 +237,6 @@ export class SettlementExecutor {
     sceneId: string,
     stageId: string,
     dice: number[],
-    explodedDice: number[],
     options?: { goldenDiceUsed?: number }
   ): StageSettlementResult | null {
     const scene = this.sceneManager.getScene(sceneId);
@@ -270,23 +251,25 @@ export class SettlementExecutor {
     const cards = investedCardIds
       .map(id => this.cardManager.getCard(id))
       .filter((c): c is CardInstance => c !== undefined && c.isCharacter);
-
-    let totalReroll = 0;
-    for (const card of cards) {
-      totalReroll += card.getSpecialAttributeValue(SpecialAttribute.Reroll);
-      totalReroll += this.equipmentSystem.getSpecialBonus(card.id, SpecialAttribute.Reroll);
-    }
-
-    const diceState = this.diceChecker.performFullCheckWithValues(
-      dice,
-      explodedDice,
+    const goldenDiceUsed = options?.goldenDiceUsed ?? 0;
+    const modifier = calcPowerModifier(
+      cards,
+      settlement.check.attribute,
+      settlement.check.slots,
+      settlement.check.opponent_value,
+      goldenDiceUsed
+    );
+    const difficultyOffset = (DIFFICULTIES[this.difficultyKey] ?? DIFFICULTIES.normal).dc_offset;
+    const dcWithOffset = settlement.check.dc + difficultyOffset;
+    const diceState = this.diceChecker.buildCheckState(
       settlement.check,
-      totalReroll,
-      options?.goldenDiceUsed ?? 0
+      this.diceChecker.rollDiceWithValues(dice),
+      modifier,
+      dcWithOffset
     );
 
-    if (options?.goldenDiceUsed) {
-      this.playerState.useGoldenDice(options.goldenDiceUsed);
+    if (goldenDiceUsed) {
+      this.playerState.useGoldenDice(goldenDiceUsed);
     }
 
     const resultBranch = settlement.results[diceState.result];
@@ -310,7 +293,7 @@ export class SettlementExecutor {
   getDiceCheckPreview(
     sceneId: string,
     stageId: string
-  ): { poolSize: number; rerollAvailable: number } | null {
+  ): { modifier: number; dc: number } | null {
     const scene = this.sceneManager.getScene(sceneId);
     const sceneState = this.sceneManager.getSceneState(sceneId);
     if (!scene || !sceneState) return null;
@@ -323,32 +306,15 @@ export class SettlementExecutor {
     const cards = investedCardIds
       .map(id => this.cardManager.getCard(id))
       .filter((c): c is CardInstance => c !== undefined && c.isCharacter);
-
-    let poolSize = calcCheckPool(cards, settlement.check.attribute, settlement.check.calc_mode);
-
-    for (const card of cards) {
-      poolSize += this.equipmentSystem.getAttributeBonus(card.id, settlement.check.attribute);
-    }
-
-    const itemCards = investedCardIds
-      .map(id => this.cardManager.getCard(id))
-      .filter((c): c is CardInstance => c !== undefined && !c.isCharacter);
-    for (const item of itemCards) {
-      const bonus = item.data.attribute_bonus;
-      if (bonus) {
-        poolSize += bonus[settlement.check.attribute as keyof typeof bonus] || 0;
-      }
-    }
-
-    poolSize = Math.min(poolSize, 20);
-
-    let rerollAvailable = 0;
-    for (const card of cards) {
-      rerollAvailable += card.getSpecialAttributeValue(SpecialAttribute.Reroll);
-      rerollAvailable += this.equipmentSystem.getSpecialBonus(card.id, SpecialAttribute.Reroll);
-    }
-
-    return { poolSize, rerollAvailable };
+    const modifier = calcPowerModifier(
+      cards,
+      settlement.check.attribute,
+      settlement.check.slots,
+      settlement.check.opponent_value,
+      0
+    );
+    const difficultyOffset = (DIFFICULTIES[this.difficultyKey] ?? DIFFICULTIES.normal).dc_offset;
+    return { modifier, dc: settlement.check.dc + difficultyOffset };
   }
 
   private executeTrade(

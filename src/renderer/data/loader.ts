@@ -18,6 +18,60 @@ const cardModules = import.meta.glob<{ default: unknown }>(
   { eager: true }
 );
 
+function normalizeLegacyDiceCheckScene(input: unknown): unknown {
+  if (!input || typeof input !== 'object') {
+    return input;
+  }
+
+  const scene = structuredClone(input as Record<string, unknown>);
+  const stages = Array.isArray(scene.stages) ? scene.stages : [];
+
+  scene.stages = stages.map((stage) => {
+    if (!stage || typeof stage !== 'object') {
+      return stage;
+    }
+
+    const nextStage = { ...(stage as Record<string, unknown>) };
+    const settlement = nextStage.settlement;
+    if (!settlement || typeof settlement !== 'object') {
+      return nextStage;
+    }
+
+    const nextSettlement = { ...(settlement as Record<string, unknown>) };
+    if (nextSettlement.type !== 'dice_check') {
+      nextStage.settlement = nextSettlement;
+      return nextStage;
+    }
+
+    const check = (nextSettlement.check && typeof nextSettlement.check === 'object')
+      ? { ...(nextSettlement.check as Record<string, unknown>) }
+      : {};
+
+    if (!Array.isArray(check.slots)) {
+      const slotDefs = Array.isArray(scene.slots) ? scene.slots : [];
+      check.slots = slotDefs
+        .map((slot, index) => ({ slot, index }))
+        .filter(({ slot }) => Boolean(slot) && typeof slot === 'object' && (slot as Record<string, unknown>).type === 'character')
+        .map(({ index }) => index);
+    }
+    if (typeof check.opponent_value !== 'number') {
+      check.opponent_value = 9;
+    }
+    if (typeof check.dc !== 'number') {
+      check.dc = typeof check.target === 'number' ? check.target : 10;
+    }
+
+    delete check.calc_mode;
+    delete check.target;
+
+    nextSettlement.check = check;
+    nextStage.settlement = nextSettlement;
+    return nextStage;
+  });
+
+  return scene;
+}
+
 class DataLoader {
   private cache: Map<string, unknown> = new Map();
 
@@ -42,7 +96,7 @@ class DataLoader {
     for (const [path, mod] of Object.entries(sceneModules)) {
       try {
         const data = (mod as { default: unknown }).default ?? mod;
-        const validated = SceneSchema.parse(data);
+        const validated = SceneSchema.parse(normalizeLegacyDiceCheckScene(data));
         scenes.push(validated as Scene);
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -206,7 +260,8 @@ class DataLoader {
     const results: unknown[] = [];
     for (let i = 0; i < data.length; i++) {
       try {
-        const validated = schema.parse(data[i]);
+          const raw = key === 'scenes' ? normalizeLegacyDiceCheckScene(data[i]) : data[i];
+          const validated = schema.parse(raw);
         results.push(validated);
       } catch (error) {
         if (error instanceof z.ZodError) {

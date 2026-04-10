@@ -28,7 +28,7 @@ const makeDiceScene = (id: string, duration = 2): Scene => ({
     narrative: [],
     settlement: {
       type: 'dice_check',
-      check: { attribute: 'combat' as any, calc_mode: 'max' as any, target: 3 },
+      check: { attribute: 'combat' as any, slots: [0], opponent_value: 9, dc: 3 },
       results: {
         success: { narrative: 'Win', effects: { gold: 20 } },
         partial_success: { narrative: 'Partial', effects: { gold: 5 } },

@@ -60,7 +60,7 @@ describe('T2.1: DataLoader', () => {
           narrative: [],
           settlement: {
             type: 'dice_check',
-            check: { attribute: 'social', calc_mode: 'max', target: 5 },
+            check: { attribute: 'social', slots: [0], opponent_value: 9, dc: 5 },
             results: {
               success: { narrative: 'ok', effects: { gold: 10 } },
               partial_success: { narrative: 'ok', effects: {} },

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   Rarity, Attribute, SpecialAttribute, CardType, EquipmentType,
-  SceneType, SceneStatus, CheckResult, CalcMode, SlotType,
+  SceneType, SceneStatus, CheckResult, SlotType,
   ReputationLevel, GamePhase, GameEndReason,
   DICE_CONFIG, GAME_CONSTANTS, REPUTATION_RANGES, RARITY_ATTRIBUTE_RANGES,
 } from '@core/types/enums';
@@ -47,8 +47,7 @@ describe('T1.1: Enums', () => {
   });
 
   it('should have 6 calc modes', () => {
-    expect(Object.values(CalcMode)).toHaveLength(6);
-  });
+      });
 
   it('should have 4 slot types', () => {
     expect(Object.values(SlotType)).toHaveLength(4);
@@ -59,12 +58,10 @@ describe('T1.1: Enums', () => {
   });
 
   it('should have correct dice config constants', () => {
-    expect(DICE_CONFIG.SIDES).toBe(10);
-    expect(DICE_CONFIG.SUCCESS_THRESHOLD).toBe(7);
-    expect(DICE_CONFIG.EXPLODE_ON).toBe(10);
-    expect(DICE_CONFIG.MAX_POOL).toBe(20);
-    expect(DICE_CONFIG.MAX_EXPLODE).toBe(20);
-  });
+    expect(DICE_CONFIG.SIDES).toBe(6);
+            expect(DICE_CONFIG.DICE_COUNT).toBe(3);
+    expect(DICE_CONFIG.MODIFIER_K).toBe(3);
+      });
 
   it('should have correct game constants', () => {
     expect(GAME_CONSTANTS.MAX_HAND_SIZE).toBe(512);

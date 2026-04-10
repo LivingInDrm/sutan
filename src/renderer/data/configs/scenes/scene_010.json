@@ -114,8 +114,11 @@
         "narrative": "褚禄山借着切磋试探世子根骨与胆气。进行「武力」鉴定。",
         "check": {
           "attribute": "combat",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -184,8 +187,11 @@
         "narrative": "不拔刀，便只能凭言语与心思接住褚禄山的深意。进行「社交」鉴定。",
         "check": {
           "attribute": "social",
-          "calc_mode": "max",
-          "target": 4
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 4
         },
         "results": {
           "success": {
@@ -231,7 +237,10 @@
   ],
   "unlock_conditions": {
     "reputation_min": 30,
-    "day_range": [5, 16]
+    "day_range": [
+      5,
+      16
+    ]
   },
   "absence_penalty": null
 }

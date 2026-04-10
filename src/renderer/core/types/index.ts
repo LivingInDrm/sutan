@@ -1,6 +1,6 @@
 import {
   Rarity, Attribute, SpecialAttribute, CardType, EquipmentType,
-  SceneType, SceneStatus, CheckResult, CalcMode, SlotType,
+  SceneType, SceneStatus, CheckResult, SlotType,
   ReputationLevel, GamePhase, GameEndReason, NarrativeNodeType,
 } from './enums';
 
@@ -51,8 +51,9 @@ export interface SettlementResultBranch {
 
 export interface DiceCheckConfig {
   attribute: Attribute;
-  calc_mode: CalcMode;
-  target: number;
+  slots: number[];
+  opponent_value: number;
+  dc: number;
 }
 
 export interface ChoiceOption {
@@ -242,20 +243,16 @@ export interface SaveData {
 }
 
 export interface DiceRollResult {
-  dice: number[];
-  exploded_dice: number[];
-  all_dice: number[];
-  successes: number;
-  reroll_available: number;
+  dice: [number, number, number];
+  sum: number;
 }
 
 export interface DiceCheckState {
   config: DiceCheckConfig;
-  pool_size: number;
-  initial_roll: DiceRollResult;
-  after_reroll?: DiceRollResult;
-  golden_dice_used: number;
-  final_successes: number;
+  dice: [number, number, number];
+  modifier: number;
+  total: number;
+  dc_with_offset: number;
   result: CheckResult;
 }
 
@@ -286,16 +283,16 @@ export interface Difficulty {
   execution_days: number;
   initial_gold: number;
   initial_cards: number;
-  enemy_multiplier: number;
+  dc_offset: number;
 }
 
 export const DIFFICULTIES: Record<string, Difficulty> = {
-  easy: { execution_days: 21, initial_gold: 50, initial_cards: 5, enemy_multiplier: 0.8 },
-  normal: { execution_days: 14, initial_gold: 30, initial_cards: 3, enemy_multiplier: 1.0 },
-  hard: { execution_days: 7, initial_gold: 15, initial_cards: 2, enemy_multiplier: 1.2 },
-  nightmare: { execution_days: 5, initial_gold: 10, initial_cards: 1, enemy_multiplier: 1.5 },
+  easy: { execution_days: 21, initial_gold: 50, initial_cards: 5, dc_offset: -1 },
+  normal: { execution_days: 14, initial_gold: 30, initial_cards: 3, dc_offset: 0 },
+  hard: { execution_days: 7, initial_gold: 15, initial_cards: 2, dc_offset: 1 },
+  nightmare: { execution_days: 5, initial_gold: 10, initial_cards: 1, dc_offset: 2 },
 };
 
 export type { Rarity, Attribute, SpecialAttribute, CardType, EquipmentType,
-  SceneType, SceneStatus, CheckResult, CalcMode, SlotType,
+  SceneType, SceneStatus, CheckResult, SlotType,
   ReputationLevel, GamePhase, GameEndReason, NarrativeNodeType } from './enums';

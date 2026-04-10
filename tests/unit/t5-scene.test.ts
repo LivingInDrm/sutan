@@ -29,7 +29,7 @@ const makeScene = (id: string, overrides: Partial<Scene> = {}): Scene => ({
   slots: [{ type: SlotType.Character, required: true, locked: false }],
   settlement: {
     type: 'dice_check',
-    check: { attribute: 'combat' as any, calc_mode: 'max' as any, target: 5 },
+    check: { attribute: 'combat' as any, slots: [0], opponent_value: 9, dc: 5 },
     results: {
       success: { narrative: 'ok', effects: { gold: 10 } },
       partial_success: { narrative: 'ok', effects: {} },

@@ -31,8 +31,12 @@
         "type": "dice_check",
         "check": {
           "attribute": "survival",
-          "calc_mode": "min",
-          "target": 4
+          "slots": [
+            0,
+            1
+          ],
+          "opponent_value": 9,
+          "dc": 4
         },
         "results": {
           "success": {
@@ -67,7 +71,10 @@
     }
   ],
   "unlock_conditions": {
-    "day_range": [1, 10]
+    "day_range": [
+      1,
+      10
+    ]
   },
   "absence_penalty": null
 }

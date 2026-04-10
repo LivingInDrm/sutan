@@ -130,7 +130,7 @@ export function SceneScreen() {
   const settlementPreview = settlement
     ? settlement.type === 'dice_check'
       ? (() => {
-          const attr = (settlement as { check: { attribute: string; target: number } }).check.attribute;
+          const attr = (settlement as { check: { attribute: string; dc: number } }).check.attribute;
           const label = ATTRIBUTE_LABELS[attr] ?? attr;
           return `关键属性：${label}`;
         })()

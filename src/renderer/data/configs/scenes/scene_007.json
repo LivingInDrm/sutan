@@ -58,8 +58,11 @@
         "narrative": "面对这个来历不明却气势古怪的老头，徐凤年决定先试试对方深浅。进行「社交」鉴定。",
         "check": {
           "attribute": "social",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -150,8 +153,11 @@
         "narrative": "这老头话里藏锋，徐凤年若想再进一步，就得接得住这份锋芒。进行「智慧」鉴定。",
         "check": {
           "attribute": "wisdom",
-          "calc_mode": "max",
-          "target": 4
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 4
         },
         "results": {
           "success": {
@@ -234,8 +240,11 @@
         "narrative": "这一击看似随意，实则是试心也是试骨。进行「combat」鉴定。",
         "check": {
           "attribute": "combat",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -366,7 +375,10 @@
     "required_tags": [
       "北凉游历"
     ],
-    "day_range": [2, 12]
+    "day_range": [
+      2,
+      12
+    ]
   },
   "absence_penalty": null
 }

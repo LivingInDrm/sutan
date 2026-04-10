@@ -93,8 +93,11 @@
         "narrative": "集市中间让出一圈空地，这一架打得像争风吃醋，也像少年斗气。进行「武力」鉴定。",
         "check": {
           "attribute": "combat",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -174,8 +177,11 @@
         "narrative": "要么把话稳稳套到底，要么当场露馅把醋意闹成笑话。进行「隐秘」鉴定。",
         "check": {
           "attribute": "stealth",
-          "calc_mode": "max",
-          "target": 5
+          "slots": [
+            0
+          ],
+          "opponent_value": 9,
+          "dc": 5
         },
         "results": {
           "success": {
@@ -229,7 +235,10 @@
   ],
   "unlock_conditions": {
     "reputation_min": 25,
-    "day_range": [4, 16]
+    "day_range": [
+      4,
+      16
+    ]
   },
   "absence_penalty": null
 }

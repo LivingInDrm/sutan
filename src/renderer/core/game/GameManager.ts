@@ -43,7 +43,7 @@ export class GameManager {
     this.equipmentSystem = new EquipmentSystem(this.cardManager);
     this.sceneManager = new SceneManager(this.playerState, this.cardManager);
     this.settlementExecutor = new SettlementExecutor(
-      this.rng, this.playerState, this.cardManager, this.sceneManager, this.equipmentSystem
+      this.rng, this.playerState, this.cardManager, this.sceneManager, this.equipmentSystem, difficulty
     );
     this.timeManager = new TimeManager(this.playerState, diff.execution_days);
     this.thinkSystem = new ThinkSystem(this.playerState, this.cardManager);
