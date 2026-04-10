@@ -32,19 +32,12 @@ export class DiceChecker {
     };
   }
 
-  reroll(baseDice: number[], rerollIndices: number[]): DiceRollResult {
+  reroll(_baseDice: number[]): DiceRollResult {
     const nextDice: [number, number, number] = [
-      baseDice[0] ?? 1,
-      baseDice[1] ?? 1,
-      baseDice[2] ?? 1,
+      this.rng.rollD6(),
+      this.rng.rollD6(),
+      this.rng.rollD6(),
     ];
-
-    for (const index of rerollIndices) {
-      if (index < 0 || index >= DICE_CONFIG.DICE_COUNT) {
-        continue;
-      }
-      nextDice[index] = this.rng.rollD6();
-    }
 
     return {
       dice: nextDice,

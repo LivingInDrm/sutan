@@ -116,10 +116,9 @@ export function SettlementScreen() {
   const [diceFlowPhase, setDiceFlowPhase] = useState<'pre-roll' | 'roll' | 'post-roll' | 'result'>('pre-roll');
   const [selectedGoldenDice, setSelectedGoldenDice] = useState(0);
   const [rolledDice, setRolledDice] = useState<[number, number, number] | null>(null);
-  const [selectedRerollIndices, setSelectedRerollIndices] = useState<number[]>([]);
   const [rerollResult, setRerollResult] = useState<ReturnType<typeof rerollCurrentSettlementDice>>(null);
   const [diceOverlaySession, setDiceOverlaySession] = useState(0);
-  const [pendingRerollIndices, setPendingRerollIndices] = useState<number[] | null>(null);
+  const [isPendingReroll, setIsPendingReroll] = useState(false);
   const prevStageIdRef = useRef<string | null>(null);
   const prevSettlementNarrativeRef = useRef<string | null>(null);
 
@@ -160,9 +159,8 @@ export function SettlementScreen() {
       setDiceFlowPhase('pre-roll');
       setSelectedGoldenDice(0);
       setRolledDice(null);
-      setSelectedRerollIndices([]);
       setRerollResult(null);
-      setPendingRerollIndices(null);
+      setIsPendingReroll(false);
       setDiceOverlaySession(0);
       prevStageIdRef.current = null;
       prevSettlementNarrativeRef.current = null;
@@ -179,9 +177,8 @@ export function SettlementScreen() {
       setDicePreview(preview);
       setSelectedGoldenDice(0);
       setRolledDice(null);
-      setSelectedRerollIndices([]);
       setRerollResult(null);
-      setPendingRerollIndices(null);
+      setIsPendingReroll(false);
       setDiceFlowPhase(preview.goldenDice > 0 ? 'pre-roll' : 'roll');
       setDiceOverlaySession(1);
       setShowDiceOverlay(true);
@@ -192,8 +189,8 @@ export function SettlementScreen() {
 
   const handleDiceOverlayComplete = useCallback((result: { dice: [number, number, number] }) => {
     console.log('[SettlementScreen] handleDiceOverlayComplete', result);
-    if (pendingRerollIndices && rolledDice) {
-      const rerollStageResult = rerollCurrentSettlementDice(rolledDice, pendingRerollIndices, {
+    if (isPendingReroll && rolledDice) {
+      const rerollStageResult = rerollCurrentSettlementDice(rolledDice, {
         goldenDiceUsed: selectedGoldenDice,
       });
 
@@ -203,8 +200,7 @@ export function SettlementScreen() {
 
       setRolledDice(rerollStageResult.dice_check_state.dice);
       setRerollResult(rerollStageResult);
-      setSelectedRerollIndices([]);
-      setPendingRerollIndices(null);
+      setIsPendingReroll(false);
 
       try {
         executeCurrentSettlementWithDice(rerollStageResult.dice_check_state.dice, { goldenDiceUsed: selectedGoldenDice });
@@ -218,10 +214,9 @@ export function SettlementScreen() {
     }
 
     setRolledDice(result.dice);
-    setSelectedRerollIndices([]);
     setRerollResult(null);
     if ((dicePreview?.rerollAvailable ?? 0) > 0) {
-      setPendingRerollIndices(null);
+      setIsPendingReroll(false);
       setDiceFlowPhase('post-roll');
       return;
     }
@@ -242,7 +237,7 @@ export function SettlementScreen() {
         },
       });
     }
-  }, [dicePreview?.rerollAvailable, executeCurrentSettlement, executeCurrentSettlementWithDice, pendingRerollIndices, rerollCurrentSettlementDice, rolledDice, selectedGoldenDice]);
+  }, [dicePreview?.rerollAvailable, executeCurrentSettlement, executeCurrentSettlementWithDice, isPendingReroll, rerollCurrentSettlementDice, rolledDice, selectedGoldenDice]);
 
   const handleDiceOverlayCancel = useCallback(() => {
     console.log('[SettlementScreen] handleDiceOverlayCancel');
@@ -251,9 +246,8 @@ export function SettlementScreen() {
     setDiceFlowPhase('pre-roll');
     setSelectedGoldenDice(0);
     setRolledDice(null);
-    setSelectedRerollIndices([]);
     setRerollResult(null);
-    setPendingRerollIndices(null);
+    setIsPendingReroll(false);
     executeCurrentSettlement();
   }, [executeCurrentSettlement]);
 
@@ -274,37 +268,24 @@ export function SettlementScreen() {
       total: rolledDice.reduce((sum, value) => sum + value, 0) + (dicePreview?.modifier ?? 0) + selectedGoldenDice,
       dc_with_offset: dicePreview?.dc ?? 0,
       result: currentStageSettlementResult?.result_key ?? CheckResult.Failure,
-      rerolled_indices: selectedRerollIndices,
+      rerolled_indices: isPendingReroll ? [0, 1, 2] : [],
     } : null);
-  }, [currentStagePlayback?.settlementConfig, currentStageSettlementResult?.result_key, dicePreview?.dc, dicePreview?.modifier, rerollResult, rolledDice, selectedGoldenDice, selectedRerollIndices]);
-
-  const toggleRerollSelection = useCallback((index: number) => {
-    const limit = dicePreview?.rerollAvailable ?? 0;
-    setSelectedRerollIndices(prev => {
-      if (prev.includes(index)) {
-        return prev.filter(item => item !== index);
-      }
-      if (prev.length >= limit) {
-        return prev;
-      }
-      return [...prev, index].sort((a, b) => a - b);
-    });
-  }, [dicePreview?.rerollAvailable]);
+  }, [currentStagePlayback?.settlementConfig, currentStageSettlementResult?.result_key, dicePreview?.dc, dicePreview?.modifier, isPendingReroll, rerollResult, rolledDice, selectedGoldenDice]);
 
   const handleConfirmGoldenDice = useCallback(() => {
-    setPendingRerollIndices(null);
+    setIsPendingReroll(false);
     setDiceOverlaySession(value => value + 1);
     setDiceFlowPhase('roll');
   }, []);
 
   const handleConfirmReroll = useCallback(() => {
-    if (!rolledDice || selectedRerollIndices.length === 0) {
+    if (!rolledDice) {
       return;
     }
-    setPendingRerollIndices(selectedRerollIndices);
+    setIsPendingReroll(true);
     setDiceOverlaySession(value => value + 1);
     setDiceFlowPhase('roll');
-  }, [rolledDice, selectedRerollIndices]);
+  }, [rolledDice]);
 
   if (!isPlaying) {
     return <SummaryView results={lastResults} />;
@@ -428,24 +409,9 @@ export function SettlementScreen() {
           )}
           {diceFlowPhase === 'post-roll' && displayedDiceState && dicePreview ? (
             <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/72 backdrop-blur-sm px-6">
-              <Panel variant="dark" title="选择要重投的骰子" className="w-full max-w-xl">
+              <Panel variant="dark" title="命骰判定" className="w-full max-w-xl">
                 <div className="space-y-5">
                   <div className="text-sm text-gold-dim">可用重投次数：{dicePreview.rerollAvailable}</div>
-                  <div className="flex justify-center gap-4">
-                    {displayedDiceState.dice.map((value, index) => {
-                      const selected = selectedRerollIndices.includes(index);
-                      return (
-                        <button
-                          key={index}
-                          type="button"
-                          onClick={() => toggleRerollSelection(index)}
-                          className={`h-14 w-14 rounded-xl border-2 text-lg font-bold transition ${selected ? 'border-cerulean-300 bg-cerulean-900/30 text-cerulean-100' : 'border-gold-300/30 bg-ink-light/40 text-parchment-100 hover:border-gold-300/60'}`}
-                        >
-                          {value}
-                        </button>
-                      );
-                    })}
-                  </div>
                   <div className="rounded-xl border border-gold-300/20 bg-ink-light/30 p-4 text-center">
                     <DiceResult
                       dice={displayedDiceState.dice}
@@ -466,7 +432,7 @@ export function SettlementScreen() {
                         setShowDiceOverlay(false);
                         setDicePreview(null);
                         setDiceFlowPhase('result');
-                        setPendingRerollIndices(null);
+                        setIsPendingReroll(false);
                       }}
                     >
                       跳过重投
@@ -475,10 +441,9 @@ export function SettlementScreen() {
                       variant="primary"
                       size="sm"
                       glow
-                      disabled={selectedRerollIndices.length === 0}
                       onClick={handleConfirmReroll}
                     >
-                      确认重投 ({selectedRerollIndices.length}/{dicePreview.rerollAvailable})
+                      重投（剩余{dicePreview.rerollAvailable}次）
                     </Button>
                   </div>
                 </div>

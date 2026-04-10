@@ -140,7 +140,6 @@ export class SettlementExecutor {
   }
 
   settleScene(sceneId: string, options?: {
-    rerollIndices?: number[];
     goldenDiceUsed?: number;
     choiceIndex?: number;
   }): SettlementResult | null {
@@ -347,7 +346,6 @@ export class SettlementExecutor {
     sceneId: string,
     stageId: string,
     baseDice: number[],
-    rerollIndices: number[],
     options?: { goldenDiceUsed?: number }
   ): StageSettlementResult | null {
     const scene = this.sceneManager.getScene(sceneId);
@@ -372,13 +370,13 @@ export class SettlementExecutor {
     );
     const difficultyOffset = (DIFFICULTIES[this.difficultyKey] ?? DIFFICULTIES.normal).dc_offset;
     const dcWithOffset = settlement.check.dc + difficultyOffset;
-    const rerolled = this.diceChecker.reroll(baseDice, rerollIndices);
+    const rerolled = this.diceChecker.reroll(baseDice);
     const diceState = this.diceChecker.buildCheckState(
       settlement.check,
       rerolled,
       modifier,
       dcWithOffset,
-      rerollIndices
+      [0, 1, 2]
     );
 
     const resultBranch = settlement.results[diceState.result];
