@@ -254,6 +254,7 @@ export interface DiceCheckState {
   total: number;
   dc_with_offset: number;
   result: CheckResult;
+  rerolled_indices?: number[];
 }
 
 export interface SettlementResult {

@@ -3,7 +3,7 @@ import type {
   DiceCheckSettlement, TradeSettlement, ChoiceSettlement, PlayerChoiceSettlement,
   Stage, Effects, DiceRollResult,
 } from '../types';
-import { CheckResult } from '../types/enums';
+import { CheckResult, SpecialAttribute } from '../types/enums';
 import { DiceChecker } from './DiceChecker';
 import { EffectApplier, type CardDataResolver } from './EffectApplier';
 import { calcPowerModifier } from './calcPowerModifier';
@@ -95,6 +95,48 @@ export class SettlementExecutor {
 
   applyEffects(effects: Effects, investedCardIds: string[] = []): void {
     this.effectApplier.apply(effects, investedCardIds);
+  }
+
+  getDiceInteractionPreview(
+    sceneId: string,
+    stageId: string
+  ): { modifier: number; dc: number; goldenDice: number; rerollAvailable: number } | null {
+    const scene = this.sceneManager.getScene(sceneId);
+    const sceneState = this.sceneManager.getSceneState(sceneId);
+    if (!scene || !sceneState) return null;
+
+    const stage = scene.stages.find(s => s.stage_id === stageId);
+    if (!stage || !stage.settlement || stage.settlement.type !== 'dice_check') return null;
+
+    const settlement = stage.settlement;
+    const investedCardIds = sceneState.invested_cards;
+    const cards = investedCardIds
+      .map(id => this.cardManager.getCard(id))
+      .filter((c): c is CardInstance => c !== undefined && c.isCharacter);
+    const modifier = calcPowerModifier(
+      cards,
+      settlement.check.attribute,
+      settlement.check.slots,
+      settlement.check.opponent_value,
+      0
+    );
+    const difficultyOffset = (DIFFICULTIES[this.difficultyKey] ?? DIFFICULTIES.normal).dc_offset;
+    const rerollAvailable = investedCardIds.reduce((total, cardId) => {
+      const card = this.cardManager.getCard(cardId);
+      if (!card || !card.isCharacter) {
+        return total;
+      }
+      return total
+        + card.getSpecialAttributeValue(SpecialAttribute.Reroll)
+        + this.equipmentSystem.getSpecialBonus(cardId, SpecialAttribute.Reroll);
+    }, 0);
+
+    return {
+      modifier,
+      dc: settlement.check.dc + difficultyOffset,
+      goldenDice: this.playerState.goldenDice,
+      rerollAvailable,
+    };
   }
 
   settleScene(sceneId: string, options?: {
@@ -294,6 +336,20 @@ export class SettlementExecutor {
     sceneId: string,
     stageId: string
   ): { modifier: number; dc: number } | null {
+    const preview = this.getDiceInteractionPreview(sceneId, stageId);
+    if (!preview) {
+      return null;
+    }
+    return { modifier: preview.modifier, dc: preview.dc };
+  }
+
+  rerollDiceCheck(
+    sceneId: string,
+    stageId: string,
+    baseDice: number[],
+    rerollIndices: number[],
+    options?: { goldenDiceUsed?: number }
+  ): StageSettlementResult | null {
     const scene = this.sceneManager.getScene(sceneId);
     const sceneState = this.sceneManager.getSceneState(sceneId);
     if (!scene || !sceneState) return null;
@@ -306,15 +362,34 @@ export class SettlementExecutor {
     const cards = investedCardIds
       .map(id => this.cardManager.getCard(id))
       .filter((c): c is CardInstance => c !== undefined && c.isCharacter);
+    const goldenDiceUsed = options?.goldenDiceUsed ?? 0;
     const modifier = calcPowerModifier(
       cards,
       settlement.check.attribute,
       settlement.check.slots,
       settlement.check.opponent_value,
-      0
+      goldenDiceUsed
     );
     const difficultyOffset = (DIFFICULTIES[this.difficultyKey] ?? DIFFICULTIES.normal).dc_offset;
-    return { modifier, dc: settlement.check.dc + difficultyOffset };
+    const dcWithOffset = settlement.check.dc + difficultyOffset;
+    const rerolled = this.diceChecker.reroll(baseDice, rerollIndices);
+    const diceState = this.diceChecker.buildCheckState(
+      settlement.check,
+      rerolled,
+      modifier,
+      dcWithOffset,
+      rerollIndices
+    );
+
+    const resultBranch = settlement.results[diceState.result];
+
+    return {
+      type: 'dice_check',
+      result_key: diceState.result,
+      effects_applied: resultBranch.effects,
+      narrative: resultBranch.narrative,
+      dice_check_state: diceState,
+    };
   }
 
   private executeTrade(

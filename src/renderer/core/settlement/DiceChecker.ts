@@ -32,6 +32,26 @@ export class DiceChecker {
     };
   }
 
+  reroll(baseDice: number[], rerollIndices: number[]): DiceRollResult {
+    const nextDice: [number, number, number] = [
+      baseDice[0] ?? 1,
+      baseDice[1] ?? 1,
+      baseDice[2] ?? 1,
+    ];
+
+    for (const index of rerollIndices) {
+      if (index < 0 || index >= DICE_CONFIG.DICE_COUNT) {
+        continue;
+      }
+      nextDice[index] = this.rng.rollD6();
+    }
+
+    return {
+      dice: nextDice,
+      sum: nextDice[0] + nextDice[1] + nextDice[2],
+    };
+  }
+
   calculateModifier(playerPower: number, opponentPower: number, goldenDice: number): number {
     if (playerPower <= 0 || opponentPower <= 0) {
       return goldenDice;
@@ -74,7 +94,8 @@ export class DiceChecker {
     config: DiceCheckConfig,
     roll: DiceRollResult,
     modifier: number,
-    dcWithOffset: number
+    dcWithOffset: number,
+    rerolledIndices?: number[]
   ): DiceCheckState {
     const total = roll.sum + modifier;
 
@@ -85,6 +106,7 @@ export class DiceChecker {
       total,
       dc_with_offset: dcWithOffset,
       result: this.determineResult(total, dcWithOffset, roll.dice),
+      rerolled_indices: rerolledIndices,
     };
   }
 }

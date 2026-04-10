@@ -57,7 +57,12 @@ interface GameStoreActions {
     dice: number[],
     options?: { goldenDiceUsed?: number }
   ) => void;
-  getCurrentDiceCheckPreview: () => { modifier: number; dc: number } | null;
+  rerollCurrentSettlementDice: (
+    baseDice: number[],
+    rerollIndices: number[],
+    options?: { goldenDiceUsed?: number }
+  ) => StageSettlementResult | null;
+  getCurrentDiceCheckPreview: () => { modifier: number; dc: number; goldenDice: number; rerollAvailable: number } | null;
   advanceAfterSettlement: () => void;
   finishCurrentScene: () => void;
   finishAllSettlement: () => void;
@@ -311,7 +316,22 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     const playback = settlement.currentStagePlayback;
     if (!runner || !playback || !game) return null;
 
-    return game.settlementExecutor.getDiceCheckPreview(runner.sceneId, playback.stageId);
+    return game.settlementExecutor.getDiceInteractionPreview(runner.sceneId, playback.stageId);
+  },
+
+  rerollCurrentSettlementDice: (baseDice, rerollIndices, options) => {
+    const { settlement, game } = get();
+    const runner = settlement.currentRunner;
+    const playback = settlement.currentStagePlayback;
+    if (!runner || !playback || !game) return null;
+
+    return game.settlementExecutor.rerollDiceCheck(
+      runner.sceneId,
+      playback.stageId,
+      baseDice,
+      rerollIndices,
+      options,
+    );
   },
 
   advanceAfterSettlement: () => {

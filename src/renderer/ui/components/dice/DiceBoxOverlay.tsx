@@ -27,7 +27,6 @@ type DiceBoxInstance = {
 };
 
 const INIT_TIMEOUT_MS = 5000;
-const MAX_OVERLAY_LIFETIME_MS = 20000;
 
 function createFallbackRoll(seed?: string): { dice: [number, number, number] } {
   const rng = new RandomManager(seed);
@@ -254,14 +253,6 @@ export function DiceBoxOverlay({
       fallbackComplete();
     }, INIT_TIMEOUT_MS);
 
-    hardTimeoutRef.current = window.setTimeout(() => {
-      if (disposed) {
-        return;
-      }
-      console.error('[DiceBoxOverlay] overlay lifetime timeout');
-      fallbackComplete();
-    }, MAX_OVERLAY_LIFETIME_MS);
-
     void ensureDiceBox()
       .then(() => {
         if (disposed || !diceBoxRef.current || startedVisibleRef.current) {
@@ -296,10 +287,6 @@ export function DiceBoxOverlay({
   const handleTableClick = useCallback(() => {
     if (phase === 'ready') {
       clearTimers();
-      hardTimeoutRef.current = window.setTimeout(() => {
-        console.error('[DiceBoxOverlay] roll timeout');
-        fallbackComplete();
-      }, MAX_OVERLAY_LIFETIME_MS);
       void playRollSequence();
       return;
     }
@@ -307,7 +294,7 @@ export function DiceBoxOverlay({
     if (phase === 'finished') {
       confirmOverlay();
     }
-  }, [clearTimers, confirmOverlay, fallbackComplete, phase, playRollSequence]);
+  }, [clearTimers, confirmOverlay, phase, playRollSequence]);
 
   const headerText = useMemo(() => {
     if (phase === 'rolling') {
