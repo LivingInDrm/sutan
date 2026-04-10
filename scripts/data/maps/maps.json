@@ -1,25 +1,26 @@
 [
   {
-    "map_id": "map_001_beiliang",
-    "name": "北凉道",
-    "description": "清凉山到葫芦口一线，铁血家国之地",
+    "map_id": "map_a",
+    "name": "北凉",
+    "description": "北境边陲的主地图。",
+    "background_image": "/maps/beiliang/loc_001.png",
     "public_subdir": "beiliang",
-    "background_image": "/maps/beiliang/terrain_bg.png",
     "location_refs": [
-      { "location_id": "location_001", "position": { "x": 0.62, "y": 0.55 } },
-      { "location_id": "location_002", "position": { "x": 0.72, "y": 0.45 } },
-      { "location_id": "location_003", "position": { "x": 0.5, "y": 0.6 } },
-      { "location_id": "location_004", "position": { "x": 0.38, "y": 0.55 } },
-      { "location_id": "location_005", "position": { "x": 0.3, "y": 0.3 } },
-      { "location_id": "location_006", "position": { "x": 0.2, "y": 0.7 } },
-      { "location_id": "location_007", "position": { "x": 0.55, "y": 0.2 } },
-      { "location_id": "location_008", "position": { "x": 0.45, "y": 0.4 } },
-      { "location_id": "location_009", "position": { "x": 0.15, "y": 0.5 } },
-      { "location_id": "location_010", "position": { "x": 0.25, "y": 0.8 } }
+      {
+        "location_id": "loc_001",
+        "position": {
+          "x": 0.1,
+          "y": 0.2
+        }
+      },
+      {
+        "location_id": "loc_draft",
+        "position": {
+          "x": 0.3,
+          "y": 0.4
+        }
+      }
     ],
-    "meta": {
-      "terrain_prompt": "Vast northern frontier terrain panorama, desolate snow plains and yellow sand dunes, distant fortress walls and beacon towers, sparse leafless trees, frozen river tributaries. Chinese ink wash painting style, panoramic landscape, muted winter tones, no text, transparent background.",
-      "terrain_icon_path": "tools/asset-manager/backend/maps/map_001/terrain.png"
-    }
+    "meta": {}
   }
 ]
