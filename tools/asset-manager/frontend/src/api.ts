@@ -178,23 +178,34 @@ export const api = {
     const decoder = new TextDecoder();
     let buffer = '';
 
+    const emitEvent = (line: string) => {
+      if (!line.startsWith('data: ')) {
+        return;
+      }
+      try {
+        const data = JSON.parse(line.slice(6));
+        onProgress(data);
+      } catch (e) {
+        console.error('Failed to parse SSE data:', e);
+      }
+    };
+
     while (true) {
       const { done, value } = await reader.read();
-      if (done) break;
+      if (done) {
+        const trailing = buffer.trim();
+        if (trailing) {
+          emitEvent(trailing);
+        }
+        break;
+      }
 
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split('\n');
       buffer = lines.pop() || '';
 
       for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          try {
-            const data = JSON.parse(line.slice(6));
-            onProgress(data);
-          } catch (e) {
-            console.error('Failed to parse SSE data:', e);
-          }
-        }
+        emitEvent(line);
       }
     }
   },
