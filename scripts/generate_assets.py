@@ -15,6 +15,7 @@ import argparse
 import base64
 import json
 import os
+import re
 import sys
 import threading
 import time
@@ -65,13 +66,11 @@ def tprint(*args, **kwargs):
 # Prompt Templates
 # ─────────────────────────────────────────────
 STYLE_BASE = (
-    "cute chibi Q-version character, East Asian ink wash painting style, "
-    "simple bold black brush strokes, vibrant watercolor wash with rich saturated colors and soft ink bleeding, "
-    "chibi proportions: large head, small body, "
-    "minimal composition with a few wisps of ink mist around the figure, "
-    "transparent background, no background scenery, "
-    "clean and simple, not dense or complex, "
-    "absolutely no text anywhere, no writing, no stamps, no seals, no red marks"
+    "Classical Chinese painting style character illustration, gongbi-inspired linework, vibrant traditional colors, wuxia martial arts atmosphere, "
+    "realistic human proportions, elegant full-body figure, classical Eastern aesthetics, "
+    "silk-and-rice-paper texture, restrained composition with generous negative space, "
+    "transparent background, no background scenery, clean blank backdrop, "
+    "clean and focused single-character composition"
 )
 
 NO_TEXT_CONSTRAINT = (
@@ -82,11 +81,10 @@ NO_TEXT_CONSTRAINT = (
 )
 
 STYLE_NEGATIVE = (
+    "no chibi, no Q-version, no oversized head, "
     "no photorealism, no western fantasy style, no 3D render, no oil painting, "
-    "no complex background, no scenery behind character, "
-    "no text of any kind, no writing, no letters, no characters, no calligraphy, "
-    "no stamps, no seals, no chop marks, no red seal marks, no watermarks, no signatures, "
-    "no dense patterns, no realistic textures, no European medieval armor"
+    "no complex background, "
+    "no multiple characters, no extra arms, no extra fingers, no cropped feet, no distorted anatomy"
 )
 
 PORTRAIT_TEMPLATE = """\
@@ -94,14 +92,12 @@ PORTRAIT_TEMPLATE = """\
 
 {no_text}
 
-Subject: Full-body chibi character — {description}.
-The character stands upright in a simple dynamic pose, full body from head to feet visible.
-Traditional East Asian costume — flowing robes or simple warrior outfit.
-A few wisps of ink mist trail lightly from clothing edges.
+Subject: Full-body wuxia character portrait — {description}.
+The character stands in a poised, story-driven martial arts pose, full body from head to feet clearly visible.
+{faithfulness_line}
 Rich and vibrant costume colors — each character has their own distinct color palette.
-Transparent background, nothing else behind the character.
-Vertical composition, character centered.
-The image must contain absolutely zero text, zero stamps, zero seals, zero red marks.
+Transparent background, nothing else behind the character, clean blank negative space only.
+Vertical composition, character centered with elegant negative space.
 
 DO NOT include: {negative}
 """
@@ -136,6 +132,47 @@ DO NOT include: {negative}
 
 
 def build_prompt(asset_type: str, name: str, description: str) -> str:
+    weapon_patterns = (
+        r"(^|[^a-z])(?:long )?sword([^a-z-]|$)",
+        r"(^|[^a-z])blade([^a-z-]|$)",
+        r"(^|[^a-z])saber([^a-z-]|$)",
+        r"(^|[^a-z])spear([^a-z-]|$)",
+        r"(^|[^a-z])staff([^a-z-]|$)",
+        r"(^|[^a-z])dagger([^a-z-]|$)",
+        r"(^|[^a-z])bow([^a-z-]|$)",
+        r"(^|[^a-z])arrows?([^a-z-]|$)",
+        r"(^|[^a-z])whip([^a-z-]|$)",
+        r"(^|[^a-z])halberd([^a-z-]|$)",
+        r"(^|[^a-z])axe([^a-z-]|$)",
+        r"(^|[^a-z])hammer([^a-z-]|$)",
+        r"(^|[^a-z])fan([^a-z-]|$)",
+        r"(^|[^a-z])umbrella([^a-z-]|$)",
+        r"(^|[^a-z])weapons?([^a-z-]|$)",
+        r"佩剑",
+        r"长剑",
+        r"短剑",
+        r"刀",
+        r"长刀",
+        r"短刀",
+        r"枪",
+        r"长枪",
+        r"矛",
+        r"戟",
+        r"弓",
+        r"箭",
+        r"匕首",
+        r"鞭",
+        r"斧",
+        r"锤",
+        r"兵器",
+        r"武器",
+    )
+    has_weapon = any(re.search(pattern, description, re.IGNORECASE) for pattern in weapon_patterns)
+    faithfulness_line = (
+        "Costume, hairstyle, accessories, and weapons must faithfully follow the character description."
+        if has_weapon
+        else "Costume, hairstyle, and accessories must faithfully follow the character description."
+    )
     template_map = {
         "portrait": PORTRAIT_TEMPLATE,
         "item":     ITEM_TEMPLATE,
@@ -147,6 +184,7 @@ def build_prompt(asset_type: str, name: str, description: str) -> str:
         no_text=NO_TEXT_CONSTRAINT,
         name=name,
         description=description,
+        faithfulness_line=faithfulness_line,
         negative=STYLE_NEGATIVE,
     )
 
@@ -196,10 +234,10 @@ def post_process(img: Image.Image, asset_type: str) -> Image.Image:
 # Self-evaluation
 # ─────────────────────────────────────────────
 EVAL_CRITERIA = [
-    "Chibi/Q-version cartoon proportions (large head, small body)",
-    "Chinese ink wash style with simple bold brush strokes",
-    "Light watercolor wash — NOT dense or photorealistic",
-    "White or transparent background (no scenery)",
+    "Realistic human proportions, not chibi or Q-version",
+    "Chinese ink wash wuxia style with traditional brush strokes",
+    "Ink diffusion and restrained watercolor wash — NOT dense or photorealistic",
+    "Transparent or blank background with elegant negative space and no scenery",
     "No calligraphy text, stamps, or seals visible",
 ]
 

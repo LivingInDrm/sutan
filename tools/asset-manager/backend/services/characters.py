@@ -26,6 +26,47 @@ from models.types import (
 
 def _build_custom_prompt(asset_type: str, name: str, description: str) -> str:
     templates = shared_ctx._load_templates()
+    weapon_patterns = (
+        r"(^|[^a-z])(?:long )?sword([^a-z-]|$)",
+        r"(^|[^a-z])blade([^a-z-]|$)",
+        r"(^|[^a-z])saber([^a-z-]|$)",
+        r"(^|[^a-z])spear([^a-z-]|$)",
+        r"(^|[^a-z])staff([^a-z-]|$)",
+        r"(^|[^a-z])dagger([^a-z-]|$)",
+        r"(^|[^a-z])bow([^a-z-]|$)",
+        r"(^|[^a-z])arrows?([^a-z-]|$)",
+        r"(^|[^a-z])whip([^a-z-]|$)",
+        r"(^|[^a-z])halberd([^a-z-]|$)",
+        r"(^|[^a-z])axe([^a-z-]|$)",
+        r"(^|[^a-z])hammer([^a-z-]|$)",
+        r"(^|[^a-z])fan([^a-z-]|$)",
+        r"(^|[^a-z])umbrella([^a-z-]|$)",
+        r"(^|[^a-z])weapons?([^a-z-]|$)",
+        r"佩剑",
+        r"长剑",
+        r"短剑",
+        r"刀",
+        r"长刀",
+        r"短刀",
+        r"枪",
+        r"长枪",
+        r"矛",
+        r"戟",
+        r"弓",
+        r"箭",
+        r"匕首",
+        r"鞭",
+        r"斧",
+        r"锤",
+        r"兵器",
+        r"武器",
+    )
+    has_weapon = any(re.search(pattern, description, re.IGNORECASE) for pattern in weapon_patterns)
+    faithfulness_line = (
+        "Costume, hairstyle, accessories, and weapons must faithfully follow the character description."
+        if has_weapon
+        else "Costume, hairstyle, and accessories must faithfully follow the character description."
+    )
     template_map = {
         "portrait": templates.get("portrait_template", ga.PORTRAIT_TEMPLATE),
         "item": templates.get("item_template", ga.ITEM_TEMPLATE),
@@ -37,6 +78,7 @@ def _build_custom_prompt(asset_type: str, name: str, description: str) -> str:
         no_text=templates.get("no_text_constraint", ga.NO_TEXT_CONSTRAINT),
         name=name,
         description=description,
+        faithfulness_line=faithfulness_line,
         negative=templates.get("style_negative", ga.STYLE_NEGATIVE),
     )
 
@@ -152,26 +194,26 @@ def update_character_variant(character_name: str, body: UpdateVariantRequest) ->
     return {"success": True, "message": f"Updated {character_name} variant {body.variant_index} description in batch_config.json."}
 
 
-_DESCRIPTION_SYSTEM_PROMPT = """你是熟读武侠小说《雪中悍刀行》的文学专家和古风角色绘画提示词专家，对原著中所有角色的外貌、性格、武器、标志性场景有深刻理解。
+_DESCRIPTION_SYSTEM_PROMPT = """You are a literary expert on the wuxia novel 雪中悍刀行 and an expert at writing visual prompts for classical Chinese character illustrations. You understand each character's appearance, temperament, weapons, and iconic scenes in the original work.
 
-## 格式规范
-每条 description 结构为：「面部特征句。场景/动作/道具描述」
+## Format Rules
+Each description must follow this structure: "facial-features sentence. scene / action / props description"
 
-- 面部特征句：描述脸型+眉眼+神态表情，约 10-15 字，以句号"。"结尾
-- 4 条 description 的面部特征句必须完全一致（同一角色共享固定面部特征）
-- 场景描述：具体场景+动作/姿势+道具/武器+性格标签，中文逗号分隔，约 40-55 字
-- 4 条场景描述各不相同，涵盖：战斗、日常、情绪、特殊道具/标志性场景
-- 每条 description 总长度约 55-80 字
-- 使用精炼的中文词组，中文逗号分隔，不写完整句子
+- The facial-features sentence must describe face shape + eyebrows/eyes + expression in natural English, about 8-16 words, ending with a period "."
+- The facial-features sentence must be exactly identical across all 4 descriptions for the same character
+- The second part should describe concrete scene + action / pose + props / weapons + temperament in concise English phrases, separated by commas, about 18-32 words
+- The 4 second parts must all be different and should cover: combat, daily moment, emotional tone, special prop or iconic scene
+- Each full description should stay roughly 30-55 words
+- Focus on visual details only, written in concise prompt-friendly English fragments rather than long prose
 
-## 禁止一：不得包含人物关系或身份头衔信息
-description 只描述视觉内容（外貌、服饰、动作、道具、场景、气质），不得出现人物关系、身份头衔、转世/神格身份、排名标签等，这些对图像生成无帮助。
+## Restriction One
+Do not include relationships, titles, rank labels, reincarnation identity, divine identity, or other lore labels that are not visually useful.
 
-## 禁止二：不得使用可能产生歧义的专有名词
-武器名、招式名、境界名等专有名词需替换为通用视觉描述；若专名本身有清晰视觉含义可酌情保留。
+## Restriction Two
+Avoid ambiguous proper nouns for weapon names, techniques, or cultivation realms. Replace them with clear visual descriptions unless the proper noun itself has direct visual meaning.
 
-## 输出格式
-严格输出 JSON 数组，包含 4 个字符串，不要包含任何其他内容。
+## Output Format
+Return a JSON array with exactly 4 strings and no extra text.
 """
 
 
@@ -187,18 +229,23 @@ def _get_existing_examples(name: str) -> str:
             grouped.setdefault(candidate_name, []).append(desc)
     if not grouped:
         return ""
-    lines = ["\n以下是已有角色的 description 示例（每个角色取 2 条），请严格模仿此风格和格式：\n"]
+    lines = ["\nHere are existing character description examples (up to 2 per character). Follow the same style and format closely:\n"]
     for char_name in list(grouped.keys())[:3]:
         for desc in grouped[char_name][:2]:
-            lines.append(f"角色 {char_name}：\"{desc}\"")
+            lines.append(f"Character {char_name}: \"{desc}\"")
         lines.append("")
     return "\n".join(lines).rstrip()
 
 
 def _generate_descriptions_blocking(client, name: str, bio: str) -> List[str]:
     existing_examples = _get_existing_examples(name)
-    bio_section = f"角色简介（可选补充，以原著为准）：{bio}\n" if bio.strip() else ""
-    user_msg = f"角色名：{name}\n{bio_section}{existing_examples}\n\n请基于《雪中悍刀行》原著中 {name} 的外貌、性格、武器、标志性场景，生成 4 条不同场景的 description，以 JSON 数组格式输出。"
+    bio_section = f"Optional reference bio (use the original novel as ground truth): {bio}\n" if bio.strip() else ""
+    user_msg = (
+        f"Character name: {name}\n"
+        f"{bio_section}{existing_examples}\n\n"
+        f"Based on the original novel, generate 4 description variants for {name} covering appearance, temperament, weapons, and iconic scenes. "
+        "They must be in English and returned as a JSON array."
+    )
     response = client.responses.create(model=shared_ctx.DESCRIPTION_MODEL, instructions=_DESCRIPTION_SYSTEM_PROMPT, input=user_msg, temperature=0.9, max_output_tokens=1000)
     content = response.output_text.strip()
     if content.startswith("```"):
