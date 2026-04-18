@@ -1,23 +1,58 @@
 [
   {
-    "map_id": "map_a",
+    "map_id": "map_001_beiliang",
     "name": "北凉",
-    "description": "北境边陲的主地图。",
-    "background_image": "/maps/beiliang/loc_001.png",
+    "description": "北凉道与边塞，是徐家根基、旧人归处与江湖初逢的起点。",
+    "background_image": "/maps/beiliang/terrain_bg.png",
     "public_subdir": "beiliang",
     "location_refs": [
       {
-        "location_id": "loc_001",
+        "location_id": "location_qingliangshan",
         "position": {
-          "x": 0.1,
-          "y": 0.2
+          "x": 0.2,
+          "y": 0.22
         }
       },
       {
-        "location_id": "loc_draft",
+        "location_id": "location_tingchaoting",
         "position": {
-          "x": 0.3,
-          "y": 0.4
+          "x": 0.33,
+          "y": 0.18
+        }
+      },
+      {
+        "location_id": "location_lingzhou",
+        "position": {
+          "x": 0.42,
+          "y": 0.34
+        }
+      },
+      {
+        "location_id": "location_luweidang",
+        "position": {
+          "x": 0.54,
+          "y": 0.44
+        }
+      },
+      {
+        "location_id": "location_baima",
+        "position": {
+          "x": 0.6,
+          "y": 0.28
+        }
+      },
+      {
+        "location_id": "location_youzhou",
+        "position": {
+          "x": 0.74,
+          "y": 0.36
+        }
+      },
+      {
+        "location_id": "location_hulukou",
+        "position": {
+          "x": 0.84,
+          "y": 0.62
         }
       }
     ],

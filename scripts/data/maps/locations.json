@@ -1,27 +1,124 @@
 [
   {
-    "location_id": "loc_001",
-    "map_id": "map_a",
-    "name": "主城",
+    "location_id": "location_qingliangshan",
+    "map_id": "map_001_beiliang",
+    "name": "清凉山王府",
     "scene_ids": [
-      "scene-a"
+      "scene_013"
     ],
     "unlock_conditions": {},
     "meta": {
-      "publish_status": "published",
-      "updated_at": "2026-04-10T17:31:24.856601Z"
+      "publish_status": "published"
     },
-    "icon_image": "/maps/beiliang/loc_001.png",
-    "backdrop_image": "/maps/beiliang/loc_001.png"
+    "icon_image": "/maps/beiliang/icon_01_qingliangshan.png",
+    "backdrop_image": "/maps/map_001/location_001_backdrop.png"
   },
   {
-    "location_id": "loc_draft",
-    "map_id": "map_a",
-    "name": "草稿点",
-    "scene_ids": [],
+    "location_id": "location_tingchaoting",
+    "map_id": "map_001_beiliang",
+    "name": "听潮亭",
+    "scene_ids": [
+      "scene_011"
+    ],
     "unlock_conditions": {},
     "meta": {
-      "publish_status": "draft"
-    }
+      "publish_status": "published"
+    },
+    "icon_image": "/maps/beiliang/icon_02_tingchaoting.png",
+    "backdrop_image": "/maps/map_001/location_002_backdrop.png"
+  },
+  {
+    "location_id": "location_lingzhou",
+    "map_id": "map_001_beiliang",
+    "name": "陵州城",
+    "scene_ids": [
+      "scene_shop_001",
+      "scene_001"
+    ],
+    "unlock_conditions": {},
+    "meta": {
+      "publish_status": "published"
+    },
+    "icon_image": "/maps/beiliang/icon_03_lingzhou.png",
+    "backdrop_image": "/maps/map_001/location_003_backdrop.png"
+  },
+  {
+    "location_id": "location_luweidang",
+    "map_id": "map_001_beiliang",
+    "name": "芦苇荡渡口",
+    "scene_ids": [
+      "scene_006",
+      "scene_007"
+    ],
+    "unlock_conditions": {},
+    "meta": {
+      "publish_status": "published"
+    },
+    "icon_image": "/maps/beiliang/icon_04_luweidang.png",
+    "backdrop_image": "/maps/map_001/location_004_backdrop.png"
+  },
+  {
+    "location_id": "location_baima",
+    "map_id": "map_001_beiliang",
+    "name": "白马游弩校场",
+    "scene_ids": [
+      "scene_003",
+      "scene_012"
+    ],
+    "unlock_conditions": {
+      "day_range": [
+        2,
+        21
+      ]
+    },
+    "meta": {
+      "publish_status": "published"
+    },
+    "icon_image": "/maps/beiliang/icon_05_baima.png",
+    "backdrop_image": "/maps/map_001/location_001_backdrop.png"
+  },
+  {
+    "location_id": "location_youzhou",
+    "map_id": "map_001_beiliang",
+    "name": "幽州马市",
+    "scene_ids": [
+      "scene_002",
+      "scene_004",
+      "scene_010"
+    ],
+    "unlock_conditions": {
+      "day_range": [
+        3,
+        21
+      ]
+    },
+    "meta": {
+      "publish_status": "published"
+    },
+    "icon_image": "/maps/beiliang/icon_07_youzhou.png",
+    "backdrop_image": "/maps/map_001/location_002_backdrop.png"
+  },
+  {
+    "location_id": "location_hulukou",
+    "map_id": "map_001_beiliang",
+    "name": "葫芦口前哨",
+    "scene_ids": [
+      "scene_008",
+      "scene_009"
+    ],
+    "unlock_conditions": {
+      "required_cards": [
+        "card_003"
+      ],
+      "day_range": [
+        5,
+        21
+      ]
+    },
+    "meta": {
+      "publish_status": "published"
+    },
+    "icon_image": "/maps/beiliang/icon_10_hulukou.png",
+    "backdrop_image": "/maps/map_001/location_003_backdrop.png"
   }
 ]
