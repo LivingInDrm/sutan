@@ -16,3 +16,7 @@ tools/asset-manager/backend/.env
 
 # 小说原文参考（版权文件不提交）
 scripts/reference/
+
+# Portrait-eval 生成产物（图片 + 对比 HTML 不入库）
+tools/asset-manager/generated/portrait-eval/B1Plus_smoke_3char_*/
+tools/asset-manager/generated/portrait-eval/B1Plus_vs_B4Lean_*.html
