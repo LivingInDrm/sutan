@@ -23,6 +23,8 @@ from models.types import (
     UpdateVariantRequest,
 )
 
+IMAGE_GENERATION_TIMEOUT_SECONDS = 180
+
 
 def _build_custom_prompt(asset_type: str, name: str, description: str) -> str:
     templates = shared_ctx._load_templates()
@@ -114,14 +116,20 @@ async def generate_images(body: GenerateRequest):
             filename = f"{body.name}_{timestamp}_{i}.png"
             output_path = folder / filename
             try:
-                saved_path = await loop.run_in_executor(None, _generate_single_blocking, client, prompt, body.asset_type, output_path)
+                saved_path = await asyncio.wait_for(
+                    loop.run_in_executor(None, _generate_single_blocking, client, prompt, body.asset_type, output_path),
+                    timeout=IMAGE_GENERATION_TIMEOUT_SECONDS,
+                )
                 rel_path = saved_path.relative_to(shared_ctx.SAMPLES_DIR)
                 generated_images.append({"path": str(rel_path), "url": f"/images/{rel_path.as_posix()}"})
+            except asyncio.TimeoutError:
+                yield f"data: {json.dumps({'type': 'error', 'error': f'Image generation timed out after {IMAGE_GENERATION_TIMEOUT_SECONDS} seconds', 'message': f'Image generation timed out after {IMAGE_GENERATION_TIMEOUT_SECONDS} seconds', 'current': i, 'total': count})}\n\n"
             except Exception as exc:
-                yield f"data: {json.dumps({'type': 'error', 'message': f'Failed to generate image {i}: {exc}', 'current': i, 'total': count})}\n\n"
+                yield f"data: {json.dumps({'type': 'error', 'error': f'Failed to generate image {i}: {exc}', 'message': f'Failed to generate image {i}: {exc}', 'current': i, 'total': count})}\n\n"
 
         shared_ctx._append_history({"timestamp": datetime.utcnow().isoformat() + "Z", "name": body.name, "asset_type": body.asset_type, "images": generated_images})
         yield f"data: {json.dumps({'type': 'done', 'images': generated_images})}\n\n"
+        return
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
 
@@ -194,27 +202,137 @@ def update_character_variant(character_name: str, body: UpdateVariantRequest) ->
     return {"success": True, "message": f"Updated {character_name} variant {body.variant_index} description in batch_config.json."}
 
 
-_DESCRIPTION_SYSTEM_PROMPT = """You are a literary expert on the wuxia novel 雪中悍刀行 and an expert at writing visual prompts for classical Chinese character illustrations. You understand each character's appearance, temperament, weapons, and iconic scenes in the original work.
+_DESCRIPTION_SYSTEM_PROMPT = """You are a literary expert on the wuxia novel 雪中悍刀行 and an expert at writing direct-to-image character descriptions for classical Chinese character illustrations. You understand each character's appearance, temperament, weapons, and iconic traits in the original work.
 
-## Format Rules
-Each description must follow this structure: "facial-features sentence. scene / action / props description"
+The descriptions you write will be inserted directly into an image generation prompt as the Subject field. Write image-ready visual instructions, not readable copy, plot summary, or literary prose.
 
-- The facial-features sentence must describe face shape + eyebrows/eyes + expression in natural English, about 8-16 words, ending with a period "."
-- The facial-features sentence must be exactly identical across all 4 descriptions for the same character
-- The second part should describe concrete scene + action / pose + props / weapons + temperament in concise English phrases, separated by commas, about 18-32 words
-- The 4 second parts must all be different and should cover: combat, daily moment, emotional tone, special prop or iconic scene
-- Each full description should stay roughly 30-55 words
-- Focus on visual details only, written in concise prompt-friendly English fragments rather than long prose
+## Core Goal
+Generate 4 full-body character description variants that:
+- preserve the same character identity across all variants
+- are immediately usable for image generation without any rewrite layer
+- emphasize visual attributes, pose, clothing, props, mood, and costume color design
+- avoid background-dependent wording because the final image uses a transparent background
+- contain only character appearance information; style is controlled externally
 
-## Restriction One
-Do not include relationships, titles, rank labels, reincarnation identity, divine identity, or other lore labels that are not visually useful.
+## Language Requirement (HARD RULE)
+- The ENTIRE description output MUST be in natural English ONLY.
+- The output MUST NOT contain any Chinese character (no CJK unified ideographs anywhere, including inside phrases or parentheses).
+- The output MUST NOT contain the character's Chinese name or any Chinese proper noun.
+- If you need to name a weapon, robe, or accessory, use an English word (e.g. "curved saber", "scholar's robe", "jade hairpin"), never a Chinese word or transliteration.
 
-## Restriction Two
-Avoid ambiguous proper nouns for weapon names, techniques, or cultivation realms. Replace them with clear visual descriptions unless the proper noun itself has direct visual meaning.
+## Required Structure
+Each description must be exactly two parts:
+1. A facial-features sentence.
+2. A visual-body sentence fragment after that.
+
+Format:
+"[facial-features sentence]. [visual-body description]"
+
+## Part 1: Facial Features
+- Must be natural English, about 8-16 words
+- Must describe face shape, eyes or brows, age impression, and expression
+- Must end with a period
+- Must be exactly identical across all 4 variants for the same character
+- This is the identity anchor and should help keep the face consistent
+- Facial features MUST match the reference excerpts from the original novel (see "Character reference" block below). Do not invent contradictory features (wrong age, wrong face shape, wrong build).
+
+## Part 2: Visual-Body Description
+Write concise prompt-friendly English phrases, roughly 24-44 words, focused on visible design only.
+
+This part should cover most of these dimensions:
+- body type / build / posture
+- hairstyle and hair color
+- clothing silhouette, material, and color
+- accessories or signature prop / weapon
+- full-body pose or action (character-specific, not a generic "stands poised")
+- temperament / emotional atmosphere conveyed purely through visible cues
+- outfit and prop color scheme
+- short identity-atmosphere phrase at the end is allowed (e.g. "rakish young noble air", "weary old retainer carriage"), as long as it is atmosphere, not plot.
+
+## Variant Differentiation Rules (HARD RULE)
+The 4 variants MUST be clearly different from each other while still looking like the same person.
+The 4 variants MUST NOT share the same Part-2 text. At least the following MUST differ across variants:
+- clothing silhouette and dominant color palette
+- pose / gesture / body angle (e.g. walking, half-turning, kneeling, lifting a prop, back-facing stance)
+- weapon or accessory emphasis
+- emotional atmosphere
+
+Across the 4 variants, keep consistent:
+- facial-features sentence (Part 1, identical)
+- core age impression
+- essential identity-defining traits from the novel (e.g. missing arm, white hair, patched robe)
+
+Additional constraints:
+- At least 3 of the 4 variants must have clearly different dominant costume colors.
+- Do not make all 4 poses simple standing poses; include at least one dynamic pose (e.g. mid-stride, drawing a blade, kneeling, leaning, turning).
+- Each variant should feel like a different art direction for the same character, not minor wording changes.
+
+## Identity Grounding (HARD RULE)
+When a "Character reference" block is provided below, it is authoritative ground truth from the original novel.
+- You MUST respect age range (child / youth / middle-aged / elderly) stated there.
+- You MUST respect essential traits such as: missing limb, beard color, signature prop, characteristic garment, characteristic pose.
+- You MUST NOT hallucinate attributes that contradict the reference (e.g. do not write "middle-aged man" if reference says "old man with white hair and beard").
+- If the reference specifies a signature prop (sword box, wine gourd, biscuit pole, jade hairpin), at least 2 of the 4 variants should surface it visibly.
+
+## Background and Scene Restrictions
+- Do not describe specific environments or locations such as riverbank, snow ferry crossing, mountain, courtyard, battlefield, tavern, forest, or street
+- Do not write cinematic scene sentences
+- Do not mention background objects, weather, architecture, or landscape
+- Replace scene wording with atmosphere wording, for example: "lonely, wind-worn bearing" instead of "standing by a river in the wind"
+- The character must read as complete on a transparent background
+
+## Writing Style Restrictions
+- Use visual description, not narrative sentences
+- Avoid story beats, plot progression, and lore explanation
+- Do not include relationships, titles, ranks, reincarnation identity, divine identity, or other non-visual lore labels
+- Avoid ambiguous proper nouns for techniques, realms, or named moves unless the name itself creates a direct visual image
+- Prefer concrete visible nouns and adjectives over abstract praise
+- Keep descriptions compact, specific, and image-oriented
+- Do NOT include any art style, rendering technique, lighting style, camera language, or medium descriptions
+- Do NOT include phrases such as ink wash, watercolor, oil painting, Chinese painting style, gongbi, cel shading, cinematic lighting, soft focus, painterly, highly detailed rendering, wuxia style, or any similar style/medium wording
+- Style is controlled externally by the prompt template, not by the character description
 
 ## Output Format
-Return a JSON array with exactly 4 strings and no extra text.
+Return a JSON array with exactly 4 English strings and no extra text.
 """
+
+
+_CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+
+
+def _contains_chinese(text: str) -> bool:
+    return bool(_CJK_RE.search(text or ""))
+
+
+# Path to the fixed portrait-eval test set that carries novel_refs for each character.
+# Living at tools/asset-manager/tests/portrait-eval/test_set.yaml; this file is at
+# tools/asset-manager/backend/services/characters.py → relative ../../tests/portrait-eval/test_set.yaml
+_TEST_SET_PATH = Path(__file__).resolve().parent.parent.parent / "tests" / "portrait-eval" / "test_set.yaml"
+
+
+def _load_character_refs(name: str) -> List[str]:
+    """Return up to 5 novel reference excerpts for `name` from the portrait-eval test_set.yaml.
+
+    Returns empty list if the file or the character entry is missing. We purposely
+    read this file at call time (cheap, small file) so edits to test_set.yaml take
+    effect without a server restart.
+    """
+    try:
+        import yaml  # local import: only needed when descriptions are re-generated
+    except ImportError:
+        return []
+    try:
+        if not _TEST_SET_PATH.exists():
+            return []
+        with _TEST_SET_PATH.open("r", encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+        for cfg in data.get("characters", []) or []:
+            if cfg.get("name") == name:
+                refs = cfg.get("novel_refs") or []
+                return [r.strip() for r in refs if isinstance(r, str) and r.strip()][:5]
+    except Exception:
+        return []
+    return []
 
 
 def _get_existing_examples(name: str) -> str:
@@ -225,11 +343,16 @@ def _get_existing_examples(name: str) -> str:
         if candidate_name == name:
             continue
         desc = item.get("description", "").strip()
-        if desc:
-            grouped.setdefault(candidate_name, []).append(desc)
+        if not desc:
+            continue
+        # Skip poisoned legacy rows that contain Chinese characters — feeding them as
+        # few-shot examples makes the LLM drift into Chinese output (Bug 2 cause).
+        if _contains_chinese(desc):
+            continue
+        grouped.setdefault(candidate_name, []).append(desc)
     if not grouped:
         return ""
-    lines = ["\nHere are existing character description examples (up to 2 per character). Follow the same style and format closely:\n"]
+    lines = ["\nHere are existing English character description examples (up to 2 per character). Follow the same style and format closely:\n"]
     for char_name in list(grouped.keys())[:3]:
         for desc in grouped[char_name][:2]:
             lines.append(f"Character {char_name}: \"{desc}\"")
@@ -239,14 +362,33 @@ def _get_existing_examples(name: str) -> str:
 
 def _generate_descriptions_blocking(client, name: str, bio: str) -> List[str]:
     existing_examples = _get_existing_examples(name)
-    bio_section = f"Optional reference bio (use the original novel as ground truth): {bio}\n" if bio.strip() else ""
+    # Phase B1: inject authoritative character reference from test_set.yaml so the LLM
+    # has ground truth for age, signature props, and iconic traits instead of
+    # hallucinating (e.g. "middle-aged man" for 老黄, who is an old white-bearded
+    # retainer with a heavy sword box).
+    novel_refs = _load_character_refs(name)
+    ref_section = ""
+    if novel_refs:
+        ref_lines = [
+            "## Character reference (original-novel excerpts, authoritative ground truth)",
+            "Use these excerpts to decide age, build, hairstyle, signature garments and props, and characteristic atmosphere.",
+            "Translate visual cues into English; do NOT quote any Chinese text back in your output.",
+        ]
+        for ref in novel_refs:
+            ref_lines.append(f"- {ref}")
+        ref_section = "\n".join(ref_lines) + "\n"
+    bio_section = f"Optional additional bio (secondary, use only if not contradicting the reference above): {bio}\n" if bio.strip() else ""
     user_msg = (
-        f"Character name: {name}\n"
-        f"{bio_section}{existing_examples}\n\n"
-        f"Based on the original novel, generate 4 description variants for {name} covering appearance, temperament, weapons, and iconic scenes. "
-        "They must be in English and returned as a JSON array."
+        f"{_DESCRIPTION_SYSTEM_PROMPT}\n\n"
+        f"Character name (for your internal identification only; DO NOT write this name in the output): {name}\n"
+        f"{ref_section}"
+        f"{bio_section}"
+        f"{existing_examples}\n\n"
+        f"Based on the Character reference above (authoritative) and the original novel, generate 4 full-body description variants for this character. "
+        "Remember: English only, no Chinese characters, no Chinese name string, no style/medium words, and the 4 Part-2 texts must be clearly different. "
+        "Return a JSON array of exactly 4 strings."
     )
-    response = client.responses.create(model=shared_ctx.DESCRIPTION_MODEL, instructions=_DESCRIPTION_SYSTEM_PROMPT, input=user_msg, temperature=0.9, max_output_tokens=1000)
+    response = client.responses.create(model=shared_ctx.DESCRIPTION_MODEL, input=user_msg, temperature=0.9, max_output_tokens=1200)
     content = response.output_text.strip()
     if content.startswith("```"):
         content = re.sub(r"^```[^\n]*\n?", "", content)
