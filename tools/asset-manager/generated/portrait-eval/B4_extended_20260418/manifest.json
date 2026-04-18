@@ -1,0 +1,95 @@
+{
+  "version": "B4_extended",
+  "date": "20260418",
+  "quality": "high",
+  "concurrency": 4,
+  "total_elapsed_sec": 131.0,
+  "counts": {
+    "ok": 8,
+    "skipped": 0,
+    "error": 0,
+    "total": 8
+  },
+  "tasks": [
+    {
+      "character": "南宫仆射",
+      "variant": 1,
+      "png": "南宫仆射_variant_1.png",
+      "description_file": "南宫仆射_variant_1.description.txt",
+      "prompt_file": "南宫仆射_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 53.49,
+      "error": null
+    },
+    {
+      "character": "南宫仆射",
+      "variant": 2,
+      "png": "南宫仆射_variant_2.png",
+      "description_file": "南宫仆射_variant_2.description.txt",
+      "prompt_file": "南宫仆射_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 67.46,
+      "error": null
+    },
+    {
+      "character": "轩辕青锋",
+      "variant": 1,
+      "png": "轩辕青锋_variant_1.png",
+      "description_file": "轩辕青锋_variant_1.description.txt",
+      "prompt_file": "轩辕青锋_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 69.78,
+      "error": null
+    },
+    {
+      "character": "轩辕青锋",
+      "variant": 2,
+      "png": "轩辕青锋_variant_2.png",
+      "description_file": "轩辕青锋_variant_2.description.txt",
+      "prompt_file": "轩辕青锋_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 69.93,
+      "error": null
+    },
+    {
+      "character": "褚禄山",
+      "variant": 1,
+      "png": "褚禄山_variant_1.png",
+      "description_file": "褚禄山_variant_1.description.txt",
+      "prompt_file": "褚禄山_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 64.98,
+      "error": null
+    },
+    {
+      "character": "陈芝豹",
+      "variant": 1,
+      "png": "陈芝豹_variant_1.png",
+      "description_file": "陈芝豹_variant_1.description.txt",
+      "prompt_file": "陈芝豹_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 51.57,
+      "error": null
+    },
+    {
+      "character": "陈芝豹",
+      "variant": 2,
+      "png": "陈芝豹_variant_2.png",
+      "description_file": "陈芝豹_variant_2.description.txt",
+      "prompt_file": "陈芝豹_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 52.61,
+      "error": null
+    },
+    {
+      "character": "褚禄山",
+      "variant": 2,
+      "png": "褚禄山_variant_2.png",
+      "description_file": "褚禄山_variant_2.description.txt",
+      "prompt_file": "褚禄山_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 63.49,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "version": "v2_A1",
+  "date": "20260418",
+  "quality": "high",
+  "concurrency": 4,
+  "total_elapsed_sec": 240.6,
+  "counts": {
+    "ok": 20,
+    "skipped": 0,
+    "error": 0,
+    "total": 20
+  },
+  "tasks": [
+    {
+      "character": "徐凤年",
+      "variant": 4,
+      "png": "徐凤年_variant_4.png",
+      "description_file": "徐凤年_variant_4.description.txt",
+      "prompt_file": "徐凤年_variant_4.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 45.89,
+      "error": null
+    },
+    {
+      "character": "徐凤年",
+      "variant": 1,
+      "png": "徐凤年_variant_1.png",
+      "description_file": "徐凤年_variant_1.description.txt",
+      "prompt_file": "徐凤年_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 46.84,
+      "error": null
+    },
+    {
+      "character": "徐凤年",
+      "variant": 3,
+      "png": "徐凤年_variant_3.png",
+      "description_file": "徐凤年_variant_3.description.txt",
+      "prompt_file": "徐凤年_variant_3.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 47.83,
+      "error": null
+    },
+    {
+      "character": "徐凤年",
+      "variant": 2,
+      "png": "徐凤年_variant_2.png",
+      "description_file": "徐凤年_variant_2.description.txt",
+      "prompt_file": "徐凤年_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 49.89,
+      "error": null
+    },
+    {
+      "character": "老黄",
+      "variant": 1,
+      "png": "老黄_variant_1.png",
+      "description_file": "老黄_variant_1.description.txt",
+      "prompt_file": "老黄_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 46.34,
+      "error": null
+    },
+    {
+      "character": "老黄",
+      "variant": 2,
+      "png": "老黄_variant_2.png",
+      "description_file": "老黄_variant_2.description.txt",
+      "prompt_file": "老黄_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 48.94,
+      "error": null
+    },
+    {
+      "character": "老黄",
+      "variant": 4,
+      "png": "老黄_variant_4.png",
+      "description_file": "老黄_variant_4.description.txt",
+      "prompt_file": "老黄_variant_4.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 46.46,
+      "error": null
+    },
+    {
+      "character": "老黄",
+      "variant": 3,
+      "png": "老黄_variant_3.png",
+      "description_file": "老黄_variant_3.description.txt",
+      "prompt_file": "老黄_variant_3.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 48.8,
+      "error": null
+    },
+    {
+      "character": "温华",
+      "variant": 1,
+      "png": "温华_variant_1.png",
+      "description_file": "温华_variant_1.description.txt",
+      "prompt_file": "温华_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 45.59,
+      "error": null
+    },
+    {
+      "character": "温华",
+      "variant": 2,
+      "png": "温华_variant_2.png",
+      "description_file": "温华_variant_2.description.txt",
+      "prompt_file": "温华_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 43.31,
+      "error": null
+    },
+    {
+      "character": "温华",
+      "variant": 3,
+      "png": "温华_variant_3.png",
+      "description_file": "温华_variant_3.description.txt",
+      "prompt_file": "温华_variant_3.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 46.81,
+      "error": null
+    },
+    {
+      "character": "温华",
+      "variant": 4,
+      "png": "温华_variant_4.png",
+      "description_file": "温华_variant_4.description.txt",
+      "prompt_file": "温华_variant_4.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 49.71,
+      "error": null
+    },
+    {
+      "character": "姜泥",
+      "variant": 2,
+      "png": "姜泥_variant_2.png",
+      "description_file": "姜泥_variant_2.description.txt",
+      "prompt_file": "姜泥_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 43.57,
+      "error": null
+    },
+    {
+      "character": "姜泥",
+      "variant": 1,
+      "png": "姜泥_variant_1.png",
+      "description_file": "姜泥_variant_1.description.txt",
+      "prompt_file": "姜泥_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 46.74,
+      "error": null
+    },
+    {
+      "character": "姜泥",
+      "variant": 3,
+      "png": "姜泥_variant_3.png",
+      "description_file": "姜泥_variant_3.description.txt",
+      "prompt_file": "姜泥_variant_3.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 47.35,
+      "error": null
+    },
+    {
+      "character": "姜泥",
+      "variant": 4,
+      "png": "姜泥_variant_4.png",
+      "description_file": "姜泥_variant_4.description.txt",
+      "prompt_file": "姜泥_variant_4.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 46.73,
+      "error": null
+    },
+    {
+      "character": "李淳罡",
+      "variant": 1,
+      "png": "李淳罡_variant_1.png",
+      "description_file": "李淳罡_variant_1.description.txt",
+      "prompt_file": "李淳罡_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 49.17,
+      "error": null
+    },
+    {
+      "character": "李淳罡",
+      "variant": 3,
+      "png": "李淳罡_variant_3.png",
+      "description_file": "李淳罡_variant_3.description.txt",
+      "prompt_file": "李淳罡_variant_3.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 47.0,
+      "error": null
+    },
+    {
+      "character": "李淳罡",
+      "variant": 2,
+      "png": "李淳罡_variant_2.png",
+      "description_file": "李淳罡_variant_2.description.txt",
+      "prompt_file": "李淳罡_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 53.15,
+      "error": null
+    },
+    {
+      "character": "李淳罡",
+      "variant": 4,
+      "png": "李淳罡_variant_4.png",
+      "description_file": "李淳罡_variant_4.description.txt",
+      "prompt_file": "李淳罡_variant_4.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 47.5,
+      "error": null
+    }
+  ]
+}

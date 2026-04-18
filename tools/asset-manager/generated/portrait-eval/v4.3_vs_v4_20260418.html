@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang='zh-CN'>
+<head><meta charset='utf-8'/>
+<title>B4 vs B4.3 — transparent bg + Tang-Song anchor (2026-04-18)</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+       margin: 16px; background: #fafafa; color: #222; }
+h1 { margin: 0 0 8px 0; font-size: 22px; }
+h2 { margin: 24px 0 10px 0; font-size: 16px; color: #555; }
+table { border-collapse: collapse; margin-bottom: 20px; }
+th, td { padding: 6px; vertical-align: top; }
+th { background: #eee; font-weight: 600; text-align: center; font-size: 12px; }
+td.cell { width: 260px; background: #fff; border: 1px solid #ddd; border-radius: 6px; text-align: center; }
+td.cell img { width: 100%; height: auto; background: #f0f0f0; border-radius: 4px; display: block; }
+.row-head { width: 70px; font-size: 12px; background: #f4f4f4; }
+.label { font-size: 12px; font-weight: 600; margin-top: 4px; }
+.badge { display: inline-block; margin-top: 4px; padding: 2px 6px; border-radius: 4px;
+         font-size: 11px; font-family: monospace; }
+.badge.good { background: #d4edda; color: #155724; }
+.badge.mid  { background: #fff3cd; color: #856404; }
+.badge.bad  { background: #f8d7da; color: #721c24; }
+.num { text-align: right; font-family: monospace; font-size: 12px; padding: 4px 8px; }
+.num.good { color: #155724; font-weight: bold; }
+.num.mid  { color: #856404; font-weight: bold; }
+.num.bad  { color: #721c24; font-weight: bold; }
+.per-char { font-family: monospace; font-size: 11px; color: #444; }
+.lab { font-weight: bold; }
+.dir { font-family: monospace; font-size: 11px; color: #666; }
+.summary { background: #fff; border: 1px solid #ddd; }
+.summary th, .summary td { border: 1px solid #e0e0e0; }
+.hist { background: #fff; border: 1px solid #ddd; }
+.hist td .bar { background: #2a6df4; height: 14px; display: inline-block; border-radius: 2px; }
+.hist td .n { font-family: monospace; font-size: 11px; margin-left: 6px; }
+.hist th.buck { background: #f4f4f4; font-family: monospace; font-size: 11px; text-align: right; }
+.meta { font-size: 11px; color: #777; font-weight: 400; }
+.legend { font-size: 12px; color: #555; margin: 10px 0; }
+.legend b { color: #222; }
+</style>
+</head><body>
+<h1>B4 vs B4.3 — transparent bg + Tang-Song anchor (2026-04-18)</h1>
+<div class='legend'>
+  <b>warm_signal</b> = mean of (R − B) / 255 over opaque pixels.
+  <span class='badge good'>&lt; 0.05</span> visually neutral (target)
+  <span class='badge mid'>0.05 – 0.15</span> noticeable warm cast
+  <span class='badge bad'>≥ 0.15</span> clearly yellow/sepia
+</div>
+
+<h2>Run summary</h2>
+<table class='summary'>
+<thead><tr>
+  <th>label</th><th>dir</th>
+  <th>mean</th><th>std</th><th>median</th><th>min</th><th>max</th>
+  <th>n</th><th>per-character mean</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td class='lab'>B4</td>
+  <td class='dir'>v2_B4_20260418</td>
+  <td class='num bad'>0.156</td>
+  <td class='num'>0.0493</td>
+  <td class='num'>0.156</td>
+  <td class='num'>0.0514</td>
+  <td class='num'>0.2451</td>
+  <td class='num'>20</td>
+  <td class='per-char'>姜泥:0.162  徐凤年:0.131  李淳罡:0.113  温华:0.204  老黄:0.170</td>
+</tr>
+<tr>
+  <td class='lab'>B4.3</td>
+  <td class='dir'>B4.3_20260418</td>
+  <td class='num bad'>0.1676</td>
+  <td class='num'>0.0542</td>
+  <td class='num'>0.1624</td>
+  <td class='num'>0.0636</td>
+  <td class='num'>0.2588</td>
+  <td class='num'>20</td>
+  <td class='per-char'>姜泥:0.170  徐凤年:0.143  李淳罡:0.101  温华:0.223  老黄:0.201</td>
+</tr></tbody>
+</table>
+
+<h2>warm_signal distribution (histogram)</h2>
+<table class='hist'>
+<thead><tr><th>warm_signal bucket</th><th>B4</th><th>B4.3</th></tr></thead>
+<tbody><tr><th class='buck'>&lt;-0.05</th><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td></tr><tr><th class='buck'>[-0.05, 0.0)</th><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td></tr><tr><th class='buck'>[0.0, 0.05)</th><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td></tr><tr><th class='buck'>[0.05, 0.1)</th><td><div class='bar' style='width:66px'>&nbsp;</div><span class='n'>3</span></td><td><div class='bar' style='width:22px'>&nbsp;</div><span class='n'>1</span></td></tr><tr><th class='buck'>[0.1, 0.15)</th><td><div class='bar' style='width:111px'>&nbsp;</div><span class='n'>5</span></td><td><div class='bar' style='width:133px'>&nbsp;</div><span class='n'>6</span></td></tr><tr><th class='buck'>[0.15, 0.2)</th><td><div class='bar' style='width:200px'>&nbsp;</div><span class='n'>9</span></td><td><div class='bar' style='width:155px'>&nbsp;</div><span class='n'>7</span></td></tr><tr><th class='buck'>[0.2, 0.25)</th><td><div class='bar' style='width:66px'>&nbsp;</div><span class='n'>3</span></td><td><div class='bar' style='width:111px'>&nbsp;</div><span class='n'>5</span></td></tr><tr><th class='buck'>[0.25, 0.3)</th><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td><td><div class='bar' style='width:22px'>&nbsp;</div><span class='n'>1</span></td></tr><tr><th class='buck'>[0.3, 0.35)</th><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td></tr><tr><th class='buck'>&gt;=0.35</th><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td><td><div class='bar' style='width:0px'>&nbsp;</div><span class='n'>0</span></td></tr></tbody>
+</table>
+
+<h2>Side-by-side images (2 columns × 20 rows)</h2>
+<table class='grid'>
+<thead><tr><th>char/variant</th><th><b>B4</b><br/><span class='meta'>v2_B4_20260418<br/>mean=0.156</span></th><th><b>B4.3</b><br/><span class='meta'>B4.3_20260418<br/>mean=0.1676</span></th></tr></thead>
+<tbody>
+<tr><th class='row-head'>姜泥<br/>v1</th><td class='cell'><img src='v2_B4_20260418/姜泥_variant_1.png' loading='lazy' alt='姜泥 v1 B4'/><div class='badge bad'>warm=0.236299</div></td><td class='cell'><img src='B4.3_20260418/姜泥_variant_1.png' loading='lazy' alt='姜泥 v1 B4.3'/><div class='badge bad'>warm=0.213822</div></td></tr>
+<tr><th class='row-head'>姜泥<br/>v2</th><td class='cell'><img src='v2_B4_20260418/姜泥_variant_2.png' loading='lazy' alt='姜泥 v2 B4'/><div class='badge mid'>warm=0.083835</div></td><td class='cell'><img src='B4.3_20260418/姜泥_variant_2.png' loading='lazy' alt='姜泥 v2 B4.3'/><div class='badge mid'>warm=0.123495</div></td></tr>
+<tr><th class='row-head'>姜泥<br/>v3</th><td class='cell'><img src='v2_B4_20260418/姜泥_variant_3.png' loading='lazy' alt='姜泥 v3 B4'/><div class='badge bad'>warm=0.174095</div></td><td class='cell'><img src='B4.3_20260418/姜泥_variant_3.png' loading='lazy' alt='姜泥 v3 B4.3'/><div class='badge bad'>warm=0.160969</div></td></tr>
+<tr><th class='row-head'>姜泥<br/>v4</th><td class='cell'><img src='v2_B4_20260418/姜泥_variant_4.png' loading='lazy' alt='姜泥 v4 B4'/><div class='badge bad'>warm=0.152261</div></td><td class='cell'><img src='B4.3_20260418/姜泥_variant_4.png' loading='lazy' alt='姜泥 v4 B4.3'/><div class='badge bad'>warm=0.180795</div></td></tr>
+<tr><th class='row-head'>徐凤年<br/>v1</th><td class='cell'><img src='v2_B4_20260418/徐凤年_variant_1.png' loading='lazy' alt='徐凤年 v1 B4'/><div class='badge mid'>warm=0.12496</div></td><td class='cell'><img src='B4.3_20260418/徐凤年_variant_1.png' loading='lazy' alt='徐凤年 v1 B4.3'/><div class='badge mid'>warm=0.112837</div></td></tr>
+<tr><th class='row-head'>徐凤年<br/>v2</th><td class='cell'><img src='v2_B4_20260418/徐凤年_variant_2.png' loading='lazy' alt='徐凤年 v2 B4'/><div class='badge bad'>warm=0.15949</div></td><td class='cell'><img src='B4.3_20260418/徐凤年_variant_2.png' loading='lazy' alt='徐凤年 v2 B4.3'/><div class='badge bad'>warm=0.157612</div></td></tr>
+<tr><th class='row-head'>徐凤年<br/>v3</th><td class='cell'><img src='v2_B4_20260418/徐凤年_variant_3.png' loading='lazy' alt='徐凤年 v3 B4'/><div class='badge bad'>warm=0.169338</div></td><td class='cell'><img src='B4.3_20260418/徐凤年_variant_3.png' loading='lazy' alt='徐凤年 v3 B4.3'/><div class='badge bad'>warm=0.194412</div></td></tr>
+<tr><th class='row-head'>徐凤年<br/>v4</th><td class='cell'><img src='v2_B4_20260418/徐凤年_variant_4.png' loading='lazy' alt='徐凤年 v4 B4'/><div class='badge mid'>warm=0.071529</div></td><td class='cell'><img src='B4.3_20260418/徐凤年_variant_4.png' loading='lazy' alt='徐凤年 v4 B4.3'/><div class='badge mid'>warm=0.105879</div></td></tr>
+<tr><th class='row-head'>李淳罡<br/>v1</th><td class='cell'><img src='v2_B4_20260418/李淳罡_variant_1.png' loading='lazy' alt='李淳罡 v1 B4'/><div class='badge mid'>warm=0.135755</div></td><td class='cell'><img src='B4.3_20260418/李淳罡_variant_1.png' loading='lazy' alt='李淳罡 v1 B4.3'/><div class='badge mid'>warm=0.108554</div></td></tr>
+<tr><th class='row-head'>李淳罡<br/>v2</th><td class='cell'><img src='v2_B4_20260418/李淳罡_variant_2.png' loading='lazy' alt='李淳罡 v2 B4'/><div class='badge mid'>warm=0.1222</div></td><td class='cell'><img src='B4.3_20260418/李淳罡_variant_2.png' loading='lazy' alt='李淳罡 v2 B4.3'/><div class='badge mid'>warm=0.115699</div></td></tr>
+<tr><th class='row-head'>李淳罡<br/>v3</th><td class='cell'><img src='v2_B4_20260418/李淳罡_variant_3.png' loading='lazy' alt='李淳罡 v3 B4'/><div class='badge mid'>warm=0.141714</div></td><td class='cell'><img src='B4.3_20260418/李淳罡_variant_3.png' loading='lazy' alt='李淳罡 v3 B4.3'/><div class='badge mid'>warm=0.114358</div></td></tr>
+<tr><th class='row-head'>李淳罡<br/>v4</th><td class='cell'><img src='v2_B4_20260418/李淳罡_variant_4.png' loading='lazy' alt='李淳罡 v4 B4'/><div class='badge mid'>warm=0.051378</div></td><td class='cell'><img src='B4.3_20260418/李淳罡_variant_4.png' loading='lazy' alt='李淳罡 v4 B4.3'/><div class='badge mid'>warm=0.063568</div></td></tr>
+<tr><th class='row-head'>温华<br/>v1</th><td class='cell'><img src='v2_B4_20260418/温华_variant_1.png' loading='lazy' alt='温华 v1 B4'/><div class='badge bad'>warm=0.182419</div></td><td class='cell'><img src='B4.3_20260418/温华_variant_1.png' loading='lazy' alt='温华 v1 B4.3'/><div class='badge bad'>warm=0.163818</div></td></tr>
+<tr><th class='row-head'>温华<br/>v2</th><td class='cell'><img src='v2_B4_20260418/温华_variant_2.png' loading='lazy' alt='温华 v2 B4'/><div class='badge bad'>warm=0.191679</div></td><td class='cell'><img src='B4.3_20260418/温华_variant_2.png' loading='lazy' alt='温华 v2 B4.3'/><div class='badge bad'>warm=0.258845</div></td></tr>
+<tr><th class='row-head'>温华<br/>v3</th><td class='cell'><img src='v2_B4_20260418/温华_variant_3.png' loading='lazy' alt='温华 v3 B4'/><div class='badge bad'>warm=0.198261</div></td><td class='cell'><img src='B4.3_20260418/温华_variant_3.png' loading='lazy' alt='温华 v3 B4.3'/><div class='badge bad'>warm=0.22235</div></td></tr>
+<tr><th class='row-head'>温华<br/>v4</th><td class='cell'><img src='v2_B4_20260418/温华_variant_4.png' loading='lazy' alt='温华 v4 B4'/><div class='badge bad'>warm=0.245122</div></td><td class='cell'><img src='B4.3_20260418/温华_variant_4.png' loading='lazy' alt='温华 v4 B4.3'/><div class='badge bad'>warm=0.248536</div></td></tr>
+<tr><th class='row-head'>老黄<br/>v1</th><td class='cell'><img src='v2_B4_20260418/老黄_variant_1.png' loading='lazy' alt='老黄 v1 B4'/><div class='badge bad'>warm=0.201892</div></td><td class='cell'><img src='B4.3_20260418/老黄_variant_1.png' loading='lazy' alt='老黄 v1 B4.3'/><div class='badge bad'>warm=0.193055</div></td></tr>
+<tr><th class='row-head'>老黄<br/>v2</th><td class='cell'><img src='v2_B4_20260418/老黄_variant_2.png' loading='lazy' alt='老黄 v2 B4'/><div class='badge bad'>warm=0.191149</div></td><td class='cell'><img src='B4.3_20260418/老黄_variant_2.png' loading='lazy' alt='老黄 v2 B4.3'/><div class='badge bad'>warm=0.242907</div></td></tr>
+<tr><th class='row-head'>老黄<br/>v3</th><td class='cell'><img src='v2_B4_20260418/老黄_variant_3.png' loading='lazy' alt='老黄 v3 B4'/><div class='badge mid'>warm=0.133542</div></td><td class='cell'><img src='B4.3_20260418/老黄_variant_3.png' loading='lazy' alt='老黄 v3 B4.3'/><div class='badge bad'>warm=0.151311</div></td></tr>
+<tr><th class='row-head'>老黄<br/>v4</th><td class='cell'><img src='v2_B4_20260418/老黄_variant_4.png' loading='lazy' alt='老黄 v4 B4'/><div class='badge bad'>warm=0.152433</div></td><td class='cell'><img src='B4.3_20260418/老黄_variant_4.png' loading='lazy' alt='老黄 v4 B4.3'/><div class='badge bad'>warm=0.218343</div></td></tr>
+
+</tbody>
+</table>
+</body></html>

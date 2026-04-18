@@ -1,0 +1,148 @@
+[2026-04-16 12:21:42] Step 1/6: validating environment
+[2026-04-16 12:21:42] OPENAI_API_KEY source check passed (process=False, backend_env=True).
+[2026-04-16 12:21:42] Prepared output directory: /Users/xiaochunliu/Desktop/sutan-test-output-v2
+[2026-04-16 12:21:42] Step 2/6: ensuring backend availability
+INFO:     127.0.0.1:58329 - "GET /api/health HTTP/1.1" 200 OK
+[2026-04-16 12:21:42] Backend already healthy at http://127.0.0.1:8100
+[2026-04-16 12:21:42] Step 3/6: cleaning previous test artifacts
+INFO:     127.0.0.1:58330 - "GET /api/characters HTTP/1.1" 200 OK
+[2026-04-16 12:21:42] Base character already exists, switched to unique name: 李淳罡_0416122142
+INFO:     127.0.0.1:58331 - "DELETE /api/characters/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416122142 HTTP/1.1" 200 OK
+[2026-04-16 12:21:42] Archived existing test character: 李淳罡_0416122142
+[2026-04-16 12:21:42] Step 4/6: creating character
+INFO:     127.0.0.1:58332 - "POST /api/characters HTTP/1.1" 200 OK
+[2026-04-16 12:21:58] Created character 李淳罡_0416122142 with 4 variants.
+[2026-04-16 12:21:58] Variant 0: Lean weathered face, sharp brows, aged eyes, elder impression, unruly sardonic expression. Tall wiry swordsman, graying loose hair, rough sheepskin cloak over dark layered robes, single arm exposed, wooden sword at waist, striding with a slouching swagger, wind-worn and unrestrained, muted brown gray palette
+[2026-04-16 12:21:58] Variant 1: Lean weathered face, sharp brows, aged eyes, elder impression, unruly sardonic expression. Gaunt one-armed elder, long white-streaked hair half tied, faded ink-black robe with wide sleeves and worn sash, wooden sword drawn in his remaining hand, body twisted mid-slash, fierce sword intent, black and steel tones
+[2026-04-16 12:21:58] Variant 2: Lean weathered face, sharp brows, aged eyes, elder impression, unruly sardonic expression. Spare sinewy build, disheveled gray hair, heavy ochre sheepskin coat draped over one shoulder, plain inner robe and boots, one-armed stance with fingers hooked behind back, wooden sword balanced casually, arrogant ease, dusty yellow and umber
+[2026-04-16 12:21:58] Variant 3: Lean weathered face, sharp brows, aged eyes, elder impression, unruly sardonic expression. Elder swordsman with a thin but resilient frame, long ash-gray hair flying loose, deep crimson outer robe over pale underlayers, empty sleeve stark at one side, wooden sword lifted in a pointing gesture, wild and disdainful, red white and charcoal palette
+[2026-04-16 12:21:58] Step 5/6: generating variant descriptions
+INFO:     127.0.0.1:58350 - "POST /api/characters/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416122142/regenerate-variants HTTP/1.1" 200 OK
+[2026-04-16 12:22:10] Regenerated 4 variant descriptions for 李淳罡_0416122142.
+INFO:     127.0.0.1:58354 - "PUT /api/characters/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416122142 HTTP/1.1" 200 OK
+[2026-04-16 12:22:10] Updated variant 0 description.
+INFO:     127.0.0.1:58355 - "PUT /api/characters/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416122142 HTTP/1.1" 200 OK
+[2026-04-16 12:22:10] Updated variant 1 description.
+INFO:     127.0.0.1:58356 - "PUT /api/characters/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416122142 HTTP/1.1" 200 OK
+[2026-04-16 12:22:10] Updated variant 2 description.
+INFO:     127.0.0.1:58357 - "PUT /api/characters/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416122142 HTTP/1.1" 200 OK
+[2026-04-16 12:22:10] Updated variant 3 description.
+[2026-04-16 12:22:10] Step 6/6: generating images and collecting outputs
+[2026-04-16 12:22:10] Generating image for variant 1/4
+INFO:     127.0.0.1:58358 - "POST /api/generate HTTP/1.1" 200 OK
+[2026-04-16 12:23:02] SSE event count for variant 1: 2
+[2026-04-16 12:23:02] SSE progress variant 1: Generating image 1 of 1 for 李淳罡_0416122142…
+[2026-04-16 12:23:02] Variant 1 image generated: portrait_李淳罡_0416122142/李淳罡_0416122142_1776309730_1.png
+[2026-04-16 12:23:02] Generating image for variant 2/4
+  [gpt-image-1.5] Requesting 1024x1536 image...
+  [gpt-image-1.5] Received 1024x1536 RGBA image
+  [Post-process] Resizing to 512x910...
+INFO:     127.0.0.1:58400 - "POST /api/generate HTTP/1.1" 200 OK
+[2026-04-16 12:24:15] SSE event count for variant 2: 2
+[2026-04-16 12:24:15] SSE progress variant 2: Generating image 1 of 1 for 李淳罡_0416122142…
+[2026-04-16 12:24:15] Variant 2 image generated: portrait_李淳罡_0416122142/李淳罡_0416122142_1776309782_1.png
+[2026-04-16 12:24:15] Generating image for variant 3/4
+  [gpt-image-1.5] Requesting 1024x1536 image...
+  [gpt-image-1.5] Received 1024x1536 RGBA image
+  [Post-process] Resizing to 512x910...
+INFO:     127.0.0.1:58452 - "POST /api/generate HTTP/1.1" 200 OK
+[2026-04-16 12:25:08] SSE event count for variant 3: 2
+[2026-04-16 12:25:08] SSE progress variant 3: Generating image 1 of 1 for 李淳罡_0416122142…
+[2026-04-16 12:25:08] Variant 3 image generated: portrait_李淳罡_0416122142/李淳罡_0416122142_1776309855_1.png
+[2026-04-16 12:25:08] Generating image for variant 4/4
+  [gpt-image-1.5] Requesting 1024x1536 image...
+  [gpt-image-1.5] Received 1024x1536 RGBA image
+  [Post-process] Resizing to 512x910...
+INFO:     127.0.0.1:58580 - "POST /api/generate HTTP/1.1" 200 OK
+[2026-04-16 12:26:08] SSE event count for variant 4: 2
+[2026-04-16 12:26:08] SSE progress variant 4: Generating image 1 of 1 for 李淳罡_0416122142…
+[2026-04-16 12:26:08] Variant 4 image generated: portrait_李淳罡_0416122142/李淳罡_0416122142_1776309908_1.png
+[2026-04-16 12:26:08] Saved variant 1 image to /Users/xiaochunliu/Desktop/sutan-test-output-v2/李淳罡_variant_1.png
+[2026-04-16 12:26:08] Saved variant 2 image to /Users/xiaochunliu/Desktop/sutan-test-output-v2/李淳罡_variant_2.png
+[2026-04-16 12:26:08] Saved variant 3 image to /Users/xiaochunliu/Desktop/sutan-test-output-v2/李淳罡_variant_3.png
+[2026-04-16 12:26:08] Saved variant 4 image to /Users/xiaochunliu/Desktop/sutan-test-output-v2/李淳罡_variant_4.png
+[2026-04-16 12:26:08] Pipeline completed successfully.
+[2026-04-16 12:26:08] OUTPUT: /Users/xiaochunliu/Desktop/sutan-test-output-v2/李淳罡_variant_1.png
+[2026-04-16 12:26:08] OUTPUT: /Users/xiaochunliu/Desktop/sutan-test-output-v2/李淳罡_variant_2.png
+[2026-04-16 12:26:08] OUTPUT: /Users/xiaochunliu/Desktop/sutan-test-output-v2/李淳罡_variant_3.png
+[2026-04-16 12:26:08] OUTPUT: /Users/xiaochunliu/Desktop/sutan-test-output-v2/李淳罡_variant_4.png
+  [gpt-image-1.5] Requesting 1024x1536 image...
+  [gpt-image-1.5] Received 1024x1536 RGBA image
+  [Post-process] Resizing to 512x910...
+INFO:     127.0.0.1:64926 - "GET /api/items/%E6%AE%8B%E7%BC%BA%E7%94%B2/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64923 - "GET /api/items/%E6%AE%8B%E7%BC%BA%E7%94%B2/variants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64927 - "GET /items/sword.png?t=1775842284 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64920 - "GET /api/item-samples/%E6%AE%8B%E7%BC%BA%E7%94%B2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64925 - "GET /api/item-prompt-config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64931 - "GET /api/items/%E6%AE%8B%E7%BC%BA%E7%94%B2/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64938 - "GET /api/items/%E6%AE%8B%E7%BC%BA%E7%94%B2/variants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64943 - "GET /api/item-prompt-config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64941 - "GET /api/item-samples/%E6%AE%8B%E7%BC%BA%E7%94%B2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64947 - "GET /api/item-prompt-config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64951 - "GET /api/item-prompt-config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64966 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115606.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64968 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115655.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64971 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115854.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64969 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115731.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64983 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416120156.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64980 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115936.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64981 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416120116.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64964 - "GET /api/samples/%E5%BE%90%E9%BE%99%E8%B1%A1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64987 - "GET /api/samples/%E5%BE%90%E9%BE%99%E8%B1%A1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65004 - "GET /api/samples/%E9%99%88%E8%8A%9D%E8%B1%B9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65014 - "GET /api/samples/%E5%BE%90%E9%AA%81 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65018 - "GET /api/samples/%E9%99%88%E8%8A%9D%E8%B1%B9 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65024 - "GET /api/samples/%E8%A4%9A%E7%A6%84%E5%B1%B1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65032 - "GET /images/portrait_%E8%A4%9A%E7%A6%84%E5%B1%B1/chulushan_01_inkwash_v3.png HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:65030 - "GET /images/portrait_%E8%A4%9A%E7%A6%84%E5%B1%B1/chulushan_02_inkwash_v3.png HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:65036 - "GET /images/portrait_%E8%A4%9A%E7%A6%84%E5%B1%B1/%E8%A4%9A%E7%A6%84%E5%B1%B1_inkwash_refresh_01.png HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:65047 - "GET /images/portrait_%E8%A4%9A%E7%A6%84%E5%B1%B1/%E8%A4%9A%E7%A6%84%E5%B1%B1_inkwash_v2_01.png HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:65045 - "GET /images/portrait_%E8%A4%9A%E7%A6%84%E5%B1%B1/%E8%A4%9A%E7%A6%84%E5%B1%B1_inkwash_refresh_02.png HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:65048 - "GET /images/portrait_%E8%A4%9A%E7%A6%84%E5%B1%B1/%E8%A4%9A%E7%A6%84%E5%B1%B1_inkwash_v2_02.png HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:65061 - "GET /api/items/%E6%AE%8B%E7%BC%BA%E7%94%B2/variants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65064 - "GET /api/items/%E6%AE%8B%E7%BC%BA%E7%94%B2/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65063 - "GET /api/item-prompt-config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65060 - "GET /api/item-samples/%E6%AE%8B%E7%BC%BA%E7%94%B2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65074 - "GET /api/items/%E6%AE%8B%E7%BC%BA%E7%94%B2/variants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65077 - "GET /api/items/%E6%AE%8B%E7%BC%BA%E7%94%B2/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65078 - "GET /api/item-prompt-config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65080 - "GET /api/item-samples/%E6%AE%8B%E7%BC%BA%E7%94%B2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65084 - "GET /api/item-prompt-config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65088 - "GET /api/item-prompt-config HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65092 - "GET /api/scenes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49350 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49351 - "GET /api/items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49355 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49359 - "GET /api/items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49349 - "GET /api/characters HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49363 - "GET /api/characters HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49375 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115606.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49379 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115731.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49367 - "GET /api/samples/%E5%BE%90%E9%BE%99%E8%B1%A1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49377 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115655.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49390 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115854.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49393 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115936.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49395 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416120116.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49403 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416122142.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49402 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416120156.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49391 - "GET /api/samples/%E5%BE%90%E9%BE%99%E8%B1%A1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49448 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49449 - "GET /api/items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49453 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49457 - "GET /api/items HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49447 - "GET /api/characters HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49473 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115606.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49461 - "GET /api/characters HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49475 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115655.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49477 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115731.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49481 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115854.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49489 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416115936.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49491 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416120116.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49471 - "GET /api/samples/%E5%BE%90%E9%BE%99%E8%B1%A1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49499 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416120156.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49500 - "GET /portraits/%E6%9D%8E%E6%B7%B3%E7%BD%A1_0416122142.png HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49501 - "GET /api/samples/%E5%BE%90%E9%BE%99%E8%B1%A1 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [60417]

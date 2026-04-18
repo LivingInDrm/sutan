@@ -1,0 +1,75 @@
+[2026-04-18 12:25:40] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4.2_templates.json
+[2026-04-18 12:25:40] === portrait eval run ===
+[2026-04-18 12:25:40] version=B4.2 date=20260418 low_res=False concurrency=4
+[2026-04-18 12:25:40] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 12:25:40] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.2_20260418
+[2026-04-18 12:25:40] descriptions_from=v1_20260418
+[2026-04-18 12:25:40] templates_from=/Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4.2_templates.json
+[2026-04-18 12:25:40] [徐凤年] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [老黄] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [温华] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [姜泥] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [李淳罡] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] → start 徐凤年 variant 1
+[2026-04-18 12:25:40] → start 徐凤年 variant 2
+[2026-04-18 12:25:40] → start 徐凤年 variant 3
+[2026-04-18 12:25:40] → start 徐凤年 variant 4
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:26:31]   ✓ 徐凤年 v3 saved in 51.7s → 徐凤年_variant_3.png
+[2026-04-18 12:26:31] → start 老黄 variant 1
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:26:33]   ✓ 徐凤年 v4 saved in 53.6s → 徐凤年_variant_4.png
+[2026-04-18 12:26:33] → start 老黄 variant 2
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:26:35]   ✓ 徐凤年 v1 saved in 55.2s → 徐凤年_variant_1.png
+[2026-04-18 12:26:35] → start 老黄 variant 3
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:26:42]   ✓ 徐凤年 v2 saved in 62.5s → 徐凤年_variant_2.png
+[2026-04-18 12:26:42] → start 老黄 variant 4
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:27:23]   ✓ 老黄 v1 saved in 51.6s → 老黄_variant_1.png
+[2026-04-18 12:27:23] → start 温华 variant 1
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:27:23]   ✓ 老黄 v2 saved in 50.1s → 老黄_variant_2.png
+[2026-04-18 12:27:23] → start 温华 variant 2
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:27:26]   ✓ 老黄 v3 saved in 51.2s → 老黄_variant_3.png
+[2026-04-18 12:27:26] → start 温华 variant 3
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:27:36]   ✓ 老黄 v4 saved in 53.9s → 老黄_variant_4.png
+[2026-04-18 12:27:36] → start 温华 variant 4
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:28:11]   ✓ 温华 v1 saved in 48.3s → 温华_variant_1.png
+[2026-04-18 12:28:11] → start 姜泥 variant 1
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:28:12]   ✓ 温华 v2 saved in 48.5s → 温华_variant_2.png
+[2026-04-18 12:28:12] → start 姜泥 variant 2
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:28:25]   ✓ 温华 v4 saved in 48.6s → 温华_variant_4.png
+[2026-04-18 12:28:25] → start 姜泥 variant 3
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:28:26]   ✓ 温华 v3 saved in 60.0s → 温华_variant_3.png
+[2026-04-18 12:28:26] → start 姜泥 variant 4
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:28:59]   ✓ 姜泥 v2 saved in 47.5s → 姜泥_variant_2.png
+[2026-04-18 12:28:59] → start 李淳罡 variant 1
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:29:00]   ✓ 姜泥 v1 saved in 48.8s → 姜泥_variant_1.png
+[2026-04-18 12:29:00] → start 李淳罡 variant 2
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:29:13]   ✓ 姜泥 v3 saved in 48.3s → 姜泥_variant_3.png
+[2026-04-18 12:29:13] → start 李淳罡 variant 3
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:29:17]   ✓ 姜泥 v4 saved in 50.7s → 姜泥_variant_4.png
+[2026-04-18 12:29:17] → start 李淳罡 variant 4
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:29:47]   ✓ 李淳罡 v1 saved in 47.9s → 李淳罡_variant_1.png
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:29:53]   ✓ 李淳罡 v2 saved in 53.3s → 李淳罡_variant_2.png
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:30:01]   ✓ 李淳罡 v3 saved in 48.3s → 李淳罡_variant_3.png
+  [Post-process] Resizing to 512x910...
+[2026-04-18 12:30:09]   ✓ 李淳罡 v4 saved in 52.2s → 李淳罡_variant_4.png
+[2026-04-18 12:30:09] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.2_20260418/B4.2_20260418_summary.html
+[2026-04-18 12:30:09] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.2_20260418/manifest.json
+[2026-04-18 12:30:09] ok=20 skipped=0 error=0 total=20 wall=269.2s

@@ -1,0 +1,33 @@
+INFO:     Started server process [83367]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8100 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59417 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59425 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59426 - "DELETE /api/characters/%E6%9D%8E%E6%B7%B3%E7%BD%A1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59427 - "POST /api/characters HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:59479 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59480 - "DELETE /api/characters/%E6%9D%8E%E6%B7%B3%E7%BD%A1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59481 - "POST /api/characters HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:59482 - "POST /api/characters/%E6%9D%8E%E6%B7%B3%E7%BD%A1/regenerate-variants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59493 - "POST /api/generate HTTP/1.1" 200 OK
+  [gpt-image-1.5] Requesting 1024x1536 image...
+  [gpt-image-1.5] Received 1024x1536 RGBA image
+  [Post-process] Resizing to 512x910...
+INFO:     127.0.0.1:59571 - "POST /api/generate HTTP/1.1" 200 OK
+  [gpt-image-1.5] Requesting 1024x1536 image...
+  [gpt-image-1.5] Received 1024x1536 RGBA image
+  [Post-process] Resizing to 512x910...
+INFO:     127.0.0.1:59644 - "POST /api/generate HTTP/1.1" 200 OK
+  [gpt-image-1.5] Requesting 1024x1536 image...
+  [gpt-image-1.5] Received 1024x1536 RGBA image
+  [Post-process] Resizing to 512x910...
+INFO:     127.0.0.1:59851 - "POST /api/generate HTTP/1.1" 200 OK
+  [gpt-image-1.5] Requesting 1024x1536 image...
+  [gpt-image-1.5] Received 1024x1536 RGBA image
+  [Post-process] Resizing to 512x910...
+INFO:     127.0.0.1:60597 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [83367]

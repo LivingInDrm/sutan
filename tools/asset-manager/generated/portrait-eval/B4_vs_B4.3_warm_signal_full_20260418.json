@@ -1,0 +1,335 @@
+{
+  "version": "B4 vs B4.3 full (9 chars × 2 variants × 2 versions = 36 rows)",
+  "date": "20260418",
+  "characters": {
+    "old_5": [
+      "徐凤年",
+      "老黄",
+      "温华",
+      "姜泥",
+      "李淳罡"
+    ],
+    "new_4": [
+      "南宫仆射",
+      "轩辕青锋",
+      "褚禄山",
+      "陈芝豹"
+    ]
+  },
+  "sources": {
+    "old_B4": "v2_B4_20260418",
+    "old_B4.3": "B4.3_20260418",
+    "new_B4": "B4_extended_20260418",
+    "new_B4.3": "B4.3_extended_20260418"
+  },
+  "global_mean": {
+    "B4_mean": 0.15421,
+    "B4.3_mean": 0.154341,
+    "delta_mean": 0.000131,
+    "B4_std": 0.046733,
+    "B4.3_std": 0.053062,
+    "n_rows": 18,
+    "n_images": 36
+  },
+  "per_character_mean": {
+    "徐凤年": {
+      "B4_mean": 0.142225,
+      "B4.3_mean": 0.135224,
+      "delta_mean": -0.007001
+    },
+    "老黄": {
+      "B4_mean": 0.196521,
+      "B4.3_mean": 0.217981,
+      "delta_mean": 0.02146
+    },
+    "温华": {
+      "B4_mean": 0.187049,
+      "B4.3_mean": 0.211332,
+      "delta_mean": 0.024283
+    },
+    "姜泥": {
+      "B4_mean": 0.160067,
+      "B4.3_mean": 0.168659,
+      "delta_mean": 0.008592
+    },
+    "李淳罡": {
+      "B4_mean": 0.128977,
+      "B4.3_mean": 0.112126,
+      "delta_mean": -0.016851
+    },
+    "南宫仆射": {
+      "B4_mean": 0.12237,
+      "B4.3_mean": 0.145284,
+      "delta_mean": 0.022914
+    },
+    "轩辕青锋": {
+      "B4_mean": 0.090165,
+      "B4.3_mean": 0.073229,
+      "delta_mean": -0.016935
+    },
+    "褚禄山": {
+      "B4_mean": 0.200481,
+      "B4.3_mean": 0.169322,
+      "delta_mean": -0.031159
+    },
+    "陈芝豹": {
+      "B4_mean": 0.160039,
+      "B4.3_mean": 0.155915,
+      "delta_mean": -0.004124
+    }
+  },
+  "rows": [
+    {
+      "character": "徐凤年",
+      "variant": 1,
+      "group": "old",
+      "B4": {
+        "png": "v2_B4_20260418/徐凤年_variant_1.png",
+        "warm_signal": 0.12496
+      },
+      "B4.3": {
+        "png": "B4.3_20260418/徐凤年_variant_1.png",
+        "warm_signal": 0.112837
+      },
+      "delta_B4.3_minus_B4": -0.012124
+    },
+    {
+      "character": "徐凤年",
+      "variant": 2,
+      "group": "old",
+      "B4": {
+        "png": "v2_B4_20260418/徐凤年_variant_2.png",
+        "warm_signal": 0.15949
+      },
+      "B4.3": {
+        "png": "B4.3_20260418/徐凤年_variant_2.png",
+        "warm_signal": 0.157612
+      },
+      "delta_B4.3_minus_B4": -0.001878
+    },
+    {
+      "character": "老黄",
+      "variant": 1,
+      "group": "old",
+      "B4": {
+        "png": "v2_B4_20260418/老黄_variant_1.png",
+        "warm_signal": 0.201892
+      },
+      "B4.3": {
+        "png": "B4.3_20260418/老黄_variant_1.png",
+        "warm_signal": 0.193055
+      },
+      "delta_B4.3_minus_B4": -0.008837
+    },
+    {
+      "character": "老黄",
+      "variant": 2,
+      "group": "old",
+      "B4": {
+        "png": "v2_B4_20260418/老黄_variant_2.png",
+        "warm_signal": 0.191149
+      },
+      "B4.3": {
+        "png": "B4.3_20260418/老黄_variant_2.png",
+        "warm_signal": 0.242907
+      },
+      "delta_B4.3_minus_B4": 0.051758
+    },
+    {
+      "character": "温华",
+      "variant": 1,
+      "group": "old",
+      "B4": {
+        "png": "v2_B4_20260418/温华_variant_1.png",
+        "warm_signal": 0.182419
+      },
+      "B4.3": {
+        "png": "B4.3_20260418/温华_variant_1.png",
+        "warm_signal": 0.163818
+      },
+      "delta_B4.3_minus_B4": -0.018601
+    },
+    {
+      "character": "温华",
+      "variant": 2,
+      "group": "old",
+      "B4": {
+        "png": "v2_B4_20260418/温华_variant_2.png",
+        "warm_signal": 0.191679
+      },
+      "B4.3": {
+        "png": "B4.3_20260418/温华_variant_2.png",
+        "warm_signal": 0.258845
+      },
+      "delta_B4.3_minus_B4": 0.067166
+    },
+    {
+      "character": "姜泥",
+      "variant": 1,
+      "group": "old",
+      "B4": {
+        "png": "v2_B4_20260418/姜泥_variant_1.png",
+        "warm_signal": 0.236299
+      },
+      "B4.3": {
+        "png": "B4.3_20260418/姜泥_variant_1.png",
+        "warm_signal": 0.213822
+      },
+      "delta_B4.3_minus_B4": -0.022476
+    },
+    {
+      "character": "姜泥",
+      "variant": 2,
+      "group": "old",
+      "B4": {
+        "png": "v2_B4_20260418/姜泥_variant_2.png",
+        "warm_signal": 0.083835
+      },
+      "B4.3": {
+        "png": "B4.3_20260418/姜泥_variant_2.png",
+        "warm_signal": 0.123495
+      },
+      "delta_B4.3_minus_B4": 0.03966
+    },
+    {
+      "character": "李淳罡",
+      "variant": 1,
+      "group": "old",
+      "B4": {
+        "png": "v2_B4_20260418/李淳罡_variant_1.png",
+        "warm_signal": 0.135755
+      },
+      "B4.3": {
+        "png": "B4.3_20260418/李淳罡_variant_1.png",
+        "warm_signal": 0.108554
+      },
+      "delta_B4.3_minus_B4": -0.027201
+    },
+    {
+      "character": "李淳罡",
+      "variant": 2,
+      "group": "old",
+      "B4": {
+        "png": "v2_B4_20260418/李淳罡_variant_2.png",
+        "warm_signal": 0.1222
+      },
+      "B4.3": {
+        "png": "B4.3_20260418/李淳罡_variant_2.png",
+        "warm_signal": 0.115699
+      },
+      "delta_B4.3_minus_B4": -0.006501
+    },
+    {
+      "character": "南宫仆射",
+      "variant": 1,
+      "group": "new",
+      "B4": {
+        "png": "B4_extended_20260418/南宫仆射_variant_1.png",
+        "warm_signal": 0.150276
+      },
+      "B4.3": {
+        "png": "B4.3_extended_20260418/南宫仆射_variant_1.png",
+        "warm_signal": 0.136532
+      },
+      "delta_B4.3_minus_B4": -0.013744
+    },
+    {
+      "character": "南宫仆射",
+      "variant": 2,
+      "group": "new",
+      "B4": {
+        "png": "B4_extended_20260418/南宫仆射_variant_2.png",
+        "warm_signal": 0.094464
+      },
+      "B4.3": {
+        "png": "B4.3_extended_20260418/南宫仆射_variant_2.png",
+        "warm_signal": 0.154037
+      },
+      "delta_B4.3_minus_B4": 0.059573
+    },
+    {
+      "character": "轩辕青锋",
+      "variant": 1,
+      "group": "new",
+      "B4": {
+        "png": "B4_extended_20260418/轩辕青锋_variant_1.png",
+        "warm_signal": 0.074808
+      },
+      "B4.3": {
+        "png": "B4.3_extended_20260418/轩辕青锋_variant_1.png",
+        "warm_signal": 0.096194
+      },
+      "delta_B4.3_minus_B4": 0.021386
+    },
+    {
+      "character": "轩辕青锋",
+      "variant": 2,
+      "group": "new",
+      "B4": {
+        "png": "B4_extended_20260418/轩辕青锋_variant_2.png",
+        "warm_signal": 0.105521
+      },
+      "B4.3": {
+        "png": "B4.3_extended_20260418/轩辕青锋_variant_2.png",
+        "warm_signal": 0.050265
+      },
+      "delta_B4.3_minus_B4": -0.055257
+    },
+    {
+      "character": "褚禄山",
+      "variant": 1,
+      "group": "new",
+      "B4": {
+        "png": "B4_extended_20260418/褚禄山_variant_1.png",
+        "warm_signal": 0.1693
+      },
+      "B4.3": {
+        "png": "B4.3_extended_20260418/褚禄山_variant_1.png",
+        "warm_signal": 0.215695
+      },
+      "delta_B4.3_minus_B4": 0.046395
+    },
+    {
+      "character": "褚禄山",
+      "variant": 2,
+      "group": "new",
+      "B4": {
+        "png": "B4_extended_20260418/褚禄山_variant_2.png",
+        "warm_signal": 0.231662
+      },
+      "B4.3": {
+        "png": "B4.3_extended_20260418/褚禄山_variant_2.png",
+        "warm_signal": 0.122949
+      },
+      "delta_B4.3_minus_B4": -0.108713
+    },
+    {
+      "character": "陈芝豹",
+      "variant": 1,
+      "group": "new",
+      "B4": {
+        "png": "B4_extended_20260418/陈芝豹_variant_1.png",
+        "warm_signal": 0.137916
+      },
+      "B4.3": {
+        "png": "B4.3_extended_20260418/陈芝豹_variant_1.png",
+        "warm_signal": 0.131114
+      },
+      "delta_B4.3_minus_B4": -0.006802
+    },
+    {
+      "character": "陈芝豹",
+      "variant": 2,
+      "group": "new",
+      "B4": {
+        "png": "B4_extended_20260418/陈芝豹_variant_2.png",
+        "warm_signal": 0.182162
+      },
+      "B4.3": {
+        "png": "B4.3_extended_20260418/陈芝豹_variant_2.png",
+        "warm_signal": 0.180716
+      },
+      "delta_B4.3_minus_B4": -0.001446
+    }
+  ]
+}

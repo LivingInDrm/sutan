@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>B4-Lean · gpt-image-1 vs gpt-image-1.5 (2026-04-18)</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", Arial, sans-serif;
+         margin: 18px; background: #fafafa; color: #222; }
+  h1 { margin: 0 0 6px 0; font-size: 20px; }
+  .intro { background: #fff; border: 1px solid #e0e0e0; border-radius: 6px;
+           padding: 10px 14px; margin: 10px 0 18px 0; font-size: 13px; line-height: 1.55; }
+  .intro code { background: #f0f0f0; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+  .intro ul { margin: 6px 0 0 18px; padding: 0; }
+  table { border-collapse: collapse; background: #fff; }
+  th, td { vertical-align: top; padding: 8px; border: 1px solid #ddd; }
+  thead th { background: #eef2f7; font-size: 13px; }
+  thead th.col-model { font-size: 14px; }
+  thead th .hint { display: block; color: #666; font-weight: 400; font-size: 11px; margin-top: 2px; }
+  td.label-col { width: 120px; background: #f6f8fa; font-weight: 600; font-size: 13px; text-align: center; }
+  td.img-col { width: 420px; text-align: center; }
+  td.img-col img { width: 100%; height: auto; background: #f0f0f0; border-radius: 4px;
+                   display: block; }
+  td.img-col .meta { color: #888; font-size: 11px; margin-top: 4px; }
+  details { margin-top: 8px; }
+  details > summary { cursor: pointer; color: #0366d6; font-size: 12px; }
+  pre { background: #f6f8fa; padding: 8px; border-radius: 4px; font-size: 11px;
+        white-space: pre-wrap; max-height: 240px; overflow: auto; text-align: left; }
+  .pill { display: inline-block; padding: 1px 7px; border-radius: 10px;
+          background: #e8f0fe; color: #1a56db; font-size: 11px; margin-right: 6px; }
+</style>
+</head>
+<body>
+
+<h1>B4-Lean Portrait · 单因子对比：<code>gpt-image-1</code> vs <code>gpt-image-1.5</code></h1>
+
+<div class="intro">
+  <div>
+    <span class="pill">单因子实验</span>
+    <span class="pill">2026-04-18</span>
+    <span class="pill">3 角色 × 2 variant = 6 组</span>
+  </div>
+  <p style="margin: 8px 0 4px 0;">
+    本页并排对比两个 OpenAI 图像模型在相同 prompt 下的生成结果。<strong>唯一变量是模型 ID</strong>，
+    所有 prompt 文本完全复用自 <code>B4-Lean_20260418/*.prompt.txt</code>（B4-Lean 模板已提前拼装完成、
+    字节级一致）。
+  </p>
+  <ul>
+    <li>左列模型：<code>gpt-image-1</code> — 来源目录 <code>B4-Lean_20260418/</code></li>
+    <li>右列模型：<code>gpt-image-1.5</code> — 来源目录 <code>B4-Lean_gpt-image-1.5_20260418/</code></li>
+    <li>共用参数：<code>size=1024x1536</code>、<code>quality=high</code>、<code>background=transparent</code>、<code>output_format=png</code>、<code>n=1</code></li>
+    <li>后处理相同：<code>generate_assets.post_process(..., "portrait")</code>（缩放至 512×910）</li>
+    <li>评估方式：<strong>人工评估</strong>（未跑任何自动指标）</li>
+  </ul>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>角色 / Variant</th>
+      <th class="col-model">gpt-image-1
+        <span class="hint">quality=high · 1024×1536 · B4-Lean prompt</span>
+      </th>
+      <th class="col-model">gpt-image-1.5
+        <span class="hint">quality=high · 1024×1536 · 同一 B4-Lean prompt</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
+      <td class="label-col">姜泥<br/>variant 1</td>
+      <td class="img-col">
+        <img src="B4-Lean_20260418/姜泥_variant_1.png" alt="姜泥 v1 · gpt-image-1"/>
+        <div class="meta">B4-Lean_20260418/姜泥_variant_1.png</div>
+      </td>
+      <td class="img-col">
+        <img src="B4-Lean_gpt-image-1.5_20260418/姜泥_variant_1.png" alt="姜泥 v1 · gpt-image-1.5"/>
+        <div class="meta">B4-Lean_gpt-image-1.5_20260418/姜泥_variant_1.png</div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="label-col">姜泥<br/>variant 2</td>
+      <td class="img-col">
+        <img src="B4-Lean_20260418/姜泥_variant_2.png" alt="姜泥 v2 · gpt-image-1"/>
+        <div class="meta">B4-Lean_20260418/姜泥_variant_2.png</div>
+      </td>
+      <td class="img-col">
+        <img src="B4-Lean_gpt-image-1.5_20260418/姜泥_variant_2.png" alt="姜泥 v2 · gpt-image-1.5"/>
+        <div class="meta">B4-Lean_gpt-image-1.5_20260418/姜泥_variant_2.png</div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="label-col">徐凤年<br/>variant 1</td>
+      <td class="img-col">
+        <img src="B4-Lean_20260418/徐凤年_variant_1.png" alt="徐凤年 v1 · gpt-image-1"/>
+        <div class="meta">B4-Lean_20260418/徐凤年_variant_1.png</div>
+      </td>
+      <td class="img-col">
+        <img src="B4-Lean_gpt-image-1.5_20260418/徐凤年_variant_1.png" alt="徐凤年 v1 · gpt-image-1.5"/>
+        <div class="meta">B4-Lean_gpt-image-1.5_20260418/徐凤年_variant_1.png</div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="label-col">徐凤年<br/>variant 2</td>
+      <td class="img-col">
+        <img src="B4-Lean_20260418/徐凤年_variant_2.png" alt="徐凤年 v2 · gpt-image-1"/>
+        <div class="meta">B4-Lean_20260418/徐凤年_variant_2.png</div>
+      </td>
+      <td class="img-col">
+        <img src="B4-Lean_gpt-image-1.5_20260418/徐凤年_variant_2.png" alt="徐凤年 v2 · gpt-image-1.5"/>
+        <div class="meta">B4-Lean_gpt-image-1.5_20260418/徐凤年_variant_2.png</div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="label-col">李淳罡<br/>variant 1</td>
+      <td class="img-col">
+        <img src="B4-Lean_20260418/李淳罡_variant_1.png" alt="李淳罡 v1 · gpt-image-1"/>
+        <div class="meta">B4-Lean_20260418/李淳罡_variant_1.png</div>
+      </td>
+      <td class="img-col">
+        <img src="B4-Lean_gpt-image-1.5_20260418/李淳罡_variant_1.png" alt="李淳罡 v1 · gpt-image-1.5"/>
+        <div class="meta">B4-Lean_gpt-image-1.5_20260418/李淳罡_variant_1.png</div>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="label-col">李淳罡<br/>variant 2</td>
+      <td class="img-col">
+        <img src="B4-Lean_20260418/李淳罡_variant_2.png" alt="李淳罡 v2 · gpt-image-1"/>
+        <div class="meta">B4-Lean_20260418/李淳罡_variant_2.png</div>
+      </td>
+      <td class="img-col">
+        <img src="B4-Lean_gpt-image-1.5_20260418/李淳罡_variant_2.png" alt="李淳罡 v2 · gpt-image-1.5"/>
+        <div class="meta">B4-Lean_gpt-image-1.5_20260418/李淳罡_variant_2.png</div>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+<p style="margin-top: 14px; color: #666; font-size: 12px;">
+  Manifests: <code>B4-Lean_20260418/manifest.json</code>（v1 侧）·
+  <code>B4-Lean_gpt-image-1.5_20260418/manifest.json</code>（v1.5 侧）
+</p>
+
+</body>
+</html>

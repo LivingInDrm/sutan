@@ -1,0 +1,89 @@
+[2026-04-18 13:41:01] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4.3_templates.json
+[2026-04-18 13:41:01] === v2.4 portrait eval run ===
+[2026-04-18 13:41:01] version=B4.3_extended date=20260418 concurrency=4 low_res=False
+[2026-04-18 13:41:01] characters=['南宫仆射', '轩辕青锋', '褚禄山', '陈芝豹'] variants_per=2
+[2026-04-18 13:41:01] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.3_extended_20260418
+[2026-04-18 13:41:01] → start 南宫仆射 variant 1
+[2026-04-18 13:41:01] → start 南宫仆射 variant 2
+[2026-04-18 13:41:01] → start 轩辕青锋 variant 1
+[2026-04-18 13:41:01] → start 轩辕青锋 variant 2
+[2026-04-18 13:41:53]   ✓ 轩辕青锋 v2 saved in 52.6s
+[2026-04-18 13:41:53] → start 褚禄山 variant 1
+[2026-04-18 13:41:54]   ✓ 南宫仆射 v1 saved in 53.3s
+[2026-04-18 13:41:54] → start 褚禄山 variant 2
+[2026-04-18 13:42:06]   ✓ 南宫仆射 v2 saved in 64.7s
+[2026-04-18 13:42:06] → start 陈芝豹 variant 1
+[2026-04-18 13:42:07]   ✓ 轩辕青锋 v1 saved in 66.3s
+[2026-04-18 13:42:07] → start 陈芝豹 variant 2
+[2026-04-18 13:42:44]   ✓ 褚禄山 v2 saved in 50.0s
+[2026-04-18 13:42:45]   ✓ 褚禄山 v1 saved in 51.3s
+[2026-04-18 13:42:58]   ✓ 陈芝豹 v2 saved in 50.5s
+[2026-04-18 13:43:10]   ✓ 陈芝豹 v1 saved in 64.1s
+[2026-04-18 13:43:10] manifest → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.3_extended_20260418/manifest.json
+[2026-04-18 13:43:10] ok=8 skipped=0 error=0 total=8 wall=128.9s
+[2026-04-18 13:43:17] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4.4_templates.json
+[2026-04-18 13:43:17] === v2.4 portrait eval run ===
+[2026-04-18 13:43:17] version=B4.4 date=20260418 concurrency=4 low_res=False
+[2026-04-18 13:43:17] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡', '南宫仆射', '轩辕青锋', '褚禄山', '陈芝豹'] variants_per=2
+[2026-04-18 13:43:17] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.4_20260418
+[2026-04-18 13:43:17] → start 徐凤年 variant 1
+[2026-04-18 13:43:17] → start 徐凤年 variant 2
+[2026-04-18 13:43:17] → start 老黄 variant 1
+[2026-04-18 13:43:17] → start 老黄 variant 2
+[2026-04-18 13:44:08]   ✓ 老黄 v2 saved in 50.4s
+[2026-04-18 13:44:08] → start 温华 variant 1
+[2026-04-18 13:44:10]   ✓ 老黄 v1 saved in 52.4s
+[2026-04-18 13:44:10] → start 温华 variant 2
+[2026-04-18 13:44:20]   ✓ 徐凤年 v1 saved in 63.2s
+[2026-04-18 13:44:20] → start 姜泥 variant 1
+[2026-04-18 13:44:25]   ✓ 徐凤年 v2 saved in 67.9s
+[2026-04-18 13:44:25] → start 姜泥 variant 2
+[2026-04-18 13:44:54]   ✓ 温华 v1 saved in 46.5s
+[2026-04-18 13:44:54] → start 李淳罡 variant 1
+[2026-04-18 13:45:13]   ✓ 温华 v2 saved in 63.1s
+[2026-04-18 13:45:13] → start 李淳罡 variant 2
+[2026-04-18 13:45:15]   ✓ 姜泥 v2 saved in 49.8s
+[2026-04-18 13:45:15] → start 南宫仆射 variant 1
+[2026-04-18 13:45:24]   ✓ 姜泥 v1 saved in 63.1s
+[2026-04-18 13:45:24] → start 南宫仆射 variant 2
+[2026-04-18 13:45:53]   ✓ 李淳罡 v1 saved in 59.0s
+[2026-04-18 13:45:53] → start 轩辕青锋 variant 1
+[2026-04-18 13:46:06]   ✓ 南宫仆射 v1 saved in 50.8s
+[2026-04-18 13:46:06] → start 轩辕青锋 variant 2
+[2026-04-18 13:46:09]   ✓ 李淳罡 v2 saved in 55.7s
+[2026-04-18 13:46:09] → start 褚禄山 variant 1
+[2026-04-18 13:46:13]   ✓ 南宫仆射 v2 saved in 49.7s
+[2026-04-18 13:46:13] → start 褚禄山 variant 2
+[2026-04-18 13:46:59]   ✗ 轩辕青锋 v2 FAILED: [Errno 2] No such file or directory: '/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.4_20260418/轩辕青锋_variant_2.png'
+[2026-04-18 13:46:59] → start 陈芝豹 variant 1
+[2026-04-18 13:46:59]   ✓ 轩辕青锋 v1 saved in 65.5s
+[2026-04-18 13:46:59] → start 陈芝豹 variant 2
+[2026-04-18 13:47:01]   ✓ 褚禄山 v1 saved in 52.1s
+[2026-04-18 13:47:05]   ✓ 褚禄山 v2 saved in 52.0s
+[2026-04-18 13:48:02]   ✓ 陈芝豹 v2 saved in 63.6s
+[2026-04-18 13:48:04]   ✓ 陈芝豹 v1 saved in 65.2s
+[2026-04-18 13:48:04] manifest → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.4_20260418/manifest.json
+[2026-04-18 13:48:04] ok=17 skipped=0 error=1 total=18 wall=286.4s
+[2026-04-18 13:49:14] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4_templates.json
+[2026-04-18 13:49:14] === v2.4 portrait eval run ===
+[2026-04-18 13:49:14] version=B4_extended date=20260418 concurrency=4 low_res=False
+[2026-04-18 13:49:14] characters=['南宫仆射', '轩辕青锋', '褚禄山', '陈芝豹'] variants_per=2
+[2026-04-18 13:49:14] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4_extended_20260418
+[2026-04-18 13:49:14] → start 南宫仆射 variant 1
+[2026-04-18 13:49:14] → start 南宫仆射 variant 2
+[2026-04-18 13:49:14] → start 轩辕青锋 variant 1
+[2026-04-18 13:49:14] → start 轩辕青锋 variant 2
+[2026-04-18 13:50:08]   ✓ 南宫仆射 v1 saved in 53.5s
+[2026-04-18 13:50:08] → start 褚禄山 variant 1
+[2026-04-18 13:50:22]   ✓ 南宫仆射 v2 saved in 67.5s
+[2026-04-18 13:50:22] → start 褚禄山 variant 2
+[2026-04-18 13:50:24]   ✓ 轩辕青锋 v1 saved in 69.8s
+[2026-04-18 13:50:24] → start 陈芝豹 variant 1
+[2026-04-18 13:50:24]   ✓ 轩辕青锋 v2 saved in 69.9s
+[2026-04-18 13:50:24] → start 陈芝豹 variant 2
+[2026-04-18 13:51:13]   ✓ 褚禄山 v1 saved in 65.0s
+[2026-04-18 13:51:16]   ✓ 陈芝豹 v1 saved in 51.6s
+[2026-04-18 13:51:17]   ✓ 陈芝豹 v2 saved in 52.6s
+[2026-04-18 13:51:25]   ✓ 褚禄山 v2 saved in 63.5s
+[2026-04-18 13:51:25] manifest → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4_extended_20260418/manifest.json
+[2026-04-18 13:51:25] ok=8 skipped=0 error=0 total=8 wall=131.0s

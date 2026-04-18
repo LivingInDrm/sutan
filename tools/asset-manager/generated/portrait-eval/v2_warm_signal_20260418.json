@@ -1,0 +1,1304 @@
+{
+  "runs": [
+    {
+      "dir": "v0_20260418",
+      "n_images": 20,
+      "warm_signal_mean": 0.2175,
+      "warm_signal_std": 0.062,
+      "warm_signal_min": 0.1063,
+      "warm_signal_max": 0.3405,
+      "warm_signal_median": 0.2133,
+      "per_character_mean": {
+        "姜泥": 0.1826,
+        "徐凤年": 0.2652,
+        "李淳罡": 0.1644,
+        "温华": 0.2501,
+        "老黄": 0.2255
+      },
+      "histogram_buckets": [
+        {
+          "bucket": "<-0.05",
+          "count": 0
+        },
+        {
+          "bucket": "[-0.05, 0.0)",
+          "count": 0
+        },
+        {
+          "bucket": "[0.0, 0.05)",
+          "count": 0
+        },
+        {
+          "bucket": "[0.05, 0.1)",
+          "count": 0
+        },
+        {
+          "bucket": "[0.1, 0.15)",
+          "count": 4
+        },
+        {
+          "bucket": "[0.15, 0.2)",
+          "count": 3
+        },
+        {
+          "bucket": "[0.2, 0.25)",
+          "count": 9
+        },
+        {
+          "bucket": "[0.25, 0.3)",
+          "count": 1
+        },
+        {
+          "bucket": "[0.3, 0.35)",
+          "count": 3
+        },
+        {
+          "bucket": ">=0.35",
+          "count": 0
+        }
+      ],
+      "entries": [
+        {
+          "character": "姜泥",
+          "variant": 1,
+          "file": "姜泥_variant_1.png",
+          "warm_signal": 0.232879,
+          "opaque_pixels": 147590,
+          "red_mean": 93.391,
+          "green_mean": 59.334,
+          "blue_mean": 34.007
+        },
+        {
+          "character": "姜泥",
+          "variant": 2,
+          "file": "姜泥_variant_2.png",
+          "warm_signal": 0.23921,
+          "opaque_pixels": 130987,
+          "red_mean": 138.065,
+          "green_mean": 127.709,
+          "blue_mean": 77.066
+        },
+        {
+          "character": "姜泥",
+          "variant": 3,
+          "file": "姜泥_variant_3.png",
+          "warm_signal": 0.117213,
+          "opaque_pixels": 163590,
+          "red_mean": 101.3,
+          "green_mean": 96.59,
+          "blue_mean": 71.411
+        },
+        {
+          "character": "姜泥",
+          "variant": 4,
+          "file": "姜泥_variant_4.png",
+          "warm_signal": 0.140938,
+          "opaque_pixels": 137606,
+          "red_mean": 80.831,
+          "green_mean": 65.013,
+          "blue_mean": 44.892
+        },
+        {
+          "character": "徐凤年",
+          "variant": 1,
+          "file": "徐凤年_variant_1.png",
+          "warm_signal": 0.340479,
+          "opaque_pixels": 168427,
+          "red_mean": 148.56,
+          "green_mean": 100.988,
+          "blue_mean": 61.738
+        },
+        {
+          "character": "徐凤年",
+          "variant": 2,
+          "file": "徐凤年_variant_2.png",
+          "warm_signal": 0.205977,
+          "opaque_pixels": 173088,
+          "red_mean": 118.663,
+          "green_mean": 100.678,
+          "blue_mean": 66.139
+        },
+        {
+          "character": "徐凤年",
+          "variant": 3,
+          "file": "徐凤年_variant_3.png",
+          "warm_signal": 0.194182,
+          "opaque_pixels": 174548,
+          "red_mean": 104.549,
+          "green_mean": 95.72,
+          "blue_mean": 55.033
+        },
+        {
+          "character": "徐凤年",
+          "variant": 4,
+          "file": "徐凤年_variant_4.png",
+          "warm_signal": 0.320357,
+          "opaque_pixels": 164070,
+          "red_mean": 126.277,
+          "green_mean": 77.346,
+          "blue_mean": 44.586
+        },
+        {
+          "character": "李淳罡",
+          "variant": 1,
+          "file": "李淳罡_variant_1.png",
+          "warm_signal": 0.147571,
+          "opaque_pixels": 164945,
+          "red_mean": 99.546,
+          "green_mean": 93.592,
+          "blue_mean": 61.916
+        },
+        {
+          "character": "李淳罡",
+          "variant": 2,
+          "file": "李淳罡_variant_2.png",
+          "warm_signal": 0.106277,
+          "opaque_pixels": 215625,
+          "red_mean": 60.709,
+          "green_mean": 53.785,
+          "blue_mean": 33.609
+        },
+        {
+          "character": "李淳罡",
+          "variant": 3,
+          "file": "李淳罡_variant_3.png",
+          "warm_signal": 0.192565,
+          "opaque_pixels": 206073,
+          "red_mean": 102.195,
+          "green_mean": 88.174,
+          "blue_mean": 53.091
+        },
+        {
+          "character": "李淳罡",
+          "variant": 4,
+          "file": "李淳罡_variant_4.png",
+          "warm_signal": 0.21103,
+          "opaque_pixels": 197913,
+          "red_mean": 128.679,
+          "green_mean": 103.773,
+          "blue_mean": 74.867
+        },
+        {
+          "character": "温华",
+          "variant": 1,
+          "file": "温华_variant_1.png",
+          "warm_signal": 0.242769,
+          "opaque_pixels": 132851,
+          "red_mean": 133.744,
+          "green_mean": 115.106,
+          "blue_mean": 71.838
+        },
+        {
+          "character": "温华",
+          "variant": 2,
+          "file": "温华_variant_2.png",
+          "warm_signal": 0.304466,
+          "opaque_pixels": 149426,
+          "red_mean": 131.516,
+          "green_mean": 94.854,
+          "blue_mean": 53.877
+        },
+        {
+          "character": "温华",
+          "variant": 3,
+          "file": "温华_variant_3.png",
+          "warm_signal": 0.209288,
+          "opaque_pixels": 187348,
+          "red_mean": 131.758,
+          "green_mean": 114.8,
+          "blue_mean": 78.389
+        },
+        {
+          "character": "温华",
+          "variant": 4,
+          "file": "温华_variant_4.png",
+          "warm_signal": 0.243778,
+          "opaque_pixels": 173668,
+          "red_mean": 117.779,
+          "green_mean": 93.4,
+          "blue_mean": 55.616
+        },
+        {
+          "character": "老黄",
+          "variant": 1,
+          "file": "老黄_variant_1.png",
+          "warm_signal": 0.276143,
+          "opaque_pixels": 177324,
+          "red_mean": 116.796,
+          "green_mean": 92.974,
+          "blue_mean": 46.379
+        },
+        {
+          "character": "老黄",
+          "variant": 2,
+          "file": "老黄_variant_2.png",
+          "warm_signal": 0.215652,
+          "opaque_pixels": 206892,
+          "red_mean": 98.244,
+          "green_mean": 84.14,
+          "blue_mean": 43.253
+        },
+        {
+          "character": "老黄",
+          "variant": 3,
+          "file": "老黄_variant_3.png",
+          "warm_signal": 0.165321,
+          "opaque_pixels": 193458,
+          "red_mean": 86.709,
+          "green_mean": 76.496,
+          "blue_mean": 44.553
+        },
+        {
+          "character": "老黄",
+          "variant": 4,
+          "file": "老黄_variant_4.png",
+          "warm_signal": 0.244757,
+          "opaque_pixels": 173809,
+          "red_mean": 109.448,
+          "green_mean": 89.847,
+          "blue_mean": 47.035
+        }
+      ]
+    },
+    {
+      "dir": "v1_20260418",
+      "n_images": 20,
+      "warm_signal_mean": 0.2051,
+      "warm_signal_std": 0.0784,
+      "warm_signal_min": 0.0413,
+      "warm_signal_max": 0.3043,
+      "warm_signal_median": 0.2186,
+      "per_character_mean": {
+        "姜泥": 0.2357,
+        "徐凤年": 0.1474,
+        "李淳罡": 0.1512,
+        "温华": 0.2428,
+        "老黄": 0.2486
+      },
+      "histogram_buckets": [
+        {
+          "bucket": "<-0.05",
+          "count": 0
+        },
+        {
+          "bucket": "[-0.05, 0.0)",
+          "count": 0
+        },
+        {
+          "bucket": "[0.0, 0.05)",
+          "count": 1
+        },
+        {
+          "bucket": "[0.05, 0.1)",
+          "count": 2
+        },
+        {
+          "bucket": "[0.1, 0.15)",
+          "count": 1
+        },
+        {
+          "bucket": "[0.15, 0.2)",
+          "count": 4
+        },
+        {
+          "bucket": "[0.2, 0.25)",
+          "count": 5
+        },
+        {
+          "bucket": "[0.25, 0.3)",
+          "count": 5
+        },
+        {
+          "bucket": "[0.3, 0.35)",
+          "count": 2
+        },
+        {
+          "bucket": ">=0.35",
+          "count": 0
+        }
+      ],
+      "entries": [
+        {
+          "character": "姜泥",
+          "variant": 1,
+          "file": "姜泥_variant_1.png",
+          "warm_signal": 0.304296,
+          "opaque_pixels": 147274,
+          "red_mean": 185.095,
+          "green_mean": 157.163,
+          "blue_mean": 107.499
+        },
+        {
+          "character": "姜泥",
+          "variant": 2,
+          "file": "姜泥_variant_2.png",
+          "warm_signal": 0.156355,
+          "opaque_pixels": 104473,
+          "red_mean": 111.272,
+          "green_mean": 108.044,
+          "blue_mean": 71.402
+        },
+        {
+          "character": "姜泥",
+          "variant": 3,
+          "file": "姜泥_variant_3.png",
+          "warm_signal": 0.277805,
+          "opaque_pixels": 159161,
+          "red_mean": 120.943,
+          "green_mean": 97.039,
+          "blue_mean": 50.103
+        },
+        {
+          "character": "姜泥",
+          "variant": 4,
+          "file": "姜泥_variant_4.png",
+          "warm_signal": 0.204202,
+          "opaque_pixels": 136597,
+          "red_mean": 119.587,
+          "green_mean": 110.875,
+          "blue_mean": 67.516
+        },
+        {
+          "character": "徐凤年",
+          "variant": 1,
+          "file": "徐凤年_variant_1.png",
+          "warm_signal": 0.04135,
+          "opaque_pixels": 138583,
+          "red_mean": 83.514,
+          "green_mean": 93.382,
+          "blue_mean": 72.97
+        },
+        {
+          "character": "徐凤年",
+          "variant": 2,
+          "file": "徐凤年_variant_2.png",
+          "warm_signal": 0.288379,
+          "opaque_pixels": 168575,
+          "red_mean": 104.788,
+          "green_mean": 61.953,
+          "blue_mean": 31.251
+        },
+        {
+          "character": "徐凤年",
+          "variant": 3,
+          "file": "徐凤年_variant_3.png",
+          "warm_signal": 0.198494,
+          "opaque_pixels": 163445,
+          "red_mean": 141.238,
+          "green_mean": 126.345,
+          "blue_mean": 90.622
+        },
+        {
+          "character": "徐凤年",
+          "variant": 4,
+          "file": "徐凤年_variant_4.png",
+          "warm_signal": 0.061573,
+          "opaque_pixels": 135215,
+          "red_mean": 59.136,
+          "green_mean": 69.128,
+          "blue_mean": 43.435
+        },
+        {
+          "character": "李淳罡",
+          "variant": 1,
+          "file": "李淳罡_variant_1.png",
+          "warm_signal": 0.072484,
+          "opaque_pixels": 147447,
+          "red_mean": 108.511,
+          "green_mean": 109.148,
+          "blue_mean": 90.028
+        },
+        {
+          "character": "李淳罡",
+          "variant": 2,
+          "file": "李淳罡_variant_2.png",
+          "warm_signal": 0.16063,
+          "opaque_pixels": 170905,
+          "red_mean": 107.167,
+          "green_mean": 104.022,
+          "blue_mean": 66.206
+        },
+        {
+          "character": "李淳罡",
+          "variant": 3,
+          "file": "李淳罡_variant_3.png",
+          "warm_signal": 0.242186,
+          "opaque_pixels": 180410,
+          "red_mean": 133.552,
+          "green_mean": 113.282,
+          "blue_mean": 71.795
+        },
+        {
+          "character": "李淳罡",
+          "variant": 4,
+          "file": "李淳罡_variant_4.png",
+          "warm_signal": 0.129445,
+          "opaque_pixels": 193760,
+          "red_mean": 109.321,
+          "green_mean": 103.032,
+          "blue_mean": 76.313
+        },
+        {
+          "character": "温华",
+          "variant": 1,
+          "file": "温华_variant_1.png",
+          "warm_signal": 0.220298,
+          "opaque_pixels": 127189,
+          "red_mean": 112.032,
+          "green_mean": 100.812,
+          "blue_mean": 55.856
+        },
+        {
+          "character": "温华",
+          "variant": 2,
+          "file": "温华_variant_2.png",
+          "warm_signal": 0.251718,
+          "opaque_pixels": 126663,
+          "red_mean": 110.786,
+          "green_mean": 88.918,
+          "blue_mean": 46.597
+        },
+        {
+          "character": "温华",
+          "variant": 3,
+          "file": "温华_variant_3.png",
+          "warm_signal": 0.237781,
+          "opaque_pixels": 163570,
+          "red_mean": 112.615,
+          "green_mean": 93.25,
+          "blue_mean": 51.98
+        },
+        {
+          "character": "温华",
+          "variant": 4,
+          "file": "温华_variant_4.png",
+          "warm_signal": 0.261517,
+          "opaque_pixels": 141087,
+          "red_mean": 135.972,
+          "green_mean": 114.803,
+          "blue_mean": 69.285
+        },
+        {
+          "character": "老黄",
+          "variant": 1,
+          "file": "老黄_variant_1.png",
+          "warm_signal": 0.301727,
+          "opaque_pixels": 169106,
+          "red_mean": 144.772,
+          "green_mean": 116.17,
+          "blue_mean": 67.831
+        },
+        {
+          "character": "老黄",
+          "variant": 2,
+          "file": "老黄_variant_2.png",
+          "warm_signal": 0.292449,
+          "opaque_pixels": 152471,
+          "red_mean": 125.495,
+          "green_mean": 96.44,
+          "blue_mean": 50.921
+        },
+        {
+          "character": "老黄",
+          "variant": 3,
+          "file": "老黄_variant_3.png",
+          "warm_signal": 0.183157,
+          "opaque_pixels": 195618,
+          "red_mean": 96.088,
+          "green_mean": 81.767,
+          "blue_mean": 49.383
+        },
+        {
+          "character": "老黄",
+          "variant": 4,
+          "file": "老黄_variant_4.png",
+          "warm_signal": 0.21689,
+          "opaque_pixels": 156397,
+          "red_mean": 119.019,
+          "green_mean": 104.508,
+          "blue_mean": 63.712
+        }
+      ]
+    },
+    {
+      "dir": "v2_A1_20260418",
+      "n_images": 20,
+      "warm_signal_mean": 0.126,
+      "warm_signal_std": 0.0646,
+      "warm_signal_min": 0.0207,
+      "warm_signal_max": 0.2502,
+      "warm_signal_median": 0.136,
+      "per_character_mean": {
+        "姜泥": 0.1356,
+        "徐凤年": 0.0876,
+        "李淳罡": 0.0762,
+        "温华": 0.1493,
+        "老黄": 0.1814
+      },
+      "histogram_buckets": [
+        {
+          "bucket": "<-0.05",
+          "count": 0
+        },
+        {
+          "bucket": "[-0.05, 0.0)",
+          "count": 0
+        },
+        {
+          "bucket": "[0.0, 0.05)",
+          "count": 4
+        },
+        {
+          "bucket": "[0.05, 0.1)",
+          "count": 2
+        },
+        {
+          "bucket": "[0.1, 0.15)",
+          "count": 7
+        },
+        {
+          "bucket": "[0.15, 0.2)",
+          "count": 5
+        },
+        {
+          "bucket": "[0.2, 0.25)",
+          "count": 1
+        },
+        {
+          "bucket": "[0.25, 0.3)",
+          "count": 1
+        },
+        {
+          "bucket": "[0.3, 0.35)",
+          "count": 0
+        },
+        {
+          "bucket": ">=0.35",
+          "count": 0
+        }
+      ],
+      "entries": [
+        {
+          "character": "姜泥",
+          "variant": 1,
+          "file": "姜泥_variant_1.png",
+          "warm_signal": 0.171641,
+          "opaque_pixels": 123803,
+          "red_mean": 152.853,
+          "green_mean": 136.487,
+          "blue_mean": 109.085
+        },
+        {
+          "character": "姜泥",
+          "variant": 2,
+          "file": "姜泥_variant_2.png",
+          "warm_signal": 0.070037,
+          "opaque_pixels": 107347,
+          "red_mean": 95.641,
+          "green_mean": 96.146,
+          "blue_mean": 77.782
+        },
+        {
+          "character": "姜泥",
+          "variant": 3,
+          "file": "姜泥_variant_3.png",
+          "warm_signal": 0.19038,
+          "opaque_pixels": 144530,
+          "red_mean": 110.114,
+          "green_mean": 88.68,
+          "blue_mean": 61.567
+        },
+        {
+          "character": "姜泥",
+          "variant": 4,
+          "file": "姜泥_variant_4.png",
+          "warm_signal": 0.110378,
+          "opaque_pixels": 134235,
+          "red_mean": 99.938,
+          "green_mean": 98.757,
+          "blue_mean": 71.791
+        },
+        {
+          "character": "徐凤年",
+          "variant": 1,
+          "file": "徐凤年_variant_1.png",
+          "warm_signal": 0.020679,
+          "opaque_pixels": 133352,
+          "red_mean": 101.283,
+          "green_mean": 106.41,
+          "blue_mean": 96.009
+        },
+        {
+          "character": "徐凤年",
+          "variant": 2,
+          "file": "徐凤年_variant_2.png",
+          "warm_signal": 0.188804,
+          "opaque_pixels": 174725,
+          "red_mean": 80.198,
+          "green_mean": 52.908,
+          "blue_mean": 32.053
+        },
+        {
+          "character": "徐凤年",
+          "variant": 3,
+          "file": "徐凤年_variant_3.png",
+          "warm_signal": 0.11328,
+          "opaque_pixels": 151292,
+          "red_mean": 134.211,
+          "green_mean": 129.723,
+          "blue_mean": 105.325
+        },
+        {
+          "character": "徐凤年",
+          "variant": 4,
+          "file": "徐凤年_variant_4.png",
+          "warm_signal": 0.027697,
+          "opaque_pixels": 120987,
+          "red_mean": 61.2,
+          "green_mean": 69.261,
+          "blue_mean": 54.137
+        },
+        {
+          "character": "李淳罡",
+          "variant": 1,
+          "file": "李淳罡_variant_1.png",
+          "warm_signal": 0.045204,
+          "opaque_pixels": 152773,
+          "red_mean": 108.858,
+          "green_mean": 113.88,
+          "blue_mean": 97.331
+        },
+        {
+          "character": "李淳罡",
+          "variant": 2,
+          "file": "李淳罡_variant_2.png",
+          "warm_signal": 0.063743,
+          "opaque_pixels": 182366,
+          "red_mean": 83.413,
+          "green_mean": 91.026,
+          "blue_mean": 67.158
+        },
+        {
+          "character": "李淳罡",
+          "variant": 3,
+          "file": "李淳罡_variant_3.png",
+          "warm_signal": 0.173119,
+          "opaque_pixels": 161480,
+          "red_mean": 118.274,
+          "green_mean": 106.553,
+          "blue_mean": 74.128
+        },
+        {
+          "character": "李淳罡",
+          "variant": 4,
+          "file": "李淳罡_variant_4.png",
+          "warm_signal": 0.02282,
+          "opaque_pixels": 176251,
+          "red_mean": 96.292,
+          "green_mean": 100.181,
+          "blue_mean": 90.473
+        },
+        {
+          "character": "温华",
+          "variant": 1,
+          "file": "温华_variant_1.png",
+          "warm_signal": 0.130148,
+          "opaque_pixels": 138070,
+          "red_mean": 97.959,
+          "green_mean": 86.858,
+          "blue_mean": 64.772
+        },
+        {
+          "character": "温华",
+          "variant": 2,
+          "file": "温华_variant_2.png",
+          "warm_signal": 0.186383,
+          "opaque_pixels": 113004,
+          "red_mean": 92.066,
+          "green_mean": 75.666,
+          "blue_mean": 44.539
+        },
+        {
+          "character": "温华",
+          "variant": 3,
+          "file": "温华_variant_3.png",
+          "warm_signal": 0.139765,
+          "opaque_pixels": 164761,
+          "red_mean": 92.95,
+          "green_mean": 82.506,
+          "blue_mean": 57.31
+        },
+        {
+          "character": "温华",
+          "variant": 4,
+          "file": "温华_variant_4.png",
+          "warm_signal": 0.141055,
+          "opaque_pixels": 139184,
+          "red_mean": 112.699,
+          "green_mean": 101.639,
+          "blue_mean": 76.73
+        },
+        {
+          "character": "老黄",
+          "variant": 1,
+          "file": "老黄_variant_1.png",
+          "warm_signal": 0.203639,
+          "opaque_pixels": 159513,
+          "red_mean": 124.928,
+          "green_mean": 107.381,
+          "blue_mean": 73.0
+        },
+        {
+          "character": "老黄",
+          "variant": 2,
+          "file": "老黄_variant_2.png",
+          "warm_signal": 0.250185,
+          "opaque_pixels": 166253,
+          "red_mean": 100.572,
+          "green_mean": 77.254,
+          "blue_mean": 36.775
+        },
+        {
+          "character": "老黄",
+          "variant": 3,
+          "file": "老黄_variant_3.png",
+          "warm_signal": 0.135696,
+          "opaque_pixels": 184757,
+          "red_mean": 98.327,
+          "green_mean": 86.288,
+          "blue_mean": 63.724
+        },
+        {
+          "character": "老黄",
+          "variant": 4,
+          "file": "老黄_variant_4.png",
+          "warm_signal": 0.136247,
+          "opaque_pixels": 148470,
+          "red_mean": 111.486,
+          "green_mean": 101.238,
+          "blue_mean": 76.743
+        }
+      ]
+    },
+    {
+      "dir": "v2_A2_20260418",
+      "n_images": 20,
+      "warm_signal_mean": 0.0916,
+      "warm_signal_std": 0.0829,
+      "warm_signal_min": -0.0321,
+      "warm_signal_max": 0.233,
+      "warm_signal_median": 0.0838,
+      "per_character_mean": {
+        "姜泥": 0.124,
+        "徐凤年": 0.0415,
+        "李淳罡": 0.0093,
+        "温华": 0.1337,
+        "老黄": 0.1495
+      },
+      "histogram_buckets": [
+        {
+          "bucket": "<-0.05",
+          "count": 0
+        },
+        {
+          "bucket": "[-0.05, 0.0)",
+          "count": 4
+        },
+        {
+          "bucket": "[0.0, 0.05)",
+          "count": 3
+        },
+        {
+          "bucket": "[0.05, 0.1)",
+          "count": 4
+        },
+        {
+          "bucket": "[0.1, 0.15)",
+          "count": 1
+        },
+        {
+          "bucket": "[0.15, 0.2)",
+          "count": 6
+        },
+        {
+          "bucket": "[0.2, 0.25)",
+          "count": 2
+        },
+        {
+          "bucket": "[0.25, 0.3)",
+          "count": 0
+        },
+        {
+          "bucket": "[0.3, 0.35)",
+          "count": 0
+        },
+        {
+          "bucket": ">=0.35",
+          "count": 0
+        }
+      ],
+      "entries": [
+        {
+          "character": "姜泥",
+          "variant": 1,
+          "file": "姜泥_variant_1.png",
+          "warm_signal": 0.233007,
+          "opaque_pixels": 138532,
+          "red_mean": 178.164,
+          "green_mean": 151.552,
+          "blue_mean": 118.748
+        },
+        {
+          "character": "姜泥",
+          "variant": 2,
+          "file": "姜泥_variant_2.png",
+          "warm_signal": 0.011545,
+          "opaque_pixels": 100170,
+          "red_mean": 78.437,
+          "green_mean": 84.3,
+          "blue_mean": 75.493
+        },
+        {
+          "character": "姜泥",
+          "variant": 3,
+          "file": "姜泥_variant_3.png",
+          "warm_signal": 0.178669,
+          "opaque_pixels": 189440,
+          "red_mean": 96.009,
+          "green_mean": 70.701,
+          "blue_mean": 50.448
+        },
+        {
+          "character": "姜泥",
+          "variant": 4,
+          "file": "姜泥_variant_4.png",
+          "warm_signal": 0.072841,
+          "opaque_pixels": 131828,
+          "red_mean": 80.169,
+          "green_mean": 85.136,
+          "blue_mean": 61.594
+        },
+        {
+          "character": "徐凤年",
+          "variant": 1,
+          "file": "徐凤年_variant_1.png",
+          "warm_signal": -0.032084,
+          "opaque_pixels": 129797,
+          "red_mean": 71.338,
+          "green_mean": 77.794,
+          "blue_mean": 79.519
+        },
+        {
+          "character": "徐凤年",
+          "variant": 2,
+          "file": "徐凤年_variant_2.png",
+          "warm_signal": 0.158349,
+          "opaque_pixels": 165832,
+          "red_mean": 62.85,
+          "green_mean": 31.361,
+          "blue_mean": 22.471
+        },
+        {
+          "character": "徐凤年",
+          "variant": 3,
+          "file": "徐凤年_variant_3.png",
+          "warm_signal": 0.031322,
+          "opaque_pixels": 187148,
+          "red_mean": 103.944,
+          "green_mean": 103.407,
+          "blue_mean": 95.956
+        },
+        {
+          "character": "徐凤年",
+          "variant": 4,
+          "file": "徐凤年_variant_4.png",
+          "warm_signal": 0.008454,
+          "opaque_pixels": 128535,
+          "red_mean": 46.862,
+          "green_mean": 57.93,
+          "blue_mean": 44.706
+        },
+        {
+          "character": "李淳罡",
+          "variant": 1,
+          "file": "李淳罡_variant_1.png",
+          "warm_signal": -0.026862,
+          "opaque_pixels": 152997,
+          "red_mean": 79.323,
+          "green_mean": 92.092,
+          "blue_mean": 86.173
+        },
+        {
+          "character": "李淳罡",
+          "variant": 2,
+          "file": "李淳罡_variant_2.png",
+          "warm_signal": -0.014851,
+          "opaque_pixels": 165338,
+          "red_mean": 56.057,
+          "green_mean": 71.875,
+          "blue_mean": 59.844
+        },
+        {
+          "character": "李淳罡",
+          "variant": 3,
+          "file": "李淳罡_variant_3.png",
+          "warm_signal": 0.088531,
+          "opaque_pixels": 191271,
+          "red_mean": 87.74,
+          "green_mean": 78.5,
+          "blue_mean": 65.164
+        },
+        {
+          "character": "李淳罡",
+          "variant": 4,
+          "file": "李淳罡_variant_4.png",
+          "warm_signal": -0.009799,
+          "opaque_pixels": 203729,
+          "red_mean": 76.999,
+          "green_mean": 80.928,
+          "blue_mean": 79.498
+        },
+        {
+          "character": "温华",
+          "variant": 1,
+          "file": "温华_variant_1.png",
+          "warm_signal": 0.063218,
+          "opaque_pixels": 120800,
+          "red_mean": 68.719,
+          "green_mean": 59.689,
+          "blue_mean": 52.599
+        },
+        {
+          "character": "温华",
+          "variant": 2,
+          "file": "温华_variant_2.png",
+          "warm_signal": 0.181323,
+          "opaque_pixels": 122295,
+          "red_mean": 76.888,
+          "green_mean": 54.581,
+          "blue_mean": 30.651
+        },
+        {
+          "character": "温华",
+          "variant": 3,
+          "file": "温华_variant_3.png",
+          "warm_signal": 0.123057,
+          "opaque_pixels": 190126,
+          "red_mean": 81.193,
+          "green_mean": 68.551,
+          "blue_mean": 49.814
+        },
+        {
+          "character": "温华",
+          "variant": 4,
+          "file": "温华_variant_4.png",
+          "warm_signal": 0.167029,
+          "opaque_pixels": 149729,
+          "red_mean": 114.544,
+          "green_mean": 100.846,
+          "blue_mean": 71.951
+        },
+        {
+          "character": "老黄",
+          "variant": 1,
+          "file": "老黄_variant_1.png",
+          "warm_signal": 0.16455,
+          "opaque_pixels": 170750,
+          "red_mean": 99.563,
+          "green_mean": 82.532,
+          "blue_mean": 57.603
+        },
+        {
+          "character": "老黄",
+          "variant": 2,
+          "file": "老黄_variant_2.png",
+          "warm_signal": 0.202934,
+          "opaque_pixels": 167571,
+          "red_mean": 90.053,
+          "green_mean": 65.325,
+          "blue_mean": 38.305
+        },
+        {
+          "character": "老黄",
+          "variant": 3,
+          "file": "老黄_variant_3.png",
+          "warm_signal": 0.079049,
+          "opaque_pixels": 221180,
+          "red_mean": 71.919,
+          "green_mean": 64.305,
+          "blue_mean": 51.762
+        },
+        {
+          "character": "老黄",
+          "variant": 4,
+          "file": "老黄_variant_4.png",
+          "warm_signal": 0.151612,
+          "opaque_pixels": 149622,
+          "red_mean": 94.287,
+          "green_mean": 83.54,
+          "blue_mean": 55.626
+        }
+      ]
+    },
+    {
+      "dir": "v2_A3_20260418",
+      "n_images": 20,
+      "warm_signal_mean": 0.1142,
+      "warm_signal_std": 0.1031,
+      "warm_signal_min": -0.0641,
+      "warm_signal_max": 0.2988,
+      "warm_signal_median": 0.1131,
+      "per_character_mean": {
+        "姜泥": 0.1251,
+        "徐凤年": 0.0659,
+        "李淳罡": 0.0221,
+        "温华": 0.1579,
+        "老黄": 0.2002
+      },
+      "histogram_buckets": [
+        {
+          "bucket": "<-0.05",
+          "count": 1
+        },
+        {
+          "bucket": "[-0.05, 0.0)",
+          "count": 3
+        },
+        {
+          "bucket": "[0.0, 0.05)",
+          "count": 2
+        },
+        {
+          "bucket": "[0.05, 0.1)",
+          "count": 3
+        },
+        {
+          "bucket": "[0.1, 0.15)",
+          "count": 3
+        },
+        {
+          "bucket": "[0.15, 0.2)",
+          "count": 2
+        },
+        {
+          "bucket": "[0.2, 0.25)",
+          "count": 4
+        },
+        {
+          "bucket": "[0.25, 0.3)",
+          "count": 2
+        },
+        {
+          "bucket": "[0.3, 0.35)",
+          "count": 0
+        },
+        {
+          "bucket": ">=0.35",
+          "count": 0
+        }
+      ],
+      "entries": [
+        {
+          "character": "姜泥",
+          "variant": 1,
+          "file": "姜泥_variant_1.png",
+          "warm_signal": 0.213021,
+          "opaque_pixels": 131329,
+          "red_mean": 188.507,
+          "green_mean": 166.259,
+          "blue_mean": 134.187
+        },
+        {
+          "character": "姜泥",
+          "variant": 2,
+          "file": "姜泥_variant_2.png",
+          "warm_signal": -0.017773,
+          "opaque_pixels": 91721,
+          "red_mean": 97.407,
+          "green_mean": 108.861,
+          "blue_mean": 101.939
+        },
+        {
+          "character": "姜泥",
+          "variant": 3,
+          "file": "姜泥_variant_3.png",
+          "warm_signal": 0.229863,
+          "opaque_pixels": 169606,
+          "red_mean": 125.32,
+          "green_mean": 102.545,
+          "blue_mean": 66.705
+        },
+        {
+          "character": "姜泥",
+          "variant": 4,
+          "file": "姜泥_variant_4.png",
+          "warm_signal": 0.07529,
+          "opaque_pixels": 133729,
+          "red_mean": 107.009,
+          "green_mean": 115.895,
+          "blue_mean": 87.81
+        },
+        {
+          "character": "徐凤年",
+          "variant": 1,
+          "file": "徐凤年_variant_1.png",
+          "warm_signal": -0.064073,
+          "opaque_pixels": 129992,
+          "red_mean": 58.329,
+          "green_mean": 72.055,
+          "blue_mean": 74.668
+        },
+        {
+          "character": "徐凤年",
+          "variant": 2,
+          "file": "徐凤年_variant_2.png",
+          "warm_signal": 0.225526,
+          "opaque_pixels": 157043,
+          "red_mean": 85.163,
+          "green_mean": 40.863,
+          "blue_mean": 27.654
+        },
+        {
+          "character": "徐凤年",
+          "variant": 3,
+          "file": "徐凤年_variant_3.png",
+          "warm_signal": 0.097145,
+          "opaque_pixels": 160091,
+          "red_mean": 151.797,
+          "green_mean": 144.842,
+          "blue_mean": 127.025
+        },
+        {
+          "character": "徐凤年",
+          "variant": 4,
+          "file": "徐凤年_variant_4.png",
+          "warm_signal": 0.004821,
+          "opaque_pixels": 118181,
+          "red_mean": 61.307,
+          "green_mean": 74.271,
+          "blue_mean": 60.077
+        },
+        {
+          "character": "李淳罡",
+          "variant": 1,
+          "file": "李淳罡_variant_1.png",
+          "warm_signal": -0.027132,
+          "opaque_pixels": 128016,
+          "red_mean": 83.295,
+          "green_mean": 91.849,
+          "blue_mean": 90.214
+        },
+        {
+          "character": "李淳罡",
+          "variant": 2,
+          "file": "李淳罡_variant_2.png",
+          "warm_signal": 0.018558,
+          "opaque_pixels": 162946,
+          "red_mean": 78.742,
+          "green_mean": 89.399,
+          "blue_mean": 74.01
+        },
+        {
+          "character": "李淳罡",
+          "variant": 3,
+          "file": "李淳罡_variant_3.png",
+          "warm_signal": 0.100941,
+          "opaque_pixels": 182787,
+          "red_mean": 101.147,
+          "green_mean": 92.034,
+          "blue_mean": 75.407
+        },
+        {
+          "character": "李淳罡",
+          "variant": 4,
+          "file": "李淳罡_variant_4.png",
+          "warm_signal": -0.004063,
+          "opaque_pixels": 178935,
+          "red_mean": 99.909,
+          "green_mean": 106.375,
+          "blue_mean": 100.945
+        },
+        {
+          "character": "温华",
+          "variant": 1,
+          "file": "温华_variant_1.png",
+          "warm_signal": 0.081271,
+          "opaque_pixels": 115363,
+          "red_mean": 92.715,
+          "green_mean": 87.836,
+          "blue_mean": 71.991
+        },
+        {
+          "character": "温华",
+          "variant": 2,
+          "file": "温华_variant_2.png",
+          "warm_signal": 0.256371,
+          "opaque_pixels": 119266,
+          "red_mean": 117.811,
+          "green_mean": 88.822,
+          "blue_mean": 52.436
+        },
+        {
+          "character": "温华",
+          "variant": 3,
+          "file": "温华_variant_3.png",
+          "warm_signal": 0.13151,
+          "opaque_pixels": 163401,
+          "red_mean": 103.197,
+          "green_mean": 94.157,
+          "blue_mean": 69.661
+        },
+        {
+          "character": "温华",
+          "variant": 4,
+          "file": "温华_variant_4.png",
+          "warm_signal": 0.162427,
+          "opaque_pixels": 135017,
+          "red_mean": 123.559,
+          "green_mean": 110.411,
+          "blue_mean": 82.14
+        },
+        {
+          "character": "老黄",
+          "variant": 1,
+          "file": "老黄_variant_1.png",
+          "warm_signal": 0.215811,
+          "opaque_pixels": 146571,
+          "red_mean": 134.586,
+          "green_mean": 111.114,
+          "blue_mean": 79.555
+        },
+        {
+          "character": "老黄",
+          "variant": 2,
+          "file": "老黄_variant_2.png",
+          "warm_signal": 0.298809,
+          "opaque_pixels": 154311,
+          "red_mean": 114.882,
+          "green_mean": 80.707,
+          "blue_mean": 38.686
+        },
+        {
+          "character": "老黄",
+          "variant": 3,
+          "file": "老黄_variant_3.png",
+          "warm_signal": 0.125337,
+          "opaque_pixels": 191789,
+          "red_mean": 87.84,
+          "green_mean": 77.497,
+          "blue_mean": 55.879
+        },
+        {
+          "character": "老黄",
+          "variant": 4,
+          "file": "老黄_variant_4.png",
+          "warm_signal": 0.160768,
+          "opaque_pixels": 138814,
+          "red_mean": 115.831,
+          "green_mean": 101.61,
+          "blue_mean": 74.836
+        }
+      ]
+    }
+  ]
+}

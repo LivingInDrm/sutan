@@ -1,0 +1,641 @@
+[2026-04-18 00:03:47] [徐凤年] reused 4 existing descriptions from batch_config.json
+[2026-04-18 00:03:47] [老黄] reused 4 existing descriptions from batch_config.json
+[2026-04-18 00:03:47] [温华] reused 4 existing descriptions from batch_config.json
+[2026-04-18 00:03:47] [姜泥] generating 4 descriptions via LLM (gpt-5.4)…
+[2026-04-18 00:03:57] [李淳罡] reused 4 existing descriptions from batch_config.json
+[2026-04-18 00:04:15] === portrait eval run ===
+[2026-04-18 00:04:15] version=v0 date=20260418 low_res=False concurrency=4
+[2026-04-18 00:04:15] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 00:04:15] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v0_20260418
+[2026-04-18 00:04:15] [徐凤年] reused 4 existing descriptions from batch_config.json
+[2026-04-18 00:04:15] [老黄] reused 4 existing descriptions from batch_config.json
+[2026-04-18 00:04:15] [温华] reused 4 existing descriptions from batch_config.json
+[2026-04-18 00:04:15] [姜泥] generating 4 descriptions via LLM (gpt-5.4)…
+[2026-04-18 00:04:24] [李淳罡] reused 4 existing descriptions from batch_config.json
+[2026-04-18 00:04:24] → start 徐凤年 variant 1
+[2026-04-18 00:04:24] → start 徐凤年 variant 2
+[2026-04-18 00:04:24] → start 徐凤年 variant 3
+[2026-04-18 00:04:24] → start 徐凤年 variant 4
+[2026-04-18 00:05:24]   ✓ 徐凤年 v1 saved in 60.5s → 徐凤年_variant_1.png
+[2026-04-18 00:05:24] → start 老黄 variant 1
+[2026-04-18 00:05:33]   ✓ 徐凤年 v4 saved in 69.1s → 徐凤年_variant_4.png
+[2026-04-18 00:05:33] → start 老黄 variant 2
+[2026-04-18 00:05:34]   ✓ 徐凤年 v2 saved in 70.2s → 徐凤年_variant_2.png
+[2026-04-18 00:05:34] → start 老黄 variant 3
+[2026-04-18 00:05:35]   ✓ 徐凤年 v3 saved in 71.6s → 徐凤年_variant_3.png
+[2026-04-18 00:05:35] → start 老黄 variant 4
+[2026-04-18 00:06:25]   ✓ 老黄 v1 saved in 60.7s → 老黄_variant_1.png
+[2026-04-18 00:06:25] → start 温华 variant 1
+[2026-04-18 00:06:28]   ✓ 老黄 v2 saved in 55.2s → 老黄_variant_2.png
+[2026-04-18 00:06:28] → start 温华 variant 2
+[2026-04-18 00:06:35]   ✓ 老黄 v4 saved in 59.3s → 老黄_variant_4.png
+[2026-04-18 00:06:35] → start 温华 variant 3
+[2026-04-18 00:06:37]   ✓ 老黄 v3 saved in 63.6s → 老黄_variant_3.png
+[2026-04-18 00:06:37] → start 温华 variant 4
+[2026-04-18 00:07:22]   ✓ 温华 v2 saved in 54.0s → 温华_variant_2.png
+[2026-04-18 00:07:22] → start 姜泥 variant 1
+[2026-04-18 00:07:24]   ✓ 温华 v1 saved in 59.4s → 温华_variant_1.png
+[2026-04-18 00:07:24] → start 姜泥 variant 2
+[2026-04-18 00:07:25]   ✓ 温华 v3 saved in 50.3s → 温华_variant_3.png
+[2026-04-18 00:07:25] → start 姜泥 variant 3
+[2026-04-18 00:07:45]   ✓ 温华 v4 saved in 67.4s → 温华_variant_4.png
+[2026-04-18 00:07:45] → start 姜泥 variant 4
+[2026-04-18 00:08:10]   ✓ 姜泥 v2 saved in 45.7s → 姜泥_variant_2.png
+[2026-04-18 00:08:10] → start 李淳罡 variant 1
+[2026-04-18 00:08:22]   ✓ 姜泥 v3 saved in 56.7s → 姜泥_variant_3.png
+[2026-04-18 00:08:22] → start 李淳罡 variant 2
+[2026-04-18 00:08:22]   ✓ 姜泥 v1 saved in 60.6s → 姜泥_variant_1.png
+[2026-04-18 00:08:22] → start 李淳罡 variant 3
+[2026-04-18 00:08:47]   ✓ 姜泥 v4 saved in 61.7s → 姜泥_variant_4.png
+[2026-04-18 00:08:47] → start 李淳罡 variant 4
+[2026-04-18 00:09:10]   ✓ 李淳罡 v1 saved in 60.0s → 李淳罡_variant_1.png
+[2026-04-18 00:09:14]   ✓ 李淳罡 v3 saved in 51.3s → 李淳罡_variant_3.png
+[2026-04-18 00:09:26]   ✓ 李淳罡 v2 saved in 64.4s → 李淳罡_variant_2.png
+[2026-04-18 00:09:38]   ✓ 李淳罡 v4 saved in 51.8s → 李淳罡_variant_4.png
+[2026-04-18 00:09:38] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v0_20260418/v0_20260418_summary.html
+[2026-04-18 00:09:38] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v0_20260418/manifest.json
+[2026-04-18 00:09:38] ok=20 skipped=0 error=0 total=20 wall=314.7s
+[2026-04-18 07:56:01] === portrait eval run ===
+[2026-04-18 07:56:01] version=v1 date=20260418 low_res=False concurrency=4
+[2026-04-18 07:56:01] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 07:56:01] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 07:56:01] [徐凤年] generating 4 descriptions via LLM (gpt-5.4)…
+[2026-04-18 07:56:36] [老黄] generating 4 descriptions via LLM (gpt-5.4)…
+[2026-04-18 07:56:43] [温华] generating 4 descriptions via LLM (gpt-5.4)…
+[2026-04-18 07:56:52] [姜泥] generating 4 descriptions via LLM (gpt-5.4)…
+[2026-04-18 07:56:59] [李淳罡] generating 4 descriptions via LLM (gpt-5.4)…
+[2026-04-18 07:57:08] → start 徐凤年 variant 1
+[2026-04-18 07:57:08] → start 徐凤年 variant 2
+[2026-04-18 07:57:08] → start 徐凤年 variant 3
+[2026-04-18 07:57:08] → start 徐凤年 variant 4
+[2026-04-18 07:57:57]   ✓ 徐凤年 v3 saved in 49.3s → 徐凤年_variant_3.png
+[2026-04-18 07:57:57] → start 老黄 variant 1
+[2026-04-18 07:58:04]   ✓ 徐凤年 v4 saved in 56.7s → 徐凤年_variant_4.png
+[2026-04-18 07:58:04] → start 老黄 variant 2
+[2026-04-18 07:58:09]   ✓ 徐凤年 v1 saved in 61.7s → 徐凤年_variant_1.png
+[2026-04-18 07:58:09] → start 老黄 variant 3
+[2026-04-18 07:58:10]   ✓ 徐凤年 v2 saved in 62.7s → 徐凤年_variant_2.png
+[2026-04-18 07:58:10] → start 老黄 variant 4
+[2026-04-18 07:58:50]   ✓ 老黄 v2 saved in 45.6s → 老黄_variant_2.png
+[2026-04-18 07:58:50] → start 温华 variant 1
+[2026-04-18 07:58:56]   ✓ 老黄 v4 saved in 46.0s → 老黄_variant_4.png
+[2026-04-18 07:58:56] → start 温华 variant 2
+[2026-04-18 07:58:58]   ✓ 老黄 v1 saved in 61.5s → 老黄_variant_1.png
+[2026-04-18 07:58:58] → start 温华 variant 3
+[2026-04-18 07:59:09]   ✓ 老黄 v3 saved in 59.2s → 老黄_variant_3.png
+[2026-04-18 07:59:09] → start 温华 variant 4
+[2026-04-18 07:59:41]   ✓ 温华 v2 saved in 44.9s → 温华_variant_2.png
+[2026-04-18 07:59:41] → start 姜泥 variant 1
+[2026-04-18 07:59:47]   ✓ 温华 v3 saved in 48.1s → 温华_variant_3.png
+[2026-04-18 07:59:47] → start 姜泥 variant 2
+[2026-04-18 07:59:49]   ✓ 温华 v1 saved in 58.7s → 温华_variant_1.png
+[2026-04-18 07:59:49] → start 姜泥 variant 3
+[2026-04-18 08:00:12]   ✓ 温华 v4 saved in 63.0s → 温华_variant_4.png
+[2026-04-18 08:00:12] → start 姜泥 variant 4
+[2026-04-18 08:00:30]   ✓ 姜泥 v2 saved in 43.2s → 姜泥_variant_2.png
+[2026-04-18 08:00:30] → start 李淳罡 variant 1
+[2026-04-18 08:00:40]   ✓ 姜泥 v1 saved in 58.4s → 姜泥_variant_1.png
+[2026-04-18 08:00:40] → start 李淳罡 variant 2
+[2026-04-18 08:00:48]   ✓ 姜泥 v3 saved in 59.0s → 姜泥_variant_3.png
+[2026-04-18 08:00:48] → start 李淳罡 variant 3
+[2026-04-18 08:00:57]   ✓ 姜泥 v4 saved in 45.8s → 姜泥_variant_4.png
+[2026-04-18 08:00:57] → start 李淳罡 variant 4
+[2026-04-18 08:01:27]   ✓ 李淳罡 v2 saved in 47.8s → 李淳罡_variant_2.png
+[2026-04-18 08:01:32]   ✓ 李淳罡 v1 saved in 62.1s → 李淳罡_variant_1.png
+[2026-04-18 08:01:54]   ✓ 李淳罡 v3 saved in 66.5s → 李淳罡_variant_3.png
+[2026-04-18 08:02:00]   ✓ 李淳罡 v4 saved in 62.9s → 李淳罡_variant_4.png
+[2026-04-18 08:02:00] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418/v1_20260418_summary.html
+[2026-04-18 08:02:00] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418/manifest.json
+[2026-04-18 08:02:00] ok=20 skipped=0 error=0 total=20 wall=292.7s
+[2026-04-18 08:13:30] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_A1_templates.json
+[2026-04-18 08:13:30] === portrait eval run ===
+[2026-04-18 08:13:30] version=v2_A1 date=20260418 low_res=False concurrency=4
+[2026-04-18 08:13:30] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 08:13:30] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_A1_20260418
+[2026-04-18 08:13:30] descriptions_from=v1_20260418
+[2026-04-18 08:13:30] templates_from=/Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_A1_templates.json
+[2026-04-18 08:13:30] [徐凤年] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:13:30] [老黄] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:13:30] [温华] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:13:30] [姜泥] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:13:30] [李淳罡] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:13:30] → start 徐凤年 variant 1
+[2026-04-18 08:13:30] → start 徐凤年 variant 2
+[2026-04-18 08:13:30] → start 徐凤年 variant 3
+[2026-04-18 08:13:30] → start 徐凤年 variant 4
+[2026-04-18 08:13:48] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_A2_templates.json
+[2026-04-18 08:13:48] === portrait eval run ===
+[2026-04-18 08:13:48] version=v2_A2 date=20260418 low_res=False concurrency=4
+[2026-04-18 08:13:48] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 08:13:48] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_A2_20260418
+[2026-04-18 08:13:48] descriptions_from=v1_20260418
+[2026-04-18 08:13:48] templates_from=/Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_A2_templates.json
+[2026-04-18 08:13:48] [徐凤年] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:13:48] [老黄] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:13:48] [温华] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:13:48] [姜泥] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:13:48] [李淳罡] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:13:48] → start 徐凤年 variant 1
+[2026-04-18 08:13:48] → start 徐凤年 variant 2
+[2026-04-18 08:13:48] → start 徐凤年 variant 3
+[2026-04-18 08:13:48] → start 徐凤年 variant 4
+[2026-04-18 08:14:06] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_A3_templates.json
+[2026-04-18 08:14:06] === portrait eval run ===
+[2026-04-18 08:14:06] version=v2_A3 date=20260418 low_res=False concurrency=4
+[2026-04-18 08:14:06] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 08:14:06] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_A3_20260418
+[2026-04-18 08:14:06] descriptions_from=v1_20260418
+[2026-04-18 08:14:06] templates_from=/Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_A3_templates.json
+[2026-04-18 08:14:06] [徐凤年] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:14:06] [老黄] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:14:06] [温华] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:14:06] [姜泥] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:14:06] [李淳罡] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 08:14:06] → start 徐凤年 variant 1
+[2026-04-18 08:14:06] → start 徐凤年 variant 2
+[2026-04-18 08:14:06] → start 徐凤年 variant 3
+[2026-04-18 08:14:06] → start 徐凤年 variant 4
+[2026-04-18 08:14:16]   ✓ 徐凤年 v4 saved in 45.9s → 徐凤年_variant_4.png
+[2026-04-18 08:14:16] → start 老黄 variant 1
+[2026-04-18 08:14:17]   ✓ 徐凤年 v1 saved in 46.8s → 徐凤年_variant_1.png
+[2026-04-18 08:14:17] → start 老黄 variant 2
+[2026-04-18 08:14:18]   ✓ 徐凤年 v3 saved in 47.8s → 徐凤年_variant_3.png
+[2026-04-18 08:14:18] → start 老黄 variant 3
+[2026-04-18 08:14:20]   ✓ 徐凤年 v2 saved in 49.9s → 徐凤年_variant_2.png
+[2026-04-18 08:14:20] → start 老黄 variant 4
+[2026-04-18 08:14:33]   ✓ 徐凤年 v4 saved in 44.7s → 徐凤年_variant_4.png
+[2026-04-18 08:14:33] → start 老黄 variant 1
+[2026-04-18 08:14:35]   ✓ 徐凤年 v1 saved in 47.3s → 徐凤年_variant_1.png
+[2026-04-18 08:14:35] → start 老黄 variant 2
+[2026-04-18 08:14:49]   ✓ 徐凤年 v4 saved in 43.8s → 徐凤年_variant_4.png
+[2026-04-18 08:14:49] → start 老黄 variant 1
+[2026-04-18 08:14:50]   ✓ 徐凤年 v3 saved in 62.1s → 徐凤年_variant_3.png
+[2026-04-18 08:14:50] → start 老黄 variant 3
+[2026-04-18 08:14:52]   ✓ 徐凤年 v2 saved in 63.8s → 徐凤年_variant_2.png
+[2026-04-18 08:14:52] → start 老黄 variant 4
+[2026-04-18 08:14:52]   ✓ 徐凤年 v3 saved in 46.7s → 徐凤年_variant_3.png
+[2026-04-18 08:14:52] → start 老黄 variant 2
+[2026-04-18 08:14:53]   ✓ 徐凤年 v1 saved in 46.9s → 徐凤年_variant_1.png
+[2026-04-18 08:14:53] → start 老黄 variant 3
+[2026-04-18 08:14:59]   ✓ 徐凤年 v2 saved in 53.5s → 徐凤年_variant_2.png
+[2026-04-18 08:14:59] → start 老黄 variant 4
+[2026-04-18 08:15:03]   ✓ 老黄 v1 saved in 46.3s → 老黄_variant_1.png
+[2026-04-18 08:15:03] → start 温华 variant 1
+[2026-04-18 08:15:06]   ✓ 老黄 v2 saved in 48.9s → 老黄_variant_2.png
+[2026-04-18 08:15:06] → start 温华 variant 2
+[2026-04-18 08:15:07]   ✓ 老黄 v4 saved in 46.5s → 老黄_variant_4.png
+[2026-04-18 08:15:07] → start 温华 variant 3
+[2026-04-18 08:15:07]   ✓ 老黄 v3 saved in 48.8s → 老黄_variant_3.png
+[2026-04-18 08:15:07] → start 温华 variant 4
+[2026-04-18 08:15:21]   ✓ 老黄 v1 saved in 48.1s → 老黄_variant_1.png
+[2026-04-18 08:15:21] → start 温华 variant 1
+[2026-04-18 08:15:35]   ✓ 老黄 v1 saved in 45.5s → 老黄_variant_1.png
+[2026-04-18 08:15:35] → start 温华 variant 1
+[2026-04-18 08:15:37]   ✓ 老黄 v2 saved in 61.8s → 老黄_variant_2.png
+[2026-04-18 08:15:37] → start 温华 variant 2
+[2026-04-18 08:15:37]   ✓ 老黄 v2 saved in 45.0s → 老黄_variant_2.png
+[2026-04-18 08:15:37] → start 温华 variant 2
+[2026-04-18 08:15:38]   ✓ 老黄 v3 saved in 45.9s → 老黄_variant_3.png
+[2026-04-18 08:15:38] → start 温华 variant 3
+[2026-04-18 08:15:43]   ✓ 老黄 v3 saved in 52.8s → 老黄_variant_3.png
+[2026-04-18 08:15:43] → start 温华 variant 3
+[2026-04-18 08:15:47]   ✓ 老黄 v4 saved in 47.7s → 老黄_variant_4.png
+[2026-04-18 08:15:47] → start 温华 variant 4
+[2026-04-18 08:15:48]   ✓ 温华 v1 saved in 45.6s → 温华_variant_1.png
+[2026-04-18 08:15:48] → start 姜泥 variant 1
+[2026-04-18 08:15:50]   ✓ 温华 v2 saved in 43.3s → 温华_variant_2.png
+[2026-04-18 08:15:50] → start 姜泥 variant 2
+[2026-04-18 08:15:50]   ✓ 老黄 v4 saved in 57.9s → 老黄_variant_4.png
+[2026-04-18 08:15:50] → start 温华 variant 4
+[2026-04-18 08:15:54]   ✓ 温华 v3 saved in 46.8s → 温华_variant_3.png
+[2026-04-18 08:15:54] → start 姜泥 variant 3
+[2026-04-18 08:15:57]   ✓ 温华 v4 saved in 49.7s → 温华_variant_4.png
+[2026-04-18 08:15:57] → start 姜泥 variant 4
+[2026-04-18 08:16:06]   ✓ 温华 v1 saved in 44.6s → 温华_variant_1.png
+[2026-04-18 08:16:06] → start 姜泥 variant 1
+[2026-04-18 08:16:18]   ✓ 温华 v1 saved in 43.2s → 温华_variant_1.png
+[2026-04-18 08:16:18] → start 姜泥 variant 1
+[2026-04-18 08:16:23]   ✓ 温华 v2 saved in 46.0s → 温华_variant_2.png
+[2026-04-18 08:16:23] → start 姜泥 variant 2
+[2026-04-18 08:16:24]   ✓ 温华 v2 saved in 46.9s → 温华_variant_2.png
+[2026-04-18 08:16:24] → start 姜泥 variant 2
+[2026-04-18 08:16:27]   ✓ 温华 v3 saved in 48.8s → 温华_variant_3.png
+[2026-04-18 08:16:27] → start 姜泥 variant 3
+[2026-04-18 08:16:31]   ✓ 温华 v4 saved in 43.7s → 温华_variant_4.png
+[2026-04-18 08:16:31] → start 姜泥 variant 4
+[2026-04-18 08:16:33]   ✓ 姜泥 v2 saved in 43.6s → 姜泥_variant_2.png
+[2026-04-18 08:16:33] → start 李淳罡 variant 1
+[2026-04-18 08:16:35]   ✓ 温华 v4 saved in 44.9s → 温华_variant_4.png
+[2026-04-18 08:16:35] → start 姜泥 variant 3
+[2026-04-18 08:16:35]   ✓ 姜泥 v1 saved in 46.7s → 姜泥_variant_1.png
+[2026-04-18 08:16:35] → start 李淳罡 variant 2
+[2026-04-18 08:16:41]   ✓ 姜泥 v3 saved in 47.3s → 姜泥_variant_3.png
+[2026-04-18 08:16:41] → start 李淳罡 variant 3
+[2026-04-18 08:16:43]   ✓ 姜泥 v4 saved in 46.7s → 姜泥_variant_4.png
+[2026-04-18 08:16:43] → start 李淳罡 variant 4
+[2026-04-18 08:16:44]   ✓ 温华 v3 saved in 60.6s → 温华_variant_3.png
+[2026-04-18 08:16:44] → start 姜泥 variant 4
+[2026-04-18 08:17:01]   ✓ 姜泥 v1 saved in 42.9s → 姜泥_variant_1.png
+[2026-04-18 08:17:01] → start 李淳罡 variant 1
+[2026-04-18 08:17:03]   ✓ 姜泥 v1 saved in 57.2s → 姜泥_variant_1.png
+[2026-04-18 08:17:03] → start 李淳罡 variant 1
+[2026-04-18 08:17:05]   ✓ 姜泥 v2 saved in 41.0s → 姜泥_variant_2.png
+[2026-04-18 08:17:05] → start 李淳罡 variant 2
+[2026-04-18 08:17:13]   ✓ 姜泥 v3 saved in 45.7s → 姜泥_variant_3.png
+[2026-04-18 08:17:13] → start 李淳罡 variant 3
+[2026-04-18 08:17:14]   ✓ 姜泥 v4 saved in 43.9s → 姜泥_variant_4.png
+[2026-04-18 08:17:14] → start 李淳罡 variant 4
+[2026-04-18 08:17:17]   ✓ 姜泥 v2 saved in 53.4s → 姜泥_variant_2.png
+[2026-04-18 08:17:17] → start 李淳罡 variant 2
+[2026-04-18 08:17:21]   ✓ 姜泥 v3 saved in 46.2s → 姜泥_variant_3.png
+[2026-04-18 08:17:21] → start 李淳罡 variant 3
+[2026-04-18 08:17:22]   ✓ 李淳罡 v1 saved in 49.2s → 李淳罡_variant_1.png
+[2026-04-18 08:17:28]   ✓ 李淳罡 v3 saved in 47.0s → 李淳罡_variant_3.png
+[2026-04-18 08:17:28]   ✓ 李淳罡 v2 saved in 53.2s → 李淳罡_variant_2.png
+[2026-04-18 08:17:31]   ✓ 李淳罡 v4 saved in 47.5s → 李淳罡_variant_4.png
+[2026-04-18 08:17:31] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_A1_20260418/v2_A1_20260418_summary.html
+[2026-04-18 08:17:31] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_A1_20260418/manifest.json
+[2026-04-18 08:17:31] ok=20 skipped=0 error=0 total=20 wall=240.6s
+[2026-04-18 08:17:38]   ✓ 姜泥 v4 saved in 53.9s → 姜泥_variant_4.png
+[2026-04-18 08:17:38] → start 李淳罡 variant 4
+[2026-04-18 08:17:46]   ✓ 李淳罡 v1 saved in 45.2s → 李淳罡_variant_1.png
+[2026-04-18 08:17:53]   ✓ 李淳罡 v2 saved in 47.5s → 李淳罡_variant_2.png
+[2026-04-18 08:17:59]   ✓ 李淳罡 v1 saved in 56.2s → 李淳罡_variant_1.png
+[2026-04-18 08:18:01]   ✓ 李淳罡 v4 saved in 46.5s → 李淳罡_variant_4.png
+[2026-04-18 08:18:02]   ✓ 李淳罡 v2 saved in 45.2s → 李淳罡_variant_2.png
+[2026-04-18 08:18:22]   ✓ 李淳罡 v3 saved in 61.0s → 李淳罡_variant_3.png
+[2026-04-18 08:18:26]   ✓ 李淳罡 v4 saved in 48.9s → 李淳罡_variant_4.png
+[2026-04-18 08:18:26] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_A2_20260418/v2_A2_20260418_summary.html
+[2026-04-18 08:18:26] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_A2_20260418/manifest.json
+[2026-04-18 08:18:26] ok=20 skipped=0 error=0 total=20 wall=278.3s
+[2026-04-18 08:18:41]   ✓ 李淳罡 v3 saved in 88.2s → 李淳罡_variant_3.png
+[2026-04-18 08:18:41] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_A3_20260418/v2_A3_20260418_summary.html
+[2026-04-18 08:18:41] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_A3_20260418/manifest.json
+[2026-04-18 08:18:41] ok=20 skipped=0 error=0 total=20 wall=275.5s
+[2026-04-18 09:12:56] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B1_templates.json
+[2026-04-18 09:12:56] === portrait eval run ===
+[2026-04-18 09:12:56] version=v2_B1 date=20260418 low_res=False concurrency=4
+[2026-04-18 09:12:56] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 09:12:56] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_B1_20260418
+[2026-04-18 09:12:56] descriptions_from=v1_20260418
+[2026-04-18 09:12:56] templates_from=/Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B1_templates.json
+[2026-04-18 09:12:56] [徐凤年] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:12:56] [老黄] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:12:56] [温华] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:12:56] [姜泥] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:12:56] [李淳罡] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:12:56] → start 徐凤年 variant 1
+[2026-04-18 09:12:56] → start 徐凤年 variant 2
+[2026-04-18 09:12:56] → start 徐凤年 variant 3
+[2026-04-18 09:12:56] → start 徐凤年 variant 4
+[2026-04-18 09:12:56] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B3_templates.json
+[2026-04-18 09:12:56] === portrait eval run ===
+[2026-04-18 09:12:56] version=v2_B3 date=20260418 low_res=False concurrency=4
+[2026-04-18 09:12:56] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 09:12:56] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_B3_20260418
+[2026-04-18 09:12:56] descriptions_from=v1_20260418
+[2026-04-18 09:12:56] templates_from=/Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B3_templates.json
+[2026-04-18 09:12:56] [徐凤年] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:12:56] [老黄] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:12:56] [温华] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:12:56] [姜泥] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:12:56] [李淳罡] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:12:56] → start 徐凤年 variant 1
+[2026-04-18 09:12:56] → start 徐凤年 variant 2
+[2026-04-18 09:12:56] → start 徐凤年 variant 3
+[2026-04-18 09:12:56] → start 徐凤年 variant 4
+[2026-04-18 09:13:49]   ✓ 徐凤年 v4 saved in 52.7s → 徐凤年_variant_4.png
+[2026-04-18 09:13:49] → start 老黄 variant 1
+[2026-04-18 09:13:51]   ✓ 徐凤年 v4 saved in 55.0s → 徐凤年_variant_4.png
+[2026-04-18 09:13:51] → start 老黄 variant 1
+[2026-04-18 09:13:51]   ✓ 徐凤年 v3 saved in 55.1s → 徐凤年_variant_3.png
+[2026-04-18 09:13:51] → start 老黄 variant 2
+[2026-04-18 09:13:51]   ✓ 徐凤年 v1 saved in 55.4s → 徐凤年_variant_1.png
+[2026-04-18 09:13:51] → start 老黄 variant 3
+[2026-04-18 09:13:54]   ✓ 徐凤年 v2 saved in 57.7s → 徐凤年_variant_2.png
+[2026-04-18 09:13:54] → start 老黄 variant 2
+[2026-04-18 09:13:54]   ✓ 徐凤年 v1 saved in 57.7s → 徐凤年_variant_1.png
+[2026-04-18 09:13:54] → start 老黄 variant 3
+[2026-04-18 09:13:55]   ✓ 徐凤年 v3 saved in 58.3s → 徐凤年_variant_3.png
+[2026-04-18 09:13:55] → start 老黄 variant 4
+[2026-04-18 09:13:55]   ✓ 徐凤年 v2 saved in 59.1s → 徐凤年_variant_2.png
+[2026-04-18 09:13:55] → start 老黄 variant 4
+[2026-04-18 09:14:42]   ✓ 老黄 v2 saved in 50.7s → 老黄_variant_2.png
+[2026-04-18 09:14:42] → start 温华 variant 1
+[2026-04-18 09:14:42]   ✓ 老黄 v3 saved in 50.5s → 老黄_variant_3.png
+[2026-04-18 09:14:42] → start 温华 variant 2
+[2026-04-18 09:14:42]   ✓ 老黄 v2 saved in 48.1s → 老黄_variant_2.png
+[2026-04-18 09:14:42] → start 温华 variant 1
+[2026-04-18 09:14:44]   ✓ 老黄 v1 saved in 52.9s → 老黄_variant_1.png
+[2026-04-18 09:14:44] → start 温华 variant 3
+[2026-04-18 09:14:45]   ✓ 老黄 v1 saved in 56.4s → 老黄_variant_1.png
+[2026-04-18 09:14:45] → start 温华 variant 2
+[2026-04-18 09:14:47]   ✓ 老黄 v4 saved in 51.4s → 老黄_variant_4.png
+[2026-04-18 09:14:47] → start 温华 variant 4
+[2026-04-18 09:14:48]   ✓ 老黄 v3 saved in 54.0s → 老黄_variant_3.png
+[2026-04-18 09:14:48] → start 温华 variant 3
+[2026-04-18 09:14:50]   ✓ 老黄 v4 saved in 54.9s → 老黄_variant_4.png
+[2026-04-18 09:14:50] → start 温华 variant 4
+[2026-04-18 09:15:31]   ✓ 温华 v1 saved in 49.3s → 温华_variant_1.png
+[2026-04-18 09:15:31] → start 姜泥 variant 1
+[2026-04-18 09:15:32]   ✓ 温华 v2 saved in 49.8s → 温华_variant_2.png
+[2026-04-18 09:15:32] → start 姜泥 variant 2
+[2026-04-18 09:15:35]   ✓ 温华 v1 saved in 52.8s → 温华_variant_1.png
+[2026-04-18 09:15:35] → start 姜泥 variant 1
+[2026-04-18 09:15:35]   ✓ 温华 v4 saved in 48.7s → 温华_variant_4.png
+[2026-04-18 09:15:35] → start 姜泥 variant 3
+[2026-04-18 09:15:40]   ✓ 温华 v3 saved in 55.9s → 温华_variant_3.png
+[2026-04-18 09:15:40] → start 姜泥 variant 4
+[2026-04-18 09:15:40]   ✓ 温华 v2 saved in 54.5s → 温华_variant_2.png
+[2026-04-18 09:15:40] → start 姜泥 variant 2
+[2026-04-18 09:15:43]   ✓ 温华 v3 saved in 55.5s → 温华_variant_3.png
+[2026-04-18 09:15:43] → start 姜泥 variant 3
+[2026-04-18 09:15:44]   ✓ 温华 v4 saved in 54.3s → 温华_variant_4.png
+[2026-04-18 09:15:44] → start 姜泥 variant 4
+[2026-04-18 09:16:22]   ✓ 姜泥 v1 saved in 50.8s → 姜泥_variant_1.png
+[2026-04-18 09:16:22] → start 李淳罡 variant 1
+[2026-04-18 09:16:22]   ✓ 姜泥 v2 saved in 50.6s → 姜泥_variant_2.png
+[2026-04-18 09:16:22] → start 李淳罡 variant 2
+[2026-04-18 09:16:29]   ✓ 姜泥 v1 saved in 54.2s → 姜泥_variant_1.png
+[2026-04-18 09:16:29] → start 李淳罡 variant 1
+[2026-04-18 09:16:30]   ✓ 姜泥 v3 saved in 54.3s → 姜泥_variant_3.png
+[2026-04-18 09:16:30] → start 李淳罡 variant 3
+[2026-04-18 09:16:31]   ✓ 姜泥 v4 saved in 51.0s → 姜泥_variant_4.png
+[2026-04-18 09:16:31] → start 李淳罡 variant 4
+[2026-04-18 09:16:31]   ✓ 姜泥 v2 saved in 51.3s → 姜泥_variant_2.png
+[2026-04-18 09:16:31] → start 李淳罡 variant 2
+[2026-04-18 09:16:34]   ✓ 姜泥 v3 saved in 50.6s → 姜泥_variant_3.png
+[2026-04-18 09:16:34] → start 李淳罡 variant 3
+[2026-04-18 09:16:36]   ✓ 姜泥 v4 saved in 52.6s → 姜泥_variant_4.png
+[2026-04-18 09:16:36] → start 李淳罡 variant 4
+[2026-04-18 09:17:13]   ✓ 李淳罡 v1 saved in 50.7s → 李淳罡_variant_1.png
+[2026-04-18 09:17:15]   ✓ 李淳罡 v2 saved in 52.3s → 李淳罡_variant_2.png
+[2026-04-18 09:17:21]   ✓ 李淳罡 v3 saved in 51.9s → 李淳罡_variant_3.png
+[2026-04-18 09:17:24]   ✓ 李淳罡 v1 saved in 55.0s → 李淳罡_variant_1.png
+[2026-04-18 09:17:25]   ✓ 李淳罡 v4 saved in 54.2s → 李淳罡_variant_4.png
+[2026-04-18 09:17:25] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_B1_20260418/v2_B1_20260418_summary.html
+[2026-04-18 09:17:25] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_B1_20260418/manifest.json
+[2026-04-18 09:17:25] ok=20 skipped=0 error=0 total=20 wall=269.0s
+[2026-04-18 09:17:26]   ✓ 李淳罡 v3 saved in 52.3s → 李淳罡_variant_3.png
+[2026-04-18 09:17:28]   ✓ 李淳罡 v2 saved in 56.6s → 李淳罡_variant_2.png
+[2026-04-18 09:17:28]   ✓ 李淳罡 v4 saved in 52.1s → 李淳罡_variant_4.png
+[2026-04-18 09:17:28] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_B3_20260418/v2_B3_20260418_summary.html
+[2026-04-18 09:17:28] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_B3_20260418/manifest.json
+[2026-04-18 09:17:28] ok=20 skipped=0 error=0 total=20 wall=272.2s
+[2026-04-18 09:26:19] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4_templates.json
+[2026-04-18 09:26:19] === portrait eval run ===
+[2026-04-18 09:26:19] version=v2_B4 date=20260418 low_res=False concurrency=4
+[2026-04-18 09:26:19] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 09:26:19] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_B4_20260418
+[2026-04-18 09:26:19] descriptions_from=v1_20260418
+[2026-04-18 09:26:19] templates_from=/Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4_templates.json
+[2026-04-18 09:26:19] [徐凤年] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:26:19] [老黄] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:26:19] [温华] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:26:19] [姜泥] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:26:19] [李淳罡] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 09:26:19] → start 徐凤年 variant 1
+[2026-04-18 09:26:19] → start 徐凤年 variant 2
+[2026-04-18 09:26:19] → start 徐凤年 variant 3
+[2026-04-18 09:26:19] → start 徐凤年 variant 4
+[2026-04-18 09:27:19]   ✓ 徐凤年 v4 saved in 60.6s → 徐凤年_variant_4.png
+[2026-04-18 09:27:19] → start 老黄 variant 1
+[2026-04-18 09:27:23]   ✓ 徐凤年 v1 saved in 64.6s → 徐凤年_variant_1.png
+[2026-04-18 09:27:23] → start 老黄 variant 2
+[2026-04-18 09:27:28]   ✓ 徐凤年 v2 saved in 69.3s → 徐凤年_variant_2.png
+[2026-04-18 09:27:28] → start 老黄 variant 3
+[2026-04-18 09:27:28]   ✓ 徐凤年 v3 saved in 69.3s → 徐凤年_variant_3.png
+[2026-04-18 09:27:28] → start 老黄 variant 4
+[2026-04-18 09:28:20]   ✓ 老黄 v4 saved in 51.8s → 老黄_variant_4.png
+[2026-04-18 09:28:20] → start 温华 variant 1
+[2026-04-18 09:28:23]   ✓ 老黄 v1 saved in 63.2s → 老黄_variant_1.png
+[2026-04-18 09:28:23] → start 温华 variant 2
+[2026-04-18 09:28:29]   ✓ 老黄 v2 saved in 66.1s → 老黄_variant_2.png
+[2026-04-18 09:28:29] → start 温华 variant 3
+[2026-04-18 09:28:34]   ✓ 老黄 v3 saved in 65.7s → 老黄_variant_3.png
+[2026-04-18 09:28:34] → start 温华 variant 4
+[2026-04-18 09:29:19]   ✓ 温华 v1 saved in 59.6s → 温华_variant_1.png
+[2026-04-18 09:29:19] → start 姜泥 variant 1
+[2026-04-18 09:29:24]   ✓ 温华 v4 saved in 50.6s → 温华_variant_4.png
+[2026-04-18 09:29:24] → start 姜泥 variant 2
+[2026-04-18 09:29:28]   ✓ 温华 v2 saved in 65.1s → 温华_variant_2.png
+[2026-04-18 09:29:28] → start 姜泥 variant 3
+[2026-04-18 09:29:40]   ✓ 温华 v3 saved in 70.2s → 温华_variant_3.png
+[2026-04-18 09:29:40] → start 姜泥 variant 4
+[2026-04-18 09:30:08]   ✓ 姜泥 v1 saved in 48.2s → 姜泥_variant_1.png
+[2026-04-18 09:30:08] → start 李淳罡 variant 1
+[2026-04-18 09:30:17]   ✓ 姜泥 v3 saved in 49.5s → 姜泥_variant_3.png
+[2026-04-18 09:30:17] → start 李淳罡 variant 2
+[2026-04-18 09:30:26]   ✓ 姜泥 v2 saved in 61.9s → 姜泥_variant_2.png
+[2026-04-18 09:30:26] → start 李淳罡 variant 3
+[2026-04-18 09:30:42]   ✓ 姜泥 v4 saved in 62.7s → 姜泥_variant_4.png
+[2026-04-18 09:30:42] → start 李淳罡 variant 4
+[2026-04-18 09:31:10]   ✓ 李淳罡 v1 saved in 62.6s → 李淳罡_variant_1.png
+[2026-04-18 09:31:15]   ✓ 李淳罡 v3 saved in 49.1s → 李淳罡_variant_3.png
+[2026-04-18 09:31:25]   ✓ 李淳罡 v2 saved in 68.3s → 李淳罡_variant_2.png
+[2026-04-18 09:31:44]   ✓ 李淳罡 v4 saved in 61.8s → 李淳罡_variant_4.png
+[2026-04-18 09:31:44] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_B4_20260418/v2_B4_20260418_summary.html
+[2026-04-18 09:31:44] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v2_B4_20260418/manifest.json
+[2026-04-18 09:31:44] ok=20 skipped=0 error=0 total=20 wall=325.5s
+[2026-04-18 12:25:39] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B3.2_templates.json
+[2026-04-18 12:25:39] === portrait eval run ===
+[2026-04-18 12:25:39] version=B3.2 date=20260418 low_res=False concurrency=4
+[2026-04-18 12:25:39] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 12:25:39] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B3.2_20260418
+[2026-04-18 12:25:39] descriptions_from=v1_20260418
+[2026-04-18 12:25:39] templates_from=/Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B3.2_templates.json
+[2026-04-18 12:25:40] [徐凤年] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [老黄] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [温华] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [姜泥] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [李淳罡] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] → start 徐凤年 variant 1
+[2026-04-18 12:25:40] → start 徐凤年 variant 2
+[2026-04-18 12:25:40] → start 徐凤年 variant 3
+[2026-04-18 12:25:40] → start 徐凤年 variant 4
+[2026-04-18 12:25:40] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4.2_templates.json
+[2026-04-18 12:25:40] === portrait eval run ===
+[2026-04-18 12:25:40] version=B4.2 date=20260418 low_res=False concurrency=4
+[2026-04-18 12:25:40] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 12:25:40] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.2_20260418
+[2026-04-18 12:25:40] descriptions_from=v1_20260418
+[2026-04-18 12:25:40] templates_from=/Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4.2_templates.json
+[2026-04-18 12:25:40] [徐凤年] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [老黄] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [温华] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [姜泥] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] [李淳罡] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 12:25:40] → start 徐凤年 variant 1
+[2026-04-18 12:25:40] → start 徐凤年 variant 2
+[2026-04-18 12:25:40] → start 徐凤年 variant 3
+[2026-04-18 12:25:40] → start 徐凤年 variant 4
+[2026-04-18 12:26:31]   ✓ 徐凤年 v3 saved in 51.7s → 徐凤年_variant_3.png
+[2026-04-18 12:26:31] → start 老黄 variant 1
+[2026-04-18 12:26:33]   ✓ 徐凤年 v4 saved in 53.6s → 徐凤年_variant_4.png
+[2026-04-18 12:26:33] → start 老黄 variant 2
+[2026-04-18 12:26:35]   ✓ 徐凤年 v1 saved in 55.2s → 徐凤年_variant_1.png
+[2026-04-18 12:26:35] → start 老黄 variant 3
+[2026-04-18 12:26:37]   ✓ 徐凤年 v1 saved in 57.6s → 徐凤年_variant_1.png
+[2026-04-18 12:26:37] → start 老黄 variant 1
+[2026-04-18 12:26:38]   ✓ 徐凤年 v2 saved in 58.8s → 徐凤年_variant_2.png
+[2026-04-18 12:26:38] → start 老黄 variant 2
+[2026-04-18 12:26:39]   ✓ 徐凤年 v4 saved in 59.7s → 徐凤年_variant_4.png
+[2026-04-18 12:26:39] → start 老黄 variant 3
+[2026-04-18 12:26:42]   ✓ 徐凤年 v2 saved in 62.5s → 徐凤年_variant_2.png
+[2026-04-18 12:26:42] → start 老黄 variant 4
+[2026-04-18 12:26:50]   ✓ 徐凤年 v3 saved in 70.5s → 徐凤年_variant_3.png
+[2026-04-18 12:26:50] → start 老黄 variant 4
+[2026-04-18 12:27:23]   ✓ 老黄 v1 saved in 51.6s → 老黄_variant_1.png
+[2026-04-18 12:27:23] → start 温华 variant 1
+[2026-04-18 12:27:23]   ✓ 老黄 v2 saved in 50.1s → 老黄_variant_2.png
+[2026-04-18 12:27:23] → start 温华 variant 2
+[2026-04-18 12:27:26]   ✓ 老黄 v3 saved in 51.2s → 老黄_variant_3.png
+[2026-04-18 12:27:26] → start 温华 variant 3
+[2026-04-18 12:27:29]   ✓ 老黄 v2 saved in 51.2s → 老黄_variant_2.png
+[2026-04-18 12:27:29] → start 温华 variant 1
+[2026-04-18 12:27:36]   ✓ 老黄 v4 saved in 53.9s → 老黄_variant_4.png
+[2026-04-18 12:27:36] → start 温华 variant 4
+[2026-04-18 12:27:44]   ✓ 老黄 v1 saved in 66.5s → 老黄_variant_1.png
+[2026-04-18 12:27:44] → start 温华 variant 2
+[2026-04-18 12:27:44]   ✓ 老黄 v4 saved in 53.8s → 老黄_variant_4.png
+[2026-04-18 12:27:44] → start 温华 variant 3
+[2026-04-18 12:27:48]   ✓ 老黄 v3 saved in 69.2s → 老黄_variant_3.png
+[2026-04-18 12:27:48] → start 温华 variant 4
+[2026-04-18 12:28:11]   ✓ 温华 v1 saved in 48.3s → 温华_variant_1.png
+[2026-04-18 12:28:11] → start 姜泥 variant 1
+[2026-04-18 12:28:12]   ✓ 温华 v2 saved in 48.5s → 温华_variant_2.png
+[2026-04-18 12:28:12] → start 姜泥 variant 2
+[2026-04-18 12:28:25]   ✓ 温华 v4 saved in 48.6s → 温华_variant_4.png
+[2026-04-18 12:28:25] → start 姜泥 variant 3
+[2026-04-18 12:28:26]   ✓ 温华 v3 saved in 60.0s → 温华_variant_3.png
+[2026-04-18 12:28:26] → start 姜泥 variant 4
+[2026-04-18 12:28:32]   ✓ 温华 v1 saved in 62.3s → 温华_variant_1.png
+[2026-04-18 12:28:32] → start 姜泥 variant 1
+[2026-04-18 12:28:37]   ✓ 温华 v2 saved in 53.7s → 温华_variant_2.png
+[2026-04-18 12:28:37] → start 姜泥 variant 2
+[2026-04-18 12:28:38]   ✓ 温华 v3 saved in 54.2s → 温华_variant_3.png
+[2026-04-18 12:28:38] → start 姜泥 variant 3
+[2026-04-18 12:28:54]   ✓ 温华 v4 saved in 65.9s → 温华_variant_4.png
+[2026-04-18 12:28:54] → start 姜泥 variant 4
+[2026-04-18 12:28:59]   ✓ 姜泥 v2 saved in 47.5s → 姜泥_variant_2.png
+[2026-04-18 12:28:59] → start 李淳罡 variant 1
+[2026-04-18 12:29:00]   ✓ 姜泥 v1 saved in 48.8s → 姜泥_variant_1.png
+[2026-04-18 12:29:00] → start 李淳罡 variant 2
+[2026-04-18 12:29:13]   ✓ 姜泥 v3 saved in 48.3s → 姜泥_variant_3.png
+[2026-04-18 12:29:13] → start 李淳罡 variant 3
+[2026-04-18 12:29:17]   ✓ 姜泥 v4 saved in 50.7s → 姜泥_variant_4.png
+[2026-04-18 12:29:17] → start 李淳罡 variant 4
+[2026-04-18 12:29:33]   ✓ 姜泥 v3 saved in 55.2s → 姜泥_variant_3.png
+[2026-04-18 12:29:33] → start 李淳罡 variant 1
+[2026-04-18 12:29:37]   ✓ 姜泥 v1 saved in 65.7s → 姜泥_variant_1.png
+[2026-04-18 12:29:37] → start 李淳罡 variant 2
+[2026-04-18 12:29:43]   ✓ 姜泥 v2 saved in 66.1s → 姜泥_variant_2.png
+[2026-04-18 12:29:43] → start 李淳罡 variant 3
+[2026-04-18 12:29:47]   ✓ 李淳罡 v1 saved in 47.9s → 李淳罡_variant_1.png
+[2026-04-18 12:29:48]   ✓ 姜泥 v4 saved in 53.5s → 姜泥_variant_4.png
+[2026-04-18 12:29:48] → start 李淳罡 variant 4
+[2026-04-18 12:29:53]   ✓ 李淳罡 v2 saved in 53.3s → 李淳罡_variant_2.png
+[2026-04-18 12:30:01]   ✓ 李淳罡 v3 saved in 48.3s → 李淳罡_variant_3.png
+[2026-04-18 12:30:09]   ✓ 李淳罡 v4 saved in 52.2s → 李淳罡_variant_4.png
+[2026-04-18 12:30:09] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.2_20260418/B4.2_20260418_summary.html
+[2026-04-18 12:30:09] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.2_20260418/manifest.json
+[2026-04-18 12:30:09] ok=20 skipped=0 error=0 total=20 wall=269.2s
+[2026-04-18 12:30:25]   ✓ 李淳罡 v1 saved in 51.9s → 李淳罡_variant_1.png
+[2026-04-18 12:30:34]   ✓ 李淳罡 v2 saved in 56.2s → 李淳罡_variant_2.png
+[2026-04-18 12:30:44]   ✓ 李淳罡 v4 saved in 56.1s → 李淳罡_variant_4.png
+[2026-04-18 12:30:46]   ✓ 李淳罡 v3 saved in 63.1s → 李淳罡_variant_3.png
+[2026-04-18 12:30:46] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B3.2_20260418/B3.2_20260418_summary.html
+[2026-04-18 12:30:46] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B3.2_20260418/manifest.json
+[2026-04-18 12:30:46] ok=20 skipped=0 error=0 total=20 wall=306.9s
+[2026-04-18 13:14:06] templates override → /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4.3_templates.json
+[2026-04-18 13:14:06] === portrait eval run ===
+[2026-04-18 13:14:06] version=B4.3 date=20260418 low_res=False concurrency=4
+[2026-04-18 13:14:06] characters=['徐凤年', '老黄', '温华', '姜泥', '李淳罡'] variants_per=4
+[2026-04-18 13:14:06] output_dir=/Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.3_20260418
+[2026-04-18 13:14:06] descriptions_from=v1_20260418
+[2026-04-18 13:14:06] templates_from=/Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4.3_templates.json
+[2026-04-18 13:14:06] [徐凤年] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 13:14:07] [老黄] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 13:14:07] [温华] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 13:14:07] [姜泥] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 13:14:07] [李淳罡] loaded 4 descriptions from /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 13:14:07] → start 徐凤年 variant 1
+[2026-04-18 13:14:07] → start 徐凤年 variant 2
+[2026-04-18 13:14:07] → start 徐凤年 variant 3
+[2026-04-18 13:14:07] → start 徐凤年 variant 4
+[2026-04-18 13:14:59]   ✓ 徐凤年 v3 saved in 52.3s → 徐凤年_variant_3.png
+[2026-04-18 13:14:59] → start 老黄 variant 1
+[2026-04-18 13:15:00]   ✓ 徐凤年 v1 saved in 54.0s → 徐凤年_variant_1.png
+[2026-04-18 13:15:00] → start 老黄 variant 2
+[2026-04-18 13:15:07]   ✓ 徐凤年 v4 saved in 60.8s → 徐凤年_variant_4.png
+[2026-04-18 13:15:07] → start 老黄 variant 3
+[2026-04-18 13:15:12]   ✓ 徐凤年 v2 saved in 65.7s → 徐凤年_variant_2.png
+[2026-04-18 13:15:12] → start 老黄 variant 4
+[2026-04-18 13:15:54]   ✓ 老黄 v1 saved in 55.2s → 老黄_variant_1.png
+[2026-04-18 13:15:54] → start 温华 variant 1
+[2026-04-18 13:15:56]   ✓ 老黄 v3 saved in 49.0s → 老黄_variant_3.png
+[2026-04-18 13:15:56] → start 温华 variant 2
+[2026-04-18 13:16:00]   ✓ 老黄 v4 saved in 47.9s → 老黄_variant_4.png
+[2026-04-18 13:16:00] → start 温华 variant 3
+[2026-04-18 13:16:01]   ✓ 老黄 v2 saved in 60.7s → 老黄_variant_2.png
+[2026-04-18 13:16:01] → start 温华 variant 4
+[2026-04-18 13:16:49]   ✓ 温华 v4 saved in 48.0s → 温华_variant_4.png
+[2026-04-18 13:16:49] → start 姜泥 variant 1
+[2026-04-18 13:16:56]   ✓ 温华 v1 saved in 61.6s → 温华_variant_1.png
+[2026-04-18 13:16:56] → start 姜泥 variant 2
+[2026-04-18 13:16:58]   ✓ 温华 v2 saved in 61.5s → 温华_variant_2.png
+[2026-04-18 13:16:58] → start 姜泥 variant 3
+[2026-04-18 13:17:00]   ✓ 温华 v3 saved in 59.9s → 温华_variant_3.png
+[2026-04-18 13:17:00] → start 姜泥 variant 4
+[2026-04-18 13:17:46]   ✓ 姜泥 v2 saved in 50.6s → 姜泥_variant_2.png
+[2026-04-18 13:17:46] → start 李淳罡 variant 1
+[2026-04-18 13:17:46]   ✓ 姜泥 v1 saved in 57.3s → 姜泥_variant_1.png
+[2026-04-18 13:17:46] → start 李淳罡 variant 2
+[2026-04-18 13:17:50]   ✓ 姜泥 v3 saved in 52.4s → 姜泥_variant_3.png
+[2026-04-18 13:17:50] → start 李淳罡 variant 3
+[2026-04-18 13:18:01]   ✓ 姜泥 v4 saved in 60.8s → 姜泥_variant_4.png
+[2026-04-18 13:18:01] → start 李淳罡 variant 4
+[2026-04-18 13:18:35]   ✓ 李淳罡 v1 saved in 49.1s → 李淳罡_variant_1.png
+[2026-04-18 13:18:39]   ✓ 李淳罡 v2 saved in 52.8s → 李淳罡_variant_2.png
+[2026-04-18 13:18:42]   ✓ 李淳罡 v3 saved in 51.4s → 李淳罡_variant_3.png
+[2026-04-18 13:18:58]   ✓ 李淳罡 v4 saved in 57.4s → 李淳罡_variant_4.png
+[2026-04-18 13:18:58] summary.html → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.3_20260418/B4.3_20260418_summary.html
+[2026-04-18 13:18:58] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4.3_20260418/manifest.json
+[2026-04-18 13:18:58] ok=20 skipped=0 error=0 total=20 wall=291.7s
+[2026-04-18 14:35:56] === B4-Lean run (6 images) ===
+[2026-04-18 14:35:56] templates -> /Users/xiaochunliu/program/sutan/tools/asset-manager/prompts/experiments/v2_B4-Lean_templates.json
+[2026-04-18 14:35:56] descriptions source -> /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/v1_20260418
+[2026-04-18 14:35:56] output -> /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4-Lean_20260418
+[2026-04-18 14:35:56] → start 姜泥 variant 1
+[2026-04-18 14:35:56] → start 姜泥 variant 2
+[2026-04-18 14:35:56] → start 徐凤年 variant 1
+[2026-04-18 14:36:49]   ✓ 徐凤年 v1 saved in 52.3s → 徐凤年_variant_1.png
+[2026-04-18 14:36:49] → start 徐凤年 variant 2
+[2026-04-18 14:36:49]   ✓ 姜泥 v1 saved in 52.5s → 姜泥_variant_1.png
+[2026-04-18 14:36:49] → start 李淳罡 variant 1
+[2026-04-18 14:37:08]   ✓ 姜泥 v2 saved in 71.4s → 姜泥_variant_2.png
+[2026-04-18 14:37:08] → start 李淳罡 variant 2
+[2026-04-18 14:37:44]   ✓ 李淳罡 v1 saved in 55.1s → 李淳罡_variant_1.png
+[2026-04-18 14:37:46]   ✓ 徐凤年 v2 saved in 57.0s → 徐凤年_variant_2.png
+[2026-04-18 14:38:03]   ✓ 李淳罡 v2 saved in 54.9s → 李淳罡_variant_2.png
+[2026-04-18 14:38:03] summary.html -> /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4-Lean_20260418/B4-Lean_20260418_summary.html
+[2026-04-18 14:38:03] manifest.json -> /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4-Lean_20260418/manifest.json
+[2026-04-18 14:38:03] ok=6 skipped=0 error=0 total=6 wall=126.3s
+[2026-04-18 17:13:08] === B4-Lean_gpt-image-1.5 run (6 images) ===
+[2026-04-18 17:13:08] model       → gpt-image-1.5
+[2026-04-18 17:13:08] prompts src → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4-Lean_20260418
+[2026-04-18 17:13:08] output      → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4-Lean_gpt-image-1.5_20260418
+[2026-04-18 17:13:08] → [gpt-image-1.5] start 姜泥 v1
+[2026-04-18 17:13:08] → [gpt-image-1.5] start 姜泥 v2
+[2026-04-18 17:13:08] → [gpt-image-1.5] start 徐凤年 v1
+[2026-04-18 17:13:57]   ✓ 姜泥 v2 saved in 49.1s → 姜泥_variant_2.png
+[2026-04-18 17:13:57] → [gpt-image-1.5] start 徐凤年 v2
+[2026-04-18 17:13:58]   ✓ 徐凤年 v1 saved in 49.5s → 徐凤年_variant_1.png
+[2026-04-18 17:13:58] → [gpt-image-1.5] start 李淳罡 v1
+[2026-04-18 17:13:58]   ✓ 姜泥 v1 saved in 50.1s → 姜泥_variant_1.png
+[2026-04-18 17:13:58] → [gpt-image-1.5] start 李淳罡 v2
+[2026-04-18 17:14:44]   ✓ 李淳罡 v2 saved in 45.2s → 李淳罡_variant_2.png
+[2026-04-18 17:14:46]   ✓ 李淳罡 v1 saved in 48.6s → 李淳罡_variant_1.png
+[2026-04-18 17:14:53]   ✓ 徐凤年 v2 saved in 56.1s → 徐凤年_variant_2.png
+[2026-04-18 17:14:53] manifest.json → /Users/xiaochunliu/program/sutan/tools/asset-manager/generated/portrait-eval/B4-Lean_gpt-image-1.5_20260418/manifest.json
+[2026-04-18 17:14:53] ok=6 skipped=0 error=0 total=6 wall=105.3s

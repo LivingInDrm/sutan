@@ -1,0 +1,77 @@
+{
+  "version": "B4-Lean",
+  "date": "20260418",
+  "quality": "high",
+  "concurrency": 3,
+  "templates_file": "prompts/experiments/v2_B4-Lean_templates.json",
+  "descriptions_source": "generated/portrait-eval/v1_20260418",
+  "total_elapsed_sec": 126.3,
+  "counts": {
+    "ok": 6,
+    "skipped": 0,
+    "error": 0,
+    "total": 6
+  },
+  "tasks": [
+    {
+      "character": "徐凤年",
+      "variant": 1,
+      "png": "徐凤年_variant_1.png",
+      "description_file": "徐凤年_variant_1.description.txt",
+      "prompt_file": "徐凤年_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 52.29,
+      "error": null
+    },
+    {
+      "character": "姜泥",
+      "variant": 1,
+      "png": "姜泥_variant_1.png",
+      "description_file": "姜泥_variant_1.description.txt",
+      "prompt_file": "姜泥_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 52.53,
+      "error": null
+    },
+    {
+      "character": "姜泥",
+      "variant": 2,
+      "png": "姜泥_variant_2.png",
+      "description_file": "姜泥_variant_2.description.txt",
+      "prompt_file": "姜泥_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 71.38,
+      "error": null
+    },
+    {
+      "character": "李淳罡",
+      "variant": 1,
+      "png": "李淳罡_variant_1.png",
+      "description_file": "李淳罡_variant_1.description.txt",
+      "prompt_file": "李淳罡_variant_1.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 55.09,
+      "error": null
+    },
+    {
+      "character": "徐凤年",
+      "variant": 2,
+      "png": "徐凤年_variant_2.png",
+      "description_file": "徐凤年_variant_2.description.txt",
+      "prompt_file": "徐凤年_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 57.05,
+      "error": null
+    },
+    {
+      "character": "李淳罡",
+      "variant": 2,
+      "png": "李淳罡_variant_2.png",
+      "description_file": "李淳罡_variant_2.description.txt",
+      "prompt_file": "李淳罡_variant_2.prompt.txt",
+      "status": "ok",
+      "elapsed_sec": 54.88,
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang='zh-CN'><head><meta charset='utf-8'/>
+<title>B4 vs B4.3 full comparison (9 chars × 2 variants)</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; margin: 16px; background: #fafafa; color: #222; }
+h1 { margin: 0 0 6px 0; font-size: 20px; }
+h2 { margin: 18px 0 6px 0; font-size: 16px; }
+.meta { font-size: 13px; color: #555; margin-bottom: 12px; }
+table.summary { border-collapse: collapse; margin-bottom: 16px; font-size: 13px; background:#fff; }
+table.summary th, table.summary td { border:1px solid #ddd; padding: 6px 10px; text-align: center; }
+table.summary th { background:#eee; }
+table.summary .total { background:#fff7e6; font-weight: 600; }
+.grp-old { color:#555; }
+.grp-new { color:#b64b00; font-weight: 600; }
+.pos { color:#b00020; font-weight: 600; }
+.neg { color:#0a5a2a; font-weight: 600; }
+table.compare { border-collapse: collapse; width: 100%; background: #fff; }
+table.compare th { background:#eee; padding: 8px; border:1px solid #ddd; font-size: 13px; }
+table.compare td { border:1px solid #ddd; vertical-align: top; padding: 8px; }
+td.label { width: 260px; font-size: 12px; }
+td.label .charname { font-weight: 600; font-size: 14px; }
+td.label .vname { color: #666; margin-bottom: 6px; }
+td.label .metrics { background:#f7f7f7; padding:6px; border-radius:4px; margin-bottom:6px; font-size: 12px; }
+.tag { font-size: 11px; padding: 1px 6px; border-radius: 8px; margin-left: 4px; vertical-align: middle; }
+.tag-old { background:#e0e0e0; color:#555; }
+.tag-new { background:#ffe2cc; color:#b64b00; }
+td.img { width: 360px; }
+td.img img { width: 100%; height: auto; display: block; background: linear-gradient(45deg,#eee 25%,transparent 25%,transparent 75%,#eee 75%),
+                                                        linear-gradient(45deg,#eee 25%,transparent 25%,transparent 75%,#eee 75%);
+              background-size: 16px 16px; background-position: 0 0, 8px 8px; border-radius: 4px; }
+.row-new td.label { background:#fff7f0; }
+details > summary { cursor:pointer; color:#0366d6; font-size: 12px; margin-top: 4px; }
+pre { background:#f6f8fa; padding:6px; border-radius:4px; font-size:11px; white-space: pre-wrap; max-height: 180px; overflow:auto; }
+</style></head><body>
+<h1>B4 vs B4.3 — 扩角色集全量对比 (9 chars × 2 variants, 2026-04-18)</h1>
+<div class='meta'>
+  老 5 角色复用 v2_B4_20260418 / B4.3_20260418，新 4 角色用 B4_extended_20260418 / B4.3_extended_20260418。
+  严格单因子：B4 vs B4.3 共用同一 description，仅 template 不同（B4.3 多一句 "Tang-Song era jianghu attire..."，
+  背景文案 "pure white background" → "clean transparent background"）。
+  <b>warm_signal</b> = mean((R−B)/255) on opaque pixels；越正越偏黄/暖，越负越偏冷。
+</div>
+<h2>每角色 warm_signal 均值 + Δ</h2>
+<table class='summary'><thead><tr><th>character</th><th>group</th><th>B4 mean</th><th>B4.3 mean</th><th>Δ (B4.3 − B4)</th></tr></thead><tbody><tr><td>徐凤年</td><td class='grp-old'>old</td><td>+0.1422</td><td>+0.1352</td><td class=''>-0.0070</td></tr><tr><td>老黄</td><td class='grp-old'>old</td><td>+0.1965</td><td>+0.2180</td><td class='pos'>+0.0215</td></tr><tr><td>温华</td><td class='grp-old'>old</td><td>+0.1870</td><td>+0.2113</td><td class='pos'>+0.0243</td></tr><tr><td>姜泥</td><td class='grp-old'>old</td><td>+0.1601</td><td>+0.1687</td><td class=''>+0.0086</td></tr><tr><td>李淳罡</td><td class='grp-old'>old</td><td>+0.1290</td><td>+0.1121</td><td class='neg'>-0.0169</td></tr><tr><td>南宫仆射</td><td class='grp-new'>new</td><td>+0.1224</td><td>+0.1453</td><td class='pos'>+0.0229</td></tr><tr><td>轩辕青锋</td><td class='grp-new'>new</td><td>+0.0902</td><td>+0.0732</td><td class='neg'>-0.0169</td></tr><tr><td>褚禄山</td><td class='grp-new'>new</td><td>+0.2005</td><td>+0.1693</td><td class='neg'>-0.0312</td></tr><tr><td>陈芝豹</td><td class='grp-new'>new</td><td>+0.1600</td><td>+0.1559</td><td class=''>-0.0041</td></tr><tr class='total'><td colspan='2'><b>global (n=18 rows)</b></td><td>+0.1542</td><td>+0.1543</td><td>+0.0001</td></tr></tbody></table>
+<h2>18 行对比网格 (description / B4 / B4.3)</h2>
+<table class='compare'>
+<thead><tr><th>description / 指标</th><th>B4 (pure white background)</th><th>B4.3 (Tang-Song anchored)</th></tr></thead>
+<tbody>
+<tr class='row-old'>
+  <td class='label'>
+    <div class='charname'>徐凤年 <span class='tag tag-old'>old</span></div>
+    <div class='vname'>variant 1</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1250</b><br/>
+      B4.3 warm: <b>+0.1128</b><br/>
+      Δ = <b class=''>-0.0121</b>
+    </div>
+    <details><summary>description</summary><pre>Jade-fair oval face, clear bright eyes, straight brows, youthful yet world-weary, lazy smile. Slender young man with a straight blade-like back, black hair tied high with a white jade hairpin, muted blue scholar&#x27;s robe with dark embroidered cuffs, curved saber at the waist, wine gourd hanging low, one hand hooked in belt, rakish noble ease</pre></details>
+  </td>
+  <td class='img'><img src='v2_B4_20260418/徐凤年_variant_1.png' alt='B4 徐凤年 v1'/></td>
+  <td class='img'><img src='B4.3_20260418/徐凤年_variant_1.png' alt='B4.3 徐凤年 v1'/></td>
+</tr>
+<tr class='row-old'>
+  <td class='label'>
+    <div class='charname'>徐凤年 <span class='tag tag-old'>old</span></div>
+    <div class='vname'>variant 2</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1595</b><br/>
+      B4.3 warm: <b>+0.1576</b><br/>
+      Δ = <b class=''>-0.0019</b>
+    </div>
+    <details><summary>description</summary><pre>Jade-fair oval face, clear bright eyes, straight brows, youthful yet world-weary, lazy smile. Lean full-body figure in a dark crimson brocade robe over narrow black trousers and boots, black hair half bound with a white jade hairpin, turning sharply while drawing the curved saber, sleeves snapping, restrained luxury and sudden menace</pre></details>
+  </td>
+  <td class='img'><img src='v2_B4_20260418/徐凤年_variant_2.png' alt='B4 徐凤年 v2'/></td>
+  <td class='img'><img src='B4.3_20260418/徐凤年_variant_2.png' alt='B4.3 徐凤年 v2'/></td>
+</tr>
+<tr class='row-old'>
+  <td class='label'>
+    <div class='charname'>老黄 <span class='tag tag-old'>old</span></div>
+    <div class='vname'>variant 1</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.2019</b><br/>
+      B4.3 warm: <b>+0.1931</b><br/>
+      Δ = <b class=''>-0.0088</b>
+    </div>
+    <details><summary>description</summary><pre>A deeply lined old face, cloudy eyes, white brows, gentle rustic smile. Hunched elderly groom build, white hair and beard in a loose untidy knot, dusty gray short jacket and cropped trousers tied with a coarse cloth belt, heavy wooden sword case strapped across his back, limping mid-stride, plain and harmless air</pre></details>
+  </td>
+  <td class='img'><img src='v2_B4_20260418/老黄_variant_1.png' alt='B4 老黄 v1'/></td>
+  <td class='img'><img src='B4.3_20260418/老黄_variant_1.png' alt='B4.3 老黄 v1'/></td>
+</tr>
+<tr class='row-old'>
+  <td class='label'>
+    <div class='charname'>老黄 <span class='tag tag-old'>old</span></div>
+    <div class='vname'>variant 2</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1911</b><br/>
+      B4.3 warm: <b>+0.2429</b><br/>
+      Δ = <b class='pos'>+0.0518</b>
+    </div>
+    <details><summary>description</summary><pre>A deeply lined old face, cloudy eyes, white brows, gentle rustic smile. Stooped, thin old man with straggling white hair, worn brown roughspun coat over faded dark trousers, frayed cloth shoes, one hand scratching his neck while the other steadies a massive wooden sword case, awkward half-turn, simpleminded village elder bearing</pre></details>
+  </td>
+  <td class='img'><img src='v2_B4_20260418/老黄_variant_2.png' alt='B4 老黄 v2'/></td>
+  <td class='img'><img src='B4.3_20260418/老黄_variant_2.png' alt='B4.3 老黄 v2'/></td>
+</tr>
+<tr class='row-old'>
+  <td class='label'>
+    <div class='charname'>温华 <span class='tag tag-old'>old</span></div>
+    <div class='vname'>variant 1</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1824</b><br/>
+      B4.3 warm: <b>+0.1638</b><br/>
+      Δ = <b class='neg'>-0.0186</b>
+    </div>
+    <details><summary>description</summary><pre>Lean youthful face, slightly prominent cheekbones, bright stubborn eyes, grinning with sly pride. Tall skinny teenage swordsman, messy dark hair loosely tied with stray side tufts, patched blue short robe over narrow trousers, cloth belt holding a bamboo sword, one hand on hip and one finger pointing outward, scrappy street-smart swagger</pre></details>
+  </td>
+  <td class='img'><img src='v2_B4_20260418/温华_variant_1.png' alt='B4 温华 v1'/></td>
+  <td class='img'><img src='B4.3_20260418/温华_variant_1.png' alt='B4.3 温华 v1'/></td>
+</tr>
+<tr class='row-old'>
+  <td class='label'>
+    <div class='charname'>温华 <span class='tag tag-old'>old</span></div>
+    <div class='vname'>variant 2</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1917</b><br/>
+      B4.3 warm: <b>+0.2588</b><br/>
+      Δ = <b class='pos'>+0.0672</b>
+    </div>
+    <details><summary>description</summary><pre>Lean youthful face, slightly prominent cheekbones, bright stubborn eyes, grinning with sly pride. Lanky young figure in a faded brown patched jacket and black leggings, dark hair carelessly knotted, wooden sword slung across the lower back, mid-stride with chest thrust forward and chin raised, boastful wanderer energy</pre></details>
+  </td>
+  <td class='img'><img src='v2_B4_20260418/温华_variant_2.png' alt='B4 温华 v2'/></td>
+  <td class='img'><img src='B4.3_20260418/温华_variant_2.png' alt='B4.3 温华 v2'/></td>
+</tr>
+<tr class='row-old'>
+  <td class='label'>
+    <div class='charname'>姜泥 <span class='tag tag-old'>old</span></div>
+    <div class='vname'>variant 1</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.2363</b><br/>
+      B4.3 warm: <b>+0.2138</b><br/>
+      Δ = <b class='neg'>-0.0225</b>
+    </div>
+    <details><summary>description</summary><pre>Small oval face, slightly upturned eyes, youthful features, guarded and stubborn expression. Short, slender girl with a loose side braid of dark hair, plain off-white cloth dress neatly washed, narrow shoulders and wary stance, fingertips smudged with soil, one hand clutching the skirt hem, quiet injured pride</pre></details>
+  </td>
+  <td class='img'><img src='v2_B4_20260418/姜泥_variant_1.png' alt='B4 姜泥 v1'/></td>
+  <td class='img'><img src='B4.3_20260418/姜泥_variant_1.png' alt='B4.3 姜泥 v1'/></td>
+</tr>
+<tr class='row-old'>
+  <td class='label'>
+    <div class='charname'>姜泥 <span class='tag tag-old'>old</span></div>
+    <div class='vname'>variant 2</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.0838</b><br/>
+      B4.3 warm: <b>+0.1235</b><br/>
+      Δ = <b class='pos'>+0.0397</b>
+    </div>
+    <details><summary>description</summary><pre>Small oval face, slightly upturned eyes, youthful features, guarded and stubborn expression. Petite thin frame, black hair braided over one shoulder with stray wisps, muted pale blue coarse dress and dark sash, half-turned as if retreating, chin lifted, hands marked by dirt, restrained resentment and lonely nobility</pre></details>
+  </td>
+  <td class='img'><img src='v2_B4_20260418/姜泥_variant_2.png' alt='B4 姜泥 v2'/></td>
+  <td class='img'><img src='B4.3_20260418/姜泥_variant_2.png' alt='B4.3 姜泥 v2'/></td>
+</tr>
+<tr class='row-old'>
+  <td class='label'>
+    <div class='charname'>李淳罡 <span class='tag tag-old'>old</span></div>
+    <div class='vname'>variant 1</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1358</b><br/>
+      B4.3 warm: <b>+0.1086</b><br/>
+      Δ = <b class='neg'>-0.0272</b>
+    </div>
+    <details><summary>description</summary><pre>Lean gaunt face, pronounced cheekbones, deep-set eyes, elderly and sternly restrained. tall wiry one-armed elder with shoulder-length white hair and full white beard, faded blue-gray robe hanging loose, empty right sleeve fluttering, old cloth shoes, plain wooden sword strapped across his back, straight pine-like posture, austere hidden-edge presence</pre></details>
+  </td>
+  <td class='img'><img src='v2_B4_20260418/李淳罡_variant_1.png' alt='B4 李淳罡 v1'/></td>
+  <td class='img'><img src='B4.3_20260418/李淳罡_variant_1.png' alt='B4.3 李淳罡 v1'/></td>
+</tr>
+<tr class='row-old'>
+  <td class='label'>
+    <div class='charname'>李淳罡 <span class='tag tag-old'>old</span></div>
+    <div class='vname'>variant 2</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1222</b><br/>
+      B4.3 warm: <b>+0.1157</b><br/>
+      Δ = <b class=''>-0.0065</b>
+    </div>
+    <details><summary>description</summary><pre>Lean gaunt face, pronounced cheekbones, deep-set eyes, elderly and sternly restrained. thin one-armed swordsman in a washed-out dark teal robe with narrow sash, white hair half-tied and trailing, left hand lifting a plain wooden sword from behind his shoulder, torso half-turned mid-draw, empty sleeve snapping outward, fierce old-master severity</pre></details>
+  </td>
+  <td class='img'><img src='v2_B4_20260418/李淳罡_variant_2.png' alt='B4 李淳罡 v2'/></td>
+  <td class='img'><img src='B4.3_20260418/李淳罡_variant_2.png' alt='B4.3 李淳罡 v2'/></td>
+</tr>
+<tr class='row-new'>
+  <td class='label'>
+    <div class='charname'>南宫仆射 <span class='tag tag-new'>new</span></div>
+    <div class='vname'>variant 1</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1503</b><br/>
+      B4.3 warm: <b>+0.1365</b><br/>
+      Δ = <b class=''>-0.0137</b>
+    </div>
+    <details><summary>description</summary><pre>容颜极美的女子，瓜子脸，长眉凤眼，白色长裙，身材窈窕，持双刀立于风雪山巅，身形修长，刀光交错如练，长发微扬，面带微笑</pre></details>
+  </td>
+  <td class='img'><img src='B4_extended_20260418/南宫仆射_variant_1.png' alt='B4 南宫仆射 v1'/></td>
+  <td class='img'><img src='B4.3_extended_20260418/南宫仆射_variant_1.png' alt='B4.3 南宫仆射 v1'/></td>
+</tr>
+<tr class='row-new'>
+  <td class='label'>
+    <div class='charname'>南宫仆射 <span class='tag tag-new'>new</span></div>
+    <div class='vname'>variant 2</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.0945</b><br/>
+      B4.3 warm: <b>+0.1540</b><br/>
+      Δ = <b class='pos'>+0.0596</b>
+    </div>
+    <details><summary>description</summary><pre>瓜子脸，长眉凤目，清冷绝艳表情。白衣女子，独坐车厢一角，低头翻阅泛黄刀谱，指尖轻压书页，双刀横置膝前，神情专注疏离，静如寒潭的冷艳气质</pre></details>
+  </td>
+  <td class='img'><img src='B4_extended_20260418/南宫仆射_variant_2.png' alt='B4 南宫仆射 v2'/></td>
+  <td class='img'><img src='B4.3_extended_20260418/南宫仆射_variant_2.png' alt='B4.3 南宫仆射 v2'/></td>
+</tr>
+<tr class='row-new'>
+  <td class='label'>
+    <div class='charname'>轩辕青锋 <span class='tag tag-new'>new</span></div>
+    <div class='vname'>variant 1</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.0748</b><br/>
+      B4.3 warm: <b>+0.0962</b><br/>
+      Δ = <b class='pos'>+0.0214</b>
+    </div>
+    <details><summary>description</summary><pre>瓜子脸，细长凤眼，眉锋冷艳，傲然表情。紫衣女子，立于山巅石坪，广袖翻卷，手掐剑诀催动漫天剑气，长发猎猎飞扬，目光睥睨四方，孤高凌厉的强势气质</pre></details>
+  </td>
+  <td class='img'><img src='B4_extended_20260418/轩辕青锋_variant_1.png' alt='B4 轩辕青锋 v1'/></td>
+  <td class='img'><img src='B4.3_extended_20260418/轩辕青锋_variant_1.png' alt='B4.3 轩辕青锋 v1'/></td>
+</tr>
+<tr class='row-new'>
+  <td class='label'>
+    <div class='charname'>轩辕青锋 <span class='tag tag-new'>new</span></div>
+    <div class='vname'>variant 2</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1055</b><br/>
+      B4.3 warm: <b>+0.0503</b><br/>
+      Δ = <b class='neg'>-0.0553</b>
+    </div>
+    <details><summary>description</summary><pre>瓜子脸，细长凤眼，眉锋冷艳，傲然表情。紫衣女子，独坐高阁栏边，指间轻拈茶盏，裙裾垂落如云，侧望远山烟雨，神色清冷疏离，华贵骄矜又难掩锋芒</pre></details>
+  </td>
+  <td class='img'><img src='B4_extended_20260418/轩辕青锋_variant_2.png' alt='B4 轩辕青锋 v2'/></td>
+  <td class='img'><img src='B4.3_extended_20260418/轩辕青锋_variant_2.png' alt='B4.3 轩辕青锋 v2'/></td>
+</tr>
+<tr class='row-new'>
+  <td class='label'>
+    <div class='charname'>褚禄山 <span class='tag tag-new'>new</span></div>
+    <div class='vname'>variant 1</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1693</b><br/>
+      B4.3 warm: <b>+0.2157</b><br/>
+      Δ = <b class='pos'>+0.0464</b>
+    </div>
+    <details><summary>description</summary><pre>肥圆脸，细眼塌鼻，笑里藏刀表情。肥硕魁梧男子，披厚重甲胄，骑高大战马冲阵，挥舞沉重长刀劈开人群，甲叶翻飞血气四溅，残忍凶悍中透着老练狡诈</pre></details>
+  </td>
+  <td class='img'><img src='B4_extended_20260418/褚禄山_variant_1.png' alt='B4 褚禄山 v1'/></td>
+  <td class='img'><img src='B4.3_extended_20260418/褚禄山_variant_1.png' alt='B4.3 褚禄山 v1'/></td>
+</tr>
+<tr class='row-new'>
+  <td class='label'>
+    <div class='charname'>褚禄山 <span class='tag tag-new'>new</span></div>
+    <div class='vname'>variant 2</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.2317</b><br/>
+      B4.3 warm: <b>+0.1229</b><br/>
+      Δ = <b class='neg'>-0.1087</b>
+    </div>
+    <details><summary>description</summary><pre>肥圆脸，细眼塌鼻，笑里藏刀表情。肥硕男子，裹锦袍坐于宽大座椅，手抓油亮羊腿大口撕咬，案几杯盘狼藉，满面油光眯眼而笑，粗鄙放纵却心机深沉</pre></details>
+  </td>
+  <td class='img'><img src='B4_extended_20260418/褚禄山_variant_2.png' alt='B4 褚禄山 v2'/></td>
+  <td class='img'><img src='B4.3_extended_20260418/褚禄山_variant_2.png' alt='B4.3 褚禄山 v2'/></td>
+</tr>
+<tr class='row-new'>
+  <td class='label'>
+    <div class='charname'>陈芝豹 <span class='tag tag-new'>new</span></div>
+    <div class='vname'>variant 1</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1379</b><br/>
+      B4.3 warm: <b>+0.1311</b><br/>
+      Δ = <b class=''>-0.0068</b>
+    </div>
+    <details><summary>description</summary><pre>瘦削脸，剑眉凤目，神情冷峻倨傲。白衣银甲男子，立于两军阵前，手持一杆雪亮长枪，枪锋斜指，衣袍猎猎，目光森寒，孤绝凌厉的肃杀气势</pre></details>
+  </td>
+  <td class='img'><img src='B4_extended_20260418/陈芝豹_variant_1.png' alt='B4 陈芝豹 v1'/></td>
+  <td class='img'><img src='B4.3_extended_20260418/陈芝豹_variant_1.png' alt='B4.3 陈芝豹 v1'/></td>
+</tr>
+<tr class='row-new'>
+  <td class='label'>
+    <div class='charname'>陈芝豹 <span class='tag tag-new'>new</span></div>
+    <div class='vname'>variant 2</div>
+    <div class='metrics'>
+      B4 warm: <b>+0.1822</b><br/>
+      B4.3 warm: <b>+0.1807</b><br/>
+      Δ = <b class=''>-0.0014</b>
+    </div>
+    <details><summary>description</summary><pre>瘦削脸，剑眉凤目，神情冷峻倨傲。白衣男子，独坐高台静观风雪，指间轻叩长枪枪杆，案上酒盏微满，背脊笔直，沉默寡言，清贵疏离的锋锐气度</pre></details>
+  </td>
+  <td class='img'><img src='B4_extended_20260418/陈芝豹_variant_2.png' alt='B4 陈芝豹 v2'/></td>
+  <td class='img'><img src='B4.3_extended_20260418/陈芝豹_variant_2.png' alt='B4.3 陈芝豹 v2'/></td>
+</tr></tbody></table>
+</body></html>

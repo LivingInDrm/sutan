@@ -1,0 +1,29 @@
+[2026-04-16 23:56:42] Step 1/6: validating environment
+[2026-04-16 23:56:42] OPENAI_API_KEY source check passed (process=False, backend_env=True).
+[2026-04-16 23:56:42] Prepared output directory: /Users/xiaochunliu/Desktop/sutan-test-output-v3
+[2026-04-16 23:56:42] Step 2/6: ensuring backend availability
+[2026-04-16 23:56:42] Backend already healthy at http://127.0.0.1:8100
+[2026-04-16 23:56:42] Step 3/6: cleaning previous character artifacts
+[2026-04-16 23:56:42] Archived existing character: 李淳罡
+[2026-04-16 23:56:42] Step 4/6: creating character
+[2026-04-16 23:56:42] Character 李淳罡 already exists, reusing it for generation.
+[2026-04-16 23:56:42] Step 5/6: generating descriptions
+[2026-04-16 23:56:53] Generated 4 descriptions for 李淳罡.
+[2026-04-16 23:56:53] Step 6/6: generating images and saving outputs
+[2026-04-16 23:56:53] Generating image for variant 1/4
+[2026-04-16 23:58:13] SSE progress variant 1: Generating image 1 of 1 for 李淳罡…
+[2026-04-16 23:58:13] Variant 1 image generated: portrait_李淳罡/李淳罡_1776351413_1.png
+[2026-04-16 23:58:13] Generating image for variant 2/4
+[2026-04-16 23:59:23] SSE progress variant 2: Generating image 1 of 1 for 李淳罡…
+[2026-04-16 23:59:23] Variant 2 image generated: portrait_李淳罡/李淳罡_1776351493_1.png
+[2026-04-16 23:59:23] Generating image for variant 3/4
+[2026-04-17 00:00:31] SSE progress variant 3: Generating image 1 of 1 for 李淳罡…
+[2026-04-17 00:00:31] Variant 3 image generated: portrait_李淳罡/李淳罡_1776351563_1.png
+[2026-04-17 00:00:31] Generating image for variant 4/4
+[2026-04-17 00:01:33] SSE progress variant 4: Generating image 1 of 1 for 李淳罡…
+[2026-04-17 00:01:33] Variant 4 image generated: portrait_李淳罡/李淳罡_1776351631_1.png
+[2026-04-17 00:01:33] Saved variant 1 image to /Users/xiaochunliu/Desktop/sutan-test-output-v3/李淳罡_variant_1.png
+[2026-04-17 00:01:33] Saved variant 2 image to /Users/xiaochunliu/Desktop/sutan-test-output-v3/李淳罡_variant_2.png
+[2026-04-17 00:01:33] Saved variant 3 image to /Users/xiaochunliu/Desktop/sutan-test-output-v3/李淳罡_variant_3.png
+[2026-04-17 00:01:33] Saved variant 4 image to /Users/xiaochunliu/Desktop/sutan-test-output-v3/李淳罡_variant_4.png
+[2026-04-17 00:01:33] Pipeline completed successfully.
