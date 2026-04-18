@@ -1,0 +1,26 @@
+# 立绘评估扩展测试集 v2 (用于 B4.4 对比)
+# - 在原 test_set.yaml 5 角色基础上新增 4 角色，每角色 2 个 variant（索引 1 和 2）。
+# - 4 个新角色的 descriptions 直接复用 scripts/batch_config.json 中 variant 1/2（已人工撰写）。
+# - 老角色的 descriptions 沿用 v1_20260418 目录中的 description.txt（与 B4.3 跑图时完全一致），通过 --descriptions-from 注入。
+version: 2
+variants_per_character: 2
+
+characters:
+  - name: 徐凤年
+    archetype: 主角 + 贵气公子
+  - name: 老黄
+    archetype: 老者 + 随从
+  - name: 温华
+    archetype: 江湖少年
+  - name: 姜泥
+    archetype: 亡国公主少女
+  - name: 李淳罡
+    archetype: 剑圣老者
+  - name: 南宫仆射
+    archetype: 年轻女性 (清冷绝艳双刀)
+  - name: 轩辕青锋
+    archetype: 年轻女性 (紫衣傲然剑修)
+  - name: 褚禄山
+    archetype: 武将 (肥硕凶悍)
+  - name: 陈芝豹
+    archetype: 武将 (白衣持枪冷峻)
