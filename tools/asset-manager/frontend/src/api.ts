@@ -183,7 +183,10 @@ export const api = {
         return;
       }
       try {
-        const data = JSON.parse(line.slice(6));
+        const data = JSON.parse(line.slice(6)) as GenerationProgress & { message?: string };
+        if (data.type === 'error' && !data.error && data.message) {
+          data.error = data.message;
+        }
         onProgress(data);
       } catch (e) {
         console.error('Failed to parse SSE data:', e);

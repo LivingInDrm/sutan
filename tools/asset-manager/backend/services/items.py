@@ -384,6 +384,7 @@ async def generate_item_images(body: GenerateRequest):
                 yield f"data: {json.dumps({'type': 'error', 'message': f'Failed to generate image {i}: {exc}', 'current': i, 'total': count})}\\n\\n"
         shared_ctx._append_history({"timestamp": datetime.utcnow().isoformat() + "Z", "name": body.name, "asset_type": "item", "images": generated_images})
         yield f"data: {json.dumps({'type': 'done', 'images': generated_images})}\\n\\n"
+        return
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
 
